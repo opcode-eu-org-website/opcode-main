@@ -1,0 +1,247 @@
+\documentclass[fontSize=10pt,bmargin=2.2cm,extra]{pdfArticle}
+
+\title {Fonts Demo}
+\author{Robert Ryszard Paciorek <rrp@opcode.eu.org>}
+\date  {2019-05-13}
+
+\makeatletter\hypersetup{
+	pdftitle = {\@title},
+	pdfauthor = {\@author}
+}\makeatother
+
+
+% multilingual support
+\RequirePackage{polyglossia}
+\setdefaultlanguage{polish} % by default polish settings and names
+                            % only this, NOT \RequirePackage{polski} NOR \RequirePackage[polish]{babel}
+\setotherlanguages{english} % provide english language option too (for code printing)
+
+% set line stretch, paragraph indent and skip
+\setstretch{1.1} \setlength{\parindent}{0pt} \setlength{\parskip}{5pt}
+
+% footnotes always on page bottom
+\let\svfootnoterule\footnoterule
+\renewcommand\footnoterule{\vfill\svfootnoterule}
+
+% redefine looks of footnotes to:
+%   margin (3mm), number (with constant filed width 6mm), empty space (remained from number filed width), text
+\makeatletter\renewcommand{\@makefntext}[1]{%
+  \setlength{\@tempdima}{\columnwidth}\addtolength{\@tempdima}{-9mm}%
+  \protect\footnotesize\hspace{3mm}\makebox[6mm][l]{\@thefnmark.}\parbox[t]{\@tempdima}{#1}%
+}\makeatother
+
+% include Examples related functions
+\input{LaTeX-demos-examples.tex}
+
+% easylist environment (item marked by ampersand (&) instead of \item and auto nex level via &&, &&&, etc)
+\usepackage[ampersand]{easylist}
+
+
+\pagestyle{empty}
+\newcommand{\bs}[1]{\textbackslash#1}
+
+
+% fake bold for LuaLaTeX
+\newcommand{\pdfFontWeight}[1]{\pdfextension literal direct {2 Tr #1 w}}
+\newcommand{\pdfFontDouble}[1]{\pdfextension literal direct {1 Tr #1 w}}
+\newcommand{\pdfFontReset}{\pdfextension literal direct {0 Tr 0 w}}
+\newcommand{\textfakebf}[2]{\pdfFontWeight{#1}#2\pdfFontReset}
+\newcommand{\textdouble}[2]{\pdfFontDouble{#1}#2\pdfFontReset}
+
+\begin{document}
+
+% This demo show text formatting and base on features provided by \texttt{pdfArticle} document class.
+To demo prezentuje zagadnienia związane z formatowaniem tekstu i bazuje na funkcjonalnościach dostarczonych przez klasę dokumentów \rrpPkgLink{pdfArticle}.
+Więcej informacji (i innych możliwości formatowań) w dokumentacji klas \pkgLink{fontspec}, \pkgLink{xcolor}, \pkgLink{ulem}, \pkgLink{contour} i \pkgLink{shadowtext} używanych przez \rrpPkgLink{pdfArticle}.
+
+\begin{easylist}[itemize]
+
+& Rozmiar fontu:
+&& względem bazowego fontu dokumentu:
+&&& pomniejszone:
+	{\tiny \bs{tiny}}
+	{\scriptsize \bs{scriptsize}}
+	{\footnotesize \bs{footnotesize}}
+	{\small \bs{small}}
+&&& rozmiar bazowy:
+	{\normalsize \bs{normalsize}}
+&&& powiększone:
+	{\large \bs{large}}
+	{\Large \bs{Large}}
+	{\LARGE \bs{LARGE}}
+	{\huge \bs{huge}}
+	{\Huge \bs{Huge}}
+&& bezwzględny:
+	{\fontsize{17pt}{1.2em}\selectfont 17 punktów}: \\ \Verb${\fontsize{17pt}{1.2em}\selectfont tekst}$
+&& skalowany:
+	{\addfontfeatures{Scale=1.5} półtora raza}:     \\ \Verb${\addfontfeatures{Scale=1.5} tekst}$
+
+& Krój fontu (rodzina, typ):
+&& \textrm{domyślny szeryfowy (roman)} (używany standardowo, dopóki nie wybierzemy innego):
+                                                   \\ \Verb$\textrm{tekst}$ lub \Verb${\rmfamily tekst}$ lub \Verb$\rmfamily tekst \normalfont$
+	\footnote{
+		\Verb$\normalfont$ resetuje oprócz kroju także serię i kształt fontu.
+	}\textsuperscript{\footnotesize, }%
+	\footnote{
+		Dostępna jest także komenda \Verb$\textnormal{}$ przywracająca domyślny font dokumentu dla napisu podanego w argumencie.
+	}
+&& \textsf{domyślny bez szeryfowy (sans)}:         \\ \Verb$\textsf{tekst}$ lub \Verb${\sffamily tekst}$ lub \Verb$\sffamily tekst \normalfont$
+&& \texttt{domyślny stałej szerokości}:            \\ \Verb$\texttt{tekst}$ lub \Verb${\ttfamily tekst}$ lub \Verb$\ttfamily tekst \normalfont$
+&& {\fontspec{DejaVu Sans Mono} dowolnie wybrany}: \\ \Verb${\fontspec{DejaVu Sans Mono} tekst}$
+	\footnote{
+		W preambule dokumentu możemy użyć komendy \Verb$\newfontfamily$, np. \Verb$\newfontfamily{\symf}{Symbola}$ i używać go poprzez \Verb${\symf text}$.
+		
+		Jeżeli użyjemy argumentu \Verb$NFSSFamily$, np. \Verb$\newfontfamily{\symf}[NFSSFamily=mysym]{Symbola}$,
+		font będzie można także wybrać standardowym polecniem \Verb$\fontfamily{mysym}\selectfont$ (czego oczekują niektóre pakiety).
+	}
+
+& Odmiany (seria i kształt) fontu (dla aktualnie aktywnej rodziny fontów)\footnote{
+	Odmiana musi być udostępniana przez dany krój pisma i dostępna w systemie LaTeX.
+}:
+&& \textbf{pogrubiony (Bold)}:                      \\ \Verb$\textbf{tekst}$     lub \Verb${\bfseries tekst}$  lub \Verb$\bfseries tekst \mdseries$
+	\footnote{
+		Jest też \Verb$\textmd{}$ zdejmujacy serię fontu (pogrubienie) dla napisu podanego w argumencie.
+	}
+&& \textit{kursywa (Italic)}:                       \\ \Verb$\textit{tekst}$     lub \Verb${\itshape tekst}$  lub \Verb$\itshape tekst \upshape$
+	\footnote{
+		Jest też \Verb$\textup{}$ zdejmujacy kształt fontu (kursywę, pochylenie i kapitaliki) dla napisu podanego w argumencie.
+	}
+&& \textsl{pochyły (Slanted aka Oblique)}:          \\ \Verb$\textsl{tekst}$     lub \Verb${\slshape tekst}$  lub \Verb$\slshape tekst \upshape$
+&& \textsc{Kapitaliki (Small Capitals)}:            \\ \Verb$\textsc{tekst}$     lub \Verb${\scshape tekst}$  lub \Verb$\scshape tekst \upshape$
+&& {\addfontfeatures{LetterSpace=25} rozrzedzony}:  \\ \Verb${\addfontfeatures{LetterSpace=25} tekst}$
+&& \oldstylenums{cyfry nautyczne: 0123456789}:      \\ \Verb$\oldstylenums{tekst}$ lub \Verb${\addfontfeatures{Numbers=OldStyle} tekst}$
+&& odmiany mogą być łączone\footnote{
+	Odpowiednia kombinacja musi być udostępniana przez dany krój pisma i dostępna w systemie LaTeX
+} np.:
+&&& {\bfseries\itshape pogrubiona kursywa}:         \\ \Verb$\textbf{\textit{tekst}}$ lub \Verb${\bfseries\itshape tekst}$
+&&& {\bfseries\slshape pogrubiony pochyły}          \\ \Verb$\textbf{\textsl{tekst}}$ lub \Verb${\bfseries\slshape tekst}$
+&&& {\itshape\scshape  Pochylone Kapitaliki}:       \\ \Verb$\textit{\textsc{tekst}}$ lub \Verb${\itshape\scshape tekst}$
+&&& {\ttfamily Stałej szerokości: {\itshape Kursywa \bfseries z pogrubieniem} oraz {\slshape pochylony} ...}
+
+& Kolor:
+&& \textcolor[rgb]{1,.4,0}{ poprzez RGB }:  \\ \Verb$\textcolor[rgb]{1,.4,0}{tekst}$ lub \Verb${\color[rgb]{1,.4,0} tekst}$
+                                        \\ lub \Verb${\addfontfeatures{Color=ff6600} tekst}$
+	\footnote{
+		Kolor ustawiany poprzez \Verb$\addfontfeatures$ nie zostanie zmieniony poprzez \Verb$\textcolor$ i \Verb$\color$.
+	}\textsuperscript{\footnotesize, }%
+	\footnote{
+		W \Verb$\addfontfeatures$ kolor może zostać podany także jako 8 znakowy ciąg kodujący hexalnie wartości RGBA.
+	}
+&& \textcolor{red}{ poprzez nazwę }:        \\ \Verb$\textcolor{red}{tekst}$         lub \Verb${\color{red} tekst}$
+                                        \\ lub \Verb${\addfontfeatures{Color=red} tekst}$
+	\footnote{
+		Dla użycia w \Verb$\addfontfeatures$ nazwany kolor powinien być definiowany jako RGB, a nie CMYK.
+	}
+
+& Efekty:
+&& pakiet \texttt{ulem} -- komendy postaci \Verb$\xxx{tekst}$, gdzie \Verb$\xxx$:\\
+	\sout{\bs{sout}}
+	\xout{\bs{xout}}
+	\uline{\bs{uline}}
+	\uuline{\bs{uuline}}
+	\uwave{\bs{uwave}}
+	\dashuline{\bs{dashuline}}
+	\dotuline{\bs{dotuline}}
+&& makra oparte na pakiecie \texttt{ulem} zdefiniowane w \texttt{pdfArticle}:
+&&& \ul[black]{kolorowe podkreślenie}:   \Verb$\ul[kolor]{tekst}$
+&&& \st[red]{kolorowe przekreślenie}:    \Verb$\so[kolor]{tekst}$
+&&& \hl[yellow]{kolorowe podświetlenie}: \Verb$\hl[kolor]{tekst}$
+&& pakiet \texttt{contour} -- \contourlength{0.03em}\contour[10]{red}{konturowe tło liter}:
+                                      \\ \Verb$\contourlength{0.03em}\contour[10]{red}{tekst}$
+&& pakiet \texttt{shadowtext} -- \shadowoffset{-1.3pt}\shadowrgb{0.6, 0.6, 0.8}\shadowtext{cień liter}: 
+                                      \\ \Verb$\shadowoffset{-1.3pt}\shadowrgb{0.6, 0.6, 0.8}\shadowtext{tekst}$
+&& {\addfontfeatures{FakeSlant=-0.4} pochylenie tekstu}:
+                                      \\ \Verb${\addfontfeatures{FakeSlant=-0.4} tekst}$
+&& {\addfontfeatures{FakeStretch=1.8} rozciągnięcie tekstu}:
+                                      \\ \Verb${\addfontfeatures{FakeStretch=1.8} tekst}$
+&& efekty fontów pdfowych --- \textfakebf{0.5}{(udawane) pogrubienie} i \textdouble{0.3}{konturowe litery} % FIXME : zrobić z tego klasę
+&& {\addfontfeatures{Opacity=0.5} przeźroczystość:}
+   \makebox[1pt][l]{ona jest prawdziwa}  {\addfontfeatures{Color=30ee3080} \large \bfseries Na prawdę !!!}
+                                      \\ \Verb${\addfontfeatures{Opacity=0.5} tekst}$
+\footnote {
+	Ten sam efekt można uzyskać także przez podanie koloru jako RGBA, z odpowiednią wartością składowej A.
+}
+&& indeks \textsuperscript{górny} i \textsubscript{dolny}:
+                                      \\ \Verb${\textsuperscript{górny} \textsubscript{dolny}}$
+
+\end{easylist}
+
+\section*{Ligatures}
+
+\newcommand{\printSpecials}{
+	« \guillemotleft{}     {\addfontfeatures{Color=ff6600} <<         }
+		abc
+	» \guillemotright{}    {\addfontfeatures{Color=ff6600}  >>        }
+		\hspace{0.66cm}
+	‘ \textquoteleft{}     {\addfontfeatures{Color=ff6600} `          }
+		abc
+	’ \textquoteright{}    {\addfontfeatures{Color=ff6600} '          }
+	
+	„ \quotedblbase{}      {\addfontfeatures{Color=ff6600}  ,,        }
+		abc
+	“ \textquotedblleft{}  {\addfontfeatures{Color=ff6600}  ``  ‘‘    }
+		abc
+	” \textquotedblright{} {\addfontfeatures{Color=ff6600} ''  ’’  "  }
+	
+	–                      {\addfontfeatures{Color=ff6600} --         } % półpaza
+		abc
+	—                      {\addfontfeatures{Color=ff6600} ---        } % pauza
+		abc
+	- {\tiny(U+002D)} ‐ {\tiny(U+2010)} − {\tiny(U+2212)}               % dywiz
+}
+
+\begin{minipage}[t]{0.47\textwidth}
+	\fontspec{Latin Modern Roman}[Ligatures=TeX] \centerline{font załadowany z Ligatures=TeX}
+	\printSpecials
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.47\textwidth}
+	\fontspec{Latin Modern Roman} \centerline{font załadowany bez Ligatures=TeX}
+	\printSpecials
+\end{minipage}
+
+\section*{Verbatim}
+
+\LaTeX umożliwia wprowadznie tesktu, którego nie będzie interpretował a jedynie przedrukuje go (np. listing kodu źródłowego).
+Domyślnie tekst taki wypisywany jest fontem o stałej szerokości. Jednak jest to co innego niż \Verb$\txexttt{}$, w którym wszystkie polecenia są normalnie interpretowane.
+Zaawansowaną wersję komendy i srodowiska pozwalającego na takie wprowadzenie tekstu oferuje pakiet \pkgLink{fancyvrb} oraz rozszerzający go m.in. o łamanie linii pakiet \pkgLink{fvextra}.
+
+\begin{CatchExample}
+% ustawiamy łamanie linii w środowiskach Verbatim i komendzie \Verb
+\fvset{
+	breaklines=true, breakafter={/}, breakaftersymbolpre={},
+	breakaftersymbolpost={\tiny\ensuremath{\ \hookrightarrow\ }}
+}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, \Verb$/usr/share/texmf/fonts/open__type/public/lm/lmroman10-regular$ sed do eiusmod tempor incididunt ut labore et ...
+\begin{Verbatim}
+Lorem ipsum dolor sit amet, $consectetur adipiscing elit$, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ...
+\end{Verbatim}
+\end{CatchExample}
+
+\begin{adjustwidth}{.05\textwidth}{.05\textwidth} \inputminted[breakaftersymbolpost={},numbers=left,numbersep=4pt,fontsize=\footnotesize]{latex}{\jobname.0.tmp} \end{adjustwidth}
+
+\let\FancyVerbFormatLineTmp\FancyVerbFormatLine
+\let\FancyVerbFormatLine\FancyVerbFormatLineOrg
+\begin{adjustwidth}{.05\textwidth}{.05\textwidth} \putExampleTeX \end{adjustwidth}
+\let\FancyVerbFormatLine\FancyVerbFormatLineTmp
+
+Więcej informacji w dokumentacji klas \pkgLink{fancyvrb} i \pkgLink{fvextra} używanych przez \rrpPkgLink{pdfArticle}.
+
+\subsection*{kolorowanie kodu}
+
+Najbardziej popularnymi pakietami umożliwiającymi kolorowanie kodu źródłowego są \pkgLink{minted} i \pkgLink{listings}.
+
+Pakiet \pkgLink{minted} korzysta z zewnętrznego skryptu do generowania ,,kolorwanego'' kodu,
+	w związku z czym wymaga uruchamiania \Verb$lualatex$ (lub innych kompilatorów \TeX{}a) z opcją \Verb$-shell-escape$.
+Posiada on też pewne ograniczenia co do możliwości włączenia interpretacji kodu \TeX{}owego w przetwarzanym kodzie źródłowym (nie jest to możliwe np. wewnątrz napisów).
+
+Pakiet \pkgLink{listings} nie wymaga zewnętrznych narzędzi i nie ma takich ograniczeń co do włączenia interpretacji kodu \TeX{}owego, jednak nie wspiera UTF-8 oraz ma problemy z kolorowaniem niektórych elementów składniowych (np. \Verb@$#@ w bashu jest nazwą zmiennej i nie rozpoczyna komentarza).
+
+Klasa \rrpPkgLink{pdfArticle} z opcją \Verb$extra$ włącza pakiet \pkgLink{minted} pozwalając na kolorowanie kodu z użyciem środowiska \Verb$minted$:
+\begin{Example}
+\begin{minted}{python}
+for i in ll:
+  print(i)
+\end{minted}
+\end{Example}
+\end{document}

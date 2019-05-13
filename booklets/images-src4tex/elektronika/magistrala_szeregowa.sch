@@ -1,0 +1,1 @@
+../../../OpCode-vip/vademecum/images-src4web/magistrala_szeregowa.sch

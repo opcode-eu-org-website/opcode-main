@@ -1,0 +1,589 @@
+\documentclass[fontSize=10pt,extra]{pdfArticle}
+
+\title {Page, Paragraphs and Boxes Demo}
+\author{Robert Ryszard Paciorek <rrp@opcode.eu.org>}
+\date  {2019-05-13}
+
+\makeatletter\hypersetup{
+	pdftitle = {\@title},
+	pdfauthor = {\@author}
+}\makeatother
+
+
+% multilingual support
+\RequirePackage{polyglossia}
+\setdefaultlanguage{polish} % by default polish settings and names
+                            % only this, NOT \RequirePackage{polski} NOR \RequirePackage[polish]{babel}
+\setotherlanguages{english} % provide english language option too (for code printing)
+
+% set line stretch, paragraph indent and skip
+\setstretch{1.1} \setlength{\parindent}{0pt} \setlength{\parskip}{7pt}
+
+% change default settings for itemize and enumerate environments
+\setlist[itemize,enumerate]{topsep=4pt, parsep=3pt, itemsep=0pt, partopsep=0pt}
+
+% include Examples related functions
+\input{LaTeX-demos-examples.tex}
+
+\usepackage{lipsum}
+
+
+% dodatkowe środowiska dla formatowań itp
+\usepackage{fancytabs} % zakładki na marginesie
+\usepackage{fancypar} % indywidualne formatowanie linii w akapicie
+\usepackage{dashrule} % rysowanie różnego rodzaju linii
+\usepackage{multicol, paracol, parcolumns} % układy kolumnowe
+
+\begin{document}
+
+To demo prezentuje zagadnienia związane z ustawieniami strony, akapitu oraz pudełkami i bazuje na funkcjonalnościach dostarczonych przez klasę dokumentów \rrpPkgLink{pdfArticle}.
+Więcej informacji w dokumentacji klas \pkgLink{changepage}, \pkgLink{setspace}, \pkgLink{geometry}, \pkgLink{graphicx} i \pkgLink{graphbox}, \pkgLink{xcolor}, \pkgLink{wrapfig}, \pkgLink{overpic}, \pkgLink{adjustbox}, \pkgLink{pbox} i \pkgLink{varwidth} używanych przez \rrpPkgLink{pdfArticle}. Część prezentowanych zaganień dotyczny pakietów innych pakietów, które nie są wykorzystywane w tej klasie.
+
+\section{Akapity i geometria strony}
+
+\subsection{Wcięte bloki tekstu, czyli zabawy marginesami}
+
+\begin{adjustwidth}{1cm}{4cm}
+	Ten wcięty (z obu stron) akapit został uzyskany z użyciem środowiska adjustwidth,
+	pozwalającego na tworzenie takich fragmentów tekstu z zachowaniem podziału na strony:
+	
+	\begin{minipage}{\linewidth}
+	\begin{Verbatim}[gobble=2,numbers=left,numbersep=4pt,fontsize=\footnotesize]
+		\begin{adjustwidth}{1cm}{4cm}
+			tekst ze zmienionymi marginesami
+			(np. wcięty lub wysunięty)
+		\end{adjustwidth}
+	\end{Verbatim}
+	\end{minipage}
+	
+	W ramach takiego akapitu nie zmienia się \Verb#\textwidth# (wynosi on nadal \the\textwidth), natomiast zmieniony jest \Verb#\linewidth# (wynosi on \the\linewidth).
+	
+	Akapity takie są bez problemu przenoszone pomiędzy stronami z zachowaniem wcięć.
+	Zastosowanie ujemnej wartości wcięcia spowoduje utworzenie bloku wysuniętego na margines.
+\end{adjustwidth}
+
+
+\subsection{Wcięcia oraz odstępy między akapitowe i międzyliniowe}
+
+Oprócz marginesów na formatowanie akapitów wpływ mają:
+\begin{itemize}
+\item wartość wcięcia akapitowego \Verb$\parindent$, którą możemy ustawić za pomocą:
+\begin{MintedCode}
+\setlength{\parindent}{0pt} % 0pt oznacza wciecie o zerowym rozmiarze, czyli jego brak
+\end{MintedCode}
+a jeżeli chcemy pominąć wcięcie w pojedynczym akapicie możemy poprzedzić go \Verb$\noindent$.
+
+\item wartość odstępu między akapitowego \Verb$\parskip$, którą możemy ustawić za pomocą:
+\begin{MintedCode}
+\setlength{\parindent}{\parskip}{5pt} % tutaj ustawiona na 5pt
+\end{MintedCode}
+a jeżeli chcemy zmienić ją w pojedynczym przypadku możemy użyć \Verb$\vspace{wartość odstępu}$.
+
+\item wartość odstępu pomiędzy liniami wewnątrz akapitu (\Verb$\baselineskip$ \Verb$baselinestretch$), którą możemy ustawić za pomocą:
+\begin{MintedCode}
+\setstretch{1.1} % tutaj współczynnik 1.1 (czyli trochę rozrzedzony)
+\end{MintedCode}
+lub przy pomocy środowiska \Verb$spacing$:
+\begin{MintedCode}
+\begin{spacing}{2.1} tekst \end{spacing}
+\end{MintedCode}
+wpływa ona także na wartość \Verb$\parskip$
+\end{itemize}
+
+
+\subsection{Linie poziome}
+Dosyć gruba, wyśrodkowana linia o szerokości 50\% tekstu:
+\begin{Example}
+\hfil\rule{0.5\linewidth}{1pt}\hfill
+\end{Example}
+
+Jeszcze grubsza, przerywana w układzie 4mm linii, 5mm przerwy, 2 mm linii, 1mm przerwy o szerokości całego tekstu (z pakietu \pkgLink{dashrule}):
+\begin{Example}
+\hdashrule{\linewidth}{2pt}{4mm 5mm 2mm 1mm}
+\end{Example}
+
+
+\subsection{Wyrównanie tekstu}
+
+\begin{Example}
+\begin{flushright}
+Akapit wyrównany do prawej strony. Akapit wyrównany do prawej.
+\end{flushright}
+\begin{FlushRight}
+Akapit wyrównany do prawej strony. Akapit wyrównany do prawej.
+\end{FlushRight}
+\end{Example}
+
+\begin{Example}
+\begin{center}
+Akapit wyśrodkowany. Akapit wyśrodkowany.
+\end{center}
+\begin{Center}
+Akapit wyśrodkowany. Akapit wyśrodkowany.
+\end{Center}
+\end{Example}
+
+\begin{Example}
+\begin{flushleft}
+Akapit do lewej strony wyrównany. Akapit wyrównany do lewej.
+\end{flushleft}
+\begin{FlushLeft}
+Akapit do lewej strony wyrównany. Akapit wyrównany do lewej.
+\end{FlushLeft}
+\end{Example}
+
+\begin{Example}
+\begin{justify}
+Akapit wyjustowany – jest to domyśle ustawienie akapitu.
+\end{justify}
+\end{Example}
+
+\subsection{Podziały}
+
+Możemy wymusić podział:
+\vspace{-\parskip}\begin{itemize}
+\item linii: \Verb$\\$, \Verb$\newline$ (powodują przejście do nowej linii w miejscu wstawienia), \Verb$\linebreak$ (powoduje złamanie linii oraz rozciągnięcie zawartości w celu wyrównania do marginesu, przyjmuje opcjonalny argument oznaczający poziom zachęty do łamania linii w danym miejscu)
+\item akapitu: pusta linia lub polecenie \Verb$\par$
+\item strony: \Verb$\newpage$ (kończy stronę), \Verb$\clearpage$ (kończy stronę, wymuszając wydrukowanie wszystkich pływających środowisk), \Verb$\pagebreak$ (kończy stronę, przyjmuje opcjonalny argument oznaczający poziom zachęty do łamania strony w danym miejscu)
+\end{itemize}
+
+Oprócz zachęcania do łamania linii lub strony poprzez \Verb$\linebreak[x]$ i \Verb$\pagebreak[x]$ możemy także w podobny sposób zniechęcać do tego poprzez \Verb$\nolinebreak[x]$ i \Verb$\nopagebreak[x]$.
+\Verb$x$ jest liczbą z zakresu od 0 do 4 i oznacza stopień zachęcania/zniechęcania (domyślne 4 oznacza wymuszenie).
+
+Możemy także zapobiegać łamaniu linii na spacji poprzez użycie spacji niełamliwej (lub \Verb$~$) oraz zapobiegać łamaniu całych wyrażeń umieszczając je w \Verb#\hbox#.
+
+\begin{CatchExample}
+% wymuszamy podział strony i modyfikujemy ustawienia geometrii - zmieniamy orientację (moglibyśmy także np. wielkość) strony
+\forceNewPageGeometry{landscape,a4paper, lmargin=3.5cm, rmargin=3.5cm}
+% kolor tła całej strony, można go wyłączyć gdy juz nie jest potrzebny z użyciem \nopagecolor (na nowej stronie)
+\pagecolor[rgb]{0.9,1,0.9}
+\end{CatchExample}
+\putExampleTeX
+
+\subsection{Geometria strony}
+
+Ta strona celowo jest zielonkawa i ma zmienioną orientację oraz poszerzone boczne marginesy.\\
+Jej wysokości to: textheight=\the\textheight{} vsize=\the\vsize{}
+a szerokości to: textwidth=\the\textwidth{} hsize=\the\hsize{} linewidth=\the\linewidth{}
+\marginpar{\raggedright tekst na marginesie wstawiony komendą \Verb$\marginpar$}
+
+Zostało to uzyskane dzięki poleceniom: \putExampleVerbatimAdjust
+
+\fancytab{Tab A}{2}
+
+\begin{CatchExample}
+% środowisko obrazka opływanego tekstem,
+%  jego położenie (r - do prawej, l - do lewej, ...) i rozmiar
+%  jest też kilka opcjonalnych argumentów
+\begin{wrapfigure}{r}{6cm}
+  % wyśrodkowanie zawartości pola obrazka
+  \begin{center}
+    % okienko skalujące:
+    %  pierwszy argument szerokość, drugi wysokość,
+    %  jeden z nich może być zastąpiony ! - zachowanie proporcji obrazka
+    %  w taki sposób możemy skalować także inne obiekty np. tekst
+    % alternatywnie możemy też użyć \scalebox{0.3}{ ... } określającego skalowanie względne
+    \resizebox{4cm}{!}{
+      % wstawienie obrazka
+      \includegraphics{/usr/share/texlive/texmf-dist/tex/latex/mwe/example-grid-100x100bp.png}
+    }
+    \caption[Opcjonalny skrócony opis do spisu obrazków]{Podpis do obrazka} % opis obrazka
+    \label{etykietka_obrazka} % etykieta
+  \end{center}
+\end{wrapfigure}
+\end{CatchExample}
+\putExampleTeX
+
+\begin{spacing}{1.7}
+\textbf{To są akapity z zwiększonymi odstępami międzyliniowymi.} Wypełnione \emph{Lorem Ipsum} z użyciem komendy \Verb$\lipsum$.
+\lipsum[1][1-13]
+\lipsum[2]
+\namedLabel{test2}{inna etykieta na obróconej stronie}
+
+Zakładka na marginesie została uzyskana przy pomocy \Verb$\fancytab{Tab A}{2}$ i pakietu \pkgLink{fancytabs}.
+Tekst na marginesie został umieszczony standardowym poleceniem \Verb$\marginpar{}$,
+	podobną funkcjonalność (ale bez "pływania") oferuje komenda \Verb$\marginnote{tekst}$ z pakietu \pkgLink{marginnote}.
+
+\end{spacing}
+
+% wymuszamy podział strony i modyfikujemy ustawienia geometrii - zmieniamy orientację i przechodzimy na tryb dwustronny
+\forceNewPageGeometry{portrait,a4paper,twoside=true, lmargin=2.2cm, rmargin=2.2cm}
+% wyłączamy kolor tła strony
+\nopagecolor
+
+
+\subsection{Opływanie}
+Opływany tekstem obrazek z poprzedniej strony został uzyskany za pomocą:
+\putExampleVerbatimAdjust
+
+
+\subsection{Zaawansowane formatowanie akapitu}
+
+Bardziej rozbudowane możliwości formatowania akapitu daje pakiet \pkgLink{fancypar}
+
+\begin{ExampleVertical*}
+\bgroup
+\textwidth=0.8\textwidth \hsize=\textwidth \linewidth=\textwidth
+\renewcommand\FancyPreFormat{ \setcounter{fancycount}{0} }
+\renewcommand\FancyFormat{%
+	\stepcounter{fancycount}
+	\ifnum\value{fancycount}=1%
+		\textcolor{red}{\box\linebox}%
+	\else%
+		\box\linebox%
+	\fi%
+}
+\hspace{1cm}\vbox{
+	Pakiet \pkgLink{fancypar} jest wygodnym interfejsem do modyfikowania formatowania akapitu
+	z niezależnym formatowaniem każdej linii (np. tutaj pierwsza linia w kolorze czerwonym).
+	Pozwala też na uzyskanie podobnego efektu jak adjustwidth.
+	\par\AddFancyFormat
+}
+\egroup
+\end{ExampleVertical*}
+
+
+\clearpage
+\section{Pudełka}
+
+\begin{CatchExample}
+\hspace{\stretch{2}}
+  % możemy wstawić obrazek skalując go (względem jego rozmiaru wynikającego z jego rozdzielczości)
+  \parbox[c]{0.4\textwidth}{\centering
+    \includegraphics[scale=0.44]{/usr/share/texlive/texmf-dist/tex/latex/mwe/example-image}
+    % gdy nie podajemy rozszerzenia latex sam wybierze optymalny format zgodnie z sugestią podaną
+    % w \DeclareGraphicsExtensions{}
+    % możemy nie podawać ścieżki (dla plików w aktualnym katalogu) lub podawać ścieżkę relatywną
+    \\ Rys. 1: podpis rysunku
+  }
+\hspace{\stretch{1}}
+  \parbox[c]{0.4\textwidth}{\centering
+    % możemy też zrobić to samo nakładając na niego dodatkowy tekst
+    \begin{overpic}[scale=0.44]{/usr/share/texlive/texmf-dist/tex/latex/mwe/example-image}
+      \put(0,0) {\raisebox{3pt}{\colorbox[rgb]{0,.5,0}{\bf Fot. 1}}}
+    \end{overpic}
+    \\ Fot. 1: podpis rysunku
+    \\ dwulinijkowy ;-)
+  }
+\hspace{\stretch{2}}
+\end{CatchExample}
+
+\putExampleTeX
+
+\vspace{\parskip}
+
+Powyższe rozmieszczenie obrazków uzyskane zostało z zastosowaniem dwóch \Verb#\parbox# pomiędzy trzema \Verb#\hspace{\stretch{x}}#
+zapewnia to umieszczenie dwóch obrazków (wraz z ich podpisami) obok siebie:
+
+\putExampleVerbatimAdjust
+
+\Verb#\stretch{x}# podaje wartość rozciągliwego odstępu poziomego w proporcjach odpowiadających podanym argumentom
+(\Verb#\hspace{\stretch{x}}# jest podobne do kilkukrotnego zastosowania \Verb#\hfill# i \Verb#\hfil#).
+\textbf{Uwaga:} Działają one w ramach akapitu a nie wiersza w akapicie, czyli użycie łamania linii (\Verb#\\#) może mieć na nie zły wpływ.
+
+\Verb#\parbox# wstawia pionowe pudełko (elementy w nim są ukłądane jeden nad drugim) o zadanej szerokości. Podobnie działa środowisko "minipage".
+Jeżeli potrzebujemy pudełka o automatycznie dobranej szerokości możemy użyć \Verb#\pbox# i środowiska "varwidth".
+
+\begin{Example}
+ \newsavebox{\fmbox}
+ \begin{lrbox}{\fmbox}
+  \begin{varwidth}{0.4\textwidth}
+   \hspace{\stretch{2}} aaa \hspace{\stretch{2}} \par
+   bbb \par bbb ccc ddd
+  \end{varwidth}
+ \end{lrbox}
+ \fbox{\usebox{\fmbox}}
+\end{Example}
+
+
+\subsection{Zapamiętywanie pudełek i manipulowanie nimi}
+
+W przykładzie zostało użyte środowisko lrbox, które jest jedną z możliwości zapamiętania pudełka do użycia w przyszłości (poprzez komendę \Verb#\usebox{PUDELKO}#).
+W tym wypadku zostało to zrobione aby użyć \Verb#\fbox# na zawrtości "varwidth", celem objęcia go ramką.
+Innym zastosowaniem zapamiętanych pudełek jest ich wielokrotne użycie lub zamiana ich rozmiarów post factum.
+Nie wpływa ona w żaden sposób na zawartość pudełka, ale ma bardzo duży wpływ na rozpychanie lub nie przez pudełko sąsaidujących elementów.
+
+\begin{Example}
+ \begin{lrbox}{\fmbox} \fbox{\hbox{QWERTY}} \end{lrbox}
+ aaa \usebox{\fmbox} bbb \par
+ \wd\fmbox=0pt aaa \usebox{\fmbox} bbb \par
+ \wd\fmbox=70pt aaa \usebox{\fmbox} bbb
+\end{Example}
+
+Podobnie możemy postępować z wysokością pudełek (\Verb#\ht\PUDELKO# i \Verb#\dp\PUDELKO#). Pakiety takie jak \pkgLink{calc}, \pkgLink{etoolbox} ułatwiają bardziej zaawansowane operacje na wymiarach elementów.
+
+Standardowe pudełko \Verb#\makebox# jest (w przeciwieństwie do wcześniej poznanego \Verb#\parbox#, \Verb#minipage#) pudełkiem horyzontalnym (jednoliniowym, podonie jak \Verb#\mbox# czy \Verb#\hbox#).
+Pozwala ono m.in. na modyfikowanie (a nawet praktyczne wyzerowanie) szerokości elementu np:
+\begin{Example}
+\ttfamily
+.....\makebox[0.1pt][l]{-----}...... \par
+.....\makebox[0.1pt][c]{-----}...... \par
+.....\makebox[0.1pt][c]{\vbox{+\\+\\+}}......
+% jeżeli chemy mieć kilka wierszy musimy użyć \vbox \parbox
+% środowiska minipage lub innych pudełek pionowych
+\end{Example}
+
+\subsection{Przycinanie i poszerzanie}
+
+Podobne operacje przycinania pudełek możemy wykonać także dzięki trimbox z \pkgLink{adjustbox}.
+\begin{Example}
+BBBB\trimbox{0.25cm 0pt 0.5cm 0pt}{
+  \colorbox[rgb]{0,1,1}{AAAA}}CCCC \\
+BBBB\clipbox{0.25cm 0pt 0.5cm 0pt}{
+  \colorbox[rgb]{0,1,1}{AAAA}}CCCC \\
+BBBB\marginbox{0.25cm 0pt 0.5cm 0pt}{
+  \colorbox[rgb]{0,1,1}{AAAA}}CCCC
+\end{Example}
+
+Jak widać w powyższym przykładzie dostępny jest też clipbox powodujący obcięcie zawartości pudełka oraz marginbox o działaniu odwrotnym - powiększa pudełko dodając do niego marginesy.
+
+
+\subsection{Obroty, odbicia i skalowanie}
+
+Pakiet \pkgLink{graphicsx} oprócz możliwości wstawiania obrazków udostępnia kilka przydatnych pudełek:
+\vspace{-\parskip}\begin{itemize}
+\item \Verb#\rotatebox# (obraca podaną zawartość względem wskazanego punktu o wskazany kąt),
+\item \Verb#\scalebox# (skaluje n-krotnie w szerokości i m-krotnie w wysokości)
+\item \Verb#\resizebox# (skaluje do zadanego rozmiaru w szerokości i/lub wysokości, użycie zamaist któregoś z rozmiarów ! pozwala na skalowanie proporcjonalne)
+\end{itemize}
+Większość tych operacji może być także wykonana bezpośrednio na wstawianej grafice poprzez opcje komendy \Verb#\includegraphics#.
+
+\begin{ExampleVertical}
+xxx \rotatebox{45}{obrócony napis} xxx
+\rotatebox[x=1cm,y=2mm]{-45}{\pbox{4cm}{obrócony napis\\ w drugą stronę\\i względem\\innego punktu}}
+xxx \rotatebox{180}{oraz do góry norami}\\
+xxx \scalebox{3}[1]{rozciągnięty} xxx \scalebox{-1}[1]{odbity} xxx \scalebox{1}[-1]{inaczej odbity}
+\end{ExampleVertical}
+
+
+\subsection{Kolorowe pudełka}
+W jednym z powyższych przykładów jako obiektu przycinanego użyto pudełka \Verb#\colorbox# z pakietu \pkgLink{xcolor} powodującego wyświetlenie jego zawartości na tle o zadanym kolorze (kolor można określać m.in. przez nazwę, czy też składowe rgb). Pakiet ten pozwala także na pokolorowanie tekstu (co było już pokazywane), tła całej strony (co za chwilę zostanie zademonstrowane) oraz m.in. wstawianie pudełek z kolorową ramką \fcolorbox{red}{green}{TEKST} poprzez \Verb#\fcolorbox{kolor ramki}{kolor tła}{ZAWARTOŚĆ}#.
+
+
+\subsection{Jeszcze więcej pudełek}
+
+Bardzo wszechstronnym pudełkiem jest \Verb#\adjustbox# z pakietu \pkgLink{adjustbox} który łączy przedstawione wyżej możliwości takie jak skalowanie, obcinanie itp w jednym pudełku. Pozwala także na określanie grubości obramowania
+
+\begin{ExampleVertical}
+xxx \adjustbox{cfbox=red 3pt 0pt 5mm}{\pbox{10cm}{
+	grube czerwone obramowanie\\ bez wewnętrznego marginesu,\\ ale za to z dużym zewnętrznym
+}}
+xxx \adjustbox{raise=2ex}{uniesiony} xxx
+\end{ExampleVertical}
+
+\begin{ExampleVertical}
+wyrównania w pionie ...
+\adjustbox{valign=T}{\pbox{1cm}{T\\b\\c}}.
+\adjustbox{valign=M}{\pbox{1cm}{M\\b\\c}}.
+\adjustbox{valign=B}{\pbox{1cm}{B\\b\\c}}...
+\adjustbox{valign=t}{\pbox{1cm}{t\\b\\c}}.
+\adjustbox{valign=m}{\pbox{1cm}{m\\b\\c}}.
+\adjustbox{valign=b}{\pbox{1cm}{b\\b\\c}}...
+pionie i poziomie ...
+\adjustbox{stack=cm, bgcolor={rgb}{0 1 0}}{stack\\b\\c}... wraz z kolorkiem tła
+\end{ExampleVertical}
+
+Pakiet ten pozwala także na tworzenie pudełek będących uniwersalnym odstępem pionowym i/lub poziomym poprzez:\\
+\Verb#\phantombox{szerokość}{wysokość - od linii w górę}{głębokość - od linii w dół}#.
+Jako tła dla pudełka możemy używać pliku graficznego:
+
+\begin{ExampleVertical}
+\adjustbox{
+	cfbox=black 1pt 4mm,
+	bgimage=/usr/share/texlive/texmf-dist/tex/latex/mwe/example-image-16x10.png,
+	minipage=10cm
+}{\color{white}\lipsum[2]}
+\end{ExampleVertical}
+
+Możemy także wykorzystać adjustbox do zdefiniowania własnych typów pudełek - np. cieniowanych czy z podwójnym obramowaniem:
+
+\begin{ExampleVertical}
+% pudełko z podwójną niebiesko-czerwoną ramką
+\def\dframeBox#1{\adjustbox{cfbox=blue 0.5pt 1pt}{\adjustbox{cfbox=red 0.3pt}{#1}}}
+% pudełko z zielonym cieniem
+\def\shadowBox#1{%
+  \newlength{\boxWidth}%
+  \hbox{%
+    \hspace{4pt}%
+    \adjustbox{cfbox=green, bgcolor=green, raise=-4pt, gstore width=\boxWidth}
+      {\color{green}#1}%
+    \setlength{\boxWidth}{\boxWidth + 4pt}\hspace{-\boxWidth}%
+    \adjustbox{cfbox=red 0.3pt, bgcolor=white}{#1}%
+    \hspace{4pt}%
+  }%
+  \undef{\boxWidth}%
+}
+xx \dframeBox{AAAA} xx \shadowBox{AAAA} xx
+\end{ExampleVertical}
+
+\clearpage
+\section{Kolumny}
+
+\subsection{tradycyjne}
+
+\begin{ExampleVertical*}
+\setlength{\columnsep}{3em} % możemy ustawić m.in. wielkość przery między kolumnami
+\begin{multicols}{2} % liczbę kolum podajemy w argumencie, tutaj mamy układ dwukolumnowy
+Tradycyjny układ kolumnowy, z  przepływem tekstu pomiędzy kolejnymi kolumnami możemy uzyskać dzięki
+pakietowi \pkgLink{multicol}, który udostępnia środowisko \Verb$multicols$.
+Po złamaniu strony tekst kolntynuowany jest od pierwszej kolumny na nowej stronie.
+\end{multicols}
+\end{ExampleVertical*}
+
+\subsection{układ side-by-side z pomocą minipage}
+
+Często chemy jednak uzyskać układ w którym kontrolujemy co jest w której z kolumn. układ taki częstoi realizowany jest z wykozystaniem środowiska minipage:
+
+\begin{ExampleVertical*}
+\hspace{2cm} % możemy dać jakiś odstęp od lewego marginesu
+\begin{minipage}{0.5\textwidth}
+	Tekst po lewej. Tekst po lewej. Tekst po lewej. Tekst po lewej.
+	Tekst po lewej. Tekst po lewej. Tekst po lewej. Tekst po lewej.
+\end{minipage}
+\hfill % rozpychamy dwa pudełka w efekcie uzyskamy odstęp pomiędzy nimi,
+       % będący wynikową ich rozmiarów, rozmiaru strony i innych odstepów
+\begin{minipage}{0.3\textwidth}Tekst po prawej. Tekst po prawej. Tekst po prawej.\end{minipage}
+\end{ExampleVertical*}
+
+Niestety w ramach minipage nie może zostać podzielone przy przejściu do nowej strony,
+w efekcie czego rozwiązanie nie jest dobre przy dłuższych kolumnach tego typu.
+
+\subsection{układ side-by-side z pomocą paracol}
+
+Z pomocą przychodzi tutaj pakiet \pkgLink{paracol}, który pozwala na definiowanie kolumnt tego typu, które mogą być dzielone na strony:
+
+\vspace{\parskip}
+
+\columnsep=0pt
+\setcolumnwidth{0.6\textwidth, .1\textwidth, 0.3\textwidth}
+\begin{paracol}{3}
+
+\begin{nthcolumn}{0}
+\textbf{Lewa kolumna.}
+
+W ramach kolumn możemy umieszczać inne elementy takie jak:
+\begin{itemize}
+\item pudełka (np. z obramowaniem)
+\item elementy graficzne
+\item wzory matematyczne
+\item środowiska \Verb$Verbatim$
+\end{itemize}
+
+Widoczy układ ten został utworzony poprzez:
+\begin{MintedCode}
+\columnsep=0pt
+\setcolumnwidth{0.6\textwidth, .1\textwidth, 0.3\textwidth}
+\begin{paracol}{3}
+  \begin{nthcolumn}{0}
+    zawartość lewej kolumny
+  \end{nthcolumn}
+  % środkową kolumnę (numer 1) pomijamy – traktujemy ją jako
+  % separator, dzięki temu w układzie wielo kolumnowym
+  % możemy łatwo mieć separatory różnych wielkości
+  \begin{nthcolumn}{2}
+    zawartość prawej kolumny
+  \end{nthcolumn}
+\end{paracol}
+\end{MintedCode}
+
+Niestety środowisko \Verb$paracol$ nie może być osadzane wewnątrz pudełek.
+
+\subsection{Inne rozwiązania}
+
+Podobne rozwiązanie do prezentowanego oferuje także pakiet \pkgLink{parcolumns},
+w odróżnieniu od \texttt{paracol} może ono być umieszczane wewnątrz innych pudełek.
+
+Niestety środowisko \texttt{parcolumns} działa w trybie liniowym
+(odpowiadające sobie linie w sąsiednich kolumnach są zawsze tej samej wysokości).
+W związku z czym osadzanie obiektów różnej wysokości w poszczególnych kolumnach
+czy nawet użycie różnej wielkości czcionki jest problematyczne.
+Możemy jednak oszukiwać:
+
+\begin{CatchExample}
+\begin{tcolorbox}[breakable]%
+\begin{parcolumns}[
+	distance=0.1\textwidth,
+	colwidths={1=.45\textwidth, 2=.45\textwidth}
+]{2}
+  \colchunk[1]{
+    \lipsum[1][1-2]
+    \begin{center}
+    \begin{adjustbox}{trim=0 \Height \Width 0, clip=false}
+    \includegraphics[width=0.95\linewidth]{/usr/share/texlive/texmf-dist/tex/latex/mwe/example-image}
+    \end{adjustbox}
+    \newline \newline \newline \newline \newline \newline
+    \end{center}
+    \lipsum[1][3-11]
+  }
+  \colchunk[2]{
+    \lipsum[1][1-13]
+  }
+\end{parcolumns}
+\end{tcolorbox}
+\end{CatchExample}
+
+\putExampleTeX
+
+\begin{adjustwidth}{.05\textwidth}{.05\textwidth}
+	\setlength{\hsize}{\hsize-.05\textwidth}
+	\inputminted[breakaftersymbolpost={},numbers=left,numbersep=4pt,fontsize=\footnotesize]{latex}{\jobname.0.tmp}
+\end{adjustwidth}
+
+\end{nthcolumn}
+\begin{nthcolumn}{2}
+\textbf{Prawa kolumna.}
+
+\lipsum[1-3]
+
+\end{nthcolumn}
+\end{paracol}
+
+Pakietem pozwalającym na tworzenie skomplikowanych układów strony opartych na ramkach jest \pkgLink{flowfram}.
+Umożliwia on automatyczny przepływ głównego tekstu dokumentu pomiędzy kolejnymi ramkami typu \emph{flow},
+umożliwia także umieszczanie dodatkowych ramek (statycznych lub dynamicznych) z zawartością ustalaną przy pomocy odpowiedniego środowiska.
+
+Niestety nie pozwala na automatyczny przepływ tekstu pomiędzy ramkami statycznymi i/lub dynamicznymi. Możliwe jest jedynie ręczne przerzucanie tekstu do kolejnej ramki przy pomocy \Verb$\continueonframe$.
+
+Przykład dokumentu opartego na \texttt{flowfram}:
+
+\begin{MintedCode}
+\documentclass[fontSize=10pt,extra]{pdfArticle}
+
+\usepackage{flowfram, lipsum}
+
+% definiujemy ramki statyczne i jedną "flow" na pierwszej stronie
+\newstaticframe[1]{\textwidth}{.2\textheight}{0pt}{.8\textheight}[top]
+\newstaticframe[1]{.35\textwidth}{.8\textheight}{0pt}{0pt}[left1]
+\newflowframe[1]{.6\textwidth}{.8\textheight}{.4\textwidth}{0pt}
+
+% definiujemy ramki na kolejnych stronach
+\newstaticframe[2]{.35\textwidth}{\textheight}{0pt}{0pt}[left2]
+\newflowframe[>1]{.6\textwidth}{\textheight}{.4\textwidth}{0pt}
+
+% ustawiamy opcje ramek
+\setstaticframe*{top,left1,left2}{valign=t}
+
+\begin{document}
+
+% określamy zawartość dla ramki "top"
+\begin{staticcontents*}{top}
+\color{red}TOP \lipsum[1]
+\end{staticcontents*}
+
+% określamy zawartość dla ramki "left1" i "left2"
+% korzystamy z przełączenia do kolejnej ramki z użyciem \continueonframe
+\begin{staticcontents*}{left1}
+\color{red}LEFT 1 \lipsum[1]
+
+\continueonframe[Ciąg dalszy nastąpi]{left2}
+
+\color{red}LEFT 2 \lipsum[2]
+\end{staticcontents*}
+
+% główny tekst przepływa pomiędzy kolejnymi flowframe
+\lipsum[1-13]
+
+\end{document}
+\end{MintedCode}
+
+\end{document}

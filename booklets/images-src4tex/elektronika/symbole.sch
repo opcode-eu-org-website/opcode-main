@@ -1,0 +1,38 @@
+v 20130925 2
+T 50700 49600 9 13 1 0 0 1 1
+rezystor
+T 50700 48800 9 13 1 0 0 1 1
+kondensator
+T 50700 48100 9 13 1 0 0 1 1
+cewka
+C 48400 49500 1 0 0 resistor-2.sym
+{
+T 48800 49850 5 10 0 0 0 0 1
+device=RESISTOR
+}
+C 49500 49500 1 0 0 resistor-1.sym
+{
+T 49800 49900 5 10 0 0 0 0 1
+device=RESISTOR
+}
+C 48400 48600 1 0 0 capacitor-1.sym
+{
+T 48600 49300 5 10 0 0 0 0 1
+device=CAPACITOR
+T 48600 49500 5 10 0 0 0 0 1
+symversion=0.1
+}
+C 49500 48600 1 0 0 capacitor-2.sym
+{
+T 49700 49300 5 10 0 0 0 0 1
+device=POLARIZED_CAPACITOR
+T 49700 49500 5 10 0 0 0 0 1
+symversion=0.1
+}
+C 49000 48000 1 0 0 coil-1.sym
+{
+T 49200 48400 5 10 0 0 0 0 1
+device=COIL
+T 49200 48600 5 10 0 0 0 0 1
+symversion=0.1
+}

@@ -1,0 +1,128 @@
+\documentclass[fontSize=10pt, rmargin=3cm, extra]{pdfArticle}
+
+\title {Advanced PDF Demo}
+\author{Robert Ryszard Paciorek <rrp@opcode.eu.org>}
+\date  {2019-05-13}
+
+\makeatletter\hypersetup{
+	pdftitle = {\@title},
+	pdfauthor = {\@author}
+}\makeatother
+
+
+% set line stretch, paragraph indent and skip
+\setstretch{1.1} \setlength{\parindent}{0pt} \setlength{\parskip}{5pt}
+
+% include Examples related functions
+\input{LaTeX-demos-examples.tex}
+
+\usepackage{pdfpages} % włączanie wielustronnicowych PDFów
+\usepackage{luatex85,attachfile2,embedfile}
+
+% funkcje (załączniki, komentarze, ...) pdf-owe
+\let\ulx\ul \let\stx\st \let\hlx\hl  \let\ul\relax \let\st\relax \let\hl\relax
+\usepackage{pdfcomment}  % włącza solu :-(  ... bo używa całkiem ciekawego soulpos
+
+\usepackage{lipsum}
+
+\begin{document}
+
+To demo prezentuje zagadnienia związane z funkcjami dokumentów PDF takimi jak załączanie plików, notatki, itp.
+Dokument ten oparty jest na klasie \rrpPkgLink{pdfArticle},
+	jednak większość prezentowanych zagadnień dotyczy pakietów nie wykorzystywanych w tej klasie.
+
+\section{Zaawansowane funkcje PDFów}
+
+\subsection{Załączanie plików}
+
+Istnieją dwa sposoby załączania innych plików do plików pdf:
+\begin{itemize}
+\item globalnie (plik będzie dostepny np. w File → Embedded Files)
+\item w postaci notatki zawierającej plik
+\end{itemize}
+
+Pakiet \pkgLink{embedfile} umożliwia osadzanie globalne pliku przy pomocy komendy \Verb$\embedfile$:
+
+\vspace{7pt}
+\begin{Example}
+\embedfile[desc={definicja klasy dokumentu}]{pdfArticle.cls}
+\end{Example}
+\vspace{7pt}
+
+Pakiet \pkgLink{attachfile2} umożliwia załączanie pliku w postaci notatki przy pomocy komendy \Verb$\attachfile$:
+
+\vspace{7pt}
+\begin{Example}
+\attachfile[
+		description={Plik źródłowy}, icon={Tag}
+	]{latex-AdvancedPDF.tex}
+\end{Example}
+\vspace{7pt}
+
+\subsection{Interaktywne formularze}
+Pakiet \pkgLink{hyperref} zapewnia wsparcie dla tworzenia interaktywnych formularzy w PDFach. Poniżej pokazany jest przykład formularza stworzonego z użyciem tego pakietu.
+\begin{ExampleVertical*}
+\begin{Form}
+	\vbox to 20pt{\vfill Ala ma:         \tabto{3cm}
+		\TextField [bordercolor={}, default=bota, name=f1]{}
+	}
+	\vbox to 20pt{\vfill W wersji:       \tabto{3cm}
+		\ChoiceMenu[bordercolor={}, combo, name=f2]{}{demo, v1.1, 2.0, innej}
+	}
+	\vbox to 30pt{\vfill Dodatkowe info: \tabto{3cm}
+		\TextField [bordercolor={}, multiline=true, height=20pt, name=f3]{}
+	}
+	\vbox to 20pt{\vfill Akceptacja      \tabto{3cm}
+		\CheckBox  [bordercolor={}, name=f4]{}
+	}
+\end{Form}
+\end{ExampleVertical*}
+
+\subsection{Inne funkcje}
+
+\subsubsection{pakiet navigator}
+
+Z pomocą pakietu \pkgLink{navigator} możliwe jest także tworzenie bardziej surowych linków PDFowych poprzez \Verb$\anchor{ID}$, odwoływać się do nich można poprzez: \Verb$\jumplink{ID}{tekst linku}$.
+
+Umożliwia on także dodawanie pozycji do zakładek pdf'owych (czyli pdf'owego spisu treści) poprzez
+	\Verb$\outline{x}[outlineID]{tekst}$ (definiuje etykietę ID w miejscu wstawienia) lub
+	\Verb$\outline[anchor=ID]{x}{tekst}$ (zakładka wskazuje na etykietę ID),
+	gdzie x określa poziom w menu zakładek.
+Zakładki te zostaną umieszczone po zakładkach związanych z automatycznym spisem sekcji.
+
+
+\subsubsection{Notatki PDF - pakiet pdfcomment}
+\begin{pdfsidelinecomment}[color=red,author={Inny Autor},linewidth=3mm,linesep=1cm]{ notatka na obu marginesach }
+Pakiet \pkgLink{pdfcomment} jest chyba najbardziej rozbudowanym z pakietów umożliwiających dodawanie do plików pdf różnego rodzaju notatek.
+
+(trochę rozciągacza żeby notatka na marginesie ładnie wyglądała) \lipsum[1-2]
+\end{pdfsidelinecomment}
+
+\vspace{1cm}
+
+Z użyciem pdfcomment możemy komentować bloki tekstu (tak jak powyżej po bokach), wstawiać notatki na marginesach oraz w \pdfcomment[icon=Note,color=yellow,opacity=0.5,author={Inny Autor}]{Notatka umieszczona w tekście} tekście.
+\pdfmargincomment[icon=Insert,color=red,author={Jeszcze Inny Autor}]{Notatka umieszczona na marginesie}
+
+Możliwe jest też oznaczanie i komentowanie fragmentów tekstu poprzez
+\pdfmarkupcomment[color=blue,markup=Highlight,author={Inny Autor 2}]{podświetlenia}{notatka do oznaczonego fragmentu nr 1},
+\pdfmarkupcomment[color=blue,markup=Underline,author={Inny Autor 2}]{podkreślenia}{notatka do oznaczonego fragmentu nr 2} i
+\pdfmarkupcomment[color=blue,markup=StrikeOut,author={Inny Autor 2}]{przekreślenia}{notatka do oznaczonego fragmentu nr 3}.
+%Pakiet pozwala \pdftooltip{także na dodawanie "tooltips"}{to jest właśnie dymek związany z tamtym tekstem.}
+
+3 cm wyżej i 7 na prawo od tego > \pdffreetextcomment[subject={free text comment},height=1cm,width=3cm,voffset=5cm,hoffset=3cm,opacity=0.5,color=yellow,author={Jeszcze Inny Autor}]{Notatka w prostokącie} < miejsca będzie notatka w prostokącie.
+
+\subsection{Włączanie wielostronicowych plików PDF}
+
+Pakiet \pkgLink{pdfpages} umożliwia włączanie plików PDF lub ich części do generowanego dokumentu. Pozwala na wybór stron z włączanego pliku, umieszczanie kilku stron na jednej stronie, dodawanie stron z włączanych plików do spisu treści, automatyczne skalowanie dodawanych stron lub dostosowywanie rozmiarów stron do dodawanych stron i wiele więcej.
+
+Następna strona została włączona poleceniem:
+
+\begin{CatchExample}
+\includepdf[fitpaper=true]{/usr/share/texlive/texmf-dist/tex/latex/mwe/example-image-a5-landscape.pdf}
+\end{CatchExample}
+
+\putExampleVerbatimAdjust
+
+\putExampleTeX
+
+\end{document}

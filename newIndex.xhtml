@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pl" lang="pl">
+<head>
+	<title>OpCode.eu.org - strona główna</title>
+	
+	<link rel="stylesheet" href="lib/index.css" type="text/css" />
+	<style>
+		#vademecum {
+			max-width: 600px; grid-area: 1 / 8 / span 1 / span 6;
+		}
+		#linux {
+			max-width: 700px; grid-area: 1 / 1 / span 2 / span 7;
+		}
+		#programowanie {
+			max-width: 550px; grid-area: 5 / 8 / span 2 / span 6;
+		}
+		#elektronika {
+			max-width: 600px; grid-area: 3 / 1 / span 4 / span 7;
+		}
+		#game {
+			width: 220px; grid-area: 2 / 9 / span 3 / span 2;
+		}
+		#blog {
+			/*width: 220px; grid-area: 2 / 11 / span 3 / span 3;*/
+			width: 220px; grid-area: 2 / 10 / span 3 / span 3;
+		}
+		#latex {
+			max-width: 580px; grid-area: 7 / 7 / span 2 / span 7; justify-self: right;
+		}
+		#misc {
+			max-width: 610px; grid-area: 7 / 1 / span 2 / span 7; justify-self: center;
+		}
+
+		@media all and (max-width: 1333px) {
+			.menu > div > div {
+				grid-template-columns: repeat(8, 100px);
+			}
+			#vademecum {
+				/*max-width: 600px; grid-area: 1 / 2 / span 1 / span 6;*/
+				max-width: 600px; grid-area: 1 / 1 / span 1 / span 6;
+			}
+			#game {
+				width: 280px; grid-area: 2 / 1 / span 1 / span 4; justify-self: center;
+			}
+			#blog {
+				/*width: 280px; grid-area: 2 / 5 / span 1 / span 3; justify-self: center;*/
+				width: 220px; grid-area: 1 / 7 / span 1 / span 2; justify-self: right;
+			}
+			#linux {
+				max-width: 800px; grid-area: 3 / 1 / span 1 / span 8;
+			}
+			#programowanie {
+				max-width: 380px; grid-area: 4 / 5 / span 1 / span 4;
+			}
+			#elektronika {
+				max-width: 380px; grid-area: 4 / 1 / span 1 / span 4;
+			}
+			#latex {
+				width: 380px; grid-area: 5 / 5 / span 1 / span 4; justify-self: center;
+			}
+			#misc {
+				max-width: 380px; grid-area: 5 / 1 / span 1 / span 4;
+			}
+		}
+
+		@media all and (max-width: 800px) {
+			.menu > div > div {
+				grid-template-columns: 100%;
+			}
+			#vademecum {
+				max-width: 100%; grid-area: 1 / 1 / span 1 / span 1;
+			}
+			#blog {
+				max-width: 100%; grid-area: 2 / 1 / span 1 / span 1; justify-self: center;
+			}
+			#game {
+				max-width: 100%; grid-area: 3 / 1 / span 1 / span 1; justify-self: center;
+			}
+			#linux {
+				max-width: 100%; grid-area: 4 / 1 / span 1 / span 1;
+			}
+			#programowanie {
+				max-width: 100%; grid-area: 5 / 1 / span 1 / span 1;
+			}
+			#elektronika {
+				max-width: 100%; grid-area: 6 / 1 / span 1 / span 1;
+			}
+			#latex {
+				width: 100%; grid-area: 7 / 1 / span 1 / span 1; justify-self: center;
+			}
+			#misc {
+				max-width: 100%; grid-area: 8 / 1 / span 1 / span 1;
+			}
+		}
+	</style>
+</head><body>
+
+<h1>www.OpCode.eu.org</h1>
+
+<div class="menu"><div><div>
+
+<div class="section" id="vademecum">
+	<a href="http://vip.opcode.eu.org/">
+		<h3>Vademecum informatyki praktycznej</h3>
+	</a>
+	<p>
+		<a href="http://vip.opcode.eu.org/">
+			<span class="txt" style="max-width: 300px;">Kompedium wiedzy z podstaw elektroniki, programowania, posixowych systemów operacyjnych i sieci komputerowych.</span>
+		</a>
+		<span class="img">
+			<a href="http://vip.opcode.eu.org/"><img src="lib/htmlFile.svg" alt="dokument (X)HTML" title="dokument (X)HTML"/></a>
+			<a href="http://vip.opcode.eu.org/vademecum.pdf"><img src="lib/pdfFile.svg" alt="dokument PDF" title="dokument PDF"/></a>
+		</span>
+	</p>
+</div>
+
+
+<div class="section" id="linux">
+	<h3>Linux</h3>
+	<ul>
+		<li>
+			<a href="Podstawowe_polecenia_Unix.pdf">
+				<div class="txt">Podstawowe <br /> polecenia</div>
+				<div class="img"><img src="lib/pdfFile.svg" alt="dokument PDF" title="dokument PDF"/></div>
+			</a>
+		</li>
+		<li>
+			<a href="Bash_jako_narzędzie_programowania.pdf">
+				<div class="txt">Bash jako narzędzie <br /> programowania</div>
+				<div class="img"><img src="lib/pdfFile.svg" alt="dokument PDF" title="dokument PDF"/></div>
+			</a>
+		</li>
+		<li>
+			<a href="Sieci.pdf">
+				<div class="txt">TCP/IP &amp; <br /> Ethernet</div>
+				<div class="img"><img src="lib/pdfFile.svg" alt="dokument PDF" title="dokument PDF"/></div>
+			</a>
+		</li>
+		<li>
+			<a href="SystemBoot.xhtml">
+				<div class="txt">Bootowanie <br /> systemu</div>
+				<div class="img"><img src="lib/htmlFile.svg" alt="dokument (X)HTML" title="dokument (X)HTML"/></div>
+			</a>
+			<a href="SystemBoot.pdf">
+				<div class="img"><img src="lib/pdfFile.svg" alt="dokument PDF" title="dokument PDF"/></div>
+			</a>
+		</li>
+		<li>
+			<a href="http://old.opcode.eu.org/debian_and_posix/#ABC_OF_COMPUTING:posix:storage">
+				<div class="txt">Storage, czyli dyski, <br /> partycje, lvm, itp</div>
+				<div class="img"><img src="lib/webSite-OldOpCode.svg" alt="artykuł w starej wersji serwisu OpCode" title="artykuł w starej wersji serwisu OpCode"/></div>
+			</a>
+		</li>
+		<li>
+			<a href="LiveUSB.xhtml">
+				<div class="txt">Własne <br />LiveUSB</div>
+				<div class="img"><img src="lib/htmlFile.svg" alt="dokument (X)HTML" title="dokument (X)HTML"/></div>
+			</a>
+			<a href="LiveUSB.pdf">
+				<div class="img"><img src="lib/pdfFile.svg" alt="dokument PDF" title="dokument PDF"/></div>
+			</a>
+		</li>
+		<!--<li>
+			<a href="FIXME">
+				<div class="txt">linux-config</div>
+				<div class="img"><img src="lib/gitRepo.svg" alt="repozytorium GIT" title="repozytorium GIT"/></div>
+			</a>
+		</li>-->
+	</ul>
+</div>
+
+<div class="section" id="programowanie">
+	<h3>Programowanie</h3>
+	<ul>
+		<li>
+			<a href="Wprowadzenie_do_programowania_w_Pythonie.pdf">
+				<div class="txt">Wprowadzenie do <br /> programowania w Pythonie</div>
+				<div class="img"><img src="lib/pdfFile.svg" alt="dokument PDF" title="dokument PDF"/></div>
+			</a>
+		</li>
+		<li>
+			<a href="Podstawy_C.pdf">
+				<div class="txt">Podstawy C</div>
+				<div class="img"><img src="lib/pdfFile.svg" alt="dokument PDF" title="dokument PDF"/></div>
+			</a>
+		</li>
+		<li>
+			<a href="http://old.opcode.eu.org/programing/c_cpp/">
+				<div class="txt">Mini kurs <br /> C i C++</div>
+				<div class="img"><img src="lib/webSite-OldOpCode.svg" alt="artykuł w starej wersji serwisu OpCode" title="artykuł w starej wersji serwisu OpCode"/></div>
+			</a>
+		</li>
+		<li>
+			<a href="Narzędzia_deweloperskie.pdf">
+				<div class="txt">Narzędzia <br /> deweloperskie</div>
+				<div class="img"><img src="lib/pdfFile.svg" alt="dokument PDF" title="dokument PDF"/></div>
+			</a>
+		</li>
+	</ul>
+</div>
+
+<div class="section" id="elektronika">
+	<h3>Elektronika</h3>
+	<ul>
+		<li>
+			<a href="Wprowadzenie_do_elektroniki.pdf">
+				<div class="txt">Wprowadzenie do <br /> elektroniki</div>
+				<div class="img"><img src="lib/pdfFile.svg" alt="dokument PDF" title="dokument PDF"/></div>
+			</a>
+		</li>
+		<li>
+			<a href="http://old.opcode.eu.org/electronics/uklady_tranzystorowe/">
+				<div class="txt">Układy <br /> tranzystorowe</div>
+				<div class="img"><img src="lib/webSite-OldOpCode.svg" alt="artykuł w starej wersji serwisu OpCode" title="artykuł w starej wersji serwisu OpCode"/></div>
+			</a>
+		</li>
+<!--		<li>
+			<a href="FIXME.xhtml">
+				<div class="txt">Programowanie <br /> AVR</div>
+				<div class="img"><img src="lib/htmlFile.svg" alt="dokument (X)HTML" title="dokument (X)HTML"/></div>
+			</a>
+			<a href="FIXME.pdf">
+				<div class="img"><img src="lib/pdfFile.svg" alt="dokument PDF" title="dokument PDF"/></div>
+			</a>
+		</li>-->
+		<li>
+			<a href="https://bitbucket.org/OpCode-eu-org/EDA-libs/">
+				<div class="txt">EDA-libs - symbole <br /> i narzędzia dla gEDA</div>
+				<div class="img"><img src="lib/gitRepo.svg" alt="repozytorium GIT" title="repozytorium GIT"/></div>
+			</a>
+		</li>
+	</ul>
+</div>
+
+
+<!--<div class="section" id="game">
+	<a href="FIXME">
+		<h3>Open Emergency</h3>
+		<p>
+			<span class="txt">otwarto źródłowy <br /> RTS ratowniczy</span>
+		</p>
+	</a>
+	<p>
+		<a href="FIXME"><img src="lib/webSite.svg" alt="serwis WWW" title="serwis WWW"/></a>
+		<a href="FIXME.git"><img src="lib/gitRepo.svg" alt="repozytorium GIT" title="repozytorium GIT"/></a>
+	</p>
+</div>-->
+
+<div class="section" id="blog">
+	<a href="http://blog.opcode.eu.org/">
+		<h3>OpCode Blog</h3>
+		<p>
+			<span class="txt" style="max-width: 110px;">Zapiski sysadmina</span>
+			<span class="img"><img src="lib/webSite.svg" alt="serwis WWW" title="serwis WWW"/></span>
+		</p>
+	</a>
+</div>
+
+
+<div class="section" id="latex">
+	<h3>LaTeX</h3>
+	<ul>
+		<li>
+			<a href="latex-fonts.pdf">
+				<div class="txt">Fonty</div>
+				<div class="img"><img src="lib/pdfFile.svg" alt="dokument PDF" title="dokument PDF"/></div>
+			</a>
+		</li>
+		<li>
+			<a href="latex-PageParagraphsAndBoxes.pdf">
+				<div class="txt">Strony, akapity<br />i pudełka</div>
+				<div class="img"><img src="lib/pdfFile.svg" alt="dokument PDF" title="dokument PDF"/></div>
+			</a>
+		</li>
+		<li>
+			<a href="latex-ListsAndTables.pdf">
+				<div class="txt">Listy<br />i tabele</div>
+				<div class="img"><img src="lib/pdfFile.svg" alt="dokument PDF" title="dokument PDF"/></div>
+			</a>
+		</li>
+		<li>
+			<a href="latex-TitlesHeadersAndFooters.pdf">
+				<div class="txt">Tytuły, stopki<br />i nagłówki</div>
+				<div class="img"><img src="lib/pdfFile.svg" alt="dokument PDF" title="dokument PDF"/></div>
+			</a>
+		</li>
+		<li>
+			<a href="latex-AdvancedPDF.pdf">
+				<div class="txt">PDFy</div>
+				<div class="img"><img src="lib/pdfFile.svg" alt="dokument PDF" title="dokument PDF"/></div>
+			</a>
+		</li>
+		<li>
+			<a href="https://bitbucket.org/OpCode-eu-org/LaTeX-libs/">
+				<div class="txt">LaTeX-libs</div>
+				<div class="img"><img src="lib/gitRepo.svg" alt="repozytorium GIT" title="repozytorium GIT"/></div>
+			</a>
+		</li>
+	</ul>
+</div>
+
+<div class="section" id="misc">
+	<h3>Różności</h3>
+	<ul>
+		<li>
+			<a href="http://old.opcode.eu.org/">
+				<!--<div class="txt">Pozostałości starej <br /> wersji serwisu OpCode</div>-->
+				<div class="txt">Stara wersja <br /> serwisu OpCode</div>
+				<div class="img"><img src="lib/webSite.svg" alt="serwis WWW" title="serwis WWW"/></div>
+			</a>
+		</li>
+		<li>
+			<a href="Blender.xhtml">
+				<div class="txt">Wprowadzenie <br /> do Blendera</div>
+				<div class="img"><img src="lib/htmlFile.svg" alt="dokument (X)HTML" title="dokument (X)HTML"/></div>
+			</a>
+			<a href="Blender.pdf">
+				<div class="img"><img src="lib/pdfFile.svg" alt="dokument PDF" title="dokument PDF"/></div>
+			</a>
+		</li>
+		<li>
+			<a href="https://bitbucket.org/OpCode-eu-org/SvgIconSet/">
+				<div class="txt">Kolekcja <br /> ikon</div>
+				<div class="img"><img src="lib/gitRepo.svg" alt="repozytorium GIT" title="repozytorium GIT"/></div>
+			</a>
+		</li>
+		<li>
+			<a href="https://bitbucket.org/OpCode-eu-org/TextUtils/">
+				<div class="txt">Narzędzia do <br /> obsługi tekstu</div>
+				<div class="img"><img src="lib/gitRepo.svg" alt="repozytorium GIT" title="repozytorium GIT"/></div>
+			</a>
+		</li>
+		<li>
+			<a href="https://bitbucket.org/account/user/OpCode-eu-org/projects/SRC">
+				<div class="txt">Źródła <br /> serwisu</div>
+				<div class="img"><img src="lib/gitRepo.svg" alt="repozytorium GIT" title="repozytorium GIT"/></div>
+			</a>
+		</li>
+	</ul>
+</div>
+
+</div></div></div>
+
+
+</body>
+</html>

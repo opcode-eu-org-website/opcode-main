@@ -1,0 +1,298 @@
+\documentclass[fontSize=10pt,extra]{pdfArticle}
+
+\title {Titles, Headers and Footers Demo}
+\author{Robert Ryszard Paciorek <rrp@opcode.eu.org>}
+\date  {2019-05-13}
+
+\makeatletter\hypersetup{
+	pdftitle = {\@title},
+	pdfauthor = {\@author}
+}\makeatother
+
+
+% multilingual support
+\RequirePackage{polyglossia}
+\setdefaultlanguage{polish} % by default polish settings and names
+                            % only this, NOT \RequirePackage{polski} NOR \RequirePackage[polish]{babel}
+\setotherlanguages{english} % provide english language option too (for code printing)
+
+% set line stretch, paragraph indent and skip
+\setstretch{1.1} \setlength{\parindent}{0pt} \setlength{\parskip}{5pt}
+
+% footnotes always on page bottom
+\let\svfootnoterule\footnoterule
+\renewcommand\footnoterule{\vfill\svfootnoterule}
+
+% include Examples related functions
+\input{LaTeX-demos-examples.tex}
+
+\usepackage{titling}  % modyfikowanie \maketitle
+\usepackage{titlesec} % kontrolowanie formatowania nagłówków sekcji
+
+% naglowki, stopki, daty, ...
+\usepackage{fancyhdr}  % nagłówek i stopka
+\usepackage{lastpage}  % numer ostatniej strony wstawiany przez \pageref{LastPage}
+\usepackage{datetime2} % formatowanie daty i czasu
+\usepackage{lipsum}
+
+\begin{document}
+
+To demo prezentuje zagadnienia związane z formatowaniem nagłówków, tytułów i stopek.
+Dokument ten oparty jest na klasie \rrpPkgLink{pdfArticle},
+	jednak większość prezentowanych zagadnień dotyczy pakietów nie wykorzystywanych w tej klasie.
+
+\section{Tytuł dokumentu}
+
+Stanadrowe polecenie \Verb$\maketitle$ pozwala na wstawienie tytułu zbudowanego w oparciu o informacje ustwaione poprzez polecenia \Verb$\title{}$, \Verb$\author{}$ i \Verb$\date{}$.
+
+\begin{Example}
+\title {To jest tytuł}
+\author{A to jego autor}
+\date  {1970-01-01}
+% powyższe deklaracje mogą być zarówno w treści
+% jak i preambule dokumentu (po lub przed \begin{document})
+\maketitle
+\end{Example}
+
+Pakiet \pkgLink{hyperref} pozwala na ustawienie tytułu i autora umieszczanego w metadanych dokumentu. Umieszczając w preambule dokumentu:
+\begin{MintedCode}
+% wcześniej musi być ustawiony \title {...} i \author{...}
+\makeatletter\hypersetup{
+	pdftitle = {\@title},
+	pdfauthor = {\@author}
+}\makeatother
+\end{MintedCode}
+\vspace{-\parskip}
+możemy ustawić je na wczesniej ustawione wartości tytułu i autora użuywane przez \Verb$\maketitle$.
+
+Pakiet \pkgLink{titling} pozwala wpływac na formatowanie tytułu uzyskiwanego komendą \Verb$\maketitle$, np.:
+\begin{Example}
+% zmniejszamy odstęp przed tytułem
+\renewcommand{\maketitlehooka}{\vspace{-44pt}}
+% zmniejszamy odstęp pomiędzy tytułemn a autorem
+\renewcommand{\maketitlehookb}{\vspace{-14pt}}
+% zmniejszamy odstęp pomiędzy autorem a datą
+\renewcommand{\maketitlehookd}{\vspace{-13pt}}
+% zmniejszamy odstęp po dacie
+\renewcommand{\maketitlehookd}{\vspace{-12pt}} 
+\maketitle
+\end{Example}
+
+Jeżeli potrzebujemy bardzo dużych zmian w sposobie wyświetlania tutułu możemy redefiniować komendę \Verb$\maketitle$ np.
+\begin{Example}
+\makeatletter % powoduje że możemy używać @ w nazwach makr
+\renewcommand{\maketitle}{
+	Tytuł: \textcolor{red}{\@title}\\
+	Autor: \textcolor{blue}{\@author}\\
+	Data: \textcolor{green}{\@date}
+}
+\makeatother % przywracamy standardowe znaczenie @
+\maketitle
+\end{Example}
+
+Należy zrócić uwagę na występowanie znaku \Verb$@$ w nazwach poleceń przechowujących tutuł, autora i datę.
+Aby ich użyć konieczne jest obudowanie poprzez \Verb$\makeatletter$ i \Verb$\makeatother$.
+
+\section{Tytuały sekcji}
+
+\label{test1}
+
+Standardowo w article na którym bazujemy dostępne są 3 poziomy nagłówków typowo z włączoną ich numeracją:\vspace{-20pt}
+\begin{Example}
+\section{sekcja}
+\subsection{sub-sekcja}
+\subsubsection{sub-sub-sekcja}
+\end{Example}
+
+Na fakt ich numerowania lub nie możemy wpływać np. poprzez ustawienie:\\ \Verb#\setcounter{secnumdepth}{2}# włączamy numerację do 2go poziomu włącznie.
+Do bardziej zaawansowanego manipulowania numeracją można użyć redefiniowania komend \Verb#\thesection# \Verb#\thesubsection# itd. np.:
+\begin{Example}
+\renewcommand{\thesubsection}{
+  \thesection-\arabic{subsection})
+}
+\renewcommand{\thesubsubsection}{
+  \thesection-\arabic{subsection}-\arabic{subsubsection})
+}
+\subsection{subsection}
+\subsubsection{subsubsection}
+\end{Example}
+
+Pakiet \pkgLink{titlesec} pozwala konfigurować sposób formatowania i wypisywania nagłówków sekcji.
+Umożliwia konfigurowanie fontu, obramowań, zmianę sposobu wypisywania numeru sekcji
+	(w odróżnieniu od modyfikowania \Verb$\thesubsection$ i jemu podobnych, te zmiany nie wpłyną na sposób wypisywania numerów w referencjach, spisach treści itp),
+	zrezygnowanie z wypisywania numeru, itd.
+Prosty przykład  użycia:
+\begin{Example}
+\titleformat{\subsection}
+ {\large\color{red}} % format etykiety i tekstu
+ {\arabic{subsection}.} % postać etykietu (tutaj numer z kropką)
+ {.5em} % odległość etykiety od terkstu
+ {\itshape}  % komenda do wykoania przed wstawieniem tekstu
+\subsection{subsection}
+\end{Example}
+
+Polecenia \Verb$\section*$, \Verb$\subsection*$, \Verb$\subsubsection*$ wstawiają nienumerowaną sekcję bądź podsekcję.
+Na numerację sekcji możemy wpływać także modyfikujac liczniki np.
+\begin{Example}
+\setcounter{section}{2}
+\setcounter{subsection}{0}
+\end{Example}
+
+spowosuje że kolejna sub-sekcja będzie miała numer 2.1 zamiast 3.4.
+
+\subsection{akapity i wyróżnienia tekstu}
+
+Oprócz sekcji do wstawiania śródtytułów mamy także (standardowo nie numerowane i nie wstawiane do spisu treści) \Verb$\paragraph$ i \Verb$\subparagraph$.
+
+Polecenia \Verb$\emph$ i \Verb$\strong$ pozwalają na wyróżnienie fragmentu tekstu.
+Przypisane do nich formatowanie jest zależne od aktualnych ustawień.
+Polecenia te możemy zagnieżdzać
+
+\begin{Example}
+\emfontdeclare{\itshape,\upshape\scshape,\slshape}
+\emph{ABCdef \emph{ABCdef \emph{ABCdef}}}
+
+\strongfontdeclare{\bfseries,\color{red}}
+\strong{ABCdef \strong{ABCdef}}
+\end{Example}
+
+\vspace{8pt}
+\section{Spisy treści}
+Spis treści umieszczamy poprzez wstawienie \Verb$\tableofcontents$ aby nadać mu nazwę "Spis treści" korzystamy wcześniej z \Verb$\def\contentsname{Spis treści}$. Pozycję do spisu wprowadzają automatycznie polecenia takie jak: chapter, section, subsection, ..., możemy też wstawić ją ręcznie:
+\begin{MintedCode}
+  \addcontentsline{toc}  {nazwa_poziomu_np_section}  {tekst który ma zostać podany w spisie}
+\end{MintedCode}
+Aby decydować które poziomy są pokazywane w spisie treści można użyć \Verb$\setcounter{tocdepth}{x}$, gdzie x określa maksymalny numer poziomu pokazywanego w spisie.
+Możemy też dodawać informacje dodatkowe np. dodatkowy odstęp: \Verb$\addtocontents{toc}{\protect\vspace{1ex}}$
+Jeżeli chcielibyśmy mieć kropki (....) w spisie treści między tytułem sekcji a numerem strony możemy je uzyskać przy pomocy:
+\begin{MintedCode}
+\makeatletter   \renewcommand*\l@section{\@dottedtocline{1}{0cm}{0cm}}  \makeatother
+\end{MintedCode}
+Jeżeli chcielibyśmy pozbyć się numeracji w spisie treści możemy użyć:
+\begin{MintedCode}
+\makeatletter  \renewcommand*\mw@markandtoc{
+  \addcontentsline{toc}{\mw@HeadingType}{\HeadingTOCText}
+} \makeatother
+\end{MintedCode}
+
+\begin{Example}
+\setcounter{tocdepth}{1}
+\tableofcontents
+\end{Example}
+
+\section{Odnośniki}
+Możemy tworzyć odnośniki wewnętrzne z wykorzystaniem: \Verb$\label{ID}$ (lub zdefiniowanego w \rrpPkgLink{pdfArticle} \Verb$\namedLabel{ID}{nazwa}$) w miejscu na które wskazujemy. W miejscu w którym chcemy je przywołać (czyli umieścić link) możemy użyć: \Verb$\ref{ID}$ lub \Verb$\hyperref[ID]{tekst}$.
+Możliwe jest także tworzenie odnośników zewnętrznych poprzez \Verb$\url{URL}$ (\url{http://www.opcode.eu.org/}) lub \Verb$\href{URL}{tekst}$.
+
+\begin{Example}
+Link do: \ref{test1} oraz \hyperref[test1]{
+	inny link do tego samego miejsca
+} w hyperref.
+\end{Example}
+
+
+\section{Przypisy}
+
+Przypisy\footnote{to jest przypis}, możemy dodawać w tekście przy pomocy polecenia \Verb$\footnote{tekst przypisu}$. Są one umieszczane na dole strony, a w miejscu ich wstawienia umieszczany jest odpowiedni odnośnik.
+
+Sposób wyświetlania przypisów możemy modyfikować np. redefiniując \@makefntext:
+\begin{MintedCode}
+\makeatletter\renewcommand{\@makefntext}[1]{%
+  \setlength{\@tempdima}{\columnwidth}\addtolength{\@tempdima}{-9mm}%
+  \protect\footnotesize\hspace{3mm}\makebox[6mm][l]{\@thefnmark.}\parbox[t]{\@tempdima}{#1}%
+}\makeatother
+\end{MintedCode}
+W efekcie powyższej komendy przypisyb będą miały:
+\begin{itemize}
+\item dodatkowy lewy margines wielkości 3mm (zwiększona odległość numeru przypisu od lewej krawędzi strony)
+\item stałej szerokości (6mm) pole przeznaczone na numer przypisu, następującą po nim kropkę
+\item zmienny odstęp związany z niezapełnioną częścią pola stałej szerokości
+\item tekst przypisu (złamane linie będą wyrównane do pierwszej, czyli wcięte o $3+6 = 9\textrm{\ mm}$
+\end{itemize}
+
+Przy pomocy poniższego kodu możemy wymusić aby przypisy były zawsze dociągane do dolnego marginesu:
+\begin{MintedCode}
+\let\svfootnoterule\footnoterule
+\renewcommand\footnoterule{\vfill\svfootnoterule}
+\end{MintedCode}
+
+\section{Nagłówki i stopki}
+
+Domyślnie nagłówek strony jest pusty a stopka zawiera numer strony.
+Nagłówek i stopka mogą być zmieniano zarówno dla całego dokumentu (komendą \Verb$\pagestyle{}$) jak i dla danej strony (komendą \Verb$\thispagestyle{}$).
+Argumentem tych poleceń jest styl nagłówka i stopki. Ustawienie w preambule \Verb$\pagestyle{empty}$ spowoduje że zarówno nagłówek jak i stopka będą puste.
+
+Pakiet \pkgLink{fancyhdr} pozwala na swobodne konfigurowanie nagłówków i stopek. Numer bieżącej strony może zostać wstawiony poleceniem \Verb$\thepage$, a jeżeli chemy móc użyć numeru ostatniej strony przydatny będzie pakiet \pkgLink{lastpage}, pozwalający na wstawienie numeru ostatniej strony poprzez \Verb$\pageref*{LastPage}$ (wersja gwiazdkowana komendy \Verb$\pageref$ wstawia sam numer strony bez tworzenia klikalnego odnośnika).
+
+\begin{CatchExample*}{1}
+% date and time (iso 8601 format with spaces: %Y-%m-%d %H:%M:%S %z)
+\renewcommand*{\DTMdisplaydate}[4]{\number#1-\DTMtwodigits{#2}-\DTMtwodigits{#3}}
+\renewcommand*{\DTMDisplaydate}{\DTMdisplaydate}
+\renewcommand*{\DTMdisplaytime}[3]{\DTMtwodigits{#1}:\DTMtwodigits{#2}:\DTMtwodigits{#3}}
+\renewcommand*{\DTMdisplayzone}[2]{\ifnum#1<0-\else+\fi\DTMtwodigits{#1}\DTMtwodigits{#2}}
+\renewcommand*{\DTMdisplay}[9]{
+	\DTMdisplaydate{#1}{#2}{#3}{#4} 
+	\DTMdisplaytime{#5}{#6}{#7} 
+	\DTMdisplayzone{#8}{#9}
+}
+\renewcommand*{\DTMDisplay}{\DTMdisplay}
+\end{CatchExample*}
+
+\putExampleTeX[1]
+
+Przykłąd użycia \pkgLink{fancyhdr} do zdefiniowania własnego stylu nagłówka i stopki:
+\begin{CatchExample}
+\fancypagestyle{stylSpecjalny}{%
+  % usuwamy wszystkie formatowania
+  \fancyhf{}%
+  % w stopce na stronach niepatrzystych po prawej (RO), na parzystych po lewej (LE)
+  % umieszczamy numer strony / numer ostatniej strony
+  \fancyfoot[RO, LE]{\thepage~/~\pageref*{LastPage}}%
+  % wyłączamy linię oddzielającą stopkę
+  \renewcommand{\footrulewidth}{0pt}%
+  % w ngłówku po środku umieszczamy datę i czas wygenerowania dokumentu
+  \fancyhead[C]{ \DTMnow }%
+  % ustawiamy grubosć linii oddzielającej nagłówek
+  \renewcommand{\headrulewidth}{1pt}%
+}
+\thispagestyle{stylSpecjalny}
+\end{CatchExample}
+
+\putExampleTeX
+
+\putExampleVerbatimAdjust
+
+Użyta do wypisania daty i czasu komenda \Verb$\DTMnow$ pochodzi z pakietu \pkgLink{datetime2}.
+Został on uprzednio skonfigurowany do wypisywania daty w stylu ISO8601 poprzez:
+
+\putExampleVerbatimAdjust[1]
+
+\section{Ustawienia językowe}
+
+Przykładowy spis treści kilka stron temu został automatycznie zatytułowany w języku polskim dzięki ustawieniu w nagłówku dokumentu języka polskiego jako domyślnego:
+
+\begin{MintedCode}
+\RequirePackage{polyglossia}
+\setdefaultlanguage{polish} % domyślne ustawienia dla języka polskiego
+\setotherlanguages{english} % dostarczamy także ustawień dla języka angielskiego
+                            % język moze zostać przełączony \begin{english} ... \end{english}
+% używając pakietu polyglossia nie uzywamy już pakietu polski ani pakietu babel z opcją "polish"
+\end{MintedCode}
+
+Ustawienie to aktywuje także mechanizmy przenoszenia wyrazów odpowiednie dla wybranego języka.
+
+W odróżnieniu od pakietu \texttt{polski} użyty pakiet \pkgLink{polyglossia} nie ustawia polonizacji środowiska matematycznego. Można ją uzyskać np. następującymi deklaracjami:
+
+\begin{MintedCode}
+\newcommand{\tg}{\ensuremath{\operatorfont tg}}
+\newcommand{\ctg}{\ensuremath{\operatorfont ctg}}
+\newcommand{\arctg}{\ensuremath{\operatorfont arctg}}
+\newcommand{\arcctg}{\ensuremath{\operatorfont arcctg}}
+\newcommand{\tgh}{\ensuremath{\operatorfont tgh}}
+\newcommand{\ctgh}{\ensuremath{\operatorfont ctgh}}
+\newcommand{\nwd}{\ensuremath{\operatorfont nwd}}
+\AtBeginDocument{\let\le=\leqslant \let\ge=\geqslant}
+\end{MintedCode}
+
+
+\end{document}

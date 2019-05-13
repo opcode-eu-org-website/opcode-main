@@ -1,0 +1,360 @@
+% Copyright (c) 2018-2019 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\documentclass{pdfBooklets}
+
+\title{Narzędzia deweloperskie: git, make i cmake}
+\author{%
+	%Projekt ,,Matematyka dla Ciekawych Świata'',\\
+	Robert Ryszard Paciorek\\\normalsize\ttfamily <rrp@opcode.eu.org>
+}
+\date  {2019-05-05}
+
+\makeatletter\hypersetup{
+	pdftitle = {\@title}, pdfauthor = {\@author}
+}\makeatother
+
+
+\begin{document}
+
+\maketitle
+
+\section{Systemem kontroli wersji}
+
+Podstawowym zadaniem systemów kontroli wersji jest przechowywanie historii zmian w plikach (np. źródłach jakiegoś projektu, plikach konfiguracyjnych, itp) oraz umożliwianie śledzenia tych zmian (porównywanie wersji, uzyskiwanie informacji o autorach i datach zmian, itd).
+
+W systemach rozproszonych wszystkie kopie repozytoriów są równoprawne (zawierają pełną historię, do każdego z nich mogą być commitowane zmiany, itd), w systemach scentralizowanych występuje pojedynczy serwer do którego commitowane są zmiany i z którego są one pobierane (także operacje związane z historią odwołują się do serwera, a nie lokalnej kopii).
+
+Najpopularniejszymi systemami kontroli wersji są: systemy rozproszone Git (polecenie \Verb{git}), Mercurial (polecenie \Verb{hg}) i Bazaar (polecenie \Verb{bzr}) oraz scentralizowany system kontroli wersji Subversion (polecenie \Verb{svn}). Nadal można spotkać używane repozytoria \Verb{cvs}.
+
+\subsection{Git}
+
+\subsubsection{Inicjalizacja repozytorium}
+
+Mamy dwie podstawowe metody utworzenia repozytorium na którym będziemy pracowali:
+\begin{itemize}
+	\item utworzenie nowego, pustego repozytorium: \Verb{git init}
+	\item pobranie repozytorium z zewnętrznego źródła \Verb{git clone adres}
+\end{itemize}
+Adres repozytorium może być m.in. postaci: \Verb{https://[login@]serwer/sciezka/} lub\\ \Verb{ssh://login@serwer/sciezka/}.
+
+\subsubsection{Kopia robocza i poczekalnia}
+
+\begin{itemize}
+	\item aktualizacja kopii roboczej: \Verb{git checkout [opcje] [sciezka]}\\
+		szczególnie przydatne jest wywołanie \Verb{git checkout -f .} umożliwiająca odrzucenie
+		istniejących zmian w kopii roboczej (reset kopii roboczej do stanu repozytorium)
+	
+	\vspace{6pt}
+	
+	\item dodawanie plików/zmian (do poczekalni): \Verb{git add sciezka}
+	\item usuwanie zmian (z poczekalni): \Verb{git reset HEAD sciezka}
+	\item usuwanie pliku: \Verb{git rm sciezka}\\
+		(jest to równoważne z \Verb{rm sciezka && git add sciezka})
+	\item zmiana nazwy (położenia) pliku: \Verb{git mv staraSciezka nowaSciezka}\\
+		(jest to równoważne z \Verb{git rm staraSciezka; git add nowaSciezka})
+	
+	\vspace{6pt}
+	
+	\item podgląd zmian kopii roboczej i poczekalni: \Verb{git status}\\
+		(aby ignorować jakieś niedodane do repozytorium pliki katalogi należy skorzystać z pliku \Verb{.gitignore})
+	\item różnica kopii roboczej do poczekalni: \Verb{git diff [sciezka]}
+	\item różnica kopii roboczej do wskazanej rewizji: \Verb{git diff rewizja [sciezka]}
+	\item różnica poczekalni do ostatniej / wskazanej rewizji: \Verb{git diff [rewizja] --cached [sciezka]}
+	
+	\vspace{6pt}
+	
+	\item zatwierdzanie zmian z poczekalni (tworzenie rewizji): \Verb{git commit [opcje] [sciezka]}, przydatne opcje:\\
+		\Verb{-a} powoduje automatyczne dodanie zmian w śledzonych plikach\\
+		\Verb{-m "OPIS"} pozwala na podanie opisu zmian z linii poleceń\\
+		\Verb{--amend} pozwala na poprawienie ostatniego commitu
+\end{itemize}
+
+\subsubsection{Historia zmian}
+
+\begin{itemize}
+	\item przeglądanie historii zmian: \Verb{git log [opcje] [sciezka]}, przydatne opcje:\\
+		\Verb{-p} pokazuje w logu zmian diff pomiędzy rewizjami\\
+		\Verb{--name-status} pokazuje nazwy i status (dodanie, usunięcie, modyfikacja) zmienianych plików\\
+		\Verb{--graph} pokazuje wykres gałęzi
+	\item listowanie pliku z danej rewizji: \Verb{git show rewizja:sciezka}
+	\item listowanie struktury repozytorium z danej rewizji: \Verb{git ls-tree rewizja}
+\end{itemize}
+
+\subsubsection{Gałęzie}
+
+\begin{itemize}
+	\item tworzenie nowej gałęzi: \Verb{git branch nazwa}
+	\item scalanie wskazanej gałęzi do aktualnej:\Verb{git merge [zasob_zdalny] nazwa}
+	
+	\vspace{6pt}
+	
+	\item utworzenie gałęzi po stronie zdalnej: \Verb{git push --set-upstream origin nazwa}
+	\item pobranie / aktualizacja informacji (m.in.) o zdalnych gałęziach: \Verb{git fetch}
+	\item listowanie gałęzi: \Verb{git branch -av}
+	
+	\vspace{6pt}
+	
+	\item przełączanie się pomiędzy gałęziami (zmiany w kopii roboczej nie zostanę utracone, w przypadku konfliktu przed przełączeniem będzie konieczność ich zaakceptowania lub odrzucenia):\\ \Verb{git checkout nazwa}
+\end{itemize}
+
+\subsubsection{Zasoby zdalne}
+
+\begin{itemize}
+	\item listowanie zasobów zdalnych: \Verb{git remote -v}
+	\item dodawanie nowego zasobu zdalnego: \Verb{git remote add nazwa URL}
+	
+	\vspace{6pt}
+	
+	\item wysyłanie zmian do (wskazanego) zasobu zdalnego: \Verb{git push [nazwa]}
+	\item pobieranie zmian z (wskazanego) zasobu zdalnego: \Verb{git pull [nazwa]}
+\end{itemize}
+
+
+\section{make}
+
+Make jest narzędziem służącym do automatyzowania kompilacji. Jego zadaniem jest ustalenie które pliki potrzebują kompilacji po zmianach w projekcie na podstawie czasu modyfikacji plików źródłowych, wynikowych oraz reguł zapisanych w pliku \Verb{Makefile}.
+
+\subsection{Wywołanie polecenia make}
+
+Wywołanie polecenia make ma postać \Verb{make [opcje] [akcja]}.
+
+Wśród opcji warto zwrócić uwagę na:\\
+\Verb{-j} pozwalającą określić liczbę równolegle uruchamianych procesów\\
+\Verb{-i} powodującą ignorowanie błędów (normalnie make przerywa pracę gdy któreś z zadań nie powiodło się)\\
+\Verb{-d} wypisywanie informacji dla debugowania.
+
+Akcja określa regułę z pliku \Verb{Makefile} która ma zostać wykonana.
+
+
+\subsection{Plik Makefile}
+
+Plik składa się z reguł następującej postaci:
+\begin{CodeFrame*}[make]{}
+nazwa: zaleznosci
+	polecenia
+\end{CodeFrame*}
+
+Pierwsza linia określa iż plik wynikowy (lub akcja) \Verb{nazwa} zależy od podanych po dwukropku plików.
+Druga linia (i ewentualnie kolejne) zawierają polecenia służące do wygenerowania pliku \Verb{nazwa} lub realizacji tej akcji. Linie te muszą zaczynać się od znaku tabulacji.
+
+\subsubsection{Proste przykłady}
+
+\begin{CodeFrame}[make]{.5\textwidth}
+all:
+	echo "Hello world"
+\end{CodeFrame}
+\begin{minipage}[t]{.45\textwidth}
+\vspace{6pt}\noindent Każde uruchomienie \Verb{make} lub \Verb{make all} spowoduje wypisanie "Hello world".
+\end{minipage}
+
+\begin{CodeFrame}[make]{.5\textwidth}
+all: witaj.txt
+
+co.txt:
+	echo cosiu > co.txt
+
+witaj.txt: co.txt
+	echo -n "Witaj " > witaj.txt
+	cat co.txt >> witaj.txt
+\end{CodeFrame}
+\begin{minipage}[t]{.45\textwidth}
+\vspace{12pt}\noindent Uruchomienie \Verb{make} spowoduje nadpisanie zawartości pliku \Verb{witaj.txt} jeżeli plik \Verb{co.txt} jest od niego nowszy. W przypadku braku pliku \Verb{co.txt} zostanie on utworzony.
+\end{minipage}
+
+\subsubsection{Bardziej zaawansowane pliki Makefile}
+
+Poniższy przykład ilustruje kilka rozwiązań stosowanych w plikach Makefile (dla GNU Make), takich jak ustawianie i korzystanie ze zmiennych, iterowanie po plikach, reguły generyczne:
+\begin{CodeFrame*}[make]{}
+# ustawiamy zmienną CONFDIR
+CONFDIR=$(HOME)/.xyz/lib
+
+# sprawdzamy czy podany plik/katalog istniej
+ifeq ($(wildcard $(CONFDIR)),)
+    # a jeżeli nie to zmieniamy wartość zmiennej CONFDIR
+    CONFDIR=$(HOME)/.xyz-lib
+endif
+
+# ustawienie zmiennej w oparciu o standardowe wyjście innego programu
+DATE=$(shell date --iso)
+
+# wartość tej zmiennej może być nadpisana przez wywołanie:
+# make CONFDIR=prawdziwa/sciezka
+
+# target installConfig kopiuje wszystkie katalogi src-conf/* do $(CONFDIR)
+# zauważ odwłonie do zmiennej makefile'owej CONFDIR vs bashowej inDir w pętli
+installConfig:
+    @ for inDir in src-conf/*; do \
+        install -m 644 -Dt $(CONFDIR)/`basename $$inDir` $$inDir/*" ; \
+    done
+
+# target installGSym odnajduje ścieżkę z której będziemy kopiować i kopiuje ...
+installGSym:
+    # pobieramy output komendy do zmiennej makefilowej w ramach konkretnego targetu
+    $(eval GEDASYSDIR := $(shell gschem -c '(display geda-data-path)(gschem-exit)'))
+    # modyfikujemy zmienną, a jeżeli jest pusta to ustawiamy wartość domyślną
+    $(eval GEDASYMDIR := $(if $(GEDASYSDIR), "$(GEDASYSDIR)/sym", "extra/sym"))
+    install -m 644 -Dt $(CONFDIR)/sym $(GEDASYMDIR)/*"
+
+# uzyskanie pliku xyz.o wymaga pliku xyz.c i wykonania komendy:
+#   $(CC) -c -o xyz.o xyz.c $(CFLAGS)
+# dla dowolnego xyz ...
+%.o: %.c %.h
+    $(CC) -c -o $@ $< $(CFLAGS)
+# % po lewej stronie : zastępuje dowolny ciąg znaków
+#   (podobnie jak * w shellu, ale objemuje też ściezki z katalogami)
+# % po prawej stronie : oznacza podstawienie ciągu dopasowanego do 
+#   znaku % po lewej stronie :
+# pod $@ podstawiane jest to co zostało dopasowane do
+#   całości napisu po lewj stronie :
+# pod $< podstawiany jest pierwszy element z listy zalezności
+#   (tego co po prawej stronie :)
+# pod $^ podstawiana jest całość prawej strony od :
+#   (co jest przydatne np. przy linkowaniu)
+# standardowo $(CC) zawiera ścieżkę do komilatora C,
+#   a $(CFLAGS) zawiera flagi kompilacji
+\end{CodeFrame*}
+
+\section{Generatory plików Makefile}
+
+W przypadku większych projektów często stosowane są narzędzia służące do automatycznego generowania plików Makefile (a często także plików nagłówkowych, itp) w oparciu o dostępne biblioteki i automatyczną detekcję zależności pomiędzy plikami. 
+
+Wywołanie komendy \Verb{make} często musi zostać poprzedzane wywołaniem skryptu \Verb{./configure}. Niekiedy także ten skrypt musi zostać poprzedzony wywołaniem polecenia \Verb{autoreconf} (z pakietu autoconf/automake).
+
+Aktualnie wiele projektów korzysta do konfiguracji kompilacji (i utworzenia plików Makefile) z \Verb{cmake}.
+
+\subsection{cmake}
+
+Cmake jest narzędziem do zarządzania procesem kompilacji. Jest on niezależny od używanej platformy, kompilatora a także narzędzia automatyzacji kompilacji (oprócz omawianego wcześniej \Verb{make} wspiera także kilka innych tego typu narzędzi).
+
+Głównym plikiem konfiguracyjnym programu \Verb{cmake} zawierającym reguły budowania danego oprogramowania jest \Verb{CMakeLists.txt}.
+
+\subsubsection{Wywołanie polecenia cmake}
+
+Wywołanie polecenia cmake ma postać \Verb{cmake [opcje] sciezka}, gdzie \Verb{cmake sciezka} wskazuje katalog zawierający plik \Verb{CMakeLists.txt} (typowo główny katalog ze źródłami projektu).
+
+Konstrukcja taka pozwala na łatwe budowanie projektu w innym katalogu niż ten zawierający źródła\footnote{ pozwala to uniknąć mieszania źródeł z plikami .o, generowanymi plikami Makefile, itp} np.:
+\begin{Verbatim}
+cd sciezka/do/projektu
+mkdir build
+cd build
+cmake ..
+\end{Verbatim}
+
+Wśród opcji należy zwrócić szczególną uwagą na opcję \Verb{-D} pozwalającą na ustawianie flag budowania i kompilacji. Warto także zrócić uwagę na program \Verb{ccmake} pozwalający na przeglądanie i modyfikowanie ustawień kompilacji.
+
+\subsubsection{Plik CMakeLists.txt}
+
+W pliku tym umieszczane są m.in komendy:
+\begin{itemize}
+	\item ustawiające zmienne cmake'owe, które mogą być użyte np. do generowania \Verb{#define} w plikach nagłówkowych czy też if'owania fragmentów pliku CMakeLists.txt (np. w celu wymagania lub nie danych bibliotek) -- \Verb{set()} i polecenia \Verb{option()}
+	\item operujące na listach (np. plików) i plikach -- \Verb{list()} i \Verb{file()}
+	\vspace{6pt}
+	\item ustawiające opcje kompilacji -- \Verb{add_compile_options()}
+	\item dodające katalogi z plikami nagłówkowymi -- \Verb{include_directories()}
+	\item dodające linkowane biblioteki -- \Verb{link_libraries()}
+	\vspace{6pt}
+	\item dodające cele budowania (akcje w Makefile) związane z kompilacją i linkowaniem -- \Verb{add_executable()}, \Verb{add_library()}
+	\item dodające cele budowania (akcje w Makefile) -- \Verb{add_custom_command()} \Verb{add_custom_target()}
+	\item dodające biblioteki linkowane tylko z wskazanym celem budowania -- \Verb{target_link_libraries()}
+	\item ustalające zależności pomiędzy celami -- polecenia \Verb{add_dependencies()}
+	\vspace{6pt}
+	\item realizujące pętle, sprawdzające warunki, definiujące funkcje czy też wypisujące komunikaty -- polecenia takie jak , \Verb{foreach()}, \Verb{if()}, \Verb{macro()}, \Verb{message()}
+\end{itemize}
+
+\noindent Przykład:
+\begin{CodeFrame*}[cmake]{}
+# wymagamy minimalnej wersji cmake
+cmake_minimum_required (VERSION 3.0)
+
+# określamy nazwę naszego projektu i język/kompilator
+project("PoznajemyCMAKE" CXX)
+
+option(USE_XLIB "Use X11 (if possible ...)" ON)
+
+# ustawiamy flagi kompilatora
+add_compile_options("-Wall")
+
+# jeżeli działamy na platformie unix'owej ...
+if(UNIX)
+    # dodajemy opcję linkowania z biblioteką matematyczną
+    # będzie ona dodana do wszystkich wywołań linkera
+    link_libraries(m)
+    
+    # wyszukujemy bibliotekę X11
+    if(${USE_XLIB})
+        find_package(X11)
+        
+        # jeżeli nie ma to przełączamy USE_XLIB na OFF
+        if(NOT ${X11_FOUND})
+            set(USE_XLIB OFF)
+        # a jeżeli jest to dodajemy do listy Libraries
+        else()
+            list(APPEND Libraries ${X11_X11_LIB})
+        endif()
+    endif()
+endif(UNIX)
+
+# tworzymy config.h w oparciu o szablon
+# wpis #cmakedefine USE_XLIB zostanie zamieniony na #define USE_XLIB
+# jeżeli USE_XLIB jest ustawione
+configure_file (
+    "${PROJECT_SOURCE_DIR}/config.h.in"
+    "${PROJECT_BINARY_DIR}/config.h"
+)
+
+# wyszukujemy rekurencyjnie pliki z rozszerzeniem .cpp
+# w pod katalogu src katalogu źródłowego projektu
+file(GLOB_RECURSE Sources "${PROJECT_SOURCE_DIR}/src/*.cpp")
+
+# wypisujemy co znaleźliśmy - debug output ;-)
+message(STATUS "Sources:")
+foreach(ff ${Sources})
+    message(STATUS "  ${ff}")
+endforeach()
+
+# ustawiamy że katalogiem bazowm dla plików nagłówkowych
+# (podawnym w opcji -I gcc/clang) będzie podkatalog src naszego projektu
+include_directories("${PROJECT_SOURCE_DIR}/src")
+# typowo robimy to także dla znalezionych nagłówków bibliotek ...
+
+# dodajemy target w postaci tworzenia pliku wykonywalnego o nazwie Run
+# powstałego z kompilacji i linkowania źródęł z listy Sources
+add_executable(Run ${Sources})
+
+# ustawiamy dodatkowe biblioteki z którymi będzie linkowany plik
+# wykonywalny Run w oparciu o listę Libraries
+target_link_libraries(Run ${Libraries})
+\end{CodeFrame*}
+
+
+\subsection{SCons}
+
+SCons jest alternatywnym rozwiązaniem wobec zestawu \Verb{cmake} + \Verb{make},
+pozwalającym na tworzenie plików zarządzających procesem budowania w postaci skryptów Pythona. 
+
+
+\copyrightFooter{
+	© Robert Paciorek, 2015-2019.\\
+	Kopiowanie, modyfikowanie i redystrybucja dozwolone pod warunkiem zachowania informacji o autorach.
+}
+\end{document}

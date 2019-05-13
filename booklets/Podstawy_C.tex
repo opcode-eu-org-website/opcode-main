@@ -1,0 +1,312 @@
+% Copyright (c) 2017-2019 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2019 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\documentclass{pdfBooklets}
+
+\title{Programowanie w elektronice: Podstawy C}
+\author{%
+	Projekt ,,Matematyka dla Ciekawych Świata'',\\
+	Robert Ryszard Paciorek\\\normalsize\ttfamily <rrp@opcode.eu.org>
+}
+\date  {2019-05-05}
+
+\makeatletter\hypersetup{
+	pdftitle = {\@title}, pdfauthor = {\@author}
+}\makeatother
+
+
+\begin{document}
+
+\maketitle
+
+C / C++ są najpopularniejszymi językami kompilowanymi do kodu maszynowego (a jeżeli traktować je łącznie to najpopularniejszymi językami w ogóle), pozwalają na stosowanie niskopoziomowych mechanizmów (łącznie z wstawkami asemblerowymi), są użyteczne do bezpośredniego programowania sprzętu (bez warstwy systemu operacyjnego) czy też tworzenia systemów operacyjnych.
+
+Język C jest językiem kompilowalnym to znaczy (po zmodyfikowaniu źródeł) przed uruchomieniem programu konieczne jest dokonanie tłumaczenia kodu źródłowego na kod maszynowy przy pomocy odpowiedniego programu (np. clang lub gcc). Kompilacja przebiega kilku etapowo. W pierwszej kolejności wywoływany jest preprocesor, który jest odpowiedzialny za włączanie plików określonych poprzez \cpp{#include} (jest to literalne włączenie zawartości wskazanego pliku w danym miejscu, obsługę rozwijania stałych makr preprocesora (definiowanych z użyciem \cpp{#define}) oraz kompilację warunkową z wykorzystaniem poleceń takich jak \cpp{#ifdef} czy \cpp{#if}. Kompilatory pozwalają na uzyskanie nie tylko wynikowego pliku binarnego, ale także plików po przetworzeniu przez preprocesor czy też po konwersji na assembler.
+
+\section{Zmienne}
+
+Język C wymaga określania typu zmiennej w momencie jej definiowania.
+
+\begin{CodeFrame*}[c]{}
+// liczba całkowita ze znakiem
+int     liczbaA = -34;
+// liczba rzeczywista (pojedynczej precyzji)
+float   liczbaB = 673.1;
+// 8 bitowa liczba całkowita bez znaku, wymaga pliku nagłówkowego inttypes.h
+uint8_t liczbaC = 0xf3;
+
+// zmienna napisowa "C NULL-end string"
+char* napisA = "q we";
+\end{CodeFrame*}
+
+\section{Podstawowe operacje}
+
+Dodawanie, mnożenie, odejmowanie zapisuje się i działają one tak jak w normalnej matematyce, dzielenie zapisuje się przy pomocy ukośnika i zależnie od typów na których operuje jest ono dzieleniem całkowitym lub zmiennoprzecinkowym.
+
+\begin{CodeFrame*}[c]{}
+double a = 12.7, b = 3, c, d, e;
+int x = 5, y = 6, z;
+
+// dodawanie, mnożenie, odejmowanie zapisuje się
+// i działają one tak jak w normalnej matematyce:
+e = (a + b) * 4 - y;
+
+// dzielenie zależy od typów argumentów
+d = a / b; // będzie dzieleniem zmiennoprzecinkowym bo a i b są typu float
+c = x / y; // będzie dzieleniem całkowitym bo z i y są zmiennymi typu int
+b = (int)a / (int)b; // będzie dzieleniem całkowitym
+a = (double)x / (double)y; // będzie dzieleniem zmiennoprzecinkowym
+
+// reszta z dzielenia (tylko dla argumentów całkowitych)
+z = x % y;
+
+// wypisanie wyników
+printf("%d %f %f %f %f %f\n", z, e, d, c, b, a);
+
+// operacje logiczne:
+// ((a większe równe od 0) AND (b mniejsze od 2)) OR (z równe 5)
+z = (a>=0 && b<2) || z == 5;
+// negacja logiczna z
+x = !z;
+
+printf("%d %d\n", z, x);
+
+// operacje binarne:
+// bitowy OR 0x0f z 0x11 i przesunięcie wyniku o 1 w lewo
+x = (0x0f | 0x11) << 1;
+// bitowy XOR 0x0f z 0x11
+y = (0x0f ^ 0x11);
+// negacja bitowa wyniku bitowego AND 0xfff i 0x0f0
+z = ~(0xfff & 0x0f0);
+
+printf("%x %x %x\n", x, y, z);
+\end{CodeFrame*}
+
+
+\section{Przepływ sterowania w programie - skoki, warunki, pętle, funkcje}
+
+Licznik programu (program counter, instruction pointer lub instruction address register) jest rejestrem procesora który określa adres następnej (w niektórych architekturach aktualnej) instrukcji która ma zostać przetworzona procesor.
+
+Skoki bezwarunkowe, instrukcje warunkowe, pętle, wywołania funkcji są realizowane poprzez modyfikację licznika programu. W przypadku wywołań funkcji dodatkowo wykonywane są operacje związane z obsługą stosu (zachowywaniem stanu rejestrów, umieszczaniem argumentów na stosie, ...). Instrukcja goto (realizująca skok bezwarunkowy) jest pełnoprawną instrukcją skoku, jedyną wadą jej stosowania jest to że przy niewłaściwym / zbyt częstym wykorzystywaniu (zamiast wywołań funkcji, warunków i pętli) kod programu staje się mniej czytelny.
+
+W większości przypadków pętle realizowane są na poziomie kodu maszynowego jako zestaw instrukcji (np. inkrementacji zmiennej, sprawdzania warunku, skoku), jednak w niektórych rozwiązaniach pętle (np. typu "powtórz n razy") mogą być realizowane sprzętowo przy pomocy pojedynczej instrukcji.
+
+\subsection{Punkt startu}
+
+Jako że program komputerowy jest sekwencją wykonywanych instrukcji musi rozpoczynać się od określonego miejsca.
+W przypadku kodu C/C++ punktem startu jest funkcja \cpp{main()}. Zakończenie tej funkcji oznacza zakończenie programu, a wartość przez nią zwracana odpowiedzialna jest za tzw. kod powrotu przekazany procesowi wywołującemu program. 
+
+\begin{CodeFrame*}[c]{}
+#include <stdio.h> // włączenie pliku nagłówkowego
+
+int main() {
+  int i, j, k;
+  
+  // instrukcja waunkowa if - else
+  if (i<j) {
+    puts("i<j");
+  } else if (j<k) {
+    puts("i>=j AND j<k");
+  } else {
+    puts("i>=j AND j>=k");
+  }
+  
+  // podstawowe operatory logiczne
+  if (i<j || j<k)
+    puts("i<j OR j<k");
+  // innymi operatorami logicznymi są && (AND), ! (NOT)
+  
+  // pętla for
+  for (i=2; i<=9; ++i) {
+    if (i==3)
+      continue; // pominięcie tego kroku pętli
+    if (i==7)
+      break; // wyjście z pętli
+    printf(" a: %d\n", i);
+  }
+  
+  // pętla while
+  while (i>0) {
+    printf(" b: %d\n", --i);
+  }
+  
+  // pętla do - while
+  do {
+    printf(" c: %d\n", ++i);
+  } while (i<2);
+  
+  // instrukcja wyboru switch
+  switch(i) {
+    case 1:
+      puts("i==1");
+      break;
+    default:
+      puts("i!=1");
+      break;
+  }
+}
+\end{CodeFrame*}
+
+\subsection{Własne funkcje}
+
+\begin{CodeFrame*}[c]{}
+#include <stdio.h>
+
+// funkcja bezargumentowa niezwracająca wartości
+void f1() {
+  puts("ABC");
+}
+
+// funkcja dwuargumentowa zwracająca wartość
+int f2(int a, int b) {
+  puts("F2");
+  return a*2.5 + b;
+}
+
+int main() {
+  f1();
+  
+  int a = f2(3, 6);
+  // zwracaną wartość można wykorzystać (jak wyżej) lub zignorować
+  
+  printf("%d\n", a);
+}
+\end{CodeFrame*}
+
+\section{Złożone typy danych}
+
+\subsection{Struktury}
+Struktura jest złożonym typem danych służącym do grupowania powiązanych ze sobą logicznie zmiennych. Zmienne wchodzące w skład struktury (pola) identyfikowane są nazwami i mogą być różnych typów. Struktura zajmuje ciągły obszar pamięci, w którym umieszczane są wartości kolejnych pól. 
+
+\begin{CodeFrame*}[c]{}
+#include <stdio.h>
+
+struct Struktura {
+  int a, b;
+  double c;
+};
+
+int main() {
+  struct Struktura s;
+  s.a = 13;
+  s.c = 17.3;
+  printf("%f\n", s.a + s.c);
+}
+\end{CodeFrame*}
+
+\subsection{Tablice}
+Tablica jest strukturą danych w której elementy (takiego samego typu) są ułożone w porządku liniowym i są dostępne za pomocą indeksów (kluczy). Typowo tablica indeksowana jest liczbami całkowitymi nie ujemnymi oraz zajmuje ciągły obszar pamięci.
+
+\begin{CodeFrame*}[c]{}
+#include <stdio.h>
+
+int main() {
+  int t[4] = {1, 8, 3, 2};
+  printf("%d -> \n", t[2]);
+  t[2] = 55;
+  printf("  %d \n", t[2]);
+}
+\end{CodeFrame*}
+
+\subsection{Napisy}
+Napisy w C są w istocie tablicami elementów typu \cpp{char}. Pojedynczy znak reprezentowany jest poprzez jeden element tablicy (dla znaków kodowanych jednobajtowo) lub grupę takich elementów (dla znaków kodowanych wielobajtowo, np. polskich znaczków w UTF8). Koniec napisu oznaczany jest przez element o wartości zero (\cpp{NULL}).
+
+\section{Zmienna i jej adres}
+
+Wszelkie dane na których operuje program komputerowy przechowywane są w jakimś rodzaju pamięci - najczęściej jest to pamięć operacyjna. W pewnych sytuacjach niektóre dane mogą być przechowywane np. tylko w rejestrach procesora lub rejestrach urządzeń wejścia-wyjścia.
+
+W programowaniu na poziomie wyższym od kodu maszynowego i asemblera używa się pojęcia zmiennej i (niemal zawsze) pozostawia kompilatorowi/interpretatorowi decyzję o tym gdzie ona jest przechowywana. Oczywistym wyjątkiem są grupy zmiennych, czy też bufory alokowane w sposób jawny w pamięci. Ze względu na ograniczoną liczbę rejestrów procesora większość zmiennych (w szczególności tych dłużej istniejących i większych) będzie znajdowała się w pamięci i będą przenoszone do rejestrów celem wykonania jakiś operacji na nich po czym wynik będzie przenoszony do pamięci.
+
+Z każdą zmienną przechowywaną w pamięci związany jest \emph{adres pamięci} pod którym się ona znajduje. Niektóre z języków programowania pozwalają na odwoływanie się do niego poprzez wskaźnik na zmienną lub referencję do zmiennej (odwołania do adresu zmiennej mogą wymusić umieszczenie jej w pamięci nawet gdyby normalnie znajdowała się tylko w rejestrze procesora).
+
+Wszystkie dane są zapisywane w postaci liczb lub ciągów liczb. Typ zmiennej (jawny lub nie) informuje o tym jakiej długości jest dana liczba i jak należy ją interpretować (jak należy interpretować ciąg liczb). 
+
+\subsection{Wskaźniki}
+Wskaźnik jest zmienną, która przechowuje adres pamięci, pod którym znajdują się jakieś dane (inna zmienna). Jako że wskaźnik jest zmienną która też jest umieszczona gdzieś w pamięci można utworzyć wskaźnik do wskaźnika itd. Na wskaźnikach można wykonywać operacje arytmetyczne (najczęściej jest to dodawanie offsetu). Na wskaźniku można wykonać operację wyłuskania czyli odwołania się do wartości zmiennej pod adresem na który wskazuje, a nie do zmiennej wskaźnikowej (zawierającej adres).
+
+Wskaźniki pozwalają na operowanie dużymi zbiorami danych (duże struktury, napisy, etc) bez konieczności ich kopiowania przy przekazywaniu do funkcji, umieszczaniu w różnych strukturach danych, sortowaniu, itd (kopiowaniu ulega jedynie wskaźnik czyli adres) oraz na współdzielenie tych samych danych pomiędzy różnymi obiektami.
+
+Wskaźnik może wskazywać na niewłaściwy adres w pamięci (np. na skutek zwolnienia tego fragmentu lub błędu w operacjach matematycznych na wskaźnikach - wyjściu poza dozwolony zakres), typowo wskaźnikowi który nic nie wskazuje przypisuje się wartość \cpp{NULL} (zero). Wyłuskania wskaźników o wartości \cpp{NULL} lub wskazujących niewłaściwy obszar pamięci prowadzą do błędów programu, często do zakończenia programu z powodu naruszenia ochrony pamięci ("Segmentation fault"). 
+
+\begin{CodeFrame*}[c]{}
+#include <stdio.h>
+
+int main() {
+  int zm = 13;
+  int *wsk = NULL; // zmienna wskaźnikowa (na typ int)
+  
+  // przypisanie do zmiennej wskaźnikowej adresu zmiennej zm
+  // pobranie adresu zmiennej przy pomocy operatora &
+  wsk = &zm;
+  printf("%p %p\n", &zm, wsk);
+  
+  // odwołanie do zmiennej wskazywanej przez wskaźnik (wyłuskanie wartości)
+  // przy pomocy operatora *
+  printf("%d %d\n", zm, *wsk);
+  *wsk = 17;
+  printf("%d %d\n", zm, *wsk);
+}
+\end{CodeFrame*}
+
+\subsection{Wskaźniki a tablice}
+
+Zmienna tablicowa w C to w istocie wskaźnik na pierwszy element tablicy.
+Dostęp do elementów tablicy odbywa się w oparciu o obliczanie ich adresu na podstawie zależności: AdresElementu = AdresPoczatkuTablicy + IndexElementu * RozmiarElementu.
+
+\begin{CodeFrame*}[c]{}
+#include <stdio.h>
+
+int main() {
+  int t[4] = {1, 8, 3, 2};
+  int *tt = t; // zauważ brak operatora pobrania adresu
+  
+  printf("%d %d\n", t[2], tt[2]);
+  printf("%d %d\n", *(t + 2), *(tt + 2));
+}
+\end{CodeFrame*}
+
+Zauważ że operator \cpp{t[x]} działa tak samo dla tablicy jak i dla wskaźnika i jest w istocie ładniejszym zapisem operacji \cpp{*(t+x)} na samym wskaźniku.
+
+\subsection{Arytmetyka wskaźnikowa}
+
+Jak już zauważyliśmy na wskaźnikach można wykonywać (niektóre) operacje arytmetyczne. Ich działanie jest zależne od typu wskaźnika, tj. zwiększenie wskaźnika o 1 zwiększa adres na który on wskazuje o tyle bajtów ile zajmuje zmienna której typu jest wskaźnik.
+
+\begin{CodeFrame*}[c]{}
+#include <stdio.h>
+
+int main() {
+  char a;  int  b;
+  char *wsk_a = &a;
+  int  *wsk_b = &b;
+  
+  printf("char: %p %p\n", wsk_a, wsk_a+1);
+  printf("int:  %p %p\n", wsk_b, wsk_b+1);
+}
+\end{CodeFrame*}
+
+\copyrightFooter{
+	© Matematyka dla Ciekawych Świata, 2017-2018.\\
+	© Robert Ryszard Paciorek <rrp@opcode.eu.org>, 2003-2019.\\
+	Kopiowanie, modyfikowanie i redystrybucja dozwolone pod warunkiem zachowania informacji o autorach.
+}
+\end{document}

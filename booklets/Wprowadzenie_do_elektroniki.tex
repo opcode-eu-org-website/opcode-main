@@ -1,0 +1,546 @@
+% Copyright (c) 2017-2019 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2019 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\documentclass{pdfBooklets}
+
+\title{Programowanie w elektronice: Wprowadzenie do elektroniki}
+\author{%
+	Projekt ,,Matematyka dla Ciekawych Świata'',\\
+	Robert Ryszard Paciorek\\\normalsize\ttfamily <rrp@opcode.eu.org>
+}
+\date  {2019-05-05}
+
+\makeatletter\hypersetup{
+	pdftitle = {\@title}, pdfauthor = {\@author}
+}\makeatother
+
+
+\begin{document}
+
+\maketitle
+
+% BEGIN: Elektronika - intro
+Elektronika zajmuje się wytwarzaniem i przetwarzaniem sygnałów w postaci prądów i napięć elektrycznych.
+Zjawisko prądu związane jest z przepływem ładunku (z uporządkowanym ruchem nośników ładunku), aby wystąpiło konieczna jest różnica potencjałów (napięcie) pomiędzy końcami przewodnika, prowadzi ono do neutralizacji tej różnicy.
+Dlatego dla podtrzymania stałej różnicy potencjałów konieczne jest istnienie źródeł prądu, prowadzących do rozdzielania ładunków dodatnich od ujemnych.
+
+\section{Podstawowe pojęcia}
+
+\subsection{Napięcie elektryczne}
+    Napięcie elektryczne $U$ pomiędzy punktem A i B (jakiegoś obwodu)
+    jest to różnica potencjału elektrycznego w punkcie A i w punkcie B.
+\subsection{Potencjał elektryczny}
+    Potencjał elektryczny $V$ w punkcie A
+    jest skalarną wielkością charakteryzującą pole elektryczne w danym punkcie. Odpowiada pracy którą trzeba by wykonać aby przenieść ładunek $q$ z tego punktu do nieskończoności podzielonej przez wielkość tego ładunku (jest niezależny od wartości $q$).
+    W elektronice używa się wartości potencjałów względem umownego potencjału zerowego GND (co umożliwia traktowanie ich jako różnic potencjałów - napięć elektrycznych), w efekcie tego określenia "(stałe) napięcie" i "potencjał" bardzo często stosowane są zamiennie. 
+\subsection{Masa}
+   Masa (oznaczana jako GND) jest to
+   umowny potencjał zerowy, względem którego wyraża się inne potencjały w układzie (co umożliwia traktowanie ich jako różnic potencjałów - napięć elektrycznych). Potencjał ten może być równy potencjałowi ziemi (masie ochronnej PE), bądź może być z nim nie związany (układy izolowane).
+
+\subsection{Natężenie prądu}
+    Natężenie prądu elektrycznego $I$ (określane skrótowo jako prąd)
+    jest to stosunek przemieszczonego ładunku do czasu jego przepływu.
+
+\subsection{Napięcie i prąd}
+Dla elementów liniowych (np. zwykły kawałek przewodu) zachodzi proporcjonalność natężenia prądu płynącego przez taki element do napięcia pomiędzy jego końcami: $R=\frac{U}{I}$. Stosunek ten nazywamy oporem (rezystancję).
+
+\section{Prawa Kirchhoffa}
+Węzeł układu (sam w sobie, pomijając zjawiska pasożytnicze) nie jest w stanie gromadzić ładunku elektrycznego zatem: \emph{Suma prądów wpływających do węzła jest równa sumie prądów wypływających z tego węzła.}
+
+Jeżeli rozważamy obwód zamknięty od punktu A z potencjałem $V_A$ to sumując napięcia na kolejnych elementach obwodu (oporach, źródłach napięciowych, etc) z uwzględnieniem ich znaku gdy wrócimy do punktu A to potencjał nadal musi wynosić $V_A$, zatem: \emph{Suma spadków napięć w zamkniętym obwodzie jest równa zeru.}
+
+
+\begin{wrapfigure}{r}{0.35\textwidth}
+  \begin{center}
+    \vspace{-40pt}
+    \includegraphics[width=0.3\textwidth]{img/elektronika/symbole}
+    \vspace{-20pt}
+  \end{center}
+\end{wrapfigure}
+\section{Elementy bierne}
+
+\subsection{Rezystor}
+Rezystor (opornik) wprowadza do układu rezystancję związaną z swoją wartością nominalną. Typowo służy do ograniczania wartości prądu przez niego przepływającego.
+
+Powoduje wydzielanie się energii (cieplnej) związanej z stratami na rezystancji - moc wydzielana dana jest zależnościami: $P = UI = \frac{U^2}{R} = I^2R$, czyli przy stałym napięciu przyłożonym do rezystora im większy jego opór tym mniejsza moc się wydzieli (gdyż popłynie mniejszy prąd), ale przy stałym prądzie płynącym przez rezystor moc rośnie wraz ze wzrostem oporu.
+
+\teacher{\vspace{8pt}\noindent Czy opór to jedyny parametr rezystora? Wspomnieć o parametrze dotyczącym mocy wydzielanej.}
+
+\subsection{Kondensator}
+Kondensator wprowadza do układu pojemność związaną z swoją wartością nominalną. 
+
+Pojemność wyraża zdolność do gromadzenia ładunku przez dany element - im większa pojemność tym więcej ładunku (przy takim samym przyłożonym napięciu) zgromadzi element. $C = \frac{q}{U}$
+
+Typowo służy do ograniczania zmian napięcia (poprzez gromadzenie energii w polu elektrycznym). Czas potrzebny do zmiany napięcia na kondensatorze dany jest zależnością: $\Delta T = \frac{C \cdot \Delta U}{I}$
+
+\begin{Zadanie}{}{}
+\noindent\begin{minipage}[b]{0.55\textwidth}
+Zbuduj układ przedstawiony na schemacie i zaobserwuj zmianę napięcia na kondensatorze w momencie załączania, wyłączania zasilania.
+\vspace{1cm}
+\end{minipage}
+\hfill
+\begin{minipage}[b]{0.4\textwidth}
+\includegraphics[width=\textwidth]{img/elektronika/zad1}
+\end{minipage}
+\end{Zadanie}
+
+\subsection{Cewka}
+Cewka (dławik) wprowadza do układu indukcyjność związaną z swoją wartością nominalną. Typowo służy do ograniczania zmian prądu (poprzez gromadzenie energii w polu magnetycznym). Czas potrzebny zmiany prądu płynącego przez cewkę (dławik stawia opór takiej zmianie tak jak kondensator zmianie napięcia) dany jest zależnością: $\Delta T = \frac{L \cdot \Delta I}{U}$
+
+\teacher{\vspace{8pt}\noindent Opowiedzieć o cewkach w przekaźnikach i transformatorach}
+
+\subsection{Dioda}
+Dioda idealna to element przewodzący prąd tylko w jednym kierunku. Rzeczywiste diody przewodzą prąd zdecydowanie chętniej w jednym kierunku niż w drugim (na ogół przewodzenie w kierunku zaporowym się pomija) ponadto charakteryzują je cechy zależne od technologi wykonania takie jak:
+\begin{itemize}
+\item spadek napięcia w kierunku przewodzenia (typowo dla diod krzemowych 0.6V - 0.7V, a dla diod Schottky’ego 0.3V)
+\item napięcie przebicia - napięcie, które przyłożone w kierunku zaporowym powoduje znaczące przewodzenie diody w tym kierunku - w większości przypadków parametr którego nie należy przekraczać, jednak wykorzystywane (i stanowiące ich parametr) w niektórych typach diod
+\item maksymalny prąd przewodzenia
+\item czas przełączania (związany głównie z pasożytniczą pojemnością złącza) - zdecydowanie krótszy (około 100 ps) w diodach Schottky’ego niż w diodach krzemowych,.
+\end{itemize}
+
+\begin{wrapfigure}{r}{0.3\textwidth}
+  \begin{center}
+    \includegraphics[width=0.25\textwidth]{img/elektronika/diody}
+  \end{center}
+\end{wrapfigure}
+Ponadto stosowane są m.in.:
+\begin{itemize}
+\item diody Zenera - wykorzystuje się (charakterystyczną dla danego typu) wartość napięcia przebicia do uzyskania w układzie spadku napięcia o tej wartości,
+\item diody świecące (LED) - emitujące światło w trakcie przewodzenia (na elemencie występuje stały spadek napięcia, jasność zależy od natężenia prądu),
+\item fotodiody - będące detektorami oświetlenia (przewodzenie spolaryzowanej w kierunku zaporowym zależy od ilości padającego na element światła, niespolaryzowana pod wpływem oświetlenia staje się źródłem prądu).
+\end{itemize}
+
+\begin{Zadanie}{}{}
+\noindent\begin{minipage}[b]{0.7\textwidth}
+Zbuduj układ przedstawiony na schemacie i zaobserwować że dla różnych napięć wejściowych (z zakresu 5-13V) na diodzie świecącej występuje stały spadek napięcia.
+Zaobserwuj że zmianie ulega wartość prądu płynącego w takim obwodzie i że wynika ona z napięcia odłożonego na rezystorze i wartości jego rezystancji).
+\end{minipage}
+\hfill
+\begin{minipage}[b]{0.25\textwidth}
+\includegraphics[width=\textwidth]{img/elektronika/zad2}\vspace{0.5cm}
+\end{minipage}
+\end{Zadanie}
+
+\teacher{\vspace{8pt}\noindent Omówić prostownik jednopołówkowy i mostek prostowniczy}
+
+\begin{Zadanie}{}{}
+\noindent\begin{minipage}[b]{0.6\textwidth}
+Zbuduj układ przedstawiony na schemacie (nazywany mostkiem Gretza) i zauważ że polaryzacja wyjścia (podłączonego do woltomierza) jest niezależna od polaryzacji wejścia (czyli od tego czy biegun dodatni będzie przyłączony do in1 czy in2, a ujemny odpowiednio in2 lub in1).
+\end{minipage}
+\hfill
+\begin{minipage}[b]{0.35\textwidth}
+\includegraphics[width=\textwidth]{img/elektronika/zad3}
+\end{minipage}
+\end{Zadanie}
+% END: Elektronika - intro
+
+% BEGIN: Elektronika - Tranzystory
+\section{Tranzystory}
+Tranzystor jest to element o regulowanym elektrycznie przewodzeniu prądu (oporze), często wykorzystywany do wzmacniania sygnałów lub jako przełącznik elektroniczny (klucz tranzystorowy).
+Klucz jest układem przełączającym wykorzystującym dwa skrajne stany pracy tranzystora - zatkania (tranzystor nie przewodzi), nasycenia (tranzystor przewodzi z minimalnymi ograniczeniami).
+
+\subsection{NPN}
+Prąd przepływający pomiędzy kolektorem a emiterem jest funkcją prądu przepływającego pomiędzy bazą a emiterem: $I_C = \beta I_B$.
+Napięcie pomiędzy kolektorem a emiterem wynosi: $U_{CE} = U_{zasilania} - I_C \cdot R_{load}$.
+Napięcie to nie może jednak spaść poniżej wartości minimalnej wynoszącej około 0.2V, gdy z powyższych zależności wynikałby taki spadek to tranzystor pracuje w stanem nasycenia i $U_{CE} \approx 0.2V$.
+
+\begin{wrapfigure}{r}{0.55\textwidth}
+  \begin{center}
+    \includegraphics[width=0.5\textwidth]{img/elektronika/npn_pnp}
+    \vspace{-20pt}
+  \end{center}
+\end{wrapfigure}
+
+Aby wprowadzić tranzystor NPN w stan zatkania należy podać na jego bazę potencjał mniejszy lub równy potencjałowi emitera (zakładamy że potencjał kolektora jest nie mniejszy niż emitera - co ma miejsce w typowych warunkach polaryzacji tranzystora NPN), czyli $U_{BE} \leq 0$.
+
+Aby wprowadzić tranzystor NPN w stan nasycenia należy na jego bazę wprowadzić potencjał większy od potencjałów emitera i kolektora, uzyskuje się to poprzez wprowadzenie do tranzystora prądu bazy $I_B \gg \frac{U_{zasilania}}{\beta R_{load}}$.
+
+\subsection{PNP}
+Podobnie jak w NPE tyle że prąd przepływający pomiędzy emiterem a kolektorem jest funkcją prądu przepływającego pomiędzy emiterem a bazą.
+
+Aby wprowadzić tranzystor PNP w stan zatkania należy podać na jego bazę potencjał większy lub równy potencjałowi emitera (zakładamy że potencjał emitera jest nie mniejszy niż kolektora - co ma miejsce w typowych warunkach polaryzacji tranzystora PNP), czyli $U_{BE} \geq 0$.
+
+Aby wprowadzić tranzystor PNP w stan nasycenia należy na jego bazę wprowadzić potencjał mniejszy od potencjałów emitera i kolektora, uzyskuje się to poprzez wyprowadzenie z tranzystora prądu bazy $I_B \gg \frac{U_{zasilania}}{\beta R_{load}}$.
+
+\subsection{N-MOSFET}
+
+\begin{wrapfigure}{r}{0.7\textwidth}
+  \begin{center}
+    \vspace{-40pt}
+    \includegraphics[width=0.65\textwidth]{img/elektronika/mosfet}
+    \vspace{-20pt}
+  \end{center}
+\end{wrapfigure}
+
+Prąd przepływający pomiędzy drenem (\emph{drain}) a źródłem (\emph{source}) jest funkcją napięcia pomiędzy bramką (\emph{gate}) a źródłem (potencjału bramki względem źródła - $U_{GS}$), bramka jest izolowana (nie płynie przez nią prąd).
+
+W kierunku dren → źródło tranzystor ten przewodzi gdy $U_{GS} > U_{GS (th)}$, natomiast w przeciwnym kierunku przewodzi zawsze. Dla tranzystorów N-MOSFET z kanałem wzbogacanym (\emph{enhancement}) $U_{GS (th)} > 0$, a z kanałem zubożonym (\emph{depletion}) $U_{GS (th)} < 0$.
+
+Konkretna wartość $U_{GS (th)}$ zależna jest od konkretnego modelu tranzystora, innym istotnym parametrem związanym z sterowaniem tranzystorem jest maksymalna i minimalna dopuszczalna wartość napięcia $U_{GS}$.
+
+Aby wprowadzić tranzystor MOSFET w stan zatkania należy podać $U_{GS} < U_{GS (th)}$. Dla tranzystorów:
+\begin{itemize}
+\item N-MOSFET z kanałem wzbogaconym wystarczy obniżyć potencjał bramki do wartości niewiele wyższej niż potencjał źródła
+\item N-MOSFET z kanałem zubożonym musi to być wartość poniżej potencjału źródła.
+\end{itemize}
+Aby wprowadzić tranzystor MOSFET w stan przewodzenia należy podać $U_{GS} \gg U_{GS (th)}$.
+
+\subsection{P-MOSFET}
+Podobnie jak N-MOSFET tyle że:
+\begin{itemize}
+\item regulowane jest przewodzenie w kierunku źródło → dren (a w kierunku dren → źródło przewodzi zawsze),
+\item przewodzenie w kierunku źródło → dren ma miejsce gdy $U_{GS} < U_{GS (th)}$,
+\item dla tranzystorów z kanałem wzbogacanym (\emph{enhancement}) $U_{GS (th)} < 0$, a z kanałem zubożonym (\emph{depletion}) $U_{GS (th)} > 0$.
+\end{itemize}
+
+Aby wprowadzić tranzystor MOSFET w stan zatkania należy podać $U_{GS} < U_{GS (th)}$. Dla tranzystorów:
+\begin{itemize}
+\item P-MOSFET z kanałem zubożonym wystarczy obniżyć potencjał bramki do wartości niewiele wyższej niż potencjał źródła
+\item P-MOSFET z kanałem wzbogaconym musi to być wartość poniżej potencjału źródła.
+\end{itemize}
+Aby wprowadzić tranzystor MOSFET w stan przewodzenia należy podać $U_{GS} \gg U_{GS (th)}$.
+% END: Elektronika - Tranzystory
+
+\teacher{\vspace{8pt}\noindent Omówić mostek H oraz półmostek H}
+
+\begin{Zadanie}{}{}
+Narysuj schemat układu półmostka H z zastosowaniem tranzystorów bipolarnych (NPN i PNP) jako elementów przełączających.
+\end{Zadanie}
+
+\teacher{\vspace{8pt}\noindent Wpomnieć o triakach - przełączanie w obwodach AC}
+
+% \noindent\begin{minipage}[t]{0.7\textwidth}
+% \begin{Zadanie}{}{}
+% \todo{Tranzystor jako klucz.}
+% \end{Zadanie}
+% \end{minipage}
+% \hfill
+% \begin{minipage}[t]{0.25\textwidth}
+% \vspace{-10pt}
+% \includegraphics[width=\textwidth]{img/elektronika/zad4}
+% \end{minipage}
+
+\begin{teacherOnly}
+\noindent\begin{minipage}[t]{0.6\textwidth}
+\strong{POKAZ: tranzystor jako klucz}\\
+Pokazać i wyjasnić działanie układu pokazanego na schemacie. Pokazać jak zmienia się prąd w obwodzie i spadek napięcia w zależności od nastawy potencjometru.
+
+Pozrozmawiać o sterowaniu cewką - dioda zabezpieczająca.
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.35\textwidth}
+\vspace{-10pt}
+\includegraphics[width=\textwidth]{img/elektronika/zad4-pokaz}
+\end{minipage}
+\end{teacherOnly}
+
+\begin{teacherOnly}
+\noindent\begin{minipage}[t]{0.6\textwidth}
+\strong{POKAZ: LED jako detektor światła}\\
+Wcześniej można pokazać poniższy schemat (bez podpisu "detektor" prz D1) i poprosić aby spróbować odgadnąć co on może robić.
+Następnie omówić działanie układu, pokazać na pojedynczym LED że oświetlenie powoduje pojawienie się napięcia i pokazać że ten układ działa.
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.35\textwidth}
+\vspace{-10pt}
+\includegraphics[width=\textwidth]{img/elektronika/detektor_na_LED}
+\end{minipage}
+\end{teacherOnly}
+
+\teacher{\newpage}
+
+% BEGIN: Elektronika - Bramki
+\section{Bramki}
+\begin{wrapfigure}{r}{0.7\textwidth}
+  \begin{center}
+    \vspace{-40pt}
+    \includegraphics[width=0.65\textwidth]{img/elektronika/bramki}
+    \vspace{-20pt}
+  \end{center}
+\end{wrapfigure}
+
+Bramki są układami elektronicznymi realizującymi podstawowe, opisane powyżej funkcje logiczne. Obok zostały przedstawione podstawowe symbole poszczególnych bramek w wariancie dwu wejściowym, spotkać się można także z symbolami z zanegowanymi wejściami - w takiej konwencji np. bramka AND reprezentowana jest przez NOR z zanegowanymi wejściami. Bramki (z wyjątkiem buforów oraz bramki NOT), mogą występować także w wariantach wielo-wejściowych (ze względu na łączność podstawowych operacji nie ma wątpliwości co don wyniku jaki powinna dawać np. 8 wejściowa bramka OR). Na ogół w pojedynczym układzie scalonym znajduje się kilka jednakowych bramek.
+
+\begin{Zadanie}{}{}
+\noindent\begin{minipage}[t]{\textwidth}
+	\noindent\parbox[b]{0.7\textwidth}{
+		Otrzymałeś układ logiczny w obudowie DIP14, o układzie wyprowadzeń pokazanym na rysunku obok\footnote{
+			Warto zauważyć że sposób numerowania pinów jest standardowy dla danego typu obudowy, natomiast funkcje poszczególnych pinów różnią się w zależności od danego układu i są opisywane w jego dokumentacji).
+		}.
+		Nóżki numer 8 i 9 są wejściami pewnej bramki logicznej, której wyjście jest na nóżce numer 10. Sporządź tablicę prawdy dla tej bramki i zidentyfikuj co to za bramka.
+		\vspace{0.25cm}
+	}\hfill\parbox[b]{0.25\textwidth}{
+		\includegraphics[height=0.22\textwidth,angle=90,origin=c]{img/elektronika/DIP14}
+		\vspace{-0.5cm}
+	}
+\end{minipage}
+\end{Zadanie}
+
+\subsection{trój-stanowe}
+Typowa bramka wymusza (w sposób silny) na swoim wyjściu stan wysoki lub niski, co uniemożliwia bezpośrednie łączenie wyjść bramek.
+Bramki trój-stanowe mają możliwość skonfigurowania wyjścia w stan \emph{wysokiej impedancji} czyli nie wymuszania żadnej jego wartości.
+Sterowanie załączeniem bądź wyłączeniem wyjścia (przełączeniem w stan wysokiej impedancji) odbywa się przy pomocy zewnętrznego sygnału sterującego "output enabled" ("OE"), sygnał ten może występować w postaci prostej i zanegowanej.
+Pozwala to na podłączanie do jednej linii wielu bramek i decydowaniu która z nich będzie nią sterować.
+
+\begin{wrapfigure}{r}{0.7\textwidth}
+  \begin{center}
+    \vspace{-40pt}
+    \includegraphics[width=0.65\textwidth]{img/elektronika/open_drain}
+    \vspace{-20pt}
+  \end{center}
+\end{wrapfigure}
+\subsection{open collector / drain}
+Są kolejnym rodzajem bramek których wyjścia można podłączać do wspólnej linii. Układy te posiadają wyjście w postaci tranzystora zwierającego linię wyjściową do masy, z tego względu samodzielnie zapewniają jedynie stan niski wyjścia (są w stanie wymusić stan niski, ale nie mają możliwości wymuszenia stanu wysokiego).
+
+Stan wysoki musi zostać zapewniony zewnętrznym rezystorem podciągającym. Pozwala to stosować na takiej linii inny poziom stanu wysokiego niż na wejściach takiej bramki oraz pozwala na sterowanie wspólnej linii przez wiele bramek (czyli łączenie wyjść bramek, jednak w odróżnieniu od bramek trój-stanowych nie wymaga dodatkowych sygnałów sterujących).
+
+Na schemacie obok przedstawiono dwa układy (U1 i U2) typu open-drain sterujące wspólną linią wyjściową w układzie \emph{suma na drucie}. Jeżeli jeden z podłączonych do linii układów będzie miał wewnętrzne wyjście ("ctrl\textit{X}") w stanie wysokim to jego wyjście OC będzie zwarte do masy (negacja na tranzystorze N-MOS lub NPN), wtedy też cała linia będzie w stanie niskim.
+
+
+\begin{wrapfigure}{r}{0.61\textwidth}
+  \begin{center}
+    \vspace{-45pt}
+    \includegraphics[width=0.59\textwidth]{img/elektronika/bramki_cmos}
+    \vspace{-35pt}
+  \end{center}
+\end{wrapfigure}
+\subsection{budowa wewnętrzna}
+Przedstawiony powyżej układ sumy na drucie jest bardzo prostą (jedno tranzystorową) realizacją bramki logicznej realizującą funkcję logiczną NOT OR (z punktu widzenia wejść \textit{ctrl1} i \textit{ctrl2} oraz wyjścia \textit{Out}).
+W podobny sposób można zrealizować bramkę AND (negując wejścia, np. przy pomocy jednego traznzystora).
+Jeszcze bardziej uproszczoną realizację można uzyskać stosując diody pozwalające na wpływanie prądu do węzła (funkcja OR) lub wypływanie z niego (funkcja AND).
+
+Po prawej przedstawione zostały schematy ideowe inwertera, dwóch podstawowych bramek (NOR i NAND) oraz bramki transmisyjnej (bufora 3 stanowego) w technologii CMOS.
+
+Działanie tych bramek (za wyjątkiem transmisyjnej) polega na otwieraniu tranzystorów podłączonych do napięcia które chcemy otrzymać na wyjściu, a zamykaniu prowadzących do napięcia przeciwnego. W szczególności bramka NOT stanowi pół-mostek H pomiędzy stanem wysokim a stanem niskim.
+
+Dzięki zastosowaniu tranzystorów PMOS polaryzowanych Vdd oraz NMOS polaryzowanych GND obie gałęzie operują na tym samym sygnale wejściowym (nie jest wymagana jego negacja). Szeregowe łączenie tranzystorów zapewnia że należy otworzyć oba aby otworzyć daną drogę, a równoległe że otwarcie danej drogi powodowane jest otwarciem pojedynczego tranzystora. Dzięki zastosowaniu technologi MOS i podłączaniu wejść bramki tylko do bramek tranzystorów wejścia praktycznie nie pobierają prądu (istotnym wyjątkiem jest chwila zmiany sygnału).
+
+Działanie bramki transmisyjnej polega na przepuszczaniu lub nie (w zależności od stanu wejścia sterującego) sygnału z wejścia na wyjście. Bramka taka nie regeneruje sygnału. Ponadto w uproszczonym (jedno tranzystorowym) rozwiązaniu prowadzi ona do degradacji sygnału wartość w przybliżeniu równą napięciu progowemu tranzystora. Dlatego też na ogół występuje wraz z bramką NOT (bufor 3 stanowy z negacją) lub dwiema szeregowo połączonymi bramkami NOT (bufor 3 stanowy bez negacji).
+
+\begin{Zadanie}{}{}
+Spróbuj zbudować własną bramkę logiczną w oparciu o tranzystory NPN i PNP. Pamiętaj że w odróżnieniu od pokazanych na powyższym schemacie tranzystorów NMOS i PMOS wymagane jest stosowanie rezystora na bramce.
+\end{Zadanie}
+% END: Elektronika - Bramki
+
+% BEGIN: Elektronika - Przerzutniki i rejestry
+\section{Przerzutniki i rejestry}
+\subsection{przerzutniki i ich budowa}
+
+RS Flip-flop (RS Latch) jest podstawowym układem służącym do zapamiętania jednego bitu informacji. Posiada on dwa wejścia (set i reset) i dwa wyjścia (Q i NOT Q), wejścia mogą reagować na stan wysoki (oznaczane jako S i R) lub niski (oznaczane jako wejścia zanegowane ~S i ~R), jedno z wyjść może być jedynie wewnętrzne (nie wyprowadzone na zewnątrz układu). Podanie stanu wysokiego na wejście S (niskiego na ~S) powoduje wystawienie stanu wysokiego na wyjściu Q, a podanie stanu wysokiego na wejście R (niskiego na ~R) powoduje wystawienie stanu niskiego na wyjściu Q. Stan na wyjściu Q nie zmienia się po zmianie wejść S i R na stan niski (zostaje zapamiętany).
+
+\begin{Zadanie}{}{}
+\noindent\begin{minipage}[b]{0.6\textwidth}
+Na schemacie przedstawiono dwubramkową budowę przerzutnika RS w wariancie z wejściami nie zanegowanymi (zastosowanie bramek NAND w miejsce NOR spowodujwe zanegowanie wejść). Zbuduj taki układ i sprawdź jego działanie.
+\end{minipage}
+\hfill
+\begin{minipage}[b]{0.35\textwidth}
+\includegraphics[width=\textwidth]{img/elektronika/RS}
+\end{minipage}
+\end{Zadanie}
+
+\subsection{zatrzask a przerzutnik}
+
+Zatrzask jest elementem reagującym na poziom sygnału na wejściu "enable" (E). W przypadku nie zanegowanego wejścia E, jeżeli jest ono w stanie wysokim sygnał na wyjściach (Q i NOT Q) jest funkcją sygnałów wejściowych, natomiast stan niski wejścia E blokuje zmianę sygnału wyjściowego (zostaje on zapamiętany).
+
+Przerzutnik jest elementem reagującym na zbocze sygnału na wejściu "clock" (CLK). W zależności od konstrukcji może reagować na zbocze narastające, opadające albo na oba (wtedy na jednym realizuje odczyt wejść a na drugim zmianę stanu wyjść).
+
+\student{\clearpage}
+\subsection{zatrzask i przerzutnik D}
+
+\begin{wrapfigure}{r}{0.7\textwidth}
+  \begin{center}
+    \vspace{-25pt}
+    \includegraphics[width=0.65\textwidth]{img/elektronika/przerzutnikD}
+    \vspace{-25pt}
+  \end{center}
+\end{wrapfigure}
+
+Posiada jedno wejścia sygnałowe "data" (D) oraz wejście "enable" (E) w przypadku zatrzasku lub wejście "clock" (CLK) w przypadku przerzutnika. Może także posiadać asynchroniczne (niezależne od stanu wejścia E / CLK) wejścia reset i set (zanegowane lub proste). Obniżenie sygnału E lub zbocze sygnału CLK powodują zapamiętanie (i wystawienie na wyjściu Q) stanu wejścia D.
+
+W przypadku zaprezentowanej realizacji przerzutnika z dwóch zatrzasków sygnał wejściowy zostanie odczytany na zboczu opadającym zegara a wystawiony na wyjście na zboczu narastającym.
+
+\subsection{rejestry}
+Mianem rejestru n-bitowego określa się zespół n przerzutników (rzadziej zatrzasków), często z uwspólnionym sterowaniem (sygnały clock, set, reset, etc) służący do zapamiętania n-bitowej wartości (liczby). W zależności od sposobu zapisu i odczytu można wyróżnić:
+
+\subsubsection{rejestry równoległe}
+Posiadają taką samą liczbę wejść jak i wyjść, sygnał na i-tym wyjściu jest bezpośrednio powiązany z sygnałem z i-tego wejścia (jest sygnałem zapamiętanym z tego wejścia).
+\subsubsection{rejestry szeregowe serial-input}
+Z kolejnymi sygnałami zegarowymi odczytywany jest stan wejścia szeregowego, a stan poprzedni przenoszony jest do kolejnego przerzutnika w ramach rejestru. W ten sposób po n cyklach zegara n-bitowy rejestr ma zapisaną nową zawartość. Często posiada zespolony z nim rejestr równoległy zapobiegający zmianie stanu wyjść w trakcie ładowania danych z wejścia szeregowego przepisanie danych z rejestru przesuwnego do rejestru odpowiedzialnego za sterowanie wyjściami sterowane jest osobnym sygnałem zegarowym.
+\subsubsection{rejestry szeregowe paraller-input serial-output}
+Z kolejnymi sygnałami zegarowymi na wyjście szeregowe wystawiany jest stan kolejnego z rejestrów wejściowych. Wariant asynchroniczny posiada osobny sygnał powodujący odczyt wejść do rejestru (sygnał działa jak "enable" w zatrzaskach). Wariant synchroniczny posiada sygnał decydujący o tym czy na zboczu zegara dokonywany jest odczyt wejść czy też przesuwanie zawartości rejestru umożliwiający odczyt z wyjścia szeregowego.
+\subsubsection{liczniki}
+Z kolejnymi sygnałami zegarowymi zwiększana jest o jeden wartość rejestru. Prostszy w budowie licznik asynchroniczny ma większe (i w dodatku rosnące wraz z bitowością licznika) ograniczenia dotyczące szybkości zliczania od licznika synchronicznego, ze względu na opóźnienie z jakim dochodzi zliczany sygnał (CLK) do kolejnych stopni licznika.
+% END: Elektronika - Przerzutniki i rejestry
+
+
+% BEGIN: Elektronika - Transmisja - sterowanie linią
+\section{Transmisja - sterowanie linią}
+\subsection{bufory}
+
+Bufor jest to układ przekazujący sygnał logiczny z wejścia na wyjście. Bufor może służyć do:
+\begin{itemize}
+\item regeneracji sygnału,
+\item uniemożliwieniu wprowadzenia sygnału z jego strony wyjściowej na wejściową,
+\item decydowania o jego przepuszczeniu lub nie (trój-stanowy),
+\item decydowania o kierunku przepuszczenia sygnału (dwa trój-stanowe albo trój-stanowy dwukierunkowy),
+\item konwersji na linię open-collector / open-drain,
+\item negacji sygnału (niektóre bufory realizują funkcję NOT).
+\end{itemize}
+
+\subsection{enkodery}
+
+Enkoder "n to m" jest to układ o n wejściach, który na swoim m bitowym wyjściu wystawia numer (typowo) wejścia o najwyższym numerze, które znajduje się w stanie niskim. Możliwe są też warianty wystawiające numer pierwszego (a nie ostatniego) w kolejności wejścia lub wybierające wejście ze stanem wysokim.
+
+Jako że wejścia numerowane są zazwyczaj od zera do 2m to układ najczęściej posiada dodatkowe wyjście informujące że którekolwiek z wejść jest w stanie aktywnym. Typowo numer wystawiany jest w postaci NKB, ale możliwe są inne kodowania.
+
+Układ pozwala na redukcję ilości wejść potrzebnych do obsługi n-bitowego sygnału w którym tylko jeden bit może być ustawiony lub w którym można pozwolić sobie na obsługę kolejnych linii z kasowaniem ich bitu (np. wektor przerwań z priorytetyzacją).
+
+\subsection{dekodery}
+
+Dekoder "m to n" jest układem o działaniu przeciwnym do enkodera. Aktywuje on wyjście o numerze odpowiadającym wartości na m-bitowym wejściu adresowym. Typowo posiada także wejście zezwolenia na aktywację wyjść, które może zostać użyte do podłączenia informacji że którekolwiek z wejść enkodera było w stanie aktywnym lub do podłączenia sygnału danych z multipleksowanej linii celem jej demultipleksacji.
+
+\subsection{(de)multipleksery cyfrowy}
+
+Multiplekser cyfrowy (jednokierunkowy) na wyjście kopiuje stan wskazanego (poprzez adres podany na wejście adresowe) wejścia. W przypadku braku sygnału "enable" w zależności od rozwiązania wyjście pozostanie w stanie niskim lub wysokiej impedancji.
+
+Demultiplekser cyfrowy (jednokierunkowy) to zazwyczaj układ dekodera w którym na wejście enabled podany jest sygnał z multipleksowanej linii. Nie wybrane wyjścia pozostają w stanie niskim lub wysokim (zależnie od użycia nieodwracającego lub odwracającego dekodera). Cyfrowe demultipleksery z 3 stanowym wyjściem są rzadkością. Demultipleksację można rozwiązać także przy pomocy odpowiednio sterowanych (np. z dekodera adresu) buforów trój-stanowych lub dwu-wejściowych multiplekserów.
+
+\subsection{(de)multipleksery analogowy}
+
+Multiplekser analogowy (dwukierunkowy) działa na zasadzie przełącznika łączącego wskazane wejście z wyjściem, dzięki elektrycznemu "zwarciu" (na ogół rezystancja takiego zwarcia to kilkadziesiąt omów) wejścia z wyjściem transmisja może odbywać się w obu kierunkach. Pozwala to także na wykorzystanie tego samego układu w roli multipleksera i demultipleksera.
+% END: Elektronika - Transmisja - sterowanie linią
+
+
+% BEGIN: Elektronika - Typy transmisji
+\section{Typy transmisji}
+
+Wyróżnić można typy transmisji:
+\begin{itemize}
+\item \strong{simplex} -- umożliwia tylko transmisję jednokierunkową
+\item \strong{half-duplex} -- umożliwia transmisję dwukierunkową, ale tylko w jedną stronę równocześnie
+\item \strong{full-duplex} -- umożliwia pełną transmisję dwukierunkową (równoczesne nadawanie i odbiór)
+\end{itemize}
+
+\section{Magistrala równoległa}
+
+\begin{figure}\begin{center}
+    \includegraphics[width=0.85\textwidth]{img/elektronika/magistrala_rownolegla}
+\end{center}\end{figure}
+Magistrala równoległa jest zespołem linii, wraz z układami nimi sterującymi, umożliwiającym równoległe przesyłanie danych (w jednym czasie / takcie zegara na magistrali wystawiane / przesyłane jest całe n-bitowe słowo).
+Można wyróżnić szyny sterującą (kierunek przypływu, żądania obsługi, etc), adresową (adres układu który ma prawo nadawać) i danych (przesyłane dane). Często szyna adresowa współdzieli linie transmisyjne z szyną danych.
+Do realizacji magistrali (celem umożliwiania podłączenia wielu układów) stosuje się zazwyczaj bufory trój-stanowe, a do zapewnienia współdzielonej szyny żądania obsługi (interrupt request) często układy typu open-collector.
+
+Typowy układ realizacji magistrali half-duplex ze współdzielonymi liniami danych i adresu przestawiony został na schemacie zamieszczonym obok.
+Zadaniem dekodera adresu jest ustalenie czy wystawiony na magistrali adres (w trakcie wysokiego stanu linii "Adres / Not Dane") jest adresem danego urządzenia i zapamiętanie tej informacji do czasu wystawienia nowego adresu. Informacja ta jest wykorzystywana do sterowania dwukierunkowym buforem trój-stanowym (jako sygnał enable).
+O kierunku działania bufora decyduje sygnał "Read / Not Write". Przy magistralach o ustalonym protokole transmisyjnym sterowanie kierunkiem może być zależne od wykonywanej komendy (po ustawieniu adresu urządzenie odczytuje z magistrali polecenie i w zależności od niego steruje kierunkiem bufora - odczytuje lub zapisuje dane na magistralę).
+Zastosowanie kilku linii typu OC do odbierania żądań obsługi pozwala (na podstawie tego które z tych linii znalazły się w stanie niskim na identyfikację urządzenia lub grupy urządzeń, z której niektóre zgłaszają żądanie obsługi.
+
+W przypadku prostych urządzeń wejścia / wyjścia zamiast buforu dwukierunkowego może być umieszczony np.
+jednokierunkowy bufor (lub n-bitowy rejestr) z wyjściami trój-stanowymi, który wystawia dane na magistralę w oparciu o sygnał zapisu na magistralę (WR) oraz zegar (clock) albo
+n-bitowy rejestr do którego zapisywane są dane z magistrali w oparciu o sygnał RD i Clock.
+
+\section{Magistrala szeregowa}
+
+\begin{figure}\begin{center}
+    \includegraphics[width=0.85\textwidth]{img/elektronika/magistrala_szeregowa}
+\end{center}\end{figure}
+W magistrali szeregowej dane przesyłane są bit po bicie w pojedynczej linii. Podobnie jak w magistrali równoległej oprócz linii danych mogą występować także linie sterujące. Prostą realizację magistrali szeregowej zapewniają rejestry przesuwne.
+
+Przykładowy układ realizacji magistrali simplex (jednokierunkowej) z rozdzielonymi szynami danych i adresową został na schemacie zamieszczonym obok.
+W prezentowanym przykładzie oprócz adresu master wystawia trzy sygnały - dane, zegar i strobe. Z każdym taktem zegara na linii danych wystawiany jest kolejny bit który jest wczytywany do zespołu rejestrów. Sygnał strobe służy do przepisania wartości z rejestrów przesuwnych do rejestrów wyjściowych, takie rozwiązanie zapobiega zmianom wyjść w trakcie przesyłania nowych danych poprzez szynę szeregową, jest ono jednak opcjonalne.
+
+W zależności od konstrukcji dekodera adresu szyna adresowa może być równoległa (w najprostszym przypadku - przez całą transmisję do danego urządzenia jego adres musi być wystawiony na szynie a dekoder jest układem bramek NOT i wielowejściowej bramki AND) lub szeregowa (w takim wypadku powinna posiadać własny zegar lub sygnał informujący o nadawaniu adresu z taktami zegara głównego, a dekoder powinien być wyposażony w rejestr przesuwny do odebrania i przechowywania aktualnego adresu z magistrali). Natomiast jeżeli magistrala byłaby oparta tylko na połączonych szeregowo rejestrach (wyjście serial-out do wejścia serial-in) to szyna adresowa nie jest potrzebna, ale konieczne może być każdorazowe wpisanie wszystkich wartości na szynę (czas zapisu rośnie z ilością podłączonych rejestrów).
+
+\section{Standardowe interfejsy}
+
+Istnieje wiele zestandaryzowanych interfejsów zarówno szeregowych jak i równoległych, wśród najważniejszych należy wymienić:
+
+\subsection{SPI (Serial Peripheral Interface)}
+    jest to szeregowa magistrala full-duplex działająca w układzie master-slave złożona z linii zegarowej (SCLK), nadawania przez mastera (MOSI), odbioru przez mastera (MISO) oraz linii służących do aktywacji urządzenia slave (SS / CS). 
+\subsection{I2C (TWI)}
+    jest to szeregowa magistrala half-duplex złożona z linii sygnałowej (SDA) i zegara (SCL) posiadająca zdefiniowany format ramki wraz z adresowaniem. Z wyjątkiem bitu startu i stopu stan linii danych może zmieniać się tylko przy niskim stanie linii zegarowej.
+    Nadajniki są typu open-drain przez co realizowany jest iloczyn na drucie, co pozwala na wykrywanie kolizji (jeżeli dany nadajnik nie nadaje zera a linia jest w stanie zera to nadaje także ktoś inny). Pozwala to także na uzyskanie układów multimaster, pomimo iż typowo na magistrali takiej występuje tylko jeden układ master (nadający sygnał zegara i inicjujący transmisję). 
+\subsection{1 wire (one-wire)}
+    jest to szeregowa magistrala half-duplex złożona z jedynie z linii sygnałowej (która może także służyć do zasilania urządzeń) posiadająca zdefiniowany format ramki wraz z adresowaniem. Standardowe nadawanie jest realizowane jako open-drain (wyjątkiem jest nadawanie tzw power-byte). 
+\subsection{USART}
+    jest to uniwersalny synchroniczny i asynchroniczny nadajnik i odbiornik, umożliwia realizację szeregowej transmisji synchronicznej (zgodnie z zegarem) lub asynchronicznej (wykrywanie początku ramki na podstawie linii danych). Interfejs korzysta z rozdzielonych linii nadajnika i odbiornika (wyjście danych TxD oraz wejście danych RxD, co umożliwia realizację transmisji full-duplex) oraz może korzystać z dodatkowych sygnałów sterujących (wyjście RTS informujące o gotowości do odbioru oraz wejście CTS informacji o gotowości odbioru / zezwolenia na nadawanie). Niekiedy dostępne jest także wyjście załączenia nadajnika używane do pracy w trybie half-duplex (linie TxD i RxD połączone buforem trój-stanowym nadajnika).
+
+    Interfejs ten najczęściej wykorzystywany jest w trybie asynchronicznym jako UART. W połączeniach UART zarówno nadajnik jak i odbiornik muszą mieć ustawione takie same parametry transmisji (szybkość, znaczenie 9 bitu (typowo bit parzystości, ale może także oznaczać np. pole adresowe), itp).
+    Głównymi standardami elektrycznymi dla UART są: poziomy napięć układów elektronicznych używających tych portów (3.3V, 5V), RS-232 (w pełnym wariancie używa sygnałów kontroli przepływu, poziom logiczny 1 wynosi od -15V do -3V, a poziom logiczny 0 od +3V do +15V), RS-422 (transmisja różnicowa full-duplex pomiędzy dwoma urządzeniami) i RS-485 (transmisja różnicowa half-duplex w oparciu o szynę łączącą wiele urządzeń, kompatybilny elektrycznie z RS-422), możliwia jest też transmisja światłowodowa i bezprzewodowa.
+% END: Elektronika - Typy transmisji
+
+\section{Literatura dodatkowa}
+
+\begin{itemize}
+\item \emph{Vademecum informatyki praktycznej} (\url{http://vip.opcode.eu.org/}) - zbiór materiałów na temat elektroniki i programowania.
+\item \emph{Kurs elektroniki w serwisie \emph{forbot.pl}}\\ (\url{https://forbot.pl/blog/kurs-elektroniki-dla-poczatkujacych-id5151}).
+\item \emph{Kurs elektroniki w serwisie \emph{robotykadlapoczatkujacych.pl}}\\ (\url{http://robotykadlapoczatkujacych.pl/kurs-elektroniki-dla-poczatkujacych/}).
+\end{itemize}
+
+\clearpage
+\section{Zadania domowe}
+\newtheorem{ZadanieDomowe}{Zadanie domowe}
+
+\begin{ZadanieDomowe} [1pkt]
+Oszacuj wartość prądu płynącego przez R1. Odpowiedź krótko uzasadnij.
+\end{ZadanieDomowe}
+
+\begin{ZadanieDomowe} [1pkt]
+Podaj wartość napięcia (względem GND) w punkcie T1 w sytuacji gdy S1 jest wciśnięty (zwarty) oraz w sytuacji gdy jest rozwarty (nie przewodzi). Odpowiedź krótko uzasadnij.
+\end{ZadanieDomowe}
+
+\begin{ZadanieDomowe} [3pkt]
+Podaj wartość napięcia (względem GND) w punkach T2, T3, T4. Odpowiedź krótko uzasadnij.
+\end{ZadanieDomowe}
+
+\begin{center}
+    \includegraphics[width=0.75\textwidth]{img/elektronika/praca_domowa-A}
+\end{center}
+
+\begin{ZadanieDomowe} [2pkt]
+Oszacuj wartość prądu płynącego przez R8 oraz wartość prądu płynącego przez R10. Odpowiedź krótko uzasadnij.
+\end{ZadanieDomowe}
+
+\begin{ZadanieDomowe} [1pkt]
+Podaj wartość napięcia (względem GND) w punkcie T5. Przyjmujemy iż użyte bramki działają na poziomie napięć 5V (prawda) / 0V (fałsz). Odpowiedź krótko uzasadnij.
+\end{ZadanieDomowe}
+
+\begin{center}
+    \includegraphics[width=0.95\textwidth]{img/elektronika/praca_domowa-B}
+\end{center}
+
+\begin{ZadanieDomowe} [2pkt]
+Zapoznaj się z dokumentacją układu 74HC574 (np. \url{https://assets.nexperia.com/documents/data-sheet/74HC_HCT574.pdf}) i opisz sposób jego użycia (wraz z sposobem sterowania) jako modułu podłączonego do 8 bitowej magistrali równoległej w roli układu wejściowego oraz w roli układu wyjściowego.
+\end{ZadanieDomowe}
+
+\begin{ZadanieDomowe} [2pkt]
+Zapoznaj się z dokumentacją układu 74HC595 (np. \url{http://www.ti.com/lit/ds/symlink/sn74hc595.pdf}) i opisz sposób jego użycia (wraz z sposobem sterowania) w roli układu wyjściowego podłączonego do magistrali szeregowej.
+\end{ZadanieDomowe}
+
+\copyrightFooter{
+	© Matematyka dla Ciekawych Świata, 2017-2019.\\
+	© Robert Ryszard Paciorek <rrp@opcode.eu.org>, 2003-2019.\\
+	Kopiowanie, modyfikowanie i redystrybucja dozwolone pod warunkiem zachowania informacji o autorach.
+}
+\end{document}
+

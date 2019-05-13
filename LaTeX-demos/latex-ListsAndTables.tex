@@ -1,0 +1,322 @@
+\documentclass[fontSize=10pt, extra]{pdfArticle}
+
+\title {Lists and Tables Demo}
+\author{Robert Ryszard Paciorek <rrp@opcode.eu.org>}
+\date  {2019-05-13}
+
+\makeatletter\hypersetup{
+	pdftitle = {\@title},
+	pdfauthor = {\@author}
+}\makeatother
+
+
+% set line stretch, paragraph indent and skip
+\setstretch{1.1} \setlength{\parindent}{0pt} \setlength{\parskip}{7pt}
+
+% include Examples related functions
+\input{LaTeX-demos-examples.tex}
+
+%\RequirePackage[ampersand]{easylist}   % easylist environment (for creating multilevel items list with ampersand (&) character
+\usepackage[ampersand]{labels4easylist} % (auto next level via &&, &&&, etc) instead of using \item command ans nested environments)
+
+% tabele i okolice
+\usepackage{multirow,longtable} % lepsze, elastyczniejsze tabele
+\usepackage{diagbox} % komórki dzielone na ukos
+\usepackage{colortbl} % kolorowanie tabel, musi być PRZED ehhline (bo redefiniuje funkcje z pakietu hhline)
+\usepackage{vtable,ehhline}
+\usepackage{dashrule} % zaawansowane linie
+\usepackage{tabu,spreadtab}
+
+\usepackage{lipsum}
+
+\begin{document}
+
+To demo prezentuje zagadnienia związane z formatowaniem list oraz tabel.
+Dokument ten oparty jest na klasie \rrpPkgLink{pdfArticle},
+	jednak większość prezentowanych zagadnień dotyczy pakietów nie wykorzystywanych w tej klasie.
+
+\vspace{-0.3cm}
+
+\section{Listy numerowane i wypunktowywane}
+
+Podstawowym środowiskiem do tworzenia różnego rodzaju list jest środowisko \Verb$list$ przyjmujące dwa argumerty:
+	pierwszy określa etykietę dla poszczególnych punktów, a drugi określa formatownaie tekstu danego punktu.
+
+\begin{Example}
+\begin{list}{\color{red}→}{\color{blue}}
+\item aa
+\item bb
+\end{list}
+\end{Example}
+
+Środowisko to żadko używane jest bezpośrednio dużo częściej stosowane są środowiska \Verb$itemize$, \Verb$enumerate$ oraz \Verb$description$.
+Ich bardziej rozbudowane i konfigurowalne warianty dostarcza pakiet \pkgLink{enumitem}.
+
+\begin{Example}
+\begin{enumerate}
+	\item aa
+	\item bb
+	\begin{enumerate}
+		\item bb aa
+		\begin{enumerate}
+			\item bb aa aaa
+			\item bb aa bbb
+		\end{enumerate}
+		\item bb bb
+	\end{enumerate}
+	\item cc
+\end{enumerate}
+\end{Example}
+
+Powyżej zamieszczona jest domyślnie sformatowana lista numerowana, poniżej zamieszczam przykład własnej definicji listy numerowanej opartej na tym pakiecie z odmiennym formatowaniem:
+
+\begin{CatchExample*}{1}
+% definiujemy środowisko enumIII oferujące listę z:
+%   3 poziomami numerowanymi cyframi arabskimi, jednym literami i jednym wypunktowywanym
+\newlist{enumIII}{enumerate}{5}
+\setlist[enumIII,1]{label=\arabic*., ref=\arabic*}
+\setlist[enumIII,2]{label=\theenumIIIi.\arabic*., ref=\theenumIIIi.\arabic*}
+\setlist[enumIII,3]{label=\theenumIIIii.\arabic*., ref=\theenumIIIii.\arabic*}
+\setlist[enumIII,4]{label=\alph*), ref=\theenumIIIiii.\alph*}
+\setlist[enumIII,5]{label=$\bullet$, ref=\theenumIIIiv.??}
+
+% definiujemy komendę wstawiającą item wypisywany pogróbioną i powiększoną czcionką
+\newcommand{\hitemB}[1]{\large\bfseries\item #1 \mdseries\normalsize}
+\end{CatchExample*}
+
+\begin{CatchExample*}{2}
+\setlist[enumIII]{before={\upshape}}
+\setlist[enumIII,2]{before={\itshape}, label=\theenumIIIi.\arabic*., ref=\theenumIIIi.\arabic*}
+\end{CatchExample*}
+
+\putExampleTeX[1]
+\putExampleTeX[2]
+
+\begin{Example*}
+\begin{enumIII}
+	\hitemB{ pierwszy nagłówek }
+	\begin{enumIII}
+		\item aa  \item bb  % dwa itemy w jednej linii ...
+		\begin{enumIII}
+			\item bb aa
+			\begin{enumIII}
+				\item bb aa aaa \label{e11}
+				\begin{enumIII}
+					\item xx xx
+				\end{enumIII}
+			\end{enumIII}
+		\end{enumIII}
+		\item ee \label{e12}
+	\end{enumIII}
+	\hitemB{ drugi nagłówek }
+		\begin{enumIII}
+		\item ref: e11 → \ref{e11}\\e12 → \ref{e12}
+		\end{enumIII}
+	\end{enumIII}
+\end{Example*}
+
+Środowisko \Verb$enumIII$ oraz polecenie \Verb$\hitemB$ zostało zdefiniowane w pakiecie \rrpPkgLink{styles4lists} w następujący sposób:
+\putExampleVerbatimAdjust[1]
+
+Definicja ta obejmuje konfigurację sposobu w jaki będą prezentowane referencje do etykiet ustawionych w ramach listy.
+W tym wypadku jest to pełny numer punktu rozdzielany kropkami, jak pokazano na powyższym przykładzie.
+
+Dodatkowo zostało włączone wypisywanie kursywą 2 poziomu listy poprzez modyfikację definicji \Verb$enumIII$:
+\putExampleVerbatimAdjust[2]
+
+
+Innym pakietem umożliwiającym zaawansowaną konfigurację list jest \pkgLink{easylist}.
+Dodatkowo pozwala on także na prostsze tworzenie wielopoziomowych list bez konieczności tworzenia zagnieżdżonych środowisk
+(poziom listy jest określany przez ilość znaków oznaczających punkt listy np. \Verb$&$).
+
+\begin{CatchExample*}{1}
+\def\initStdList{\NewList(
+	% separator pomiędzy numerami oraz separatory końcowe
+	Mark=.,FinalMark=.,
+	% ustawienie odstępów między punktami
+	Space=3pt,Space*=1pt,
+	% ustawienia wcięć
+	Hang=true,Align=move,FinalSpace=0.5em,Progressive*=3ex,Margin1=1ex,
+)}
+\def\initEnumIII{\initStdList\ListProperties(
+	% na poziomie 4 uzywamy liter z separtorem końcowym ")"
+	% i nie dołączamy numeracji wyższych poziomów
+	Numbers4=l,Hide4=3,FinalMark4={)},Margin4=8ex,
+	% na poziomie 5 używamy wypunktowywania z użyciem kropki
+	Hide5=5,Style5*=$\bullet$ ,
+)}
+\end{CatchExample*}
+\putExampleTeX[1]
+
+\begin{Example*}
+\begin{easylist}\initEnumIII\ListProperties(
+	% formatowanie tekstu przypisane do 1go poziomu
+	Style1=\large\bf
+)
+& pierwszy nagłówek
+&& aa
+&& bb
+&&& bb aa
+&&&& bb aa aaa \label{e21} \itemLabel{e21a}
+&&&&& xx xx
+&& ee  \label{e22}
+& drugi nagłówek
+&& ref: e21 → \ref{e21} vs \ref{e21a}\\e22 → \ref{e22}
+\end{easylist}
+\end{Example*}
+
+Komenda konfiguracyjna \Verb$\initEnumIII$ została zdefiniowana w pakiecie \rrpPkgLink{styles4lists} w następujący sposób:
+\putExampleVerbatimAdjust[1]
+
+Pakiet \texttt{easylist} nie pozwala wpływać na sposób formatowania referencji do poszczególnych punktów (jest ona zawsze tożsama z wypisanym numerem danego punktu).
+Dlatego w przykładzie została użyta \Verb$\itemLabel$ komenda z pakietu \rrpPkgLink{labels4easylist}, pozwalająca na tworzenie bardziej elastycznych etykiet.
+
+
+\section{Wyrównanie tabulatorowe}
+
+Pakiet \pkgLink{tabto} pozwala na stosowanie wyrównania względem tabulatora.
+Pozycje tabulatora mogą być określane każdorazowo bądź z góry ustalone przy pomocy komendy \Verb$\tab$.
+W połączeniu z komendą \Verb$\makebox$ możliwe jest wycentrowanie i wyrównanie do prawej tekstu umieszczanego na pozycji tabulatora.
+
+\begin{ExampleVertical}
+aa \tabto{3cm} bb \tabto{7cm}\makebox[0.1pt][c]{ccc ccc} \tabto{11cm}\makebox[0.1pt][r]{rrrr} \par
+aaa a aaa aa a \tabto{3cm} bbb b bb \tabto{7cm}\makebox[0.1pt][c]{ccc cc c ccc}
+	\tabto{11cm}\makebox[0.1pt][r]{rrr rr rrrr}
+\end{ExampleVertical}
+
+
+\section{Tabele}
+
+\begin{ExampleVertical}
+\begin{tabular}{ p{2.9cm} || l | r c | r@{.}l || D{.}{.}{-1} }
+długi tekst który zostanie połamany &  bb & cc & dd & 2&718281 & 3.141592 \tabularnewline \hline
+% dwie metody wyrównywania wg kropki dziesiętnej: dwie kolumny rozdzielane kropką, lub kolumna typu D
+% dwie metody kończenia wiersza: \tabularnewline działa jak \\ ale bywa bezpieczniejszy dla formatowania
+AAA & \multirow{2}{2.5cm}{dwu wierszowa, łamie}  & \multicolumn{2}{c|}{dwukolumnowa} & 112&57 & 13.16 \\
+%        \multicolumn wymaga ustawienia stylu prawego obramowania  ^^^ w przeciwnym razie go nie będzie
+BBB &                                     & xx & yy & 98765&12356 & 1716.13 \\ \hline\hline
+%     ^^^ pusta komórka ze względu na \multirow powyżej (w tej kolumnie)
+CCC & ale tylko wewnątrz niej ... & x2 & x3 & 12345 & & 67890
+\end{tabular}
+\end{ExampleVertical}
+
+Powyżej pokazana jest prosta \LaTeX'owa tabelka, korzysta ona z następujących pakietów: \pkgLink{array}, \pkgLink{dcolumn} oraz \pkgLink{multirow}.
+Oprócz nich także wiele innych pakietów rozszerza możliwości związane z tworzeniem tabel.
+Poniższa tabelka korzysta dodatkowo z pakietów: \pkgLink{diagbox}, \pkgLink{colortbl}, \pkgLink{hhline} (wraz z rozszerzeniem w \pkgLink{ehhline}).
+Użyty longtable pozwala na dzielenie tej tabelki pomiędzy strony.
+
+\begin{ExampleVertical}
+\begin{longtable}{
+    || >{\raggedleft}p{3cm}      % z łamaniem linii o szerokości 3cm, wyrównana do prawej
+    || r                         % wyrównana do prawej
+    || >{\color{yellow}\columncolor{gray}[.5\tabcolsep]}c % żółty tekst na szarym tle
+     | c
+       !{\color{blue}\vrule width 3pt} % ta kolumna pełni rolę obramowania ...
+ }
+  \hhline{|t:==:t:==|}
+    \diagbox[width=3.4cm]{AA}{BB}{CC} & pierwsza & \multicolumn{1}{c}{druga} & trzecia \\
+  \hhline{|:=||=>{\arrayrulecolor{red}}=>{\arrayrulecolor{black}}=|}
+    \textcolor{red}{aa bbb cccc dd eeee} &
+    \multirow{2}{2.5cm}[-0.65cm]{xxx yy zzzz yy xxxx} &
+    ccc ccc &
+    112.5 \tabularnewline
+  \hhline{#=#~||~|->{\color{blue}\vrule width 3pt}} % >{...} zapewnia odpowiednią linię po prawej
+    QQQQ \linebreak od nowej linii &                  %       (zgodną z definicją w nagłówku)
+    & % ta komórka powinna być putsta bo wyżej użyliśmy \multirow
+    \diagbox[dir=SE,height=4\line]{AA AA}{CC CC} &
+    \cellcolor[rgb]{0,1,1} 98765.12356 \tabularnewline
+  \hhline{% !{...} jest rozszerzeniem \hhline zdefiniowanym w ehhline
+     !{\leaders\hrule height 1pt\hfil}%    pozwala na tworzenie dowolnych
+     !{\leaders\hbox{\tiny$\star$}\hfil}%  poziomych linii rozdzielających
+     !{\hfil...\hfil...\hfil}%
+     !{\leaders\hbox{\hdashrule{1.5mm}{1pt}{0.5mm 0.5mm 0.5mm 0mm}}\hfil}%
+  }
+\end{longtable}
+\end{ExampleVertical}
+
+\subsection{wyrównanie w pionie i poziomie}
+
+Poniższa tabelka bazuje na zdefiniowanych w \rrpPkgLink{vtable} typach kolumn i komórek (wielowierszowych, wielokolumnowych, niezależnie formatowanych) - umożliwiają one poprawne wyrównywanie wysokości elementów w tabeli.
+
+\begin{ExampleVertical}
+\begin{tabular}{
+    | C{2cm}{}{t} | C{2cm}{1.5cm}{m} | C{2cm}{}{b} | L{2cm}{}{m} |
+    R{2cm}{}{t} | J{2cm}{}{t} I{\color{red}}{1pt}{0.5mm 0.5mm 0.5mm 0mm}
+  }
+  \hline
+    top & middle & bottom & middle left & top right & top justify
+  \nextRow \hline
+    A \lb xxx \lb X & B & C &
+      \setMultiRow{3}{- \lipsum[1][1] - \lb - \lipsum[1][2] -} &
+      q & q
+  \nextRow \hhline{---~--}
+    D \lb d & E \lb xxx xx \lb X \lb X & F \lb f & & q & q
+  \nextRow \hhline{---~--}
+    G & H & I \lb xxx \lb Xj & & q & q
+  \nextRow \hline
+    G &
+    \setMultiColumn{2}{4cm}{3cm}{c}{t}{}{|} {top, center: \lb \lipsum[1][3]} &
+    xx & q & q
+  \nextRow \hline
+    G &
+    \multicolumn{2}{Z{4cm}{3cm}{l}{2}{t}{1}|} {top, left: \lb \lb \lipsum[1][4]} &
+    LL LL\lb xxx\lb X\lb X & RR RR\lb xxx\lb X\lb X & BB BB\lb xxx\lb X\lb X
+  \nextRow \hline
+    G &
+    \tableFormatedCell{3.5cm}[3cm]{r}{b}I I \lb xxxxxxx \lb a a Xj &
+    y & \lipsum[1][1] & \lipsum[1][1] & \lipsum[1][1]
+  \nextRow \hline
+\end{tabular}
+\end{ExampleVertical}
+
+\subsection{jeszcze więcej tabelek}
+
+Istnieje także wiele innych pakietów bardziej gruntownie modyfikujących składanie tabel (jak choćby mdwtab, longtable czy tabularx). Najbardziej wszechstronnym i elastycznym wydaje się \href{http://mirrors.ctan.org/macros/latex/contrib/tabu/tabu.pdf}{tabu}. Powyższe tabelki są z nim kompatybilne (to znaczy pokazane efekty obramowań, wyrównań, rozciągniętych komórek itd możemy uzyskać w ten sam sposób).
+
+\begin{ExampleVertical}
+ \taburowcolors 2{gray!15 .. gray!50}
+ \begin{tabu} {|[1pt blue]|[1pt green] m{2cm} || r || c | D{.}{.}{-1} }
+  \tabucline[3pt on 1.5pt blue off 2pt red]{1-2}
+  \tabucline[2pt white]{1-2}
+  \tabucline[3pt on 1.5pt blue off 2pt red]{1-2}
+    \diagbox[width=2.4cm]{AA}{BB}{CC} &
+    BBB &
+    ddd dd &
+    0.12356 \\
+  \hhline{|:=||=>{\arrayrulecolor{red}}=>{\arrayrulecolor{black}}=}
+     aaaa aa bbb ddd eee &
+     bbb aaaa aa  &
+    ccc ccc &
+    112.57 \\
+  \tabucline[2pt red]{1-1}
+  \tabucline[\hbox{\textcolor{blue}{x}}]{1-1}
+  \tabucline[2pt red]{1-1}
+    QQQQ &
+    bbb ddd eee &
+    \diagbox[dir=SE]{AA}{CC} &
+    98765.12356 \\
+ \end{tabu}
+\end{ExampleVertical}
+
+Jeżeli chcemy korzystać w ramach tabu z komórek rozciągniętych równocześnie na kilka kolumn i wierszy możemy deklarować je w sposób następujący:
+\begin{MintedCode}
+\multicolumn{2}{c|}{\multirow{3}{2\tabucolX}{\centering
+	zawartość komórki
+}}
+% nawet przy samym multirow w kolumnach typu X należy jako drugi argument podawać \tabucolX
+% tutaj mamy 2\tabucolX bo zajmujemy miejsce dwóch kolumnt typu X z powodu \multicolumn
+\end{MintedCode}
+
+Dzięki pakietowi \pkgLink{spreadtab} można nawet używać prostych arkuszy kalkulacyjnych.
+\begin{Example}
+ \begin{spreadtab}{{tabular}{ccc}}
+  @A/1 & @B                  & @C       \\
+  2    & 11                  & 23       \\
+  3    & @ b2 + c2 =   & b2 + c2  \\
+  4    & 54                  & 10       \\
+  5    & :={c4} * c3 =       & c4 * c3
+ \end{spreadtab}
+\end{Example}
+
+Tabele możemy umieszczać także poza głównym tekstem (analogicznie jak obrazki) poprzez wstawienie ich w środowisko "table". Dzięki użyciu \href{http://mirrors.ctan.org/macros/latex/contrib/threeparttable/threeparttable.pdf}{threeparttable} możliwe jest umieszczanie w takich tabelach niezależnych przypisów.
+\end{document}

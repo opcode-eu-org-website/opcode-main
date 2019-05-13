@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pl" lang="pl">
+<head>
+	<title>Bootowanie systemu</title>
+	
+	<link rel="stylesheet" href="lib/base.css" type="text/css" />
+	<link rel="stylesheet" href="lib/menu.css" type="text/css" />
+	<link rel="stylesheet" href="lib/highlight.css" type="text/css" />
+</head><body>
+
+<h1>Bootowanie systemu</h1>
+
+<div id="page_menu">
+	<ul id="toc"><li>Spis treści</li></ul>
+	<p id="menu_extra">
+		<a href="http://www.opcode.eu.org/"><img src="lib/opcode.svg" alt="OpCode WWW site" title="Strona należy do serwisu OpCode.eu.org"/></a>
+		<a href="SystemBoot.pdf"><img src="lib/pdfFile.svg" alt="Pobierz jako PDF" title="Pobierz jako PDF"/></a>
+	</p>
+</div>
+<p id="updateInfo">(aktualizacja: 2019-04-17)</p>
+
+<section>
+<h2>GRUB</h2>
+
+<p>Po zakończeniu procesu inicjalizacji sprzętu i testów rozruchowych BIOS ładuje do pamięci kod znajdujący się w pierwszym sektorze dysku twardego (<a class="Wikipedia" href="http://pl.wikipedia.org/wiki/Sektor rozruchowy">sektorze rozruchowym</a> rozpoczynającym się od adresu zerowego) i uruchamia go (przekazuje do niego kontrolę). W przypadku sektorów rozruchowych typu <a class="Wikipedia" href="http://pl.wikipedia.org/wiki/Master Boot Record">MBR</a> (i kompatybilnych z nim), kod ten może liczyć maksymalnie 446 bajtów (gdyż na kolejnych pozycjach znajduje się tablica partycji) i jego zadaniem jest załadowanie i uruchomienie pozostałej częsci <a class="Wikipedia" href="http://pl.wikipedia.org/wiki/Program rozruchowy">programu rozruchowego</a> (np. może użyć programu w partycji oznaczonej jako bootowalna).</p>
+
+<p><a class="Wikipedia" href="http://en.wikipedia.org/wiki/GNU GRUB">GRUB</a> jest jednym z najpopularniejszych w środowisku linuxowym boot menagerów / boot loaderów. Jego wykonywalna przy starcie komputera wersja składa się z 3 części:</p><ul>
+<li>stage1 (boot.img)   - ma za zadanie uruchomić stage1.5 (zawiera jego położenie na dysku)</li>
+<li>stage1.5 (core.img) - zawiera moduły pozwalające na dostęp do systemu plików zawierającego stage2 oraz informację o jego położeniu (dysk, partycja, ścieżka)</li>
+<li>stage2 (/boot/grub) - zawiera wszystkie dodatkowe moduły oraz konfigurację</li>
+</ul>
+<p>Może on być zainstalowany zarówno w MBR, jak i w bootowalnej partycji. W tym pierwszym przypadku w MBR wgrywany jest stage1, natomiast stage1.5 w zależności od używanego typu tablicy partycji znajduje się albo tuż za MBR - w przerwie pomiędzy MBR a pierwszą partycją (dla partycji MBR/msdos), albo w dedykowanej partycji <a class="Wikipedia" href="http://en.wikipedia.org/wiki/BIOS boot partition">BIOS boot partition</a> (w przypadku GPT).</p>
+
+<p>W przypadku komputerów opartych na <a class="Wikipedia" href="http://pl.wikipedia.org/wiki/Unified Extensible Firmware Interface">UEFI</a> firmware odpowiedzialny jest za zinterpretowanie tablicy partycji (<a class="Wikipedia" href="http://en.wikipedia.org/wiki/GUID Partition Table">GPT</a>) i załadowanie progragramu rozruchowego z pliku znajdującego się na specjalnej partycji EFI (<a class="Wikipedia" href="http://en.wikipedia.org/wiki/EFI System partition">EFI System partition</a>) z systemem plików <a class="Wikipedia" href="http://pl.wikipedia.org/wiki/FAT32">FAT32</a>. GRUB może pełnic funkcję tak uruchamianego boot loadera (w tym przypadku całość potrzebnego kodu stage1 i stage1.5 znajduje się w pliku na tej partycji).</p>
+
+<p>Zadaniem GRUBa jest umożliwenie wyboru, załadowanie i uruchomienie jądra systemu operacyjnego z zadanymi opcjami. Jego działanie kończy się w momencie gdy jądro przejmuje sterowanie.</p>
+
+<section>
+<h3>Konfiguracja</h3>
+<p>Współcześnie konfiguracja GRUB'a jest generowana automatycznie w oparciu o <code>/etc/grub.d/</code> i <code>/etc/default/grub</code> przez <code>grub-mkconfig</code> w oparciu o wykrywanie typów dysków na których jest zainstalowany system (raid, lvm, typ systemu plików, ...) oraz unikalne identyfikatory dysków, partycji, itd.
+	Mimo to warto znać przynajmniej podstawy działania grub'a, jego komend, aby być wstanie coś zrobić gdy zamiast menu startowego ujrzymy tylko konsolę awaryjną. Poniżej zamieszczam przykładowy plik konfiguracyjny <code>/boot/grub/grub.cfg</code> z komentarzami opisującymi zanczenie różnych poleceń i opcji.</p>
+<pre>
+# oficjalna dokumentacja: http://www.gnu.org/software/grub/manual/grub.html
+
+# korzystanie z konsoli na porcie szeregowym
+#serial --speed=115200 --unit=1 --word=8 --parity=no --stop=1
+#terminal_input serial console
+#terminal_output serial console
+# za to na którym RS jest grub odpowiada --unit w serial
+#
+# korespondujące opcje uruchamiania dla Linuxa:
+#   module    /boot/vmlinuz [...] console=tty0 console=ttyS1,115200n8
+# korespondujące opcje uruchamiania dla XENa:
+#   multiboot /boot/xen.gz  [...] com2=115200,8n1 vga=mode-0x0319 console=com2,vga
+#   module    /boot/vmlinuz [...] console=tty0 console=hvc0
+#
+# w opcjach kernela szczególną rolę odgrywa ostatni podany terminal (ostatnia opcja console)
+# jest on związany z /dev/console i na nim pokazywany jest init, ponadto należy uruchamiać getty
+# na odpowiednim urządzeniu poprzez wpis w inittab np.:
+#   T0:23:respawn:/sbin/getty -L /dev/ttyS1 115200 vt100
+# lub (dla wariantu XENowego, UWAGA: w przykładzie tylko runlevel 4 i 5):
+#   T1:45:respawn:/sbin/getty 38400 hvc0
+
+# timeout w sekundach dla domyślnej pozycji menu
+set timeout=60
+set default="0"
+
+# ładowanie modułów - typ tablicy partycji
+insmod part_gpt
+#insmod part_msdos
+
+# ładowanie modułów - RAID
+insmod mdraid1x # mdraid metadata 1.x
+#insmod mdraid09 # mdraid metadata 0.9
+#insmod raid5rec # faulty RAID4/5
+#insmod raid6rec # faulty RAID6
+
+# ładowanie modułów - LVM
+insmod lvm
+
+# ładowanie modułów - File System
+insmod xfs
+
+# ustawienie root'a
+set root='lvm0-root'
+
+menuentry 'Debian GNU/Linux' {
+	# obraz jądra Linuxa z przekazywanymi do systemu opcjami 
+	linux   /boot/vmlinuz-3.12-trunk-amd64 root=/dev/mapper/lvm0-root ro rootdelay=3 quiet
+	# obraz initrd
+	initrd  /boot/initrd.img-3.12-trunk-amd64
+}
+
+menuentry "SBM Boot Manager" {
+	linux16  /boot/extra/memdisk floppy
+	# memdisk z pakietu syslinux-common (/usr/lib/syslinux/memdisk)
+	initrd16 /boot/extra/sbootmgr.dsk
+	# SBM Boot Manager (http://btmgr.sourceforge.net/about.html)
+	# z http://ftp.lanet.lv/ftp/mirror/Slackware/isolinux/sbootmgr/
+}
+</pre>
+</section>
+
+<section>
+<h3>Więcej informacji</h3>
+<ul>
+	<li><a href="https://wiki.archlinux.org/index.php/GRUB">GRUB @ wiki.archlinux.org</a></li>
+	<li><a href="https://wiki.archlinux.org/index.php/Unified_Extensible_Firmware_Interface">UEFI @ wiki.archlinux.org</a></li>
+</ul>
+</section>
+
+</section>
+
+
+<section>
+<h2>Start systemu - initrd, init i pliki startowe</h2>
+
+<p>Start systemu rozpoczyna się od załadowania do pamięci obrazu jądra wraz z parametrami oraz (opcjonalnie) initrd i przekazania kontroli do jądra przez program rozruchowy (np. GRUB, LILO). W przypadku korzystania z initrd obraz ten przekształcany jest na RAM-dysk w trybie zapisu-odczytu i montowany jako rootfs z którego uruchamiany jest <code>/init</code> (nie <code>/sbin/init</code>). Po zakończeniu jego działania (lub od razu gdy nie używamy initrd) uruchamiany jest program wskazany w opcji <code>init=</code> jądra (typowo domyślnie jest to <code>/sbin/init</code>) z rootfs wskazanego w opcji <code>root=</code> jądra.</p>
+
+<section>
+<h3>initrd</h3>
+
+<p>Zawartość obrazu rozruchowego można podejrzeć wypakowując jego zawartość przy np. pomocy następującej funkcji:</p>
+<pre>
+extractInitRd() {
+	[ $# -ne 2 ] &amp;&amp; echo "USAGE extractInitRd path/to/initrd extratDir" &amp;&amp; return
+	initrd=`realpath "$1"`
+	mkdir -p "$2"; cd "$2"
+	if file "$initrd" | grep "ASCII cpio archive" &gt;&amp; /dev/null; then
+		# extract microcode
+		blocks=`cpio -i &lt; "$initrd" |&amp; awk '/^[0-9]* blocks$/ {print $1}'`
+		echo "unpack $blocks blocks of microdode from initrd"
+		
+		# extract ramdisk
+		mkdir initrd; cd initrd
+		dd if="$initrd" of=/dev/stdout bs=512 skip=$blocks | zcat | cpio -i
+	else
+		# no microcode ... extract ramdisk
+		zcat "$initrd" | cpio -i
+	fi
+}
+</pre>
+<p>Jednak zwykłe ponowne spakowanie go nie przynosi pożądanych rezultatów, ponadto współczesnych obrazów nie da się już montować przez mount -o loop. Celem dostosowywania initrd do własnych potrzeb polecam przyjrzenie się strukturze katalogów <code>/usr/share/initramfs-tools/</code> i <code>/etc/initramfs-tools/</code>. W szczególności wart przeanalizowania jest skrypt <code>/usr/share/initramfs-tools/init</code>, który jest uruchamiany zaraz po odpaleniu obrazu startowego (jest kopiowany przy tworzeniu initrd.img na <code>/init</code> w obrazie ram dysku). Po wykonaniu stosownych zmian w tych plikach obraz można zbudować poprzez wywołanie <code>mkinitramfs</code> lub wygodniejszego <code>update-initramfs -u</code>.</p>
+
+<p>Część z opcji przekazywanych jako parametry jądra jest obsługiwana przez initrd - wybrane z tych opcji:</p><ul>
+	<li><code>break=top|modules|premount|mount|mountroot|bottom|init</code> - przerywa initrd (i uruchamia powłokę busybox) w wskazanym momencie (w initramfs-tools 0.92o jest błąd powodujący iż break-point init nie działa - przed wywołaniem maybe_break init jest wstawione unset break), dalsze bootowanie można wznowić Ctrl+D</li>
+	<li><code>rootdelay=xxx</code> - wstawia opóźnienie xxx sekund przed próbą montowania głównego systemu plików (pomiędzy inicjalizacją urządzeń fizycznych a startem skryptów local - tworzących urządzenia md, lvm itp), jej uzycie może być konieczne w przypadku korzystania z rootfs na lvm, soft-raid itp</li>
+	<li><code>rootflags=</code> - podaje flagi montowania głównego systemu plików (przekazane do opcji -o komendy mount)</li>
+	<li><code>boot=</code> - określa jakie skrypty celem zamontowania root fs ma zainkludować initrd (domyślnie local), boot=xxx nakazuje wykonanie skryptu /scripts/xxx (np. /scripts/nfs) przed montowaniem głównego systemu plików</li>
+	<li><code>debug</code> - zwiększa głośność initrd</li>
+	<li><code>blacklist=</code> - rozdzielana przecinkami lista modułów których ładowania chcemy zabronić na etapie initrd</li>
+	<li><code>init=</code> - określa jaki program ma być wykonany zaraz po zakończeniu initrd</li>
+</ul>
+<p>Więcej opcji linii poleceń jądra znaleźć można w <code>man bootparam</code> oraz <code>man init</code>. Zaznaczyć tu należy iż zgodnie z <code>man bootparam</code> parametry postaci nazwa=wartosc nie rozpoznane jako parametry jądra są przekazywane jako zmienne środowiskowe, obecnie trafiają one w tej postaci do skryptów wywoływanych przez init (jednak zdarzało się że gdzieś ginęły). Natomiast same procesy związane z logowaniem użytkownika nie przekazują tych zmiennych do środowiska obecnego po zalogowaniu, zatem aby z nich skorzystać konieczne jest przetwarzanie <code>/proc/cmdline</code> (ze względów na nie pewność co do ustawienia środowiska przez init warto tak postępować także w skryptach init). Można to realizować w następujący sposób <code>ZMIENNA=`awk 'BEGIN {RS="[ \n]"; FS="=";} $1=="ZMIENNA" {print $2}' /proc/cmdline`</code> lub:</p>
+<pre>
+for tmp in $(cat /proc/cmdline); do
+	case $tmp in
+		ZMIENNA=*)
+			ZMIENNA=${tmp#ZMIENNA=}
+			;;
+	esac
+done
+</pre>
+
+<p>Działanie skryptu <code>/init</code> z initrd.img kończy się wywołaniem (poprzez exec) programu <code>run-init</code>, którego zadaniem jest chroot-owanie się do wcześniej zamontowanego katalogu z rootfs'em oraz execowanie się na wskazany program rozruchowy (typowo <code>/sbin/init</code> bądź inny wskazany w opcji jądra) na nowym root filesystemie.</p>
+</section>
+
+<section>
+<h3>klasyczny init</h3>
+<p>
+	Klasyczny init konfigurowany jest z uzyciem pliku <code>/etc/initab</code> i oferuje 7 poziomów działania (0 - wyłączenie, 1 - pojedynczy użytkownik (single), 2...5 - standardowe (najczęściej używany 2), 6 - restart).
+	Podczas zmiany poziomu rozruchu przetwarza skrypty startowe (będące na ogół zwykłymi skryptami powłoki) z odpowiedniego katalogu /etc/rcX.d (X- poziom rozruchu na który przechodzi init).
+	Pliki w katalogach /etc/rcX.d mają nazwy postaci YZZxxxx, gdzie Y to S gdy dany skrypt wykonywany ma być z parametrem "start" albo K gdy z parametrem "stop", ZZ to dwucyfrowy numer decydujący o kolejności wykonania, xxxx - nazwa skryptu.
+	Typowo są one dowiązaniami symbolicznymi do skryptów umieszczonych w /etc/init.d. Do zarządzania nimi można użyć polecenia <code>update-rc.d</code>.
+	Przy starcie systemu najpierw wykonywane są skrypty z /etc/rcS.d a następnie zadanego poziomu (zazwyczaj /etc/rc2.d, rzadziej z /etc/rc1.d - tu na ogół i tak są same "stop", a jeszcze rzadziej z innych).
+</p>
+</section>
+
+<section>
+<h3>systemd</h3>
+<p>Współcześnie <code>/sbin/init</code> wskazuje najczęściej na systemd. W odróżnieniu od klasycznego podejścia nie opiera się on na skryptach umieszczanych w <code>/etc/init.d</code> i linkowanych do odpowiedniego <code>/etc/rc*.d</code> a na opisach usług w postaci plików konfiguracyjnych typu <code>.desktop</code> / <code>.ini</code>, jednak często obsługuje też skrypty klasycznego inita.</p>
+
+<p>Do zarządzania plikami usług (listowania dostępnych, włączania/wyłączania autostartu, blokowania, itd) służą m.in. następujące polecenia programu <code>systemctl</code>:</p>
+<pre>
+systemctl  list-unit-files
+systemctl  enable|disable  NAZWA_USLUGI
+	ls /etc/systemd/system/*.target.wants/
+systemctl  mask|unmask  NAZWA_USLUGI
+systemctl  show|list-dependencies  NAZWA_USLUGI
+systemctl  cat|edit  NAZWA_USLUGI
+</pre>
+
+<p>Poziomy startu, czyli to jakie usługi kiedy mają byćn uruchomione (z wyłączeniem rzeczy wynikłych z zależności - są one uruychamiane automatycznie na podstawie zależności zdefiniowanych w pliku usługi) opisywane są linkami w <code>/etc/systemd/system/*.target.wants/</code></p>
+
+<p>Do zarządzania aktualnym stanem usługi (jej startowania, zatrzymywania itd) a także wyświetlania timerów służy również program <code>systemctl</code> z następującymi poleceniami:</p>
+<pre>
+systemctl  list-units|list-timers
+systemctl  status|start|stop|restart|reload  NAZWA_USLUGI
+</pre>
+
+<p>Jak wspomniano systemd jest kompatybilny z klasycznymi sktyptami startowymi (z <code>/etc/rc[0-6].d</code>, typowo nie dla <code>/etc/rcS.d</code>) - automatycznie generuje dla nich pliki konfiguracyjne usług i umieszcza je w <code>/run/systemd/generator.late/</code> a linki do usług związanych z danym poziomem uruchomienia w <code>/run/systemd/generator.late/*.target.wants/</code>.</p>
+
+<p>systemd umożliwia także tworzenie katalogów, linków itp przy starcie systemu. Np. aby mieć <code>/tmp</code> i <code>/var/log</code> na tmpfs (przydatne dla systemów np. na kartach SD) możemy utworzyć plik <code>/etc/tmpfiles.d/on_tmpfs.conf</code> z następującą zawartością:</p>
+<pre>
+d  /run/tmp   1777 root root -
+L+ /tmp       -    -    -    -  /run/tmp
+L+ /var/tmp   -    -    -    -  /run/tmp
+
+d  /run/log   0755 root root -
+L+ /var/log   -    -    -    -  /run/log
+</pre>
+
+	<section>
+	<h4>Więcej informacji</h4>
+	<ul>
+		<li><a href="https://wiki.archlinux.org/index.php/Systemd">Systemd @ wiki.archlinux.org</a></li>
+		<li><a href="https://medium.com/@johannes_gehrs/getting-started-with-systemd-on-debian-jessie-e024758ca63d">Getting Started With systemd on Debian Jessie</a></li>
+		<li><a href="https://www.digitalocean.com/community/tutorials/how-to-use-systemctl-to-manage-systemd-services-and-units">How To Use Systemctl to Manage Systemd Services and Units</a></li>
+		<li><a href="https://ask.fedoraproject.org/en/question/44938/can-systemd-replace-monit/">Can systemd replace monit?</a></li>
+	</ul>
+	</section>
+</section>
+</section>
+
+
+<section>
+<h2>Moduły - ładowanie, konfiguracja, ...</h2>
+
+<p>Jądro Linuxa ma zmodularyzowana budowę i wiele sterowników (urządzeń, protokołów, ...) oraz innych funkcji zawartych jest w osobnych modułach. Moduły te mogą być ładowane podczas startu systemu bądź być ładowane dynamicznie lub ręcznie podczas działania systemu. Pliki określające jakie moduły i z jakimi parametrami chcemy załadować podczas startu umieszczane są w katalogu <code>/etc/modules-load.d</code>, gdzie w każdej linii nie zaczętej od # pierwszy wyraz to nazwa modułu a wszystko następne to parametry.</p>
+
+<p>Za konfigurację modułów (oprócz wspomnianego pliku z listą ładowanych modułów) odpowiadają również pliki w katalogu <code>/etc/modprobe.d</code> (wszystkie pliki w tym katalogu są równoważne). W skrypcie startowym modułów znajduje się polecenie budujące drzewo zależności (depmod), jeżeli zależy nam na przyspieszeniu startu komputera możemy je wyłączyć i uruchamiać ręcznie po zmianie, dodaniu, ... jakiś modułów, bądź modyfikacji ich parametrów w wspomnianych wyżej ktalogach.</p>
+
+<p>Trzeba także zaznaczyć że w nowszych jądrach gdzie wykorzystywany jest udev, większość modułów (domyślnie) ładowana będzie automatycznie - dlatego ważniejsza jest konfiguracja <code>/etc/modprobe*</code> niż <code>/etc/modules-load.d</code>. Trzeba także zwrócić uwagę na konfigurację <code>/etc/udev/*</code>.</p>
+
+<p>Moduły są ładowane na etapie initrd (są to moduły określone w <code>/usr/share/initramfs-tools/modules*</code> oraz inne potrzebne do zamontowania rootfs, aby modyfikacje ich dotyczące konfiguracyjne mogły odnieść skutek należy przebudować initrd) lub na etapie normalnego init'a.</p>
+</section>
+
+
+<section>
+<h2>Tworzenie plików urządzeń - udev</h2>
+
+<p>udev jest mechcanizmem służącym do dynamicznego zarządzania zawartością katalogu <code>/dev</code>, jego konfiguracja znajduje się w katalogu <code>/etc/udev</code> (osobiście polecam swoje wpisy umieszczać na początku pliku udev.rules, kolejność wykonywania reguł określana jest przez porządek linków w <code>/etc/udev/rules.d</code> i jest ona istotna) i umożliwia m.in. (oczywiście to tylko parę przykładów zastosowań konfiguracji udev):</p>
+<ul>
+	<li>Określenie numeracji kart sieciowych na podstawie adresów sprzętowych: <code>KERNEL=="eth*", SYSFS{address}=="mac:adres:wybranej:karty:sieciowej:", NAME="eth0"</code> (jeżeli komputer posiada dwie karty sieciowe a w konfiguracji udev nie określimy ich kolejności numeracja ich może się zmienić po restarcie - nawet jeżeli używają różnych modułów jako sterowników).</li>
+	<li>Określanie własnych nazw urządzeń: np. <code>BUS=="scsi", SYSFS{model}=="USB Storage-CFC ", NAME{all_partitions}="flash/cf"</code> określa że wszystkie partycje (tak na zapas) karty CF która może być umieszczona w czytniku USB Mass Device Storage (widzianym jako urządzenie magistrali scsi) o nazwie modelu "USB Storage-CFC " mają mieć nazwy <code>/dev/flash/cfX</code>, gdzie X jest numerem partycji.</li>
+	<li>Konfigurację dowiązań symbolicznych do urządzeń znajdujących się w katalogu <code>/dev</code>: np. <code>KERNEL=="radio0", SYMLINK+="radio"</code> nakazuje utworzenie dowiązania symbolicznego <code>/dev/radio</code> do <code>/dev/radio0</code>.</li>
+	<li>Oba powyższe w jednym - np. <code>BUS=="serio", KERNEL=="mouse*", DRIVER=="psmouse", SYMLINK="input/mouse0", NAME="input/psmouse"</code> nakazuje myszkę PS/2 podłączyć do <code>/dev/input/psmouse</code> oraz utworzyć do niej dowiązanie <code>/dev/input/mouse0</code></li>
+	<li>Konfigurować uprawnienia dostępu do urządzeń - poprzez dodanie do wpisu tworzącego urządzenie <code>OWNER="<var>wlasciciel</var>", GROUP="<var>grupa</var>", MODE="<var>prawa_numerycznie</var>"</code> lub interesującego nas fragmentu tego wyrażenia.</li>
+</ul>
+
+<p>Przy tworzeniu i testowaniu reguł udev'a pomocna może być komenda udevadm, która umożliwia testowanie reguł dla danego urządzenia (określonego ścieżką względem <code>/sys</code>) - np. <code>udevadm test <var>/devices/platform/ipmi_si.0/ipmi/ipmi0</var></code>, uzyskanie informacji o istniejącym urzadzeniu w dev - np. <code>udevadm info --query=all --name=<var>ipmi0</var></code>, czy też przeładowanie i wykonanie reguł na działającym systemie (w celu np. zmiany nazw interfejsów sieciowych):</p><pre>
+udevadm control --reload-rules
+udevadm trigger --action=add --verbose --subsystem-match=<var>net</var>
+</pre>
+
+<p>Udev do identyfikacji urządzeń oprócz czytania informacji z <code>/sys/</code> korzysta z różnych pomocniczych programów są to m.in.:</p><ul>  
+	<li><code>/sbin/blkid <var>/dev/sda</var></code> - informacje dotyczące filesystemu, (tablicy partycji) - UUID, LABEL, etc</li>
+	<li><code>/lib/udev/ata_id --export  <var>/dev/sda1</var></code> - informacje dotyczące urządzenia ATA - MODEL, SERIAL, WWN</li>
+	<li><code>/lib/udev/scsi_id --export --whitelisted <var>/dev/sda1</var></code> - informacje dotyczące urządzenia SCSI - MODEL, SERIAL, WWN</li>
+	<li><code>/lib/udev/v4l_id <var>/dev/video0</var></code> - informacje dotyczące urządzenia V4L</li>
+</ul>
+
+<p>Od pewnego czasu stosowane są dziwne nazwy interfejsów (np. z całym numerem MAC w nazwie), jeżeli chcemy uniknąć takiego zachowania i powrócić do klasycznych nazw interfejsów typu ethX (przydatne np. w  bootowalnych nośniach USB) możemy zablokować nowy tryb nazewnictwa poprzez:
+	<code>ln -s /dev/null /etc/udev/rules.d/80-net-setup-link.rules</code> i
+	<code>ln -s /dev/null /etc/udev/rules.d/73-special-net-names.rules</code>.
+Można także utworzyć plik <code>/etc/udev/rules.d/80-net-names</code> przypisujący nasze nazwy do interfejsów wpisami typu:
+	<code>SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="aa:bb:cc:dd:ee:ff", NAME="lan1"</code>
+</p>
+
+<p>Zazwyczj całkiem dobrym miejscem na umieszczanie swoich wpisów jest <code>/etc/udev/udev.rules</code>. Na koniec wspomnę że udev'owi nie zawsze udaje się ładować wszystko autmagicznie i np. aby mieć <code>/dev/lp0</code> należy załadować (np. przez <code>/etc/modules</code>) moduł <code>lp</code>. Podobnie warto tam dopisać <code>ipv6</code>. Podobną rolę jak wpisy udev mogą pełnić w niektórych przypadkach parametry modułów określające z jakim numerem ma występować urządzenie (tak jest np. w modułach v4l) - możemy je podać w konfiguracji modprobe. Z kolei nieskuteczną drogą jest określanie numerów urządzeń poprzez wpisy alias w konfiguracji modprobe.</p>
+</section>
+
+<section>
+<h2>Licencja</h2>
+<pre class="no-highlight hljs">
+<b>Copyright (c) 2013-2019, Robert Ryszard Paciorek &lt;rrp@opcode.eu.org&gt;</b>
+
+To jest wolny i otwarty dokument/oprogramowanie. Redystrybucja, użytkowanie
+i/lub modyfikacja SĄ DOZWOLONE na warunkach licencji MIT.
+
+This is free and open document/software. Redistribution, use and/or modify
+ARE PERMITTED under the terms of the MIT license.
+
+
+<b>The MIT License:</b>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+</pre>
+</section>
+
+</body></html>

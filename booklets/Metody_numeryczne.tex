@@ -1,0 +1,458 @@
+\documentclass{pdfBooklets}
+
+\title{Laboratorium programistyczne: metody numeryczne (interpolacja, różniczkowanie i całkowanie)}
+\author{%
+	Projekt ,,Matematyka dla Ciekawych Świata'',\\
+	Robert Ryszard Paciorek\\\normalsize\ttfamily <rrp@opcode.eu.org>
+}
+\date  {2018-05-23}
+
+\makeatletter\hypersetup{
+	pdftitle = {\@title}, pdfauthor = {\@author}
+}\makeatother
+
+
+\begin{document}
+
+\maketitle
+
+\teacher{Skrypt przeznaczony do realizacji na dwóch ostatnich labach programistycznych. W przypadku braku czasu można pominąć wybrane zagadnienia. W przypadku przedwczesnego skończenia skryptu można pokazać inne algorytmy numeryczne lub wrócić do materiałów dodatkowych z pierwszego skryptu.}
+
+\teacher{\todo{używanie dx w argumentach całkowania (co powoduje problem z granicą) wymaga dopracyzowania zadań (bo obecnie gdy (a-b)\%dx !=0 nie istnieje rozwiązanie) ... może jednak lepiej dawać ilość punktów i dx obliczać wewnętrznie}}
+
+\section{Wielomiany}
+
+Najczęściej spotykanym zapisem wielomianu jest postać sumy jednomainów:
+$$w(x) = \sum_{i=0}^na_ix^i = a_0 + a_1x + \ldots + a_nx^n$$
+Żeby wiedzieć, o jaki wielomian chodzi, wystarczy że okreslimy listę jego współczynników $a_0 \ldots a_n$. 
+\teacher{Zanim przejdziemy dalej, można zapytać, jak obliczalibyśmy np. wartość wielomianu $[1,1,\ldots,1]$, gdzie $n=2, \, 10$ lub $100$, w jakimś wybranym punkcie. Jak zapisalibyśmy algorytm tego obliczenia?}
+
+
+\subsection{Obliczanie wartości wielomianu}
+
+Niech  \Verb{a} będzie listą kolejnych współczynników wielomianu $a_0 \ldots a_n$.
+Do obliczenia wartości wielomianu w zadanym punkcie $x$ naturalne wydaje się zastosowanie powyższego wzoru w następujący sposób:
+
+\begin{CodeFrame*}[python]{}
+def oblicz(a, x):
+    w = 0
+    for i in range(len(a)):
+        w += a[i] * (x**i)
+    return w
+\end{CodeFrame*}
+Niestety podejście takie jest bardzo nieefektywne, gdyż w każdym kolejnym kroku sumy musimy wykonać coraz więcej mnożeń. W ogólności w kroku $n$-tym musimy wykonać $n$ mnożeń, co przekłada się na czasową złożoność obliczeniową rzędu $\mathcal{O}(n^2)$, co oznacza że czas wykonania rośnie z kwadratem ilości współczynników wielomianu (czyli, ogólnie rzecz biorąc, ze stopniem wielomianu). Innymi słowy, jeśli zwiększymy 10 razy stopień wielomianu, to czas liczenia zwiększy się nam $100=10^2$ razy. 
+Ponieważ będziemy czasem potrzebowali wielomianów wysokiego stopnia  --- o czym za chwilę --- nie jest to dla nas najlepsza sytuacja. 
+
+Jeżeli zauważymy, że potrzebujemy policzyć kolejno wszystkie potęgi wartości $x$, aż do $n$ to algorytm ten możemy znacznie przyspieszyć implementując liczenie potęgi w tej samej pętli co sumowanie:
+\begin{CodeFrame*}[python]{}
+def oblicz(a, x):
+    p = 1
+    w = a[0]
+    for i in range(1, len(a)):
+        p = p * x
+        w += a[i] * p
+    return w
+\end{CodeFrame*}
+Zauważ, że dodatkowo wyrzuciliśmy $a_0$ poza pętlę. W ten sposób potrzebujemy już tylko $n$ sumowań i $2n$ mnożeń (pomijając narzut związany z obsługą pętli itp).
+
+Jeżeli chcemy jeszcze szybciej obliczyć wartość wielomianu w punkcie $x$ możemy skorzystać z \emph{schematu Hornera}, co pozwoli nam zredukować o połowę liczbę mnożeń.
+Wymaga on przekształcenia postaci w której zapisujemy wielomian poprzez powyciąganie $x$-ów przed nawias:
+$$a_0 + x(a_1 + x(a_2 + \ldots + x(a_{n-1} + xa_n)))$$
+i rozpoczęcia obliczeń od $a_n$.
+
+\begin{CodeFrame*}[python]{}
+def oblicz(a, x):
+    w = 0
+    for i in range(len(a)-1, 0, -1):
+        w = x * (a[i] + w)
+    w += a[0]
+    return w
+\end{CodeFrame*}
+
+\subsection{Postać Newtona}
+
+Wielomian możemy przedstawić także w innych postaciach. Jedną z takich postaci jest \emph{postać Newtona}:
+$$w(x) = b_0 + b_1(x-x_0) + b_2(x-x_1)(x-x_0) + \ldots + b_n(x-x_{n-1})\ldots(x-x_0)$$
+w której wielomian stopnia $n$ określony jest przez $n+1$ współczynników $b_i$ oraz $n$ punktów $x_i$.
+
+\begin{Zadanie}{}{}
+Napisz funkcję \Verb{oblicz_wart(xx, x, b)} obliczającą wartość wielomianu w postaci Newtona.
+Funkcja powinna otrzymywać argumenty: \Verb{xx} - punkt w którym ma zostać obliczona wartość, \Verb{x} - lista współczynników $x_i$, \Verb{b} - lista współczynników $b_i$.\\
+\\
+Wskazówka: do testowania funkcji możesz użyć wielomianu $w(x)$ zdefiniowanego przez
+\Verb{x = [-1, 1]} i \Verb{b = [2, 1, -3]}, który przyjmuje następujące wartości:
+$w(-2) = -8$, $w(-1) = 2$, $w(0) = 6$, $w(1) = 4$, $w(2) = -4$.
+
+\begin{rozwiazanie}{python}
+def oblicz_wart(xx, x, b):
+	xxx = 1
+	wyn = b[0]
+	
+	for i in range(1, len(b)):
+		xxx *= (xx-x[i-1])
+		wyn += b[i] * xxx
+	
+	return wyn
+\end{rozwiazanie}
+\end{Zadanie}
+
+\section{Interpolacja}
+
+Interpolacja to zgadywanie wartości nieznanych na podstawie znanych. 
+Dokładniej, jest to wyznaczanie przybliżonych wartości nieznanej funkcji, 
+w oparciu o znane wartości w tzw. punktach węzłowych, które też znamy. 
+Realizujemy  to wyznaczając tzw. funkcję interpolacyjną,  
+która  w punktach węzłowych przyjmuje ustalone wartości. 
+Innymi słowy, wybieramy sobie pewną postać funkcji (np. decydujemy, że nasza szukana 
+funkcja interpolacyjna będzie wielomianem pewnego stopnia) 
+i dopasowujemy ją tak, by przechodziła przez znane wartości w znanych punktach. 
+
+\subsection{Interpolacja wielomianowa}
+
+Bardzo często jako funkcje interpolacyjne stosowane są funkcje wielomianowe. W tym wypadku zadanie interpolacji to po  prostu zadanie znalezienia wielomianu przechodzącego przez dane punkty.
+\begin{teacherOnly}
+Warto zwrócić uwagę że:
+\begin{itemize}
+	\item w przypadku gdybyśmy wiedzieli, że przybliżana funkcja jest wielomianem $n$-tego stopnia oraz dysponowani $n+1$ punktami węzłowymi, to uzyskane rozwiązanie byłoby dokładne;
+	\item parzystość stopnia wielomianu drastycznie wpływa na zachowanie uzyskanej funkcji (zwłaszcza poza zakresem dla którego mamy dane wejściowe)
+\end{itemize}
+\end{teacherOnly}
+
+\subsubsection{Obliczanie współczynników interpolacyjnych}
+
+Możliwe jest obliczanie współczynników $a_i$ interpolowanego wielomianu zapisanego w postaci potęgowej, jednak ze względów obliczeniowych bardziej praktyczne jest posłużenie się postacią Newtona.
+Realizowane jest to przy pomocy następującego algorytmu:
+\begin{teacherOnly}
+Uwaga! ten algorytm możemy potraktować jako czarną skrzynkę, której uczymy się używać.
+\end{teacherOnly}
+\begin{CodeFrame*}[python]{}
+j = 0
+while j <= n:
+	b[j] = f[j]
+	j += 1
+
+j = 1
+while j <= n:
+	k = n
+	while k >= j:
+		b[k] = (b[k] - b[k-1]) / (x[k] - x[k-j])
+		k -= 1
+	j += 1
+\end{CodeFrame*}
+gdzie \Verb{n} jest stopniem wielomianu interpolacyjnego (obliczanego dla $n+1$ punktów węzłowych), \Verb{x[i]} jest wartością $x$ dla $i$-tego punktu, a \Verb{f[i]} wartością funkcji w $i$-tym punkcie węzłowym.
+
+\begin{Zadanie}{}{}
+Napisz funkcję \Verb{oblicz_wsp(x, y)} obliczającą współczynniki wielomianu interpolacyjnego dla danego zbioru punktów węzłowych (określonych przez listy \Verb{x, y}).
+Wykorzystaj ją do narysowania wykresu wielomianu interpolującego następującą funkcję:
+
+\begin{center}\begin{tabular}{|c|c|}
+\hline\hspace{.75cm}$x$\hspace{.75cm}~&\hspace{.75cm}$f(x)$\hspace{.75cm}~\\\hline 
+1 &  8\\
+3 & -5\\
+6 &  3\\
+7 &  9\\
+\hline
+\end{tabular}\end{center}
+
+\begin{rozwiazanie}{python}
+def oblicz_wsp(x, y):
+	n = len(y)-1
+	b = [0]*(n+1)
+	
+	j = 0
+	while j <= n:
+		b[j] = y[j]
+		j += 1
+	
+	j = 1
+	while j <= n:
+		k = n
+		while k >= j:
+			b[k] = (b[k] - b[k-1]) / (x[k] - x[k-j])
+			k -= 1
+		j += 1
+	
+	return b
+
+x = [1, 3, 6, 7]
+y = [8, -5, 3, 9]
+b = oblicz_wsp(x, y)
+
+xx, yy = [], []
+for w in range(-5, 13):
+	xx.append(w)
+	yy.append(oblicz_wart(w, x, b))
+
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+plt.plot(x, y, ".r")
+plt.savefig('wykres.png')
+\end{rozwiazanie}
+\end{Zadanie}
+
+\subsection{Interpolacja trygonometryczna {\Symbola 🤔}}
+
+Interpolacja wielomianowa, ze względu na swoją naturę, nie za bardzo sprawdza się w przypadku funkcji okresowych. Stosowana jest wtedy często interpolacja trygonometryczna, w której funkcja interpolująca ma postać:
+$$f(x) = a_0 + \sum_{k=1}^m a_k \cos(kx) + \sum_{k=1}^m b_k \sin(kx)$$
+W szczególnym przypadku nieparzystej liczby $n$ równoodległych\footnote{
+	W przypadku punktów równoodległych rozwiązaniem jest dyskretna transformata Fouriera
+} punktów $x_i = i \cdot \frac{2\pi}{n}$ ta funkcja jest określona przez następujące wzory:
+\begin{itemize}
+\item $m = \frac{n-1}{2}$
+\item $a_0 = \frac{1}{n} \sum_{k=0}^{n-1} f(x _{k})$
+\item $a_j = \frac{1}{n} \sum_{k=0}^{n-1} f(x _{k}) \cdot \cos(j \cdot x _{k} )$
+\item $b_j = \frac{1}{n} \sum_{k=0}^{n-1} f(x _{k}) \cdot \sin(j \cdot x _{k} )$
+\end{itemize}
+
+\section{Całkowanie}
+
+Najprostszą podejściem do numerycznego obliczania całki oznaczonej z danej funkcji byłoby liczenie sumy pól prostokątów pod wykresem funkcji dla odpowiednio małego boku $dx$ takiego prostokąta w współrzędnej X.
+Za wysokość prostokąta możemy przyjmować wartość funkcji w początku, środku lub końcu danego przedziału.
+Prostym usprawnieniem tej metody, nie wymagającym znacznie większej ilości obliczeń ani nie powodującej znacznego wzrostu skomplikowania programu, jest zastosowanie trapezów zamiast prostokątów.
+
+\begin{Zadanie}{}{}
+Napisz funkcję \Verb{calka(f, a, b, dx = 0.3)} obliczającą wartość całki określonej na odcinku od \Verb{a} do \Verb{b} z funkcji \Verb{f}, korzystającą z metody trapezów.\\
+Wskazówka, zauważ że dodając do \Verb{a} kolejne wartości \Verb{dx} możemy przekroczyć \Verb{b}.
+
+\begin{rozwiazanie}{python}
+def calka(f, a, b, dx = 0.3):
+	x = a
+	fb = f(x)
+	pole = 0
+	while x < b:
+		x += dx
+		if x > b:
+			dx -= x-b
+			x = b
+		
+		fa, fb = fb, f(x)
+		pole += (fa + .5 * (fb-fa)) * dx
+	return pole
+
+calka(f, 0, 1, 0.3)
+\end{rozwiazanie}
+\end{Zadanie}
+
+\section{Różniczkowanie}
+
+Najprostszą metodą obliczania (przybliżania) wartości pochodnej funkcji w danym punkcie jest obliczenie jej jako: $f'_x=  \frac{f(x+dx) - f(x)}{dx}$, gdzie $dx$ jest odpowiednio małą odległością pomiędzy dwoma punktami.
+
+\begin{Zadanie}{}{}
+Napisz funkcję obliczającą pochodną funkcji $sin(x)$, w oparciu o powyższą zależność. Funkcja powinna posiadać argumenty pozwalające na wskazanie punktu $x$ oraz wartości $dx$ używanej do obliczeń. Zobacz jak obliczane przybliżenie pochodnej zalezy od wartości $dx$.
+
+\begin{rozwiazanie}{python}
+import math
+
+def pochodnaSin(x, dx):
+	return (math.sin(x+dx) - math.sin(x)) / dx
+
+for d in range(1,10):
+	print(pochodnaSin(0.5, 0.1/d))
+\end{rozwiazanie}
+\end{Zadanie}
+
+Główny problem takiego podejścia polega na znalezieniu odpowiednio małego $dx$. Można go jednak ominąć traktując $f'_x$ jako funkcję zależną od $dx$, obliczając jej wartości dla kilku $dx$ i interpolując jej wartość w zerze.
+
+\begin{Zadanie}{}{pochodna_funkcj_z_interpolacja}
+Napisz funkcję \Verb{pochodna(f, x, d = 0.3)} obliczającą wartość pochodnej funkcji $f(x)$ (przekazanej w argumencie \Verb{f}) w zadanym punkcie \Verb{x}.
+Funkcja powinna obliczać pochodną interpolując wartości $f'_x(dx)$ obliczonej dla $dx = -2d$, $dx = -d$, $dx = d$ i $dx = 2d$.
+\end{Zadanie}
+
+\section{Regulator PID {\Symbola 🤔}}
+
+Regulator PID jest to algorytm regulacji parametru procesu działający w pętli sprzężenia zwrotnego posiadający człony: proporcjonalny (P), całkujący (I) i różniczkujący (D).
+
+Wejściem algorytmu jest wartość mierzona (bądź od razu różnica wartości zadanej i mierzonej). Jeżeli kierunek zmiany sterowania jest zgodny ze zmianą wartości mierzonej (zwiększenie wartości sygnału sterującego powoduje zwiększenie wartości mierzonej) to należy odejmować wartość mierzoną od zadanej, w przeciwnym razie od zadanej mierzoną.
+
+Wyjściem algorytmu jest wartość zmiany jakiegoś sygnału sterującego - może być wykorzystana bezpośrednio przy sterowaniu krokowym lub akumulowana celem uzyskania stałej wartości sygnału sterującego.
+
+Typowa algorytm ten działa w nieskończonej pętli, często z dodatkowym krokiem czasowym (odstępem pomiędzy wykonaniami kolejnych obiegów pętli) - deklarowanym jawnie lub wynikłym z kostrukcji układu sterującego.
+
+Przykładowa implementacja algorytmu:
+\begin{CodeFrame*}[python]{}
+class PID:
+  # nastawa - wartość zadana
+  setPoint = 0
+  
+  # wartość wyjścia dla sterowania krokowego
+  # (gdy akumulacja w układzie realizującym)
+  outStep = 0
+  
+  # wartość wyjścia dla sterowania sygnałem
+  outValue = 0
+  
+  # parametry regulatora PID
+  Kp, Ki, Kd = 0, 0, 0
+  
+  # limity wartości sterowanej
+  outValueMin, outValueMax = 0, 0
+  
+  # poprzednia różnica między wartością zadaną a otrzymaną
+  # (poprzedni błąd regulacji / uchyb)
+  lastDiff = 0
+  
+  # poprzednia wartość otrzymana (zmienna procesu)
+  lastVal = 0
+  
+  # część całkująca, akumulowana pomiędzy krokami
+  integral = 0
+  
+  def doStep(self, inputVal, stepTime):
+    # obliczmy aktualny błąd regulacji
+    # (na podstawie odczytanej wartości wejściowej)
+    diff = self.setPoint - inputVal
+    
+    # wyłączamy regulację gdy prowadziłby do przesterowania
+    if (self.outValue > self.outValueMax and diff > 0):
+      return 1
+    if (self.outValue < self.outValueMin and diff < 0):
+      return -1
+    
+    # całkowanie przybliżamy jako jako suma pól trapezów
+    self.integral += (diff + self.lastDiff) / 2 * stepTime
+    
+    # różniczkowanie przybliżamy jako tangens nachylenia
+    # prostej pomiędzy poprzednim krokiem a obecnym
+    # celem złagodzenia odpowiedzi na zmiany wartości zadanej
+    # różniczkujemy sygnał wejściowy a nie błąd regulacji
+    derivative = -(inputVal - self.lastVal) / stepTime
+    
+    # obliczenie wartości sygnału sterującego na podstawie tego kroku
+    self.outStep   = self.Kp*diff + self.Ki*self.integral + \
+                     self.Kd*derivative
+    
+    # akumulacja sygnału sterującego
+    self.outValue += self.outStep
+    
+    # zapamiętanie aktualnego błędu regulacji
+    # jako poprzedni dla następnego kroku
+    self.lastDiff = diff
+    
+    # zapamiętanie aktualnej wartości wejściowej
+    # jako poprzedniej dla następnego kroku
+    self.lastVal  = inputVal
+    
+    return 0
+\end{CodeFrame*}
+
+Implementacja ta wymaga ustawienia parametrów pracy algorytmu takich jak \Verb{setPoint}, \Verb{outValueMin}, \Verb{outValueMax}, współczynniki \Verb{Kp}, \Verb{Ki}, \Verb{Kd}.
+Przydatne może być też zainicjowanie \Verb{lastVal} na obecny stan wejścia. Następnie działanie odbywa się w pętli:
+\begin{enumerate}
+\item odczyt wejścia
+\item obliczenie wartości sterującej z użyciem PID (wywołanie metody \Verb{doStep})
+\item wystawienie wartości sterującej
+\item opcjonalne odczekanie jakiegoś czasu
+\end{enumerate}
+
+Do testowania algorytmu posłuży nam prosty model zbiornika, w którym chcemy utrzymać zadany poziom wody, a z którego cały czas odpływa jakaś jej ilość:
+\begin{CodeFrame*}[python]{}
+poziom = 15
+wyplyw = 2
+
+def getInput():
+	global poziom
+	return poziom;
+
+def setOutput(doplyw):
+	global poziom
+	poziom -= wyplyw
+	
+	if poziom < 0:
+		poziom = 0
+	
+	if doplyw > 100:
+		doplyw = 100
+	if doplyw < 0:
+		doplyw = 0
+	
+	poziom += 0.3 * doplyw
+\end{CodeFrame*}
+
+\begin{Zadanie}{}{testuj_pid}
+Napisz funkcję \Verb{testuj(steps, kp, ki, kd)} testującą działanie algorytmu PID. Funkcja powinna wykonać \Verb{steps} iteracji algorytmu dla zadanych parametrów \Verb{kp}, \Verb{ki}, \Verb{kd} i narysować wykres zmian wartości poziomu wody w zbiorniku (zwracanej przez \Verb{getInput()} w danym kroku) oraz wartości sterującej zaworem dopływowym (przekazywanej do \Verb{setOutput()} w danym kroku).
+\end{Zadanie}
+
+\begin{Zadanie}{}{}
+Korzystając z funkcji \Verb{testuj(steps, kp, ki, kd)} poeksperymentuj z doborem wartości współczynników algorytmu.
+
+\begin{teacherOnly}
+Pokazać róznicę pomiędzy:
+\begin{CodeFrame*}[python]{}
+testuj(200, 0.01, 0.00, 0.00)
+testuj(200, 0.1, 0.00, 0.00)
+testuj(200, 0.3, 0.00, 0.00)
+\end{CodeFrame*}
+i omówić znaczenie członu proporcjonalnego (wskazać kiedy algorytm zaczyna zamykanie dolewania wody oraz jaki jest skutek trwania tego procesu)
+
+Wspomnieć o znaczeniu kroku czasowego algorytmu w stosunku co do szybkości procesu.
+
+Pokazać róznicę pomiędzy:
+\begin{CodeFrame*}[python]{}
+testuj(200, 0.3, 0.00, 0.01)
+testuj(200, 0.3, 0.00, 0.1)
+\end{CodeFrame*}
+i omówić znaczenie oraz wpływ członu różniczkującego (teraz prędkość sterowania zaworem dopływu zależy od prędkości zmiany poziomu wody w zbiorniku)
+
+Można też zasugerować zmodyfikowanie zachowania zbiornika w taki sposób aby od pewnego kroku zmianie uległa ilość wypływającej wody.
+\end{teacherOnly}
+\end{Zadanie}
+
+\section{Zadania dodatkowe}
+
+\begin{Zadanie}{}{}
+Napisz funkcję \Verb{oblicz_wart_tryg (xx, a, b)} obliczającą wartość interpolacji trygonometrycznej w punkcie \Verb{xx}, dla podanych list współczynników \Verb{a} i \Verb{b}.
+\end{Zadanie}
+
+\begin{Zadanie}{}{}
+Napisz funkcję \Verb{oblicz_wsp_tryg (y)} obliczającą i zwracającą współczynniki \Verb{a} i \Verb{b} interpolacji trygonometrycznej  dla podanego w skrypcie przypadku.\\
+Wskazówka: zauważ że nie obliczany i nie wykorzystywany jest współczynnik \Verb{b[0]}
+\end{Zadanie}
+
+\begin{Zadanie}{\domowe{1}}{calka_z_prostokatow}
+Napisz funkcje obliczającą całkę jako sumę pól prostokątów o wysokości określonej przez prawy koniec przedziału o długości dx.
+\end{Zadanie}
+
+\begin{Zadanie}{\domowe{2}}{interpolacja_zbioru_punktow}
+Napisz program dokonujący interpolacji następującego zbioru punktów:
+\begin{center}\begin{tabular}{|c|c|}
+\hline\hspace{.75cm}$x$\hspace{.75cm}~&\hspace{.75cm}$f(x)$\hspace{.75cm}~\\\hline 
+-3 & 58 \\
+-2 & 39 \\
+-1 & -4 \\
+1  & 6 \\
+2  & -37 \\
+3  & -56 \\
+\hline
+\end{tabular}\end{center}
+Narysuj wykres funkcji interpolacyjnej w przedziale [-3.7 3.7] oraz podaj wzór wielomianu interpolacyjnego w postaci potęgowej.
+\end{Zadanie}
+
+\begin{Zadanie}{\domowe{3}}{interpolacja_cos}
+Napisz program który będzie dokonywał interpolacji wielomianowej funkcji $cos(x)$ opierając się kolejno na: 3, 6, 13 i 16 wybranych punktach z przedziału $[0, 4\pi]$
+Program powinien narysować wykresy kolejnych funkcji interpolującyh oraz wykres $cos(x)$ na wspólnym wykresie.
+\end{Zadanie}
+
+
+\begin{Zadanie}{\domowe{1}}{pochodna_dwustronna}
+Na zajęciach pisaliśmy funckję przybliżającą wartoć pochodnej w oparciu o zależność $f'_x=  \frac{f(x+dx) - f(x)}{dx}$, innym podejściem jest obliczanie jej jako $f'_x=  \frac{f(x+dx) - f(x-dx)}{2 \cdot dx}$.
+Napisz funkcją obliczającą przybliżenie pochodnej funkcji $cos(x)$ obliczane jako $f'_x=  \frac{f(x+dx) - f(x-dx)}{2 \cdot dx}$. Która z tych metod wydaje się lepsza.
+\end{Zadanie}
+
+\begin{Zadanie}{\domowe{2}}{wykres_pochodnej}
+Napisz program która oblicza numerycznie wartość pochodnej danej funkcji (np. $cos(x)$) w danym przedziale (z jakimś ustalonym krokiem) i rysuje wykres funcji oraz tej pochodnej w zadanym przedziale.
+Do obliczania pochodnej możesz użyć dowolnej metody omawianej na zajęciach.
+\end{Zadanie}
+
+\begin{Zadanie}{\domowe{3}}{wykres_sin_ze_styczna}
+Narysuj wykres funkcji $sin(x)$ dla x z przedziału [1,2] oraz styczne w punkcie $x=1.4$ obliczone jako krzywe o nacyleniu odpowiadającemu przybliżeniu pochodnej obliczonemu jako: $f'_x=  \frac{f(x+dx) - f(x)}{dx}$ i jako $f'_x=  \frac{f(x+dx) - f(x-dx)}{2 \cdot dx}$ dla dx=0.13.
+\end{Zadanie}
+
+\rozwiazania
+
+\copyrightFooter{
+	© Matematyka dla Ciekawych Świata, 2018.\\
+	© Robert Ryszard Paciorek <rrp@opcode.eu.org>, 2003-2018.\\
+	Kopiowanie, modyfikowanie i redystrybucja dozwolone pod warunkiem zachowania informacji o autorach.
+}
+\end{document}
