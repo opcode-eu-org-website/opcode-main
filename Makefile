@@ -7,8 +7,9 @@ export PATH := $(shell realpath $(MAINDIR)/TextUtils/convert):$(PATH)
 
 
 all: | check-submodules $(TEXBUILDDIR)/pdfArticle.cls $(TEXBUILDDIR)/labels4easylist.sty $(TEXBUILDDIR)/vtable.sty $(TEXBUILDDIR)/ehhline.sty
-	cd booklets;    $(MAKE) -f ../Makefile buildAll
-	cd LaTeX-demos; $(MAKE) -f ../Makefile buildAll
+	$(MAKE) buildAll
+	[ "$(abspath $(MAINDIR))" = "$(PWD)" ] && (cd booklets &&    $(MAKE) -f ../Makefile buildAll) || true
+	[ "$(abspath $(MAINDIR))" = "$(PWD)" ] && (cd LaTeX-demos && $(MAKE) -f ../Makefile buildAll) || true
 
 upload:
 	ln -sf `realpath newIndex.xhtml` $(OUTDIR)/index.xhtml
