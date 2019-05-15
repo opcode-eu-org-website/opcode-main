@@ -51,8 +51,8 @@
 \begin{document}
 
 % This demo show text formatting and base on features provided by \texttt{pdfArticle} document class.
-To demo prezentuje zagadnienia związane z formatowaniem tekstu i bazuje na funkcjonalnościach dostarczonych przez klasę dokumentów \rrpPkgLink{pdfArticle}.
-Więcej informacji (i innych możliwości formatowań) w dokumentacji klas \pkgLink{fontspec}, \pkgLink{xcolor}, \pkgLink{ulem}, \pkgLink{contour} i \pkgLink{shadowtext} używanych przez \rrpPkgLink{pdfArticle}.
+To demo prezentuje zagadnienia związane z formatowaniem tekstu i bazuje na funkcjonalnościach dostarczonych przez klasę dokumentów \pkgLink{pdfArticle}.
+Więcej informacji (i innych możliwości formatowań) w dokumentacji klas \pkgLink{fontspec}, \pkgLink{xcolor}, \pkgLink{ulem}, \pkgLink{contour} i \pkgLink{shadowtext} używanych przez \pkgLink{pdfArticle}.
 
 \begin{easylist}[itemize]
 
@@ -225,7 +225,7 @@ Lorem ipsum dolor sit amet, $consectetur adipiscing elit$, sed do eiusmod tempor
 \begin{adjustwidth}{.05\textwidth}{.05\textwidth} \putExampleTeX \end{adjustwidth}
 \let\FancyVerbFormatLine\FancyVerbFormatLineTmp
 
-Więcej informacji w dokumentacji klas \pkgLink{fancyvrb} i \pkgLink{fvextra} używanych przez \rrpPkgLink{pdfArticle}.
+Więcej informacji w dokumentacji klas \pkgLink{fancyvrb} i \pkgLink{fvextra} używanych przez \pkgLink{pdfArticle}.
 
 \subsection*{kolorowanie kodu}
 
@@ -237,7 +237,7 @@ Posiada on też pewne ograniczenia co do możliwości włączenia interpretacji 
 
 Pakiet \pkgLink{listings} nie wymaga zewnętrznych narzędzi i nie ma takich ograniczeń co do włączenia interpretacji kodu \TeX{}owego, jednak nie wspiera UTF-8 oraz ma problemy z kolorowaniem niektórych elementów składniowych (np. \Verb@$#@ w bashu jest nazwą zmiennej i nie rozpoczyna komentarza).
 
-Klasa \rrpPkgLink{pdfArticle} z opcją \Verb$extra$ włącza pakiet \pkgLink{minted} pozwalając na kolorowanie kodu z użyciem środowiska \Verb$minted$:
+Klasa \pkgLink{pdfArticle} z opcją \Verb$extra$ włącza pakiet \pkgLink{minted} pozwalając na kolorowanie kodu z użyciem środowiska \Verb$minted$:
 \begin{Example}
 \begin{minted}{python}
 for i in ll:
