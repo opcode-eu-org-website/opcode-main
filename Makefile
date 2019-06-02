@@ -13,7 +13,7 @@ all: | check-submodules $(TEXBUILDDIR)/pdfArticle.cls $(TEXBUILDDIR)/labels4easy
 
 upload:
 	ln -sf `realpath newIndex.xhtml` $(OUTDIR)/index.xhtml
-	cd $(OUTDIR); rsync -rLc --delete -v -e "ssh" ./ www.opcode.eu.org:/srv/WebPages/main/
+	cd $(OUTDIR) && rsync -rLc --delete -v -e "ssh" --exclude="~rrp" ./ www.opcode.eu.org:/srv/WebPages/main/
 
 
 #
