@@ -1,6 +1,6 @@
 \documentclass{pdfBooklets}
 
-\title{Laboratorium programistyczne: Zastosowania automatów}
+\title{Laboratorium programistyczne:\\ Sumator i zastosowania automatów}
 \author{%
 	Projekt ,,Matematyka dla Ciekawych Świata'',\\
 	Robert Ryszard Paciorek\\\normalsize\ttfamily <rrp@opcode.eu.org>
@@ -47,6 +47,117 @@
 \begin{document}
 
 \maketitle
+
+%  BEGIN: Systemy liczbowe 01
+\section{Systemy liczbowe}
+
+Liczby mogą być zapisywane w różny sposób. Istnieją systemy addytywne (np. rzymski), w których istotna jest ilość powtórzeń danego elementu oraz systemy pozycyjne o różnych podstawach (np. system dziesiętny), w których istotne jest miejsce w którym znajduje się dany element.
+
+W życiu codziennym najczęściej spotykamy się z zapisem dziesiętnym, funkcjonującym następująco: $5731 = 10^0 \cdot 1 + 10^1 \cdot 3 + 10^2 \cdot 7 + 10^3 \cdot 5$.
+
+\subsection{System dwójkowy}
+
+Ze względu na sposób budowy elektroniki cyfrowej i komputerów w informatyce dużo częściej spotykamy się z systemem dwójkowym (oraz systemami łatwo rozkładającymi się na dwójkowy, np. szesnastkowym).
+
+Pojedynczą cyfrę systemu dwójkowego (przybierającą wartość 0 albo 1) określa się mianem \emph{bit}u, liczby reprezentowane są jako ciągi takich cyfr. Terminem \emph{bajt} określa się zazwyczaj ciąg o długości 8 bitów (ale w niektórych systemach ciąg o innej długości).
+
+Podstawowym sposobem zapisy liczb całkowitych nie ujemnych w systemie dwójkowym jest \emph{naturalny kod binarny} (\emph{NKB}), w którym np. 4 bitowy ciąg {\tt a\textsubscript{3}a\textsubscript{2}a\textsubscript{1}a\textsubscript{0}} reprezentuje liczbę $2^0 \cdot a_0 + 2^1 \cdot a_1 + 2^2 \cdot a_2 + 2^3 \cdot a_3$. Zwróć uwagę na podobieństwo do systemu dziesiętnego.
+
+Podstawowym sposobem zapisy liczb całkowitych (ze znakiem) jest \emph{kod uzupełnień do dwóch} (\emph{U2}) w którym n-bitowa liczba reprezentowana przez ciąg {\tt a\textsubscript{n-1}...a\textsubscript{3}a\textsubscript{2}a\textsubscript{1}a\textsubscript{0}} będzie miała wartość $2^0 \cdot a_0 + 2^1 \cdot a_1 + 2^2 \cdot a_2 + ... + 2^{n-2} \cdot a_{n-2} - 2^{n-1} \cdot a_{n-1}$. Jako że najstarszy bit wchodzi z ujemną wagą, jego ustawienie na 1 oznacza liczbę ujemną (ale nie jest to kod znaku). Warto zauważyć kompatybilność z NKB.
+
+Liczby zapisywane w tych kodowaniach systemu dwójkowego oznacza się często przy pomocy prefiksu "0b" albo sufiksu "b" (w Pythonie możemy stosować jedynie  zapis z prefiksem), np. {\tt 0b101 = 101b} reprezentuje liczbę 5 w systemie dziesiętnym ($2^0 \cdot 1 + 2^1 \cdot 0 + 2^2 \cdot 1 = 5$).
+
+%Oprócz podanych istnieje jeszcze kilka stosowanych sposobów zapisu liczb binarnych takich jak (dla liczb bez znaku): kod "1 z n", kod Graya, kod Johnsona, (dla liczb ze znakiem): kod znak-moduł, kod uzupełnień do jedności (U1). Odmiennym zagadnieniem jest kodowanie liczb zmiennoprzecinkowych. Nie będziemy ich jednak omawiać na tych zajęciach.
+%  END: Systemy liczbowe 01
+
+%  BEGIN: Sumator
+\section{Sumator}
+
+Cyfrowe układy elektroniczne (także te składające się na nasze komputery) każdą liczbę traktują jako ciąg logicznych jedynek i zer (wartości True i False).
+Spróbujemy zasymulować takie działanie w Pythonie i zastanowić się nad tym jak można zrealizować dodawanie takich liczb.
+
+Jeżeli znamy i pamiętamy jeszcze metodę dodawania ,,w słupku'' (,,pod kreską'') to wiemy, że dodawanie dwóch n cyfrowych liczb możemy potraktować jako ciąg n dodawań dwóch liczb jednocyfrowych z obsługą przeniesienia.
+Podobnie można postąpić przy sumowaniu liczb binarnych. Potrzebujemy zatem elementu, który będzie sumował 3 wartości logiczne (dwie pochodzące z sumowanych liczb, jedna z przeniesienia z poprzedniego elementu)
+i generował wynik sumy oraz wartość przeniesienia dla następnego elementu.
+
+\begin{Zadanie}{}{}
+Zastanów się w jaki sposób, korzystają z poznanych funkcji logicznych (and, or, xor, not) można obliczyć wartość sumy dwóch cyfr binarnych a i b oraz wartość przeniesienia.
+
+\emph{Wskazówka: zapisz tablicę prawdy dla tej operacji}
+
+\begin{teacherOnly}
+Zapisując tablicę prawdy dla takiej operacji:
+
+\begin{tabular}{c|c||c|c}
+a & b  &  suma & przeniesienie\\
+\hline
+0 & 0  &  0 & 0\\
+1 & 0  &  1 & 0\\
+0 & 1  &  1 & 0\\
+1 & 1  &  0 & 1\\
+\end{tabular}
+
+możemy zauważyć że suma to a XOR b, natomiast przeniesienie to a AND b.
+\end{teacherOnly}
+\end{Zadanie}
+
+\begin{Zadanie}{}{}
+Spróbuj rozszerzyć poprzednie rozwiązanie, tak aby uwzględniać w sumowaniu przeniesienie z poprzedniego elementu.
+
+\emph{Wskazówka: rozszerz tablicę prawdy o jedną kolumnę wejściową}
+
+\begin{teacherOnly}
+
+\begin{tabular}{c|c|c||c|c}
+p & a & b  &  suma & przeniesienie\\
+\hline
+0 & 0 & 0  &  0 & 0\\
+0 & 1 & 0  &  1 & 0\\
+0 & 0 & 1  &  1 & 0\\
+0 & 1 & 1  &  0 & 1\\
+%
+1 & 0 & 0  &  1 & 0\\
+1 & 1 & 0  &  0 & 1\\
+1 & 0 & 1  &  0 & 1\\
+1 & 1 & 1  &  1 & 1\\
+\end{tabular}
+
+\vspace{6pt} Teraz jest to trudniej zauważyć, ale:
+\begin{itemize}
+\item suma to (a XOR b) XOR p
+\item przeniesienie to (a AND b) OR (p AND (a OR b)), co jest równoważne (a AND b) OR (p AND (a XOR b)),\\
+      gdyż XOR od OR różni się tylko dla a == b == 1, a ten przypadek załatwia i tak OR z (a AND b)
+\end{itemize}
+
+Można też pokazać i omówić animację z Wikipedii: \url{https://commons.wikimedia.org/wiki/File:Fulladder.gif}
+\end{teacherOnly}
+\end{Zadanie}
+
+\begin{teacherOnly}
+\vspace{8pt}\noindent\strong{Napisać na tablicy wzory na sumator:}\\
+s = (a XOR b) XOR p\\
+p = (a AND b) OR (p AND (a XOR b))\\
+\end{teacherOnly}
+
+\begin{Zadanie}{}{zadanie_FullAdder}
+Napisz funkcję realizującą sumator. Funkcja powinna przyjmować 3 argumenty logiczne (wartości dwóch bitów do zsumowania oraz wartość przeniesienia) i zwracać wartość sumy i przeniesienia do następnego elementu.
+
+\emph{Wskazówka: zwracanie dwóch elementów z funkcji najprościej zrealizować poprzez zwracanie dwu elementowej listy.}
+\end{Zadanie}
+
+Liczba 6 posiada zapis binarny 0b110. Czyli jeżeli chcielibyśmy przedstawić ją w postaci listy wartości logicznych byłoby to [0, 1, 1]. Zwróć uwagę na zmianę kolejność bitów: wynika ona z tego że w zapisie list element o indeksie zero podajemy jako pierwszy a w zapisie binarnym liczby bit zerowy (wchodzący z wagą $2^0$) jest jako ostatni. Dzięki takiemu zapisaniu liczb możemy użyć naszego sumatora do dodania wielo-bitowych liczb.
+
+\begin{Zadanie}{\domowe{3}}{zadanie_sumator_list}
+Napisz funkcję wykorzystującą sumator stworzony w zadaniu \ref{zadanie_FullAdder} do obliczania sumy dwóch liczb reprezentowanych jako listy wartości logicznych.
+Na przykład dla argumentów \Verb{[True, False, True]}, \Verb{[False, True, True]} (odpowiadających liczbom 5 i 6) wynikiem powinna być lista \Verb{[True, True, False, True]} (odpowiadająca liczbie 11).
+
+Rozwiązanie powinno działać poprawnie dla liczb o dowolnej ilości bitów, także w przypadku gdy liczba bitów poszczególnych liczb jest różna.
+Rozwiązania działające tylko dla liczb o równej lub ustalonej liczbie bitów mogą otrzymać maksymalnie 2pkt.
+
+\emph{Wskazówka: dodawanie elementu na koniec listy możliwe jest z użyciem metody \Verb{append}, można też zedefiniować listę o zadanej ilości elementów np. \Verb{5 * [False]} i tylko modyfikować wybrane elementy.}
+\end{Zadanie}
+%  END: Sumator
+
 
 \section{Automaty skończone}
 
@@ -130,7 +241,7 @@ Oficjalna specyfikacja protokołu przesyłu poczty elektronicznej SMTP (Simple M
 				node[serwer, pos=0.45] {221 ... \textit{zamknięcie poł.}}
 				(S0)
 		(H)
-			edge[out=-110, in=-130, looseness=0.9]
+			edge[out=-100, in=-130, looseness=0.9]
 				node[klient] {QUIT}
 				node[serwer] {221 ... \textit{zamknięcie poł.}}
 				(S0)
@@ -169,6 +280,10 @@ Oficjalna specyfikacja protokołu przesyłu poczty elektronicznej SMTP (Simple M
 				node[klient] {MAIL FROM: ...}
 				node[serwer] {250 ...}
 				(MF)
+			edge[out=-110, in=-160, looseness=11]
+				node[klient,sloped] {RSET}
+				node[serwer,sloped] {250 ...}
+				(H)
 		(MF)
 			edge[loop, out=30, in=150, looseness=7]
 				node[klient] {...}
@@ -251,7 +366,7 @@ Zapis przykładowej sesji protokołu SMTP opisywanej powyższym automatem:
 
 \begin{Zadanie}{\domowe{3}}{zadanie_smtp}
 \teacher{\strong{Uwaga:} Pomimo że zadanie sugeruję dać jako domowe to na zajęciach warto krótko omówić działanie tego automatu. }
-Napisz symulator serwera SMTP w postaci wyżej przedstawionego automatu.
+Napisz symulator serwera SMTP w postaci wyżej przedstawionego automatu. Program powinien przyjmować kolejne komendy od użytkownika i stosownie na nie reagować.
 
 \vspace{0.3cm}
 \emph{Wskazówka: do wczytywania kolejnych linii w ramach pętli głównej automatu możesz użyć: \python{linia = sys.stdin.readline().rstrip()}.
@@ -688,22 +803,6 @@ Jest to efektem tego że przy takiem zapisie pierwszy element listy jest podawan
 a naturalne wydaje się podawanie operacji do wykonania na początku nieskończonej taśmy.
 Zadanie możesz rozwiązać także z odwróconą kolejnością list.
 \end{Zadanie}
-
-
-%  BEGIN: Literatura dodatkowa
-\section{Głębiej w Pythona (cz. 4)}
-
-\subsection{Literatura dodatkowa {\Symbola 🤔}}
-
-\begin{itemize}
-\item \emph{The Python Tutorial} (\url{https://docs.python.org/3/tutorial/}) - oficjalny Tutorial Pythona.
-\item \emph{Vademecum informatyki praktycznej} (\url{http://vip.opcode.eu.org/}) - zbiór materiałów na temat elektroniki i programowania m.in. w Pythonie, wykorzystywany m.in. w edycji VIIIbis MdCŚ.
-\item \emph{Biblioteka Riklaunima: Podstawy Pythona} (\url{http://www.python.rk.edu.pl/w/p/podstawy/}).
-\item \emph{A Byte of Python} (\url{https://python.swaroopch.com/}).
-\item \emph{How to Think Like a Computer Scientist: Learning with Python 3} (\url{http://openbookproject.net/thinkcs/python/english3e/}).
-\item \emph{Zanurkuj w Pythonie} (\url{https://pl.wikibooks.org/wiki/Zanurkuj_w_Pythonie}).
-\end{itemize}
-%  END: Literatura dodatkowa
 
 \rozwiazania
 
