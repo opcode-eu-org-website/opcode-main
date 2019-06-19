@@ -17,7 +17,7 @@
 		<a href="LiveUSB.pdf"><img src="lib/pdfFile.svg" alt="Pobierz jako PDF" title="Pobierz jako PDF"/></a>
 	</p>
 </div>
-<p id="updateInfo">(aktualizacja: 2019-04-02)</p>
+<p id="updateInfo">(aktualizacja: 2019-05-19)</p>
 
 <section>
 <p>Live USB możemy bardzo prosto utworzyć instalując system z użyciem debootastrapa i uzupełniając go w chroocie o jądro, gruba i potrzebne nam narzędzia.</p>
@@ -115,6 +115,7 @@ debootstrap ${SUITE} ${MNT} ${MIRROR}
 mount -t proc  proc  $MNT/proc
 mount -t sysfs sysfs $MNT/sys
 mount -o rbind /dev  $MNT/dev
+mount -o rbind /run  $MNT/run/
 
 # ustawienie zmiennych środowiskowych
 export DEV DEVp MIRROR SUITE
@@ -386,6 +387,7 @@ mount \$DEV \$MNT
 mount -t proc  proc  \$MNT/proc
 mount -t sysfs sysfs \$MNT/sys
 mount -o rbind /dev  \$MNT/dev
+mount -o rbind /run  \$MNT/run/
 
 chroot \$MNT
 EOF
@@ -401,7 +403,8 @@ MNT=\$1
 
 umount \$MNT/proc
 umount \$MNT/sys
-mount --make-rslave \$MNT/dev ; umount -R \$MNT/dev
+mount --make-rslave \$MNT/dev &amp;&amp; umount -R \$MNT/dev
+mount --make-rslave \$MNT/run &amp;&amp; umount -R \$MNT/run
 umount \$MNT
 EOF
 chmod +x /root/umountChroot.sh
@@ -433,6 +436,8 @@ umount $MNT/proc
 umount $MNT/sys
 mount --make-rslave $MNT/dev
 umount -R $MNT/dev
+mount --make-rslave $MNT/run
+umount -R $MNT/run
 umount $MNT
 losetup -d $DEV
 </pre>
