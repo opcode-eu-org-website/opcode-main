@@ -6,10 +6,13 @@ SVGICONURL  := https://bytebucket.org/OpCode-eu-org/svgiconset/raw/HEAD/other/
 export PATH := $(shell realpath $(MAINDIR)/TextUtils/convert):$(PATH)
 
 
-all: | check-submodules $(TEXBUILDDIR)/pdfArticle.cls $(TEXBUILDDIR)/labels4easylist.sty $(TEXBUILDDIR)/vtable.sty $(TEXBUILDDIR)/ehhline.sty
+all: | init
 	$(MAKE) buildAll
 	[ "$(abspath $(MAINDIR))" = "$(PWD)" ] && (cd booklets &&    $(MAKE) -f ../Makefile buildAll) || true
 	[ "$(abspath $(MAINDIR))" = "$(PWD)" ] && (cd LaTeX-demos && $(MAKE) -f ../Makefile buildAll) || true
+
+init: | check-submodules $(TEXBUILDDIR)/pdfArticle.cls $(TEXBUILDDIR)/labels4easylist.sty $(TEXBUILDDIR)/vtable.sty $(TEXBUILDDIR)/ehhline.sty
+	@ echo "init done"
 
 upload:
 	ln -sf `realpath newIndex.xhtml` $(OUTDIR)/index.xhtml
@@ -34,7 +37,7 @@ check-submodules: $(MAINDIR)/OpCode-core/lib/base.css $(MAINDIR)/TextUtils/conve
 
 $(MAINDIR)/OpCode-core/% $(MAINDIR)/TextUtils/% $(MAINDIR)/OpCode-vip/%:
 	git submodule update --init
-	[ -e "$@" ] || $(MAKE) update-submodules
+	$(MAKE) update-submodules
 	chmod 111 `git submodule | awk '{print $$2}'`
 
 update-submodules:
