@@ -37,6 +37,12 @@
 \usepackage[ampersand]{easylist}
 \usepackage{paracol}
 
+\usepackage{tikz}
+\usetikzlibrary{positioning} % for positionig nodes with `right = of X`
+\usetikzlibrary{arrows.meta, decorations.markings} % for arrows formating in tikzpicture
+\tikzset{
+  invisibleNode/.style={inner sep=0, outer sep = 0pt, minimum size=0},
+}
 \begin{document}
 
 \maketitle
@@ -115,8 +121,8 @@ Protokół IP (Internet Protocol) odpowiedzialny jest przede wszystkim za sposó
 		& jak mając adres hosta i prefix ustalić adres sieci
 			&& rozpiska na tablicy
 			&& pokazać sipcalc / ipcalc
-		& prównywanie adresów sieci o nie równych maskach
-			&& pokazać ilustrację - kółko w kółku (każdy host widzi tylko piersze otaczające go kółko)
+		& porównywanie adresów sieci o nie równych maskach
+			&& pokazać ilustrację - kółko w kółku (każdy host widzi tylko pierwsze otaczające go kółko)
 	\end{easylist}
 \end{teacherOnly}
 
@@ -240,7 +246,7 @@ Oprócz opisanego powyżej routingu unicastowego (kierowania do jednego odbiorcy
 	&&&& nie jest on routowany do sieci zewnętrznych, zawsze może być używany wewnątrz sieci lokalnej (ale wymaga jawnego określania interfejsu sieciowego dla pakietów adresowych na taki adres np. \Verb$ping6 fe80::f66d:4ff:fe4e:ade8%eth0$);
 	&&&& adres taki (dla adresu MAC 11:22:33:44:55:66) będzie miał postać:\\ fe80::1{\bfseries 3}22:33{\bfseries FF}:{\bfseries FE}44:5566 (pierwsza część adresu MAC zwiększana jest o 2, w środku wstawiane jest FFFE).
 	& broadcast
-	&& występuje jedynie w IPv4, w IPv6 zastapiony multicastem:
+	&& występuje jedynie w IPv4, w IPv6 zastąpiony multicastem:
 	&&& ff0$x$::1 – wszystkie węzły
 	&&& ff0$x$::2 – wszystkie routery
 	&&& $x$ określa zasięg, np. x=2 w zakresie \emph{Link-Local}
@@ -299,7 +305,7 @@ W ramach sieci mogą być realizowane różne usługi w oparciu o różne protok
 \begin{teacherOnly}
 	Porozmawiać także o:
 	\begin{easylist}[itemize]
-	& standary Internetu - dokumenty RFC
+	& standardy Internetu - dokumenty RFC
 	&& standardy de facto
 	&& poważne i mniej (gołębie, ...)
 	&& dość dobrze się czyta
@@ -312,7 +318,7 @@ W ramach sieci mogą być realizowane różne usługi w oparciu o różne protok
 
 \begin{teacherOnly}
 	\begin{easylist}[itemize]
-	& chybanajpopularniesza warstwa niższa dla IP
+	& chyba najpopularniejsza warstwa niższa dla IP
 	& MAC adresy
 	&& ARP i NDISC
 	&& co to znaczy wysyłanie pakietu do bramki obsługującej jakąś sieć (jaki adres ma pakiet)
@@ -424,7 +430,7 @@ Konfigurację interfejsów sieciowych w systemie Linux umożliwia polecenie \Ver
 		\begin{itemize}
 			\item \Verb{ip addr} – wypisuje obecną konfigurację adresów i informacje o stanie interfejsu
 			                 (\Verb{UP}/\Verb{DOWN} – interfejs włączony/wyłączony,
-			                  \Verb{LOWER_UP}/\Verb{LOWER_DOWN} – link warsty niższej na interfejsie / jego brak)
+			                  \Verb{LOWER_UP}/\Verb{LOWER_DOWN} – link warstwy niższej na interfejsie / jego brak)
 			\item \Verb{ip addr add ADDRESS dev INTERFACE} – dodaje adres \Verb{ADDRESS} do interfejsu \Verb{INTERFACE}
 			\item \Verb{ip addr del ADDRESS dev INTERFACE} – usuwa adres \Verb{ADDRESS} z interfejsu \Verb{INTERFACE}
 		\end{itemize}
@@ -467,7 +473,7 @@ Często dostępne są także klasyczne polecenia:
 	\item \Verb{vconfig}
 		dodawanie i usuwanie obsługi wskazanych VLANów z danego interfejsu
 	\item \Verb{brctl}
-		konfiguracja programowego switcha ethernetowego pomiędzy interfejsmi (bridge)
+		konfiguracja programowego switcha ethernetowego pomiędzy interfejsami (bridge)
 	\item \Verb{ifenslave}
 		konfiguracja bondów
 \end{itemize}
@@ -475,7 +481,7 @@ Często dostępne są także klasyczne polecenia:
 \begin{teacherOnly}
 	Wspomnieć krótko o filtracji pakietów - iptables (jakiś przykład), łańcuchy, w oparciu o co można filtować.
 	
-	Można powiedzieć kilka słów o DHCP i autkonfiguracji IPv6:
+	Można powiedzieć kilka słów o DHCP i auto-konfiguracji IPv6:
 	
 	Polega ona na tym że dla podsieci będących LAN'em przydzielana jest pula z maską /64 co umożliwia tworzenie unikalnych numerów IP w oparciu o (niepowtarzalne) numery sprzętowe MAC.
 	64 bitowy prefiks sieci jest informacją rozgłaszaną przy pomocy ICMPv6 przez routery (mechanizm radvd), a host dokleja do niego część go identyfikującą związaną z adresem link-local.
@@ -484,16 +490,16 @@ Często dostępne są także klasyczne polecenia:
 
 Oprócz wyżej omówionej konfiguracji interfejsów i tras routingowych, często potrzebna jest konfiguracja jądrowych mechanizmów filtracji pakietów. Służą do tego komendy:
 \begin{itemize}
-	\item \Verb{iptables}
-		konfiguracja filtrów działających na pakietach IP, filtracja może odbywać się m.in. w oparciu o źródłowe i docelowe adresy IP, numery portów, protokół warstwy transportowej, interfejsy oraz mechanizm śledzenia połączeń;
-		umożliwia także konfigurację translacji adresów (NAT).
+	\item \Verb{iptables}, \Verb{ip6tables}
+		konfiguracja filtrów działających na pakietach IP (\Verb{iptables} dla IPv4, \Verb{ip6tables} dla IPv6), filtracja może odbywać się m.in. w oparciu o źródłowe i docelowe adresy IP, numery portów, protokół warstwy transportowej, interfejsy oraz mechanizm śledzenia połączeń; umożliwia także konfigurację translacji adresów (NAT).
 	\item \Verb{ebtables}
 		konfiguracja filtrów działających na poziomie switcha ethernetowego, filtracja może odbywać się m.in. w oparciu o źródłowe i docelowe interfejsy i adresy sprzętowe.
 	\item \Verb{arptables}
 		konfiguracja filtrów związanych z protokołem ARP (zamiany adresów IP na adresy sprzętowe)
 \end{itemize}
 
-Ponaddto konieczne może być dokonywanie pewnych ustawień poprzez jądrowe systemy plików \Verb$/proc$ i \Verb$/sys$.
+
+Ponadto konieczne może być dokonywanie pewnych ustawień poprzez jądrowe systemy plików \Verb$/proc$ i \Verb$/sys$.
 Najczęstszym przypadkiem jest włączenie przekazywania pakietów pomiędzy interfejsami poprzez:
 
 \begin{minted}{bash}
@@ -502,12 +508,136 @@ for f in /proc/sys/net/ipv*/conf/*/forwarding; do echo 1 > $f; done
 (powyższy jednolinijkowiec włącza forwading pakietów IP dla IPv4 i IPv6 na wszystkich interfejsach)
 
 
-\subsection{Programowanie usług sieciowych}
+\subsection{iptables}
+
+Iptables wykorzystuje kilka tablic reguł (najistotniejszymi są \Verb{filter} i \Verb{nat}). Tablica może zostać określona przy pomocy opcji \Verb{-t}, jeżeli nie użyto tej opcji operacje będą wykonywane na tablicy \Verb{filter}. Zależności pomiędzy poszczególnymi łańcuchami i tablicami przedstawia (uproszczony) diagram przejścia pakietu przez mechanizm iptables:
+
+\begin{center}\begin{adjustbox}{scale=.9}\begin{tikzpicture}[->, >={Stealth[length=8pt,width=6pt]}, node distance=0.6cm, semithick]
+	\tikzstyle{info1}=[above, align=center]
+	\tikzstyle{info2}=[below=0.8cm, align=center]
+	\tikzstyle{base}=[align=center, minimum height=3.3em, minimum width=8.6em]
+	\tikzstyle{inout}=[base]
+	\tikzstyle{routing}=[draw, base]
+	\tikzstyle{table_raw}=[draw, base]
+	\tikzstyle{table_mangle}=[draw, base]
+	\tikzstyle{table_nat}=[draw, base]
+	\tikzstyle{table_filter}=[draw, base]
+	
+	\node[inout] (INPUT) {pakiet\\przychodzący};
+	\node[table_raw] (RAW_PREROUTING) [below = of INPUT] {raw\\PREROUTING};
+	\node[routing] (TRACK1) [below = of RAW_PREROUTING] {śledzenie\\stanu połączeń};
+	\node[table_mangle] (MANGLE_PREROUTING) [below = of TRACK1] {mangle\\PREROUTING};
+		\node[table_nat] (NAT_PREROUTING) [right = 2.5cm of MANGLE_PREROUTING] {nat\\PREROUTING};
+		\node[routing] (ROUTING1) [below = of NAT_PREROUTING] {wybór trasy\\routingowej};
+	
+	\node[table_mangle] (MANGLE_INPUT) [below = 2.7cm of MANGLE_PREROUTING] {mangle\\INPUT};
+		\node[table_mangle] (MANGLE_FORWARD) [below = 1.7cm of ROUTING1] {mangle\\FOWRARD};
+	\node[table_filter] (FILTER_INPUT) [below = of MANGLE_INPUT] {filter\\INPUT};
+	\node[table_nat] (NAT_INPUT) [below = of FILTER_INPUT] {nat\\INPUT};
+	\node[inout] (RECIVE) [below = of NAT_INPUT] {przetwarzanie\\lokalne};
+		\node[table_filter] (FILTER_FORWARD) [below = of MANGLE_FORWARD] {filter\\FORWARD};
+	
+	\node[inout] (GENERATE) [right = 7.6cm of INPUT] {pakiet\\generowany lokalnie};
+	\node[routing] (ROUTING2) [below = of GENERATE] {wybór trasy\\routingowej};
+	\node[table_raw] (RAW_OUTPUT) [below = of ROUTING2] {raw\\OUTPUT};
+	\node[routing] (TRACK2) [below = of RAW_OUTPUT] {śledzenie\\stanu połączeń};
+	\node[table_mangle] (MANGLE_OUTPUT) [below = of TRACK2] {mangle\\OUTPUT};
+	\node[table_nat] (NAT_OUTPUT) [below = of MANGLE_OUTPUT] {nat\\OUTPUT};
+	\node[routing] (ROUTING3) [below = of NAT_OUTPUT] {wybór trasy\\routingowej};
+	\node[table_filter] (FILTER_OUTPUT) [below = of ROUTING3] {filter\\OUTPUT};
+	\node[table_mangle] (MANGLE_POSTROUTING) [below = of FILTER_OUTPUT] {mangle\\POSTROUTING};
+	
+	\node[table_nat] (NAT_POSTROUTING) [below = 1.7cm of MANGLE_POSTROUTING] {nat\\POSTROUTING};
+	\node[inout] (OUTPUT) [below = of NAT_POSTROUTING] {pakiet\\wychodzący};
+	
+	\draw (INPUT) edge (RAW_PREROUTING);
+	\draw (RAW_PREROUTING) edge (TRACK1);
+	\draw (TRACK1) edge (MANGLE_PREROUTING);
+		\draw (MANGLE_PREROUTING) edge node[info1] {nie z\\localhost} (NAT_PREROUTING);
+		\draw (MANGLE_PREROUTING) node[info2] {z localhost} edge (MANGLE_INPUT);
+	\draw (NAT_PREROUTING) edge (ROUTING1);
+		\draw (ROUTING1) node[info2] {nie do localhost} edge (MANGLE_FORWARD);
+		\node[invisibleNode] (ROUTING1a) [left = 3.6cm of ROUTING1] {};
+		\draw[-] (ROUTING1) edge node[info1] {do localhost} (ROUTING1a);
+		\draw (ROUTING1a) -| (MANGLE_INPUT);
+	\draw (MANGLE_INPUT) edge (FILTER_INPUT);
+	\draw (FILTER_INPUT) edge (NAT_INPUT);
+	\draw (NAT_INPUT) edge (RECIVE);
+	
+	\draw (MANGLE_FORWARD) edge (FILTER_FORWARD);
+	\draw (FILTER_FORWARD) |- (MANGLE_POSTROUTING);
+	
+	\draw (GENERATE) edge (ROUTING2);
+	\draw (ROUTING2) edge (RAW_OUTPUT);
+	\draw (RAW_OUTPUT) edge (TRACK2);
+	\draw (TRACK2) edge (MANGLE_OUTPUT);
+	\draw (MANGLE_OUTPUT) edge (NAT_OUTPUT);
+	\draw (NAT_OUTPUT) edge (ROUTING3);
+	\draw (ROUTING3) edge (FILTER_OUTPUT);
+	\draw (FILTER_OUTPUT) edge (MANGLE_POSTROUTING);
+	
+	\draw (MANGLE_POSTROUTING) node[info2] {nie do localhost} edge (NAT_POSTROUTING);
+	\node[invisibleNode] (MANGLE_POSTROUTINGa) [right = 0.7cm of MANGLE_POSTROUTING] {};
+	\node[invisibleNode] (OUTPUTa) [right = 0.7cm of OUTPUT] {};
+	\draw[-] (MANGLE_POSTROUTINGa) -| (MANGLE_POSTROUTING);
+	\draw[-] (MANGLE_POSTROUTINGa) edge node[below,rotate=90] {do localhost} (OUTPUTa);
+	\draw (OUTPUTa) |- (OUTPUT);
+	\draw (NAT_POSTROUTING) edge (OUTPUT);
+	
+\end{tikzpicture}\end{adjustbox}\end{center}
+
+W każdej z tablic występuje kilka różnych łańcuchów reguł. Każdy łańcuch posiada akcję domyślną, która może zostać ustawiona komendą \Verb{iptables [-t TABLICA] -P ŁAŃCUCH AKCJA}.
+Reguły do wskazanego łańcucha (w wskazanej tablicy) mogą być dodawane/usuwane z użyciem komend:
+\begin{itemize}
+	\item \Verb{iptables [-t TABLICA] -A|-D ŁAŃCUCH REGUŁA} – dodanie (\Verb{-A}) lub usunięcie (\Verb{-D}) reguły
+	\item \Verb{iptables [-t TABLICA] -I ŁAŃCUCH POZYCJA REGUŁA} – wstawienie reguły na wskazaną pozycję
+	\item \Verb{iptables [-t TABLICA] -F ŁAŃCUCH} – usuniecie wszystkich reguł z łańcucha
+\end{itemize}
+
+Reguły składają się ze zbioru dopasowań (filtrów) w postaci opcji do komendy iptables oraz akcji podawanej po opcji \Verb{-j}, do najistotniejszych filtrów należą:
+\begin{itemize}
+	\item \Verb{-s ADRES} – pasuje gdy adres źródłowy w pakiecie zgadza się z podaną siecią IP (lub pojedynczym adresem)
+	\item \Verb{-d ADRES} – pasuje gdy adres docelowy w pakiecie zgadza się z podaną siecią IP (lub pojedynczym adresem)
+	\item \Verb{-p PROTOKÓŁ --dport PORT} – pasuje gdy pakiet zawiera w sobie pakiet wskazanego protokołu (np. tcp, udp) i adresowany jest na wskazany numer portu
+	\item \Verb{-i INTERFEJS} – pasuje gdy pakiet przyszedł wskazanym interfejsem sieciowym
+	\item \Verb{-o INTERFEJS} – pasuje gdy pakiet wychodzi wskazanym interfejsem sieciowym
+\end{itemize}
+
+Najistotniejszymi akcjami jest ACCEPT (zaakceptowanie/przepuszczenie pakietu przez łańcuch), REJECT (odrzucenie pakietu z wygenerowaniem komunikatu błędu poprzez ICMP), DROP (zapomnienie o pakiecie / ciche zignorowanie) oraz LOG (zapisanie informacji do logu).
+
+Przykład konfiguracji iptables:
+
+\begin{CodeFrame*}[bash]{}
+# polityki domyślne
+iptables -P INPUT DROP
+iptables -P FORWARD ACCEPT
+iptables -P OUTPUT ACCEPT
+
+# interfejs lokalny oraz połączenia nawiązane
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A INPUT -m state --state ESTABLISHED -j ACCEPT
+iptables -A INPUT -m state --state INVALID -j REJECT
+
+# SSH
+iptables -A INPUT -p tcp --dport ssh -s 0.0.0.0/0 -j sshguard
+iptables -A INPUT -p tcp --dport ssh -s 0.0.0.0/0 -j ACCEPT
+
+## ICMP
+iptables -A INPUT -p icmp -j ACCEPT
+
+## RESZTA
+iptables -A INPUT -j REJECT
+\end{CodeFrame*}
+
+Do wyświetlenia wszystkich reguł można użyć komendy \Verb{iptables-save} / \Verb{ip6tables-save}. Generuje ona skrypt który może zostać wczytany przy pomocy \Verb{iptables-restore} / \Verb{ip6tables-restore}.
+
+\student{\clearpage}
+\section{Programowanie usług sieciowych}
 
 \begin{teacherOnly}
 	Na początek:
 	\begin{easylist}[itemize]
-		& zabawa netcat-em (serwer, klient) + tcpdum do podłuchiwania
+		& zabawa netcat-em (serwer, klient) + tcpdum do podsłuchiwania
 		& kilka słów więcej o:
 			&& HTTP (+ oglądanie WWW netcatem, pamiętać o -C w netcacie)
 			&& SMTP (+ sesja SMTP netcatem, pokazać łatwość fałszowania nagłówków)
@@ -522,7 +652,7 @@ for f in /proc/sys/net/ipv*/conf/*/forwarding; do echo 1 > $f; done
 	&&&& czy program może nie umrzeć?
 	&&& wiele różnych sygnałów ...
 	&& pamięć i semafory
-	&&& poopwiadać o problemie if a==1: a=0
+	&&& poopowiadać o problemie if a==1: a=0
 	& subprocess w pythonie
 	& multiprocessing i lock w pythonie
 	\end{easylist}\vspace{4pt}
@@ -699,6 +829,7 @@ while True:
 \end{CodeFrame*}
 
 
+\student{\clearpage}
 \section{Zadania domowe}
 
 \begin{Zadanie}{}{czy_w_sieci_ipv4} % [1pkt]
