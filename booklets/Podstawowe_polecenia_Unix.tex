@@ -28,12 +28,13 @@
 	Projekt ,,Matematyka dla Ciekawych Świata'',\\
 	Robert Ryszard Paciorek\\\normalsize\ttfamily <rrp@opcode.eu.org>
 }
-\date  {2019-05-05}
+\date  {2019-07-05}
 
 \makeatletter\hypersetup{
 	pdftitle = {\@title}, pdfauthor = {\@author}
 }\makeatother
 
+\usepackage[ampersand]{easylist}
 
 \begin{document}
 
@@ -73,7 +74,9 @@ Ponadto pozwalają na odłączanie i podłączanie sesji, co pozwala na łatwe p
 Informację na temat działania danej komendy oraz jej opcji można uzyskać w wbudowanym systemie pomocy przy pomocy poleceń \Verb{man} lub \Verb{info} / \Verb{pinfo}.
 Większość poleceń obsługuje także opcje \Verb{--help} lub \Verb{-h}, które wyświetlają informację na temat ich użycia.
 
-Zarówno w tekstach pomocy jak i w tym skrypcie stosowana jest konwencja polegająca na oznaczaniu opcjonalnych argumentów poprzez umieszczanie ich w nawiasach kwadartowych (jeżeli podajemy ten argument do komendy nie obejmujemy go już tymi nawiasami).
+\pagebreak[2]\begin{ProTip}{\normalfont{\strong{Do zapamiętania}}}
+Zarówno w tekstach pomocy jak i w tym dokumencie stosowana jest konwencja polegająca na oznaczaniu opcjonalnych argumentów poprzez umieszczanie ich w nawiasach kwadartowych (jeżeli podajemy ten argument do komendy nie obejmujemy go już tymi nawiasami) oraz rozdzielaniu alternatywnych opcji przy pomocy~\Verb{|}. Np. \Verb{a [b] c|d} oznacza iż polecenie \Verb{a} wymaga argumentu postaci \Verb{c} albo \Verb{d}, który może być poprzedzony argumentem \Verb{b}.
+\end{ProTip}
 
 \subsection{more i less}
 
@@ -174,42 +177,7 @@ Podstawowa klawiszologia:
 \end{itemize}
 % END: vi i vim
 
-% BEGIN: Struktura katalogów
 \section{Operacje na systemie plików}
-
-Systemy unix'owe posiadają drzewiasty system plików zaczynający się w katalogu głównym oznaczanym przez ukośnik (\texttt{/}), w którym zamontowany jest główny system plików (rootfs), inne systemy plików mogą być montowane w kolejnych katalogach. Do najistotniejszych katalogów należy zaliczyć:
-\begin{itemize}
-	\item \Verb{/bin}
-	      zawierający pliki wykonywalne podstawowych programów
-	\item \Verb{/sbin}
-	      zawierający pliki wykonywalne podstawowych programów administracyjnych
-	\item \Verb{/lib}
-	      zawierający pliki podstawowych bibliotek
-	\item \Verb{/usr}
-	      zawierający oprogramowanie dodatkowe (wewnętrznie ma podobną strukturę do głównego - tzn. katalogi \texttt{/usr/bin}, \texttt{/usr/sbin}, \texttt{/usr/lib}, itd)
-	
-	\vspace{6pt}
-	
-	\item \Verb{/etc}
-	      zawierający konfiguracje ogólnosystemowe
-	\item \Verb{/var}
-	      zawierający dane programów i usług (takie jak kolejka poczty, harmonogramy zadań, bazy danych)
-	\item \Verb{/home}  
-	      zawierający katalogi domowe użytkowników (często montowany z innego systemu plików, dlatego też root ma swój katalog domowy w \texttt{/root}, aby był dostępny nawet gdy takie montowanie nie doszło do skutku)
-	\item \Verb{/tmp}
-	      zawierający pliki tymczasowe (typowo czyszczony przy starcie systemu); w Linuxie występuje też \texttt{/run} przeznaczony do trzymania danych tymczasowych działających usług takich jak numery pid, blokady, itp
-	
-	\vspace{6pt}
-	
-	\item \Verb{/dev}
-	      zawierający pliki reprezentujące urządzenia; w Linuxie występuje też \texttt{/sys} zawierający informacje i ustawienia dotyczące m.in. urządzeń
-	\item \Verb{/proc}
-	      zawierający informacje o działających procesach (w Linuxie także interfejs konfiguracyjny dla wielu parametrów jądra)
-\end{itemize}
-Pliki i katalogi których nazwa rozpoczyna się od kropki traktowane są jako pliki ukryte.
-
-Z punktu widzenia programisty czy też użytkownika (prawie) wszystko jest plikiem, których istnieją różne rodzaje (zwykły plik, katalog, urządzenie znakowe, urządzenie blokowe, link symboliczny, kolejka FIFO, ...); pewnym wyjątkiem są urządzenia sieciowe (które nie mają reprezentacji w systemie plików (ale gniazda związane z nawiązanymi połączeniami obsługuje się zasadniczo tak jak pliki).
-% END: Struktura katalogów
 
 \subsection{Podstawowe komendy}
 
@@ -220,7 +188,7 @@ Z punktu widzenia programisty czy też użytkownika (prawie) wszystko jest pliki
 \begin{itemize}
 	\item \Verb{cd [ścieżka]}
 		zmiana bieżącego katalogu,\\
-			warto zauważyć, iż katalog bieżący oznaczamy kropką \texttt{.}, nadrzędny oznaczamy dwiema kropkami \texttt{..},\\
+			warto zauważyć, iż katalogi w ścieżce oddzielamy ukośnikami \texttt{/}, bieżący katalog oznaczamy kropką \texttt{.}, nadrzędny oznaczamy dwiema kropkami \texttt{..},\\
 			ścieżki zaczynające się od ukośnika \texttt{/} oznaczają \emph{ścieżki bezwzględne} (od korzenia systemu plików), pozostałe oznaczają \emph{ścieżkę względną} (wyrażoną względem bierzącego katalogu),\\
 			katalog domowy oznacza się tyldą\ \ \texttt{\~}
 		
@@ -259,12 +227,12 @@ Z punktu widzenia programisty czy też użytkownika (prawie) wszystko jest pliki
 			\texttt{warunek -o warunek} łączy warunki sumą logiczną OR zamiast domyślnego iloczynu logicznego AND\\
 			\texttt{! warunek} negacja warunku\vspace{6pt}\\
 			%
-			\texttt{-mtime [+-]n} pliki których modyfikacja odbyła się n*24 godziny temu\\
-			\texttt{-mmin [+-]n} pliki których modyfikacja odbyła się n minut temu\\
-			\texttt{-ctime [+-]n} pliki które zostały utworzone n*24 godziny temu\\
-			\texttt{-cmin [+-]n} pliki które zostały utworzone n minut temu\\
-			\texttt{-size [+-]n[c|k|M|G]} pliki których rozmiar wynosi n (c - bajtów, k - kilobajtów, M - Megabajtów, G - gigabajtów)\\
-			w powyższych testach \texttt{+} oznacza więcej niż, \texttt{-} oznacza mniej niż\vspace{6pt}\\
+			\texttt{-mtime [+|-]n} pliki których modyfikacja odbyła się \texttt{n}*24 godziny temu\\
+			\texttt{-mmin [+|-]n} pliki których modyfikacja odbyła się \texttt{n} minut temu\\
+			\texttt{-ctime [+|-]n} pliki które zostały utworzone \texttt{n}*24 godziny temu\\
+			\texttt{-cmin [+|-]n} pliki które zostały utworzone \texttt{n} minut temu\\
+			\texttt{-size [+|-]n[c|k|M|G]} pliki których rozmiar wynosi \texttt{n} (c - bajtów, k - kilobajtów, M - Megabajtów, G - gigabajtów)\\
+			\strong{\emph{w powyższych testach \texttt{+} oznacza więcej niż, \texttt{-} oznacza mniej niż, uwaga: porównywaniu podlegają liczby całkowite, np. +1 oznaczacza $>1$ w liczbach całkowitych tzn. $\ge2$}}\vspace{6pt}\\
 			%
 			\texttt{-exec}\Verb@ polecenie \{\} \;@ dla każdego znalezionego pliku wykonaj \texttt{polecenie} podstawiając ścieżkę do tego pliku pod \Verb@\{\}@ (zastosowane odwrotne ukośniki służą zabezpieczeniu nawiasów klamrowych i średnika przed zinterpretowaniem ich przez powłokę)\\
 			\Verb@-execdir polecenie \{\} \;@, podobnie jak \texttt{-exec} tyle że polecenie zostanie uruchomione w katalogu w którym znajduje się wyszukany plik
@@ -312,7 +280,7 @@ Warto zauważyć, iż w przypadku komendy \texttt{ls} znaki uogólniające musz�
 Natomiast w przypadku komendy \texttt{find} na ogół chcemy aby nie były rozwijane przez powłokę, ale interpretowane przez samą komendę \texttt{find}.
 W tym celu powinniśmy je zabezpieczyć przed rozwinięciem przy pomocy cudzysłowów.
 
-Zauważ również, że jeżeli komanda \texttt{ls} w wyniku rozwinięcia znaków uogólniających dostanie jako argument ścieżkę do katalogu to wylistuje jego zawartość (zachowanie to zmienia opcja \texttt{-d}.
+Zauważ również, że jeżeli komanda \texttt{ls} w wyniku rozwinięcia znaków uogólniających dostanie jako argument ścieżkę do katalogu to wylistuje jego zawartość (zachowanie to zmienia opcja \texttt{-d}).
 
 \subsubsection{kopiowanie, przenoszenie, usuwanie, ...}
 \begin{itemize}
@@ -345,11 +313,49 @@ Zauważ również, że jeżeli komanda \texttt{ls} w wyniku rozwinięcia znaków
 		tworzy wskazane katalogi, do ważniejszych opcji należy zaliczyć:\\
 			\texttt{-p} pozwala na tworzenie całej ścieżki a nie tylko ostatniego elementu, nie zgłasza błędu gdy wskazany katalog istnieje
 \end{itemize}
+% END: Operacje na systemie plików
+
+% BEGIN: Struktura katalogów
+\subsection{Struktura katalogów}
+
+Systemy unix'owe posiadają drzewiasty system plików zaczynający się w katalogu głównym oznaczanym przez ukośnik (\texttt{/}), w którym zamontowany jest główny system plików (rootfs), inne systemy plików mogą być montowane w kolejnych katalogach. Do najistotniejszych katalogów należy zaliczyć:
+\begin{itemize}
+	\item \Verb{/bin}
+	      zawierający pliki wykonywalne podstawowych programów
+	\item \Verb{/sbin}
+	      zawierający pliki wykonywalne podstawowych programów administracyjnych
+	\item \Verb{/lib}
+	      zawierający pliki podstawowych bibliotek
+	\item \Verb{/usr}
+	      zawierający oprogramowanie dodatkowe (wewnętrznie ma podobną strukturę do głównego - tzn. katalogi \texttt{/usr/bin}, \texttt{/usr/sbin}, \texttt{/usr/lib}, itd)
+	
+	\vspace{6pt}
+	
+	\item \Verb{/etc}
+	      zawierający konfiguracje ogólnosystemowe
+	\item \Verb{/var}
+	      zawierający dane programów i usług (takie jak kolejka poczty, harmonogramy zadań, bazy danych)
+	\item \Verb{/home}  
+	      zawierający katalogi domowe użytkowników (często montowany z innego systemu plików, dlatego też root ma swój katalog domowy w \texttt{/root}, aby był dostępny nawet gdy takie montowanie nie doszło do skutku)
+	\item \Verb{/tmp}
+	      zawierający pliki tymczasowe (typowo czyszczony przy starcie systemu); w Linuxie występuje też \texttt{/run} przeznaczony do trzymania danych tymczasowych działających usług takich jak numery pid, blokady, itp
+	
+	\vspace{6pt}
+	
+	\item \Verb{/dev}
+	      zawierający pliki reprezentujące urządzenia; w Linuxie występuje też \texttt{/sys} zawierający informacje i ustawienia dotyczące m.in. urządzeń
+	\item \Verb{/proc}
+	      zawierający informacje o działających procesach (w Linuxie także interfejs konfiguracyjny dla wielu parametrów jądra)
+\end{itemize}
+Pliki i katalogi których nazwa rozpoczyna się od kropki traktowane są jako pliki ukryte.
+
+Z punktu widzenia programisty czy też użytkownika (prawie) wszystko jest plikiem, których istnieją różne rodzaje (zwykły plik, katalog, urządzenie znakowe, urządzenie blokowe, link symboliczny, kolejka FIFO, ...); pewnym wyjątkiem są urządzenia sieciowe (które nie mają reprezentacji w systemie plików (ale gniazda związane z nawiązanymi połączeniami obsługuje się zasadniczo tak jak pliki).
+% END: Struktura katalogów
 
 \setcounter{subsection}{0} % \subsection{zadania}
 
 \begin{Zadanie}{}{lsetc}
-Wyświetlić nazwy (mogą byc wraz z pełną ścieżką) wszystkich plików i katalogów znajdujących się bezpośrednio w \texttt{/etc/} których druga litera to \texttt{a} natomiast trzecia to \texttt{p} lub \texttt{s}.
+Wyświetlić nazwy (mogą być wraz z pełną ścieżką) wszystkich plików i katalogów znajdujących się bezpośrednio w \texttt{/etc/} których druga litera to \texttt{a} natomiast trzecia to \texttt{p} lub \texttt{s}.
 
 \emph{Wskazówka: to zadanie nie wymaga stosowania find.}
 \end{Zadanie}
@@ -365,7 +371,7 @@ Utworzyć w katalogu \texttt{/tmp} linki symboliczne \texttt{ll1} i \texttt{ll2}
 \begin{Zadanie}{}{findetc2}
 Zmodyfikuj rozwiązanie zadania \ref{findetc} tak aby wyświetlać szczegóły (w tym datę modyfikacji) dla wyszukanych plików.
 \end{Zadanie}
-% END: Operacje na systemie plików
+
 
 % BEGIN: ssh
 \section{Praca zdalna}
@@ -546,7 +552,7 @@ Wspomnieć także o opcji -x wymagającej dopasowania całej linii.
 		usuwa powtarzające się linie z posortowanego pliku, przydatne opcje:\\
 			\texttt{-c} wypisz liczbę powtórzeń\\
 			\texttt{-d} wypisz tylko linie z 2 lub więcej wystąpieniami\\
-			\texttt{-d} wypisz tylko linie z 1 wystąpieniem
+			\texttt{-u} wypisz tylko linie z 1 wystąpieniem
 	% END: paste join comm uniq
 \end{itemize}
 
@@ -565,7 +571,7 @@ Napisz polecenie które wyszuka wszystkie wystąpienia napisu \Verb{nameserver} 
 \end{Zadanie}
 
 \begin{Zadanie}{}{wyszukaj_napis2} % [1pkt]
-Zmodyfikuj rozwiązanie zadania \ref{wyszukaj_napis} tak aby wyłącznie wypisywało nazwy plików zawierających wyszukiwany napis.
+Zmodyfikuj rozwiązanie zadania \ref{wyszukaj_napis} tak aby wyłącznie wypisywało nazwy plików (mogą być ze ścieżką) zawierających wyszukiwany napis.
 \end{Zadanie}
 
 
@@ -615,6 +621,43 @@ Wszystkie poniższe komendy przyjmują opcję \texttt{-R} powodującą rekursywn
 		program pozwalający na wykonywanie uprzywilejowanych komend przez wyznaczonych użytkowników
 \end{itemize}
 
+\begin{teacherOnly}
+\subsection*{System operacyjny}
+\begin{easylist}[itemize]
+	& proces startu
+		&& "co komputer zaczyna robić po włączeniu?"
+		&& zasysanie instrukcji przez procesor
+		&& załadowanie i uruchomienie bootloadera
+		&& załadowanie i uruchomienie jądra
+		&& opcja init
+	& funkcje systemu operacyjnego
+		&& procesy
+			&&& co to jest proces
+			&&& wątki (wątek vs proces)
+			&&& szeregowanie zadań
+			&&& drzewo procesów (rodzice)
+			&&& ew. algorytmy szeregowania
+			&&& fork()
+			&&& sygnały
+				&&&& kill
+				&&&& czy proces może nie umżeć? ... pokazać: wynik ps, wskazać pid bash'a, zrobić kill bash
+				&&&& wiele różnych sygnałów ... Ctr+C ... Ctrl+Z ... info o zakończeniu potomka ...
+		&& obsługa plików
+			&&& wszystko jest plikiem
+			&&& select(), czyli czekanie na dane ...
+		&& obsługa dostępu do pamięci
+			&&& pokazać rysując na tablicy stronnicowanie
+			&&& pamięć współdzielona
+				&&&& problem  if a==1: a=0
+				&&&& semafory
+		&& obsługa dostępu do urządzeń
+			&&& interfejsy sieciowe, itd
+		&& standardowe usługi
+			&&& cron
+			&&& mail
+\end{easylist}
+\end{teacherOnly}
+
 \subsection{Procesy i zasoby}
 \begin{itemize}
 	\item \Verb{ps [opcje]}
@@ -648,6 +691,7 @@ Typowo system zapewnia usługę uruchamiania zadań o zadanym czasie. Z usługi 
 	Standardowe wyjście, wyjście błędu oraz powiadomienie o niezerowym kodzie powrotu domyślnie są wysyłane na lokalny adres mailowy użytkownika będącego właścicielem danego contaba.
 	Niekiedy dostępny jest także \texttt{anacron} pozwalający na mniej precyzyjne planowanie zadań.
 % END: Planowanie zadań
+
 
 \section{Literatura dodatkowa}
  Więcej informacji o podstawach działania w systematach ,,unixowych'' oraz pełniejsza lista poleceń zamieszczona została pod adresem \url{http://vip.opcode.eu.org/#Systemy_unix-owate}.

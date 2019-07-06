@@ -28,7 +28,7 @@
 	Projekt ,,Matematyka dla Ciekawych Świata'',\\
 	Robert Ryszard Paciorek\\\normalsize\ttfamily <rrp@opcode.eu.org>
 }
-\date  {2019-05-05}
+\date  {2019-07-05}
 
 \makeatletter\hypersetup{
 	pdftitle = {\@title}, pdfauthor = {\@author}
@@ -110,6 +110,17 @@ b=$(echo '3/2' | bc -l)
 echo $a $b
 \end{CodeFrame*}
 
+
+\section{Uruchamianie kodu z pliku}
+
+Dłuższe fragmenty kodu bashowego często wygodniej jest pisać w pliku tekstowym niż bezpośrednio w linii poleceń.
+Plik taki może zostać wykonany przy pomocy polecenia: \Verb{./nazwa_pliku} pod warunkiem że ma prawo wykonalności
+(powinien także zawierać w pierwszą linii komentarz określający program używany do interpretacji tekstowego pliku wykonywalnego,
+w postaci: \Verb{#!/bin/bash}).
+Może też być wykonany za pomocą wywołania: \Verb{bash nazwa_pliku}.
+
+Przydatną alternatywą dla powyższych metod wykonania kodu zawartego w pliku jest włączenie go do aktualnej sesji basha przy pomocy \Verb{. ./nazwa_pliku}.
+W odróżnieniu od poprzednich metod pozwala to na korzystanie z funkcji i zmiennych zdefiniowanych w tym pliku w kolejnych poleceniach.
 
 \section{Pętle i warunki}
 
@@ -222,17 +233,6 @@ case $xx in
 esac
 \end{CodeFrame*}
 
-\section{Uruchamianie kodu z pliku}
-
-Dłuższe fragmenty kodu bashowego często wygodniej jest pisać w pliku tekstowym niż bezpośrednio w linii poleceń.
-Plik taki może zostać wykonany przy pomocy polecenia: \Verb{./nazwa_pliku} pod warunkiem że ma prawo wykonalności
-(powinien także zawierać w pierwszą linii komentarz określający program używany do interpretacji tekstowego pliku wykonywalnego,
-w postaci: \Verb{#!/bin/bash}).
-Może też być wykonany za pomocą wywołania: \Verb{bash nazwa_pliku}.
-
-Przydatną alternatywą dla powyższych metod wykonania kodu zawartego w pliku jest włączenie go do aktualnej sesji basha przy pomocy \Verb{. ./nazwa_pliku}.
-W odróżnieniu od poprzednich metod pozwala to na korzystanie z funkcji i zmiennych zdefiniowanych w tym pliku w kolejnych poleceniach.
-
 \section{Definiowanie funkcji}
 
 W bashu każda funkcja może przyjmować dowolną ilość parametrów pozycyjnych
@@ -281,6 +281,7 @@ Napisać funkcję przyjmującą jeden argument - liczbę kotów i wypisującą:
 \end{itemize}
 Dla uproszczenia należy założyć że podana ilość kotów jest w zakresie od 1 do 9.
 \end{Zadanie}
+
 
 \section{Przetwarzanie napisów}
 
@@ -345,7 +346,7 @@ Alternatywną składnią jest \Verb@expr $x : 'wr1\(wr2\)wr3'@
 \begin{teacherOnly}
 Przykład do zademonstrowania:
 
-\begin{CodeFrame*}
+\begin{CodeFrame*}[bash]{}
 z="ab=cd"
 expr match $z '^\([^=]*\)='
 expr $z : '^[^=]*=\(.*\)$'
@@ -353,6 +354,7 @@ expr $z : '^[^=]*=\(.*\)$'
 \end{teacherOnly}
 
 Możliwe jest też sprawdzanie dopasowań wyrażeń regularnych poprzez (zwróć uwagę na brak cytowania wyrażenia regularnego):
+
 \begin{CodeFrame*}[bash]{}
 [[ "$z" =~ ^([^=]*)= ]] && echo "OK"
 \end{CodeFrame*}
@@ -361,6 +363,7 @@ Możliwe jest także zaawansowane formatowanie napisów, konwertowanie liczb na 
 w tym wypisywanie w różnych systemach liczbowych przy pomocy \Verb@printf@\footnote{
 	Instrukcja \Verb@printf@ ma składnię opartą na tej funkcji z C, interpretuje ona także liczby zmiennoprzecinkowe.
 }:
+
 \begin{CodeFrame*}[bash]{}
 printf "0o%o %d 0x%x\n" 0xf 010 3
 \end{CodeFrame*}
@@ -507,7 +510,7 @@ wyświetlić z /etc/passwd linie w których UID (3 pole) ma warość >= 1000 ...
 \end{Zadanie}
 
 \begin{Zadanie}{}{pliki_zawierajace_napis} %[1pkt]
-Napisz polecenie które wyszuka i przekopiuje do katalogu \Verb{/tmp} pliki z katalogu \Verb{/etc} (wraz z jego podkatalogami), które zawierają napisa \Verb{nameserver}.
+Napisz polecenie które wyszuka i przekopiuje do katalogu \Verb{/tmp} pliki z katalogu \Verb{/etc} (wraz z jego podkatalogami), które (w swojej treści) zawierają napis \Verb{nameserver}.
 \end{Zadanie}
 
 \begin{Zadanie}{}{zmiana_rozszerzenia} %[2pkt]

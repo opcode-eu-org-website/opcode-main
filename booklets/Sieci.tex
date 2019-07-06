@@ -28,7 +28,7 @@
 	Projekt ,,Matematyka dla Ciekawych Świata'',\\
 	Robert Ryszard Paciorek\\\normalsize\ttfamily <rrp@opcode.eu.org>
 }
-\date  {2019-05-05}
+\date  {2019-07-06}
 
 \makeatletter\hypersetup{
 	pdftitle = {\@title}, pdfauthor = {\@author}
@@ -43,9 +43,7 @@
 
 \begin{teacherOnly}
 	\begin{easylist}[itemize]
-	& kto ma w domu telefon stacjonarny (taki klasyczny, analogowy)?
-	& kto wie jak on działa?
-	&& (to nam się przyda)
+	& co to jest sieć komputerowa? jak ona działa?
 	& jak działa internet?
 	& w jaki sposób dane są przesyłane z jednego komputera na drugi?
 	&& pakiety
@@ -87,11 +85,42 @@ Z punktu widzenia modelu TCP/IP można powiedzieć o enkapsulacji danych kolejny
 
 % BEGIN: adresacja IP
 \subsection{Protokół IP}
+
+\begin{teacherOnly}
+	\begin{easylist}[itemize]
+		& struktura pakietu
+			&& pokazać i omówić dobry, kolorowy obrazek ilustrujący strukturę pakietu IPv4 i IPv6
+			&& nagłówek – dane
+			&& adresy
+		& \strong{danymi może być inny pakiet} -> struktura warstwowa
+			&& od nisko poziomowych (specyficznych dla danej fizycznej realizacji sieci)
+			&& poprzez warstwy sieciowe (,,uniwersalne'')
+			&& po wysokopoziomowe (aplikacyjne, specyficzne dla zastosowania)
+	\end{easylist}
+\end{teacherOnly}
+
 Protokół IP (Internet Protocol) odpowiedzialny jest przede wszystkim za sposób adresacji hostów oraz reguły komutacji pakietów (routing). Jest on wspomagany przez kolejny protokół z tej rodziny - ICMP (Internet Control Message Protocol), którego zadaniem jest przekazywanie informacji kontrolnych np. o nieosiągalności hosta docelowego, odrzuceniu przetwarzania pakietu ze względu na zbyt dużą liczbę skoków (gdy wartość pola TTL z nagłówka IP wyniesie zero) a także pingi (zarówno żądanie jak i odpowiedź).
 
-\teacher{ Pokazać i omówić dobry, kolorowy obrazek ilustrujący strukturę pakietu IPv4 i IPv6. }
-
 \subsection{Adresacja IP}
+
+\begin{teacherOnly}
+	\noindent adres IP:
+	\begin{easylist}[itemize]
+		& jest to liczba, a taki lub inny zapis służy naszej wygodzie
+		& pierwsza część określa adres sieci do której należy host, druga część adres hosta
+			&& długość części określającej adres sieci wyznacza jest za pomocą tzw prefix (który rozwinąć
+			można do maski sieci)
+			&& sieci mogą być grupowane w wieksze sieci
+		& notacja kropkowo-dziesiętna (IPv4), notacja dwukropkowa (IPv6)
+		& jak mając adres hosta i prefix ustalić adres sieci
+			&& rozpiska na tablicy
+			&& pokazać sipcalc / ipcalc
+		& prównywanie adresów sieci o nie równych maskach
+			&& pokazać ilustrację - kółko w kółku (każdy host widzi tylko piersze otaczające go kółko)
+	\end{easylist}
+\end{teacherOnly}
+
+
 Adresy hostów (nazywane adresami IP) są to 32-bitowe (w IPv4) lub 128-bitowe (w IPv6) liczby.
 Adresy IPv4 zapisywane są najczęściej w notacji kropkowo-dziesiętnej, gdzie każdy bajt (ciąg 8 bitów) zapisywany jest jako liczba dziesiętna rozdzielana kropką od pozostałych. Adresy IPv6 zapisywane są zazwyczaj w notacji dwukropokowej, polegającej na zapisywaniu 16 bitowych części adresu liczbami szesnastkowymi oddzielanymi dwukropkiem, dodatkowo jeden ciąg zer (o długości będącej wielokrotnością 16 bitów) może być skompresowany (pominięty) co daje w zapisie dwa dwukropki \Verb$::$.
 
@@ -99,17 +128,10 @@ Adresy IPv4 zapisywane są najczęściej w notacji kropkowo-dziesiętnej, gdzie 
 
 \begin{teacherOnly}
 	\begin{easylist}[itemize]
-	& adres IP jest to liczba, a taki lub inny zapis służy naszej wygodzie
 	& pierwsza część (najstarsze bity) określa adres sieci do której należy host, druga część adres hosta
 	&& długość części określającej adres sieci określa jest za pomocą prefixu (który rozwinąć można do maski sieci)
 	&&& wielkość prefixu określa ilość adresów dostępnych w danej sieci (dla prefixu o długości $n$ wynosi ona $2^{32-n}$ dla IPv4 i $n$ wynosi ona $2^{128-n}$)
 	&&&& dla IPv4 użyteczna liczba adresów jest mniejsza o dwa: adres sieci (część hosta binarnie – same zera) i adres rozgłoszeniowy (część hosta – binarnie same jedynki)
-	&& sieci mogą być grupowane w większe sieci
-	& jak mając adres hosta i prefix ustalić adres sieci
-	&& rozpiska na tablicy
-	&& pokazać sipcalc
-	&& porównywanie adresów sieci o nierównych maskach
-	&&& pokazać ilustrację - kółko w kółku (każdy host widzi tylko piersze otaczające go kółko)
 	\end{easylist}
 \end{teacherOnly}
 
@@ -168,6 +190,15 @@ Przeanalizuj powyższy kod programu. Zapoznaj się z dokumentacją modułu ipadd
 \end{Zadanie}
 
 \subsection{Routing}
+
+\begin{teacherOnly}
+	\begin{easylist}[itemize]
+		& pokazać tablicę routingu jako wynik polecenia ip r
+		& omówić przeszukiwanie - sprawdzanie pasujących sieci, próba dopasowania najmniejszej, znaczenie 0.0.0.0/0 (::/0)
+		& pokazać i omówić ping i traceroute, wspomnieć o TTL
+	\end{easylist}
+\end{teacherOnly}
+
 Router kieruje każdy z pakietów do kolejnego routera lub bezpośrednio do hosta docelowego na podstawie jego adresu docelowego i tablicy routingu. Tablica taka zawiera adresy sieci wraz z adresami następnych routerów do nich prowadzących bądź wskazaniem lokalnego interfejsu sieciowego poprzez który powinny być osiągalne hosty z danej sieci. W tym celu korzysta z sprawdzania przynależności adresu do sieci, w celu ustalenia adresu następnego routera i/lub interfejsu sieciowego na który ma zostać przekazany pakiet.
 
 Tablica przeglądana jest od wpisów najbardziej precyzyjnych, czyli z największym prefixem do wpisów najbardziej ogólnych (ostatnim wpisem jest na ogół trasa domyślna czyli sieć ::/0 dla IPv6 lub 0.0.0.0/0 dla IPv4). Dzięki czemu jeżeli kilka wpisów (sieci) z tablicy routingu pasuje do adresu docelowego z nagłówka pakietu, wybierany jest wpis najbardziej precyzyjny (o najdłuższym prefixie), a pasująca do każdego adresu trasa domyślna wybierana jest tylko gdy nie ma żadnej lepszej. Może się zdarzyć że kilka wpisów (nawet z tą samą maską) pasuje do adresu docelowego hosta, w takiej sytuacji do wyboru ścieżki używane są inne dane z tablicy routingu (takie jak metryka).
@@ -185,8 +216,6 @@ Oprócz opisanego powyżej routingu unicastowego (kierowania do jednego odbiorcy
 % END: adresacja IP
 
 \begin{teacherOnly}
-	Pokazać i omówić ping i traceroute, wspomnieć o TTL.
-	
 	Można trochę rozwinąć temat adresacji:
 	\begin{easylist}[itemize]
 	& adresy IPv4
@@ -220,6 +249,15 @@ Oprócz opisanego powyżej routingu unicastowego (kierowania do jednego odbiorcy
 
 % BEGIN: TCP / UDP
 \section{Komunikacja TCP/IP}
+
+\begin{teacherOnly}
+	\begin{easylist}[itemize]
+		& protokoły warstwy transportowej - TCP i UDP
+		&& czym się różnią?
+		&& numery portów – identyfikacja usługi / procesu na hoście
+	\end{easylist}
+\end{teacherOnly}
+
 W oparciu o protokół IP działają protokoły warstwy transportowej takie jak UDP, TCP, czy też (mniej znane protokoły czasu rzeczywistego, transmisji strumieniowych): RTP, RTCP i SCTP.
 Najprostszym protokołem warstwy transmisji wydaje się być UDP, protokół ten umożliwia przesłanie informacji pomiędzy dwoma hostami IP i nie kontroluje on tego czy została ona przesłana poprawnie.
 Natomiast TCP kontroluje to czy przesłana informacja dotarła do adresata i nie została uszkodzona, a w przypadku problemów informacja wysyłana jest ponownie. TCP w związku z tym w przeciwieństwie do UDP musi otworzyć połączenie i wykorzystywać je do kontroli poprawności przesłania informacji, wymaga zatem przesłania większej liczby pakietów (co może prowadzić do pewnych opóźnień itp).
@@ -230,6 +268,13 @@ Dodatkowo zarówno UDP jak i TCP na każdym z hostów wyróżniają numeryczny i
 
 % BEGIN: Polularne usługi
 \subsection{Polularne usługi}
+
+\begin{teacherOnly}
+	\begin{easylist}[itemize]
+		& pokazać jak działa serwer dns robiąc ręcznie zapytania dig'iem o kolejne poziomy
+	\end{easylist}
+\end{teacherOnly}
+
 W ramach sieci mogą być realizowane różne usługi w oparciu o różne protokoły warstwy aplikacyjnej. Standardowe usługi posiadają zdefiniowane domyślne adresy portów dla swoich protokołów. Wśród usług i protokołów sieciowych należy wymienić przynajmniej:
 \begin{itemize}
 	\item DNS (Domain Name System) - odpowiedzialny za system mapujący nazwy alfanumeryczne hostów na adresy IP.
@@ -259,28 +304,216 @@ W ramach sieci mogą być realizowane różne usługi w oparciu o różne protok
 	&& poważne i mniej (gołębie, ...)
 	&& dość dobrze się czyta
 	& czemu służą, jak działają (ogólnie) protokoły routingu dynamicznego
-	& krótko o filtracji pakietów - iptables (jakiś przykład), łańcuchy, w oparciu o co można filtować
 	\end{easylist}
+\end{teacherOnly}
+
+
+\section{Ethernet}
+
+\begin{teacherOnly}
+	\begin{easylist}[itemize]
+	& chybanajpopularniesza warstwa niższa dla IP
+	& MAC adresy
+	&& ARP i NDISC
+	&& co to znaczy wysyłanie pakietu do bramki obsługującej jakąś sieć (jaki adres ma pakiet)
+	& switche (wspomnieć o tym że kiedyś były też inne rozwiązania)
+	&& VLANy (tagowane i nie tagowane)
+	&& pętle i STP
+	&& switch softwerowy na linuxie
+	&& zarządzanie switchem z poziomu OS (pokazać Junos OS)
+	&&& wzmianka o BSD
+	&&&& bardziej liberalna licencja, dłuższy rodowód, ...
+	&&&& część rzeczy podobnie (shell, komendy posixowe)
+	&&&& część rzeczy inaczej (konfiguracja ...)
+	& mediakonwertery i WDM
+	& kable
+	& wifi i hostap
+	\end{easylist}
+\end{teacherOnly}
+
+% BEGIN: Warstwa sprzętowa
+Od strony sprzętowej sieć składa z:
+\begin{itemize}
+	\item hostów stanowiących nadawców i odbiorców informacji
+	\item urządzeń sieciowych pośredniczących w ich przekazywaniu, takich jak nadajniki, switche, mediakonwertery
+	\item okablowania miedzianego bądź światłowodowego (jeżeli nie jest siecią bezprzewodową)
+\end{itemize}
+
+W przypadku sieci w standardzie Ethernet stosowane są 48 bitowe adresy MAC (pierwsza część identyfikuje producenta karty) oraz wspólny dla wszystkich odmian (przewodowych i bezprzewodowych) format ramki (określający położenie w ramce adresów, informacji dodatkowych oraz danych). Pakiety protokołu warstwy wyższej (np. pakiety IP wraz ich strukturą zawierającą adresy itd) z punktu widzenia ramki ethernetowej są danymi, w które ta warstwa nie wnika. Do mapowania adresów IP na adresy MAC wykorzystywany jest protokół ARP (dla IPv4) lub Neighbor Discovery (dla IPv6) - odbywa się to poprzez wysłanie ramki ethernetowej na adres rozgłoszeniowy (odbierany przez wszystkie hosty) z pytaniem o to jaki MAC adres ma host o podanym numerze IP.
+
+Sieć ethernetowa typowo posiada strukturę wielokrotnej gwiazdy (drzewa), w węzłach której stosowane są switche. Kierują one ramki do odpowiednich gałęzi na podstawie adresu docelowego i wpisów w tablicy adresów MAC, utworzonej w oparciu o źródłowe nadawców przechodzących przez dany switch ramek. W przypadku gdy adresu docelowego nie ma w tablicy ramka kierowana jest na wszystkie porty switcha z wyjątkiem tego na którym została odebrana. W taki sposób zawsze są też przesyłane ramki wysyłane na adres rozgłoszeniowy (bradcast).
+
+\begin{teacherOnly}
+Można wspomnieć że dawniej funkcję switchy pełniły (dzisiaj już nie spotykany) mostek (bridge) będący w zasadzie switchem o dwóch gniazdach.
+Natomiast do łączenia kabli wykorzystywany był (także już nie spotykany) hub (koncentrator) który zapewniał że sygnał nadawany przez dowolny z hostów do niego podłączonych był odbierany przez wszystkie inne (poza nim samym) oraz wzmacniał sygnał. Występował także regenerator (repeater) wzmacniający sygnał i umożliwiający przekroczenie ograniczenia 100m.
+
+Najprostszy hub to w zasadzie drabinka oporników zapewniająca że po pełnym obiegu mamy oporność nieskończonej linii (100omów).
+Można obyć się nawet bez żadnego huba, a jedynie z wykorzystaniem zwykłego trójnika (tutaj komputery wpięte w gniazdka trójnika się nie widzą - widzą tylko ten po drugiej stronie, a w komunikacji dużą rolę odgrywa protokół CSMA/CD).
+\end{teacherOnly}
+
+Ethernet pozwala na wirtualne podzielenie pojedynczej sieci lokalnej na wiele niezależnych (nie komunikujących się ze sobą w warstwie ethernetu) sieci, nazywanych VLAN. Działanie tego mechanizmu opiera się na zastosowaniu zarządzalnych switchy, które programowo mogą być dzielone na części zapewniające separację ruchu poszczególnych VLANów. Ponadto wybrane porty takiego switcha mogą być przypisane do różnych części (celem udostępnienia do innego switcha lub hosta kilku sieci wirtualnych), w takim przypadku do ramek ethernetowych wysyłanych tym portem dodawana jest informacja do którego VLANu należą (dwu bajtowy numer), a w przypadku ramek otrzymywanych na podstawie tego numeru odbywa się ich kierowanie do odpowiedniej "części" przełącznika (mówimy o VLANach tagowanych). Możliwe jest aby jeden wybrany VLAN na takim porcie był nie tagowany (do jego ramek nie będzie dodawany numer, a otrzymywane pakiety bez numeru będą kierowane do niego.
+
+Ethernet pozwala również na grupowanie kilku portów w jeden port wirtualny (tzw port trunking / bonding) celem zwiększenia przepustowości lub niezawodności łącza. A dzięki zastosowaniu w różnych typach sieci ethernet tego samego formatu ramki możliwe jest też stosunkowo proste zmienianie medium transmisyjnego (np. z kabla miedzianego na światłowód) z użyciem media-konwerterów.
+
+W przewodowych sieciach Ethernet wykrywaniem zajętości medium transmisyjnego oraz wykrywaniem kolizji zajmuje się protokół CSMA/CD (Carrier Sense Multiple Access with Collision Detection - wielodostęp z rozpoznawaniem stanu kanału oraz wykrywaniem kolizji). Przed rozpoczęciem nadawania stacja musi sprawdzić czy medium jest wolne, jeżeli tak może zacząć nadawać, jeżeli dwie stacje zaczną nadawać równocześnie zostaje to wykryte, obie przerywają nadawanie i wznawiają po losowym czasie. Jednak ze względu na stosowanie głównie połączeń punkt-punkt full-duplex (osobne przewody do nadawania i osobne do odbioru), co ogranicza tzw. domenę kolizji do pojedynczego hosta, protokół ten nie odgrywa obecnie szczególnie istotnej roli.
+% END: Warstwa sprzętowa
+
+\subsection{Kable}
+
+Sieć ethernetowa wykorzystuje 8 żyłowe kable złożone z 4 par. Najpopularniejszym przewodem jest kabel UTP kategorii 5e, czyli nieekranowana skrętka pozwalająca na pracę z częstotliwością 100 MHz. W przypadku instalacji okablowania strukturalnego często stosowane są wyższe kategorie okablowania a także kable dodatkowo ekranowane. Ekran może obejmować osobno każdą parę, jak też może być wspólny dla całego przewodu, może być wykonany z folii lub siatki. Np. SF/FTP oznacza kabel z ekranem z siatki i folii (SF/), gdzie dodatkowo każda para jest ekranowana folią (FTP).
+
+W ramach poszczególnych par realizowana jest transmisja różnicowa, czyli istotne jest napięcie pomiędzy przewodami w parze, a nie napięcie na danym przewodzie (w odniesieniu do jakiegoś zewnętrznego poziomu odniesienia).
+Standard 100Mb/s (dokładniej 100BASE-TX) wykorzystuje jedynie dwie pary przewodów, standard 1Gb/s (1000BASE‑T) wykorzystuje wszystkie 4 pary przewodów.
+Długość kabla pomiędzy dwoma urządzeniami nie powinna przekraczać 100 m.
+Wykorzystywanie skręconych par przewodów (jeden skręt na 6-10 cm kabla) ma na celu eliminację zakłóceń transmisji - (w uproszczeniu) zakłócenia wchodzą tak samo na oba przewody i różnica miedzy nimi nie zmienia się.
+
+Kable zakańczane są gniazdami bądź wtykami typu RJ-45 montowanymi według jednego z dwóch schematów kolorystycznych: EIA/TIA 568A lub 568B.
+Pierwotnie (dla sieci 100Mb/s lub starszych) użycie różnych standardów na obu końcach kabla służyło stworzeniu kabla skrosowanego\footnote{Połączenie takie przy jednakowych urządzeniach, gdzie nadajnik i odbiornik trafia zawsze na te same piny, zamieniało na kablu nadajnik z odbiornikiem, umożliwiając transmisje między nimi. Aktualnie zdecydowana większość urządzeń obsługuje protokół \emph{Auto MDI-X}, który umożliwia automatyczne ustalenie na których pinach odbywa się nadawanie, a na których odbiór. W rzadkich przypadkach konieczne może być jednak zastosowanie kabla skrosowanego}.
+
+\vspace{0.3cm}\noindent
+\begin{minipage}{0.47\textwidth}
+\begin{center}
+{\noindent\large\bfseries EIA/TIA 568A}
+
+{\noindent\includegraphics[width=0.7\textwidth,clip=true,trim={0, 4.5mm, 0, 0}]{RJ-45_TIA-568A_Right.png}}
+\end{center}
+\vspace{-0.3cm}
+
+Kolejność przewodów we wtyczce/gnieździe:
+\begin{enumerate}
+	\item biało-zielony
+	\item zielony
+	\item biało-pomarańczowy
+	\item niebieski
+	\item biało-niebieski
+	\item pomarańczowy
+	\item biało-brązowy
+	\item brązowy
+\end{enumerate}
+\end{minipage}
+\hfill
+\begin{minipage}{0.47\textwidth}
+\begin{center}
+{\noindent\large\bfseries EIA/TIA 568B}
+
+{\noindent\includegraphics[width=0.7\textwidth,clip=true,trim={0, 4.5mm, 0, 0}]{RJ-45_TIA-568B_Right.png}}
+\end{center}
+\vspace{-0.3cm}
+
+Kolejność przewodów we wtyczce/gnieździe:
+\begin{enumerate}
+	\item biało-pomarańczowy
+	\item pomarańczowy
+	\item biało-zielony
+	\item niebieski
+	\item biało-niebieski
+	\item zielony
+	\item biało-brązowy
+	\item brązowy
+\end{enumerate}
+\end{minipage}
+\vspace{0.3cm}
+
+Wtyczki RJ-45 są wtyczkami zaciskanymi na przewodzie (bez konieczności odizolowywania żył). Gniazda RJ-45 najczęściej wykonywane są ze złączem typu IDC (Insulation Displacement Connector, KRONE/LSA) służącym do podłączenia przewodu również bez konieczności odizolowywania poszczególnych żył.
+
+\section{Konfiguracja sieci w Linuxie}
+
+Konfigurację interfejsów sieciowych w systemie Linux umożliwia polecenie \Verb$ip$. Przykłady użycia (ta lista w żaden sposób nie wyczerpuje dostępnych możliwości i dodatkowych opcji):
+\begin{itemize}
+	\item wyświetlanie i ustawianie adresów IP
+		\begin{itemize}
+			\item \Verb{ip addr} – wypisuje obecną konfigurację adresów i informacje o stanie interfejsu
+			                 (\Verb{UP}/\Verb{DOWN} – interfejs włączony/wyłączony,
+			                  \Verb{LOWER_UP}/\Verb{LOWER_DOWN} – link warsty niższej na interfejsie / jego brak)
+			\item \Verb{ip addr add ADDRESS dev INTERFACE} – dodaje adres \Verb{ADDRESS} do interfejsu \Verb{INTERFACE}
+			\item \Verb{ip addr del ADDRESS dev INTERFACE} – usuwa adres \Verb{ADDRESS} z interfejsu \Verb{INTERFACE}
+		\end{itemize}
+	\item włączanie i wyłaczanie interfejsów
+		\begin{itemize}
+			\item \Verb{ip link set INTERFACE up} / \Verb{ip link set INTERFACE down} – włączenie / wyłączenie interfejsu \Verb{INTERFACE}
+			\item \Verb{ip link set INTERFACE address ADDRESS} – ustawienie adresu sprzętowego urządzenia \Verb{INTERFACE} na \Verb{ADDRESS}
+		\end{itemize}
+	\item konfiguracja tagowanych VLANów
+		\begin{itemize}
+			\item \Verb{ip link add link INTERFACE name INTERFACE.VLANID type vlan id VLANID} – dodanie interfejsu związanego z tagowanym VLANem o numerze \Verb{VLANID} na interfejsie \Verb{INTERFACE}, moduł 8021q powinien zostać załadowany automatycznie
+			\item \Verb{ip link del INTERFACE.VLANID type vlan} – usunięcie interfejsu INTERFACE.VLANID (związanego z tagowanym VLANem VLANID na interfejsie INTERFACE
+		\end{itemize}
+	\item konfiguracja BRIDGE (programowego switcha)
+		\begin{itemize}
+			\item \Verb{ip link add INTERFACE type bridge} – dodanie interfejsu bridgowego o nazwie INTERFACE
+			\item \Verb{ip link set SLAVE master INTERFACE}  – włączenie interfejsu SLAVE w skład bridgowego INTERFACE
+			\item \Verb{ip link set SLAVE nomaster} - wyłaczenie interfejsu SLAVE z bridgowego
+		\end{itemize}
+	\item konfiguracja BONDów (interfejsów agregujących inne w grupę celem zwiększenia prędkości lub niezawodności)
+		\begin{itemize}
+			\item \Verb{ip link add INTERFACE type bond} – dodanie interfejsu bondingowego o nazwie INTERFACE
+			\item \Verb{ip link set SLAVE master INTERFACE}  – włączenie interfejsu SLAVE w skład bondingu INTERFACE
+			\item \Verb{ip link set SLAVE nomaster} - wyłaczenie interfejsu SLAVE z bondingu
+		\end{itemize}
+	\item konfiguracja routingu
+		\begin{itemize}
+			\item \Verb{ip [-6] route} – wyświetlanie informacji na temat tras routingowych dla IPv4 (gdy wywołany bez opcji \Verb{-6}) / IPv6 (gdy wywołany z opcją \Verb{-6})
+			\item \Verb{ip route add NETWORK via GATEWAY dev INTERFACE} – dodanie trasy routingowej do sieci \Verb{NETWORK} poprzez router o adresie \Verb{GATEWAY} na interfejsie \Verb{INTERFACE}
+			\item \Verb{ip route del NETWORK via GATEWAY dev INTERFACE} – usunięcie trasy routingowej do sieci \Verb{NETWORK} ...
+		\end{itemize}
+\end{itemize}
+
+Często dostępne są także klasyczne polecenia:
+\begin{itemize}
+	\item \Verb{ifconfig}
+		włączanie i wyłączanie interfejsów sieciowych (up i down), ustawianie adresu IP i wyświetlanie informacji o interfejsach.
+	\item \Verb{route}
+		konfiguracja tras routingowych
+	\item \Verb{vconfig}
+		dodawanie i usuwanie obsługi wskazanych VLANów z danego interfejsu
+	\item \Verb{brctl}
+		konfiguracja programowego switcha ethernetowego pomiędzy interfejsmi (bridge)
+	\item \Verb{ifenslave}
+		konfiguracja bondów
+\end{itemize}
+
+\begin{teacherOnly}
+	Wspomnieć krótko o filtracji pakietów - iptables (jakiś przykład), łańcuchy, w oparciu o co można filtować.
 	
-	Można powiedzieć kilka słów o autkonfiguracji IPv6:
+	Można powiedzieć kilka słów o DHCP i autkonfiguracji IPv6:
 	
 	Polega ona na tym że dla podsieci będących LAN'em przydzielana jest pula z maską /64 co umożliwia tworzenie unikalnych numerów IP w oparciu o (niepowtarzalne) numery sprzętowe MAC.
 	64 bitowy prefiks sieci jest informacją rozgłaszaną przy pomocy ICMPv6 przez routery (mechanizm radvd), a host dokleja do niego część go identyfikującą związaną z adresem link-local.
 	Radvd rozgłasza także informacje routingowe (takie jak adres bramy - dhcpv6 tego nie potrafi), niestety nie da się rozgłaszać w ten sposób innej od standardowej dla LAN długości prefixu.
 \end{teacherOnly}
 
+Oprócz wyżej omówionej konfiguracji interfejsów i tras routingowych, często potrzebna jest konfiguracja jądrowych mechanizmów filtracji pakietów. Służą do tego komendy:
+\begin{itemize}
+	\item \Verb{iptables}
+		konfiguracja filtrów działających na pakietach IP, filtracja może odbywać się m.in. w oparciu o źródłowe i docelowe adresy IP, numery portów, protokół warstwy transportowej, interfejsy oraz mechanizm śledzenia połączeń;
+		umożliwia także konfigurację translacji adresów (NAT).
+	\item \Verb{ebtables}
+		konfiguracja filtrów działających na poziomie switcha ethernetowego, filtracja może odbywać się m.in. w oparciu o źródłowe i docelowe interfejsy i adresy sprzętowe.
+	\item \Verb{arptables}
+		konfiguracja filtrów związanych z protokołem ARP (zamiany adresów IP na adresy sprzętowe)
+\end{itemize}
+
+Ponaddto konieczne może być dokonywanie pewnych ustawień poprzez jądrowe systemy plików \Verb$/proc$ i \Verb$/sys$.
+Najczęstszym przypadkiem jest włączenie przekazywania pakietów pomiędzy interfejsami poprzez:
+
+\begin{minted}{bash}
+for f in /proc/sys/net/ipv*/conf/*/forwarding; do echo 1 > $f; done
+\end{minted}
+(powyższy jednolinijkowiec włącza forwading pakietów IP dla IPv4 i IPv6 na wszystkich interfejsach)
+
+
 \subsection{Programowanie usług sieciowych}
 
 \begin{teacherOnly}
 	Na początek:
 	\begin{easylist}[itemize]
-	& zabawa netcat-em (serwer, klient) + tcpdum do podłuchiwania
-	& kilka słów więcej o:
-	&& HTTP (+ oglądanie WWW netcatem)
-	&& SMTP (+ sesja SMTP netcatem)
+		& zabawa netcat-em (serwer, klient) + tcpdum do podłuchiwania
+		& kilka słów więcej o:
+			&& HTTP (+ oglądanie WWW netcatem, pamiętać o -C w netcacie)
+			&& SMTP (+ sesja SMTP netcatem, pokazać łatwość fałszowania nagłówków)
 	\end{easylist}
 	
-	Następnie \strong{krótkie} wprowadzenie systemowe:
+	Następnie \strong{krótkie} wprowadzenie systemowe (jeżeli wcześniej nie było) – \strong{to jest ważne}:
 	\begin{easylist}[itemize]
 	& fork
 	& komunikacja międzyprocesowa
@@ -292,8 +525,9 @@ W ramach sieci mogą być realizowane różne usługi w oparciu o różne protok
 	&&& poopwiadać o problemie if a==1: a=0
 	& subprocess w pythonie
 	& multiprocessing i lock w pythonie
-	& funkcja \verb$getaddrinfo$
-	\end{easylist}
+	\end{easylist}\vspace{4pt}
+	
+	Opowiedzieć o funkcji \verb$getaddrinfo$ – od tego przechodzimy płynnie do wysyłania po UDP.
 \end{teacherOnly}
 
 
@@ -465,185 +699,6 @@ while True:
 \end{CodeFrame*}
 
 
-\section{Ethernet}
-
-\begin{teacherOnly}
-	\begin{easylist}[itemize]
-	& switche (wspomnieć o tym że kiedyś były też inne rozwiązania)
-	&& switch softwerowy na linuxie
-	&& zarządzanie switchem z poziomu OS (pokazać Junos OS)
-	&&& wzmianka o BSD
-	&&&& bardziej liberalna licencja, dłuższy rodowód, ...
-	&&&& część rzeczy podobnie (shell, komendy posixowe)
-	&&&& część rzeczy inaczej (konfiguracja ...)
-	& pętle i STP
-	& VLANy (tagowane i nie tagowane)
-	& mediakonwertery i WDM
-	& kable
-	& wifi i hostap
-	\end{easylist}
-\end{teacherOnly}
-
-% BEGIN: Warstwa sprzętowa
-Od strony sprzętowej sieć składa z:
-\begin{itemize}
-	\item hostów stanowiących nadawców i odbiorców informacji
-	\item urządzeń sieciowych pośredniczących w ich przekazywaniu, takich jak nadajniki, switche, mediakonwertery
-	\item okablowania miedzianego bądź światłowodowego (jeżeli nie jest siecią bezprzewodową)
-\end{itemize}
-
-W przypadku sieci w standardzie Ethernet stosowane są 48 bitowe adresy MAC (pierwsza część identyfikuje producenta karty) oraz wspólny dla wszystkich odmian (przewodowych i bezprzewodowych) format ramki (określający położenie w ramce adresów, informacji dodatkowych oraz danych). Pakiety protokołu warstwy wyższej (np. pakiety IP wraz ich strukturą zawierającą adresy itd) z punktu widzenia ramki ethernetowej są danymi, w które ta warstwa nie wnika. Do mapowania adresów IP na adresy MAC wykorzystywany jest protokół ARP (dla IPv4) lub Neighbor Discovery (dla IPv6) - odbywa się to poprzez wysłanie ramki ethernetowej na adres rozgłoszeniowy (odbierany przez wszystkie hosty) z pytaniem o to jaki MAC adres ma host o podanym numerze IP.
-
-Sieć ethernetowa typowo posiada strukturę wielokrotnej gwiazdy (drzewa), w węzłach której stosowane są switche. Kierują one ramki do odpowiednich gałęzi na podstawie adresu docelowego i wpisów w tablicy adresów MAC, utworzonej w oparciu o źródłowe nadawców przechodzących przez dany switch ramek. W przypadku gdy adresu docelowego nie ma w tablicy ramka kierowana jest na wszystkie porty switcha z wyjątkiem tego na którym została odebrana. W taki sposób zawsze są też przesyłane ramki wysyłane na adres rozgłoszeniowy (bradcast).
-
-\begin{teacherOnly}
-Można wspomnieć że dawniej funkcję switchy pełniły (dzisiaj już nie spotykany) mostek (bridge) będący w zasadzie switchem o dwóch gniazdach.
-Natomiast do łączenia kabli wykorzystywany był (także już nie spotykany) hub (koncentrator) który zapewniał że sygnał nadawany przez dowolny z hostów do niego podłączonych był odbierany przez wszystkie inne (poza nim samym) oraz wzmacniał sygnał. Występował także regenerator (repeater) wzmacniający sygnał i umożliwiający przekroczenie ograniczenia 100m.
-
-Najprostszy hub to w zasadzie drabinka oporników zapewniająca że po pełnym obiegu mamy oporność nieskończonej linii (100omów).
-Można obyć się nawet bez żadnego huba, a jedynie z wykorzystaniem zwykłego trójnika (tutaj komputery wpięte w gniazdka trójnika się nie widzą - widzą tylko ten po drugiej stronie, a w komunikacji dużą rolę odgrywa protokół CSMA/CD).
-\end{teacherOnly}
-
-Ethernet pozwala na wirtualne podzielenie pojedynczej sieci lokalnej na wiele niezależnych (nie komunikujących się ze sobą w warstwie ethernetu) sieci, nazywanych VLAN. Działanie tego mechanizmu opiera się na zastosowaniu zarządzalnych switchy, które programowo mogą być dzielone na części zapewniające separację ruchu poszczególnych VLANów. Ponadto wybrane porty takiego switcha mogą być przypisane do różnych części (celem udostępnienia do innego switcha lub hosta kilku sieci wirtualnych), w takim przypadku do ramek ethernetowych wysyłanych tym portem dodawana jest informacja do którego VLANu należą (dwu bajtowy numer), a w przypadku ramek otrzymywanych na podstawie tego numeru odbywa się ich kierowanie do odpowiedniej "części" przełącznika (mówimy o VLANach tagowanych). Możliwe jest aby jeden wybrany VLAN na takim porcie był nie tagowany (do jego ramek nie będzie dodawany numer, a otrzymywane pakiety bez numeru będą kierowane do niego.
-
-Ethernet pozwala również na grupowanie kilku portów w jeden port wirtualny (tzw port trunking / bonding) celem zwiększenia przepustowości lub niezawodności łącza. A dzięki zastosowaniu w różnych typach sieci ethernet tego samego formatu ramki możliwe jest też stosunkowo proste zmienianie medium transmisyjnego (np. z kabla miedzianego na światłowód) z użyciem media-konwerterów.
-
-W przewodowych sieciach Ethernet wykrywaniem zajętości medium transmisyjnego oraz wykrywaniem kolizji zajmuje się protokół CSMA/CD (Carrier Sense Multiple Access with Collision Detection - wielodostęp z rozpoznawaniem stanu kanału oraz wykrywaniem kolizji). Przed rozpoczęciem nadawania stacja musi sprawdzić czy medium jest wolne, jeżeli tak może zacząć nadawać, jeżeli dwie stacje zaczną nadawać równocześnie zostaje to wykryte, obie przerywają nadawanie i wznawiają po losowym czasie. Jednak ze względu na stosowanie głównie połączeń punkt-punkt full-duplex (osobne przewody do nadawania i osobne do odbioru), co ogranicza tzw. domenę kolizji do pojedynczego hosta, protokół ten nie odgrywa obecnie szczególnie istotnej roli.
-% END: Warstwa sprzętowa
-
-\subsection{Kable}
-
-Sieć ethernetowa wykorzystuje 8 żyłowe kable złożone z 4 par. Najpopularniejszym przewodem jest kabel UTP kategorii 5e, czyli nieekranowana skrętka pozwalająca na pracę z częstotliwością 100 MHz. W przypadku instalacji okablowania strukturalnego często stosowane są wyższe kategorie okablowania a także kable dodatkowo ekranowane. Ekran może obejmować osobno każdą parę, jak też może być wspólny dla całego przewodu, może być wykonany z folii lub siatki. Np. SF/FTP oznacza kabel z ekranem z siatki i folii (SF/), gdzie dodatkowo każda para jest ekranowana folią (FTP).
-
-W ramach poszczególnych par realizowana jest transmisja różnicowa, czyli istotne jest napięcie pomiędzy przewodami w parze, a nie napięcie na danym przewodzie (w odniesieniu do jakiegoś zewnętrznego poziomu odniesienia).
-Standard 100Mb/s (dokładniej 100BASE-TX) wykorzystuje jedynie dwie pary przewodów, standard 1Gb/s (1000BASE‑T) wykorzystuje wszystkie 4 pary przewodów.
-Długość kabla pomiędzy dwoma urządzeniami nie powinna przekraczać 100 m.
-Wykorzystywanie skręconych par przewodów (jeden skręt na 6-10 cm kabla) ma na celu eliminację zakłóceń transmisji - (w uproszczeniu) zakłócenia wchodzą tak samo na oba przewody i różnica miedzy nimi nie zmienia się.
-
-Kable zakańczane są gniazdami bądź wtykami typu RJ-45 montowanymi według jednego z dwóch schematów kolorystycznych: EIA/TIA 568A lub 568B.
-Pierwotnie (dla sieci 100Mb/s lub starszych) użycie różnych standardów na obu końcach kabla służyło stworzeniu kabla skrosowanego\footnote{Połączenie takie przy jednakowych urządzeniach, gdzie nadajnik i odbiornik trafia zawsze na te same piny, zamieniało na kablu nadajnik z odbiornikiem, umożliwiając transmisje między nimi. Aktualnie zdecydowana większość urządzeń obsługuje protokół \emph{Auto MDI-X}, który umożliwia automatyczne ustalenie na których pinach odbywa się nadawanie, a na których odbiór. W rzadkich przypadkach konieczne może być jednak zastosowanie kabla skrosowanego}.
-
-\vspace{0.3cm}\noindent
-\begin{minipage}{0.47\textwidth}
-\begin{center}
-{\noindent\large\bfseries EIA/TIA 568A}
-
-{\noindent\includegraphics[width=0.7\textwidth,clip=true,trim={0, 4.5mm, 0, 0}]{RJ-45_TIA-568A_Right.png}}
-\end{center}
-\vspace{-0.3cm}
-
-Kolejność przewodów we wtyczce/gnieździe:
-\begin{enumerate}
-	\item biało-zielony
-	\item zielony
-	\item biało-pomarańczowy
-	\item niebieski
-	\item biało-niebieski
-	\item pomarańczowy
-	\item biało-brązowy
-	\item brązowy
-\end{enumerate}
-\end{minipage}
-\hfill
-\begin{minipage}{0.47\textwidth}
-\begin{center}
-{\noindent\large\bfseries EIA/TIA 568B}
-
-{\noindent\includegraphics[width=0.7\textwidth,clip=true,trim={0, 4.5mm, 0, 0}]{RJ-45_TIA-568B_Right.png}}
-\end{center}
-\vspace{-0.3cm}
-
-Kolejność przewodów we wtyczce/gnieździe:
-\begin{enumerate}
-	\item biało-pomarańczowy
-	\item pomarańczowy
-	\item biało-zielony
-	\item niebieski
-	\item biało-niebieski
-	\item zielony
-	\item biało-brązowy
-	\item brązowy
-\end{enumerate}
-\end{minipage}
-\vspace{0.3cm}
-
-Wtyczki RJ-45 są wtyczkami zaciskanymi na przewodzie (bez konieczności odizolowywania żył). Gniazda RJ-45 najczęściej wykonywane są ze złączem typu IDC (Insulation Displacement Connector, KRONE/LSA) służącym do podłączenia przewodu również bez konieczności odizolowywania poszczególnych żył.
-
-\section{Konfiguracja sieci w Linuxie}
-
-Konfigurację interfejsów sieciowych w systemie Linux umożliwia polecenie \Verb$ip$. Przykłady użycia (ta lista w żaden sposób nie wyczerpuje dostępnych możliwości i dodatkowych opcji):
-\begin{itemize}
-	\item wyświetlanie i ustawianie adresów IP
-		\begin{itemize}
-			\item \Verb{ip addr} – wypisuje obecną konfigurację adresów i informacje o stanie interfejsu
-			                 (\Verb{UP}/\Verb{DOWN} – interfejs włączony/wyłączony,
-			                  \Verb{LOWER_UP}/\Verb{LOWER_DOWN} – link warsty niższej na interfejsie / jego brak)
-			\item \Verb{ip addr add ADDRESS dev INTERFACE} – dodaje adres \Verb{ADDRESS} do interfejsu \Verb{INTERFACE}
-			\item \Verb{ip addr del ADDRESS dev INTERFACE} – usuwa adres \Verb{ADDRESS} z interfejsu \Verb{INTERFACE}
-		\end{itemize}
-	\item włączanie i wyłaczanie interfejsów
-		\begin{itemize}
-			\item \Verb{ip link set INTERFACE up} / \Verb{ip link set INTERFACE down} – włączenie / wyłączenie interfejsu \Verb{INTERFACE}
-			\item \Verb{ip link set INTERFACE address ADDRESS} – ustawienie adresu sprzętowego urządzenia \Verb{INTERFACE} na \Verb{ADDRESS}
-		\end{itemize}
-	\item konfiguracja tagowanych VLANów
-		\begin{itemize}
-			\item \Verb{ip link add link INTERFACE name INTERFACE.VLANID type vlan id VLANID} – dodanie interfejsu związanego z tagowanym VLANem o numerze \Verb{VLANID} na interfejsie \Verb{INTERFACE}, moduł 8021q powinien zostać załadowany automatycznie
-			\item \Verb{ip link del INTERFACE.VLANID type vlan} – usunięcie interfejsu INTERFACE.VLANID (związanego z tagowanym VLANem VLANID na interfejsie INTERFACE
-		\end{itemize}
-	\item konfiguracja BRIDGE (programowego switcha)
-		\begin{itemize}
-			\item \Verb{ip link add INTERFACE type bridge} – dodanie interfejsu bridgowego o nazwie INTERFACE
-			\item \Verb{ip link set SLAVE master INTERFACE}  – włączenie interfejsu SLAVE w skład bridgowego INTERFACE
-			\item \Verb{ip link set SLAVE nomaster} - wyłaczenie interfejsu SLAVE z bridgowego
-		\end{itemize}
-	\item konfiguracja BONDów (interfejsów agregujących inne w grupę celem zwiększenia prędkości lub niezawodności)
-		\begin{itemize}
-			\item \Verb{ip link add INTERFACE type bond} – dodanie interfejsu bondingowego o nazwie INTERFACE
-			\item \Verb{ip link set SLAVE master INTERFACE}  – włączenie interfejsu SLAVE w skład bondingu INTERFACE
-			\item \Verb{ip link set SLAVE nomaster} - wyłaczenie interfejsu SLAVE z bondingu
-		\end{itemize}
-	\item konfiguracja routingu
-		\begin{itemize}
-			\item \Verb{ip route} \Verb{ip -6 route} – wyświetlanie informacji na temat tras routingowych dla IPv4 / IPv6
-			\item \Verb{ip route add NETWORK via GATEWAY dev INTERFACE} – dodanie trasy routingowej do sieci \Verb{NETWORK} poprzez router o adresie \Verb{GATEWAY} na interfejsie \Verb{INTERFACE}
-			\item \Verb{ip route del NETWORK via GATEWAY dev INTERFACE} – usunięcie trasy routingowej do sieci \Verb{NETWORK} ...
-		\end{itemize}
-\end{itemize}
-
-Często dostępne są także klasyczne polecenia:
-\begin{itemize}
-	\item \Verb{ifconfig}
-		włączanie i wyłączanie interfejsów sieciowych (up i down), ustawianie adresu IP i wyświetlanie informacji o interfejsach.
-	\item \Verb{route}
-		konfiguracja tras routingowych
-	\item \Verb{vconfig}
-		dodawanie i usuwanie obsługi wskazanych VLANów z danego interfejsu
-	\item \Verb{brctl}
-		konfiguracja programowego switcha ethernetowego pomiędzy interfejsmi (bridge)
-	\item \Verb{ifenslave}
-		konfiguracja bondów
-\end{itemize}
-
-Oprócz wyżej omówionej konfiguracji interfejsów i tras routingowych, często potrzebna jest konfiguracja jądrowych mechanizmów filtracji pakietów. Służą do tego komendy:
-\begin{itemize}
-	\item \Verb{iptables}
-		konfiguracja filtrów działających na pakietach IP, filtracja może odbywać się m.in. w oparciu o źródłowe i docelowe adresy IP, numery portów, protokół warstwy transportowej, interfejsy oraz mechanizm śledzenia połączeń;
-		umożliwia także konfigurację translacji adresów (NAT).
-	\item \Verb{ebtables}
-		konfiguracja filtrów działających na poziomie switcha ethernetowego, filtracja może odbywać się m.in. w oparciu o źródłowe i docelowe interfejsy i adresy sprzętowe.
-	\item \Verb{arptables}
-		konfiguracja filtrów związanych z protokołem ARP (zamiany adresów IP na adresy sprzętowe)
-\end{itemize}
-
-Ponaddto konieczne może być dokonywanie pewnych ustawień poprzez jądrowe systemy plików \Verb$/proc$ i \Verb$/sys$.
-Najczęstszym przypadkiem jest włączenie przekazywania pakietów pomiędzy interfejsami poprzez:
-
-\begin{minted}{bash}
-for f in /proc/sys/net/ipv*/conf/*/forwarding; do echo 1 > $f; done
-\end{minted}
-(powyższy jednolinijkowiec włącza forwading pakietów IP dla IPv4 i IPv6 na wszystkich interfejsach)
-
 \section{Zadania domowe}
 
 \begin{Zadanie}{}{czy_w_sieci_ipv4} % [1pkt]
@@ -660,7 +715,7 @@ Ustal czy host o adresie IPv6 2001:6a0:0:21::60:2 należy do sieci 2001:6a0:0:10
 Ustal adresy serwerów DNS posiadających informację o domenie \emph{gov}. Podaj polecenie którego użyłeś.
 \end{Zadanie}
 
-\begin{Zadanie}{}{} % [3pkt]
+\begin{Zadanie}{}{trasy_pakietow} % [3pkt]
 Polecenie \Verb{ip r} pokazało następują tablicę routingu:
 
 \begin{Verbatim}
@@ -682,7 +737,7 @@ Ustal trasę (urządzenie którym zostanie wysłany pakiet oraz jeżeli jest pot
 
 \begin{Zadanie}{}{} % [4pkt]
 Na zajęciach omawialiśmy serwer usługi "echo" (odsyłającej odebrane dane do nadawcy).
-Poniżej znajduje się prykładowy kod wysyłający dane po UDP ("klient UDP") i odbierający dane po UDP ("serwer UDP").
+Powyżej znajduje się przykładowy kod wysyłający dane po UDP ("klient UDP") i odbierający dane po UDP ("serwer UDP").
 W oparciu o te informacje napisz program realizujący funkcję serwera echo z użyciem UDP.\\
 \emph{Jeżeli nie lubisz Pythona program może być w C.}
 \end{Zadanie}
