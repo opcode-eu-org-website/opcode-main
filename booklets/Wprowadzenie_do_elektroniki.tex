@@ -28,12 +28,13 @@
 	Projekt ,,Matematyka dla Ciekawych Świata'',\\
 	Robert Ryszard Paciorek\\\normalsize\ttfamily <rrp@opcode.eu.org>
 }
-\date  {2019-05-05}
+\date  {2019-07-15}
 
 \makeatletter\hypersetup{
 	pdftitle = {\@title}, pdfauthor = {\@author}
 }\makeatother
 
+\usepackage[ampersand]{easylist}
 
 \begin{document}
 
@@ -45,6 +46,19 @@ Zjawisko prądu związane jest z przepływem ładunku (z uporządkowanym ruchem 
 Dlatego dla podtrzymania stałej różnicy potencjałów konieczne jest istnienie źródeł prądu, prowadzących do rozdzielania ładunków dodatnich od ujemnych.
 
 \section{Podstawowe pojęcia}
+
+\begin{teacherOnly}
+	\begin{easylist}[itemize]
+	& prawo Ohma i rezystor
+		&& rezystancyjny dzielnik napięcia \url{http://ln.opcode.eu.org/dzielnik}
+			% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+10.20027730826997+54+5+50%0Ag+336+320+336+336+0%0Aw+336+192+416+192+0%0Ar+416+256+416+320+0+1000%0Ag+416+320+416+336+0%0Ar+336+112+336+192+0+500%0As+416+192+416+256+0+1+false%0As+480+192+480+256+0+1+false%0Ag+480+320+480+336+0%0Ar+480+256+480+320+0+100%0Aw+416+192+480+192+0%0AR+336+112+336+80+0+0+40+12+0+0+0.5%0Aw+480+192+560+192+0%0Ap+560+192+560+320+1+0%0Ag+560+320+560+336+0%0Ar+336+192+336+320+0+500%0A38+10+0+2+24+Voltage%0A
+		&& czy opór to jedyny parametr rezystora?
+			&&& mamy też dokładność, stabilność temperaturową, napięciową, ...
+			&&& ... ale przede wszystkim moc
+	& prawa Kirchhoffa
+	& rysowanie schematów wg elektronika – potencjały zasilania i masy, zamiast bateryjki
+	\end{easylist}
+\end{teacherOnly}
 
 \subsection{Napięcie elektryczne}
     Napięcie elektryczne $U$ pomiędzy punktem A i B (jakiegoś obwodu)
@@ -70,6 +84,40 @@ Węzeł układu (sam w sobie, pomijając zjawiska pasożytnicze) nie jest w stan
 Jeżeli rozważamy obwód zamknięty od punktu A z potencjałem $V_A$ to sumując napięcia na kolejnych elementach obwodu (oporach, źródłach napięciowych, etc) z uwzględnieniem ich znaku gdy wrócimy do punktu A to potencjał nadal musi wynosić $V_A$, zatem: \emph{Suma spadków napięć w zamkniętym obwodzie jest równa zeru.}
 
 
+\section{Elementy bierne}
+
+\begin{teacherOnly}
+	\begin{easylist}[itemize]
+	& kondensator
+		&& "magazynuje napięcie"
+		&& zastosowania:
+		&&& stabilizacja napięcia
+		&&& odcinanie składowej sygnały zmiennego (rozwarcie dla prądu stałego, ale przewodzi zmienny)
+		&&& opóźnienie zmiany jakiegoś sygnału (stała czasowa) => 
+			\url{http://ln.opcode.eu.org/cap}
+			%https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+16.13108636308289+50+5+50%0Av+96+336+96+64+0+0+40+5+0+0+0.5%0AS+256+144+256+64+0+1+false+0+3%0Aw+96+64+240+64+0%0Aw+272+64+400+64+0%0Ac+256+144+256+256+0+0.00019999999999999998+0.001%0Ar+256+256+256+336+0+100%0Aw+96+336+256+336+0%0Aw+256+336+400+336+0%0Ar+400+64+400+336+0+1000%0Ao+4+128+0+4102+0.009765625+0.00009765625+0+2+4+3%0A38+4+0+0.000009999999999999999+0.00101+Capacitance%0A
+	& cewka – mówiliśmy o magazynowaniu ...
+		&& "magazynuje prąd"
+		&& gdzie występuje (w jakich bardziej złożonych elementach) - transformator, przekaźnik
+		&& sterowanie przez tranzystor => dioda zabezpieczająca
+	& dioda
+		&& przewodzi w jednym kierunku
+		&& element nieliniowy -> łamie prawo Ohma
+		&& dioda prostownicza i dioda świecąca
+			&&& rezystor przy diodzie świecącej -> na diodzie stały spadek napięcia w kierunku przewodzenia => \url{http://ln.opcode.eu.org/led}
+				% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+10.20027730826997+50+1+50%0A172+336+176+336+128+0+7+3.5300000000000002+5+-2+0+0.5+Voltage%0Aw+336+320+336+352+1%0Ag+336+352+336+368+0%0Ad+336+256+336+320+2+default-led%0Ar+336+176+336+256+0+1000%0Aw+336+256+400+256+0%0Aw+336+320+400+320+0%0Ap+400+256+400+320+1+0%0Aw+336+176+400+176+0%0As+400+176+400+256+0+1+false%0A
+			&&& dioda prostownicza – prostownik jedno połówkowy \url{http://ln.opcode.eu.org/prost1} i mostek prostowniczy \url{http://ln.opcode.eu.org/prost2}
+				% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+13.097415321081861+55+5+50%0Av+112+320+112+96+0+1+40+5+0+0+0.5%0Ar+416+96+416+320+0+640%0Ad+112+96+416+96+2+default%0Aw+112+320+416+320+0%0Ao+0+64+0+4102+5+0.0125+0+2+1+0%0A
+				% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+10.20027730826997+53+5+50%0Av+160+352+160+64+0+1+40+5+0+0+0.5%0Aw+160+64+304+64+0%0Aw+304+64+304+128+0%0Ad+304+128+368+192+2+default%0Ad+304+256+368+192+2+default%0Ad+240+192+304+128+2+default%0Ad+240+192+304+256+2+default%0Aw+304+256+304+352+0%0Aw+304+352+160+352+0%0Aw+240+192+240+288+0%0Aw+368+192+416+192+0%0Aw+240+288+416+288+0%0Ar+416+192+416+288+0+100%0Ax+463+248+557+251+4+20+load%0Ao+0+64+0+4098+5+0.05+0+2+12+0%0A
+		&& czy może przewodzić w drugą stronę -> dioda Zenera
+		&& dzielnik napięcia z diodą Zenera =>  \url{http://ln.opcode.eu.org/zener}
+			%https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+10.20027730826997+54+5+50%0Az+336+288+336+160+3+default-zener%0Ag+336+288+336+304+0%0Aw+336+160+416+160+0%0Ar+416+224+416+288+0+1000%0Ag+416+288+416+304+0%0Ar+272+160+336+160+0+500%0As+416+160+416+224+0+1+false%0As+480+160+480+224+0+1+false%0Ag+480+288+480+304+0%0Ar+480+224+480+288+0+100%0Aw+416+160+480+160+0%0AR+272+160+192+160+0+0+40+11.68+0+0+0.5%0Aw+480+160+560+160+0%0Ap+560+160+560+288+1+0%0Ag+560+288+560+304+0%0A38+11+0+2+24+Voltage%0A
+		&& fotodioda
+		&& dioda LED jako detektor światła (jeżeli będzie czas!)
+	\end{easylist}
+	\clearpage
+\end{teacherOnly}
+
 \begin{wrapfigure}{r}{0.35\textwidth}
   \begin{center}
     \vspace{-40pt}
@@ -77,7 +125,6 @@ Jeżeli rozważamy obwód zamknięty od punktu A z potencjałem $V_A$ to sumują
     \vspace{-20pt}
   \end{center}
 \end{wrapfigure}
-\section{Elementy bierne}
 
 \subsection{Rezystor}
 Rezystor (opornik) wprowadza do układu rezystancję związaną z swoją wartością nominalną. Typowo służy do ograniczania wartości prądu przez niego przepływającego.
@@ -156,6 +203,24 @@ Zbuduj układ przedstawiony na schemacie (nazywany mostkiem Gretza) i zauważ ż
 
 % BEGIN: Elektronika - Tranzystory
 \section{Tranzystory}
+
+\begin{teacherOnly}
+	\begin{easylist}[itemize]
+	& tranzystor bipolarny
+		&& przewodzenie regulowane napięciem baza - emiter (NPN)
+		&& praca w trybie klucza (stan nasycenia i zatkania) => \url{http://ln.opcode.eu.org/npn}
+			% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+10.634267539816555+43+2+50%0Aw+352+256+352+304+1%0Aw+352+224+352+176+1%0Ag+352+304+352+320+0%0At+304+240+352+240+0+1+0.5443348655921529+0.6600527943196096+100%0Aw+240+240+304+240+1%0Ar+160+240+240+240+0+10000%0Ar+352+112+352+176+0+1005%0Aw+352+176+464+176+2%0AR+352+112+352+64+0+0+40+12+0+0+0.5%0AR+96+224+48+224+0+0+40+3.25+0+0+0.5%0Aw+160+240+160+288+0%0Aw+240+240+240+288+0%0As+160+288+240+288+0+1+false%0AS+160+240+96+240+0+1+false+0+2%0Ag+96+256+96+272+0%0A38+6+0+10+2000+Obci%C4%85%C5%BCenie%0A38+9+0+0+5+Vin%0A
+		&& praca jako wzmacniacz => POKAZAĆ w tym samym układzie co klucz i powiedzieć dlaczego tak się nie używa (rozrzut bety)
+		&& rezystor bazy - po co jest? analogia do diody
+		&& NPN i PNP - różnice w sposobie sterowania => różnice w zastosowaniach
+	& mostek i pół-mostek H (w oparciu o schemat z switchami) - do czego służy cały (silniki), a do czego można użyć pół (wyjście o ustalonych poziomach)?
+	& inne rodzaje tranzystorów - (MOS)FET
+		&& typy (N- vs P- oraz wzbogacony vs zubożony) i sposób sterowania
+		&& izolowana bramka - sterowanie z 3 pozycyjnego przełącznika 5V NC 0V (zapytać o stan NC) => \textbf{POKAZAĆ} że zostaje w stanie w jakim był, dlatego często sterowanie z pół-mostka, wspomnieć o ESD
+	& wspomnieć o triakach – przełączanie w obwodach AC
+	\end{easylist}
+\end{teacherOnly}
+
 Tranzystor jest to element o regulowanym elektrycznie przewodzeniu prądu (oporze), często wykorzystywany do wzmacniania sygnałów lub jako przełącznik elektroniczny (klucz tranzystorowy).
 Klucz jest układem przełączającym wykorzystującym dwa skrajne stany pracy tranzystora - zatkania (tranzystor nie przewodzi), nasycenia (tranzystor przewodzi z minimalnymi ograniczeniami).
 
@@ -269,6 +334,18 @@ Następnie omówić działanie układu, pokazać na pojedynczym LED że oświetl
 
 \teacher{\newpage}
 
+\begin{teacherOnly}
+	\begin{easylist}[itemize]
+	& elektronika cyfrowa - podstawy
+		&& algebra bool'a, NKB
+		&& poziomy logiczne TTL, logika odwrócona
+		&& bramki logiczne, symbole
+		&& bufor (wyjście) trójstanowe -> do czego to służy -> kilka układów nadających do wspólnej magistrali => POKAZAĆ
+		&& wyjścia open colektor/drain -> wymuszenie niskiego stanu linii przez jeden z elementów
+		&& jak działa bramka - zacząć od NOT'a (półmostek), następnie NAND lub NOT z analizą działania i ustaleniem co to za bramka, wspomnieć dlaczego elektronika lubi bramki zanegowane (bo takie wychodzą)
+	\end{easylist}
+\end{teacherOnly}
+
 % BEGIN: Elektronika - Bramki
 \section{Bramki}
 \begin{wrapfigure}{r}{0.7\textwidth}
@@ -344,6 +421,18 @@ Spróbuj zbudować własną bramkę logiczną w oparciu o tranzystory NPN i PNP.
 
 % BEGIN: Elektronika - Przerzutniki i rejestry
 \section{Przerzutniki i rejestry}
+
+\begin{teacherOnly}
+	\begin{easylist}[itemize]
+	& elektronika cyfrowa - rejestry i magistrale
+		&& przerzutnik jako podstawowa jednostka pamięci => POKAZAĆ konstrukcję z 2 NAND
+		&& magistrale => transmisja równoległa i szeregowa, typowe sygnały sterujące magistralą
+		&& sterowanie linią => bufory, trójstanowość, open-colektor
+		&& topologie połączeń
+		&& przykłady interfejsów w elektronicy: SPI, I2C (zwrócić uwagę na open-drain), UART (zrócić uwagę na brak zegara), 1wire
+	\end{easylist}
+\end{teacherOnly}
+
 \subsection{przerzutniki i ich budowa}
 
 RS Flip-flop (RS Latch) jest podstawowym układem służącym do zapamiętania jednego bitu informacji. Posiada on dwa wejścia (set i reset) i dwa wyjścia (Q i NOT Q), wejścia mogą reagować na stan wysoki (oznaczane jako S i R) lub niski (oznaczane jako wejścia zanegowane ~S i ~R), jedno z wyjść może być jedynie wewnętrzne (nie wyprowadzone na zewnątrz układu). Podanie stanu wysokiego na wejście S (niskiego na ~S) powoduje wystawienie stanu wysokiego na wyjściu Q, a podanie stanu wysokiego na wejście R (niskiego na ~R) powoduje wystawienie stanu niskiego na wyjściu Q. Stan na wyjściu Q nie zmienia się po zmianie wejść S i R na stan niski (zostaje zapamiętany).
