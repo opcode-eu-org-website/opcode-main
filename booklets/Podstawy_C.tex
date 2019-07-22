@@ -28,7 +28,7 @@
 	Projekt ,,Matematyka dla Ciekawych Świata'',\\
 	Robert Ryszard Paciorek\\\normalsize\ttfamily <rrp@opcode.eu.org>
 }
-\date  {2019-05-05}
+\date  {2019-07-22}
 
 \makeatletter\hypersetup{
 	pdftitle = {\@title}, pdfauthor = {\@author}
@@ -241,6 +241,13 @@ Z każdą zmienną przechowywaną w pamięci związany jest \emph{adres pamięci
 
 Wszystkie dane są zapisywane w postaci liczb lub ciągów liczb. Typ zmiennej (jawny lub nie) informuje o tym jakiej długości jest dana liczba i jak należy ją interpretować (jak należy interpretować ciąg liczb). 
 
+\subsection{Zasięg zmiennej}
+Zasięg zmiennych (widoczność i istnienie) jest limitowany do bloku (wydzielanego nawiasami klamrowymi) w którym zostały zadeklarowane, zmienne z bloków wewnętrznych mogą przesłaniać zmienne zadeklarowane wcześniej.
+
+Wywołanie funkcji powoduje rozpoczęcie nowego kontekstu w którym zmienne z bloku wywołującego funkcję nie są widoczne (ale nadal istnieją). Argumenty do funkcji przekazywane są przez kopiowanie, więc funkcja nie ma możliwości modyfikacji zmiennych z bloku ją wywołującego nawet do niej przekazanych (wyjątkiem jest przekazanie przez referencję lub wskaźnik).
+
+W przypadku manualnej alokacji pamięci (z użyciem malloc) limitowana jest widoczność i istnienie otrzymanego wskaźnika, ale nie zaalokowanego bloku pamięci. Zatem ograniczona jest widoczność takich zmiennych ale nie czas ich istnienia, dlatego też przed utratą wskaźnika na nie należy je usunąć (zwolnić zaalokowaną pamięć). 
+
 \subsection{Wskaźniki}
 Wskaźnik jest zmienną, która przechowuje adres pamięci, pod którym znajdują się jakieś dane (inna zmienna). Jako że wskaźnik jest zmienną która też jest umieszczona gdzieś w pamięci można utworzyć wskaźnik do wskaźnika itd. Na wskaźnikach można wykonywać operacje arytmetyczne (najczęściej jest to dodawanie offsetu). Na wskaźniku można wykonać operację wyłuskania czyli odwołania się do wartości zmiennej pod adresem na który wskazuje, a nie do zmiennej wskaźnikowej (zawierającej adres).
 
@@ -304,8 +311,105 @@ int main() {
 }
 \end{CodeFrame*}
 
+\subsection{Kolejność bajtów}
+
+Wskaźniki i rzutowanie typów pozwala patrzeć na dane w postaci poszczególnych bajtów.
+
+\begin{teacherOnly}
+Poniższy przykład pokazywać w 3 krokach - każdy kolejny printf(), prosząc słuchaczy aby zastanowili się jaki będzie wynik danego printf().
+\end{teacherOnly}
+
+\begin{CodeFrame*}[c]{}
+#include <inttypes.h>
+#include <stdio.h>
+int main() {
+	// dane jako tablica liczb 16 bitowych
+	uint16_t aa[4] = {0x1234, 0x5678, 0x9abc, 0xdeff};
+	
+	// wypisujemy ją
+	printf("A0: %x %x %x %x\n", aa[0], aa[1], aa[2], aa[3]);
+	// chyba nikogo nie zaskoczy wynik powyższego printf:
+	//   A0: 1234 5678 9abc deff
+	
+	// wypisujemy dwie pierwsze liczby rozłożone na części 8 bitowe
+	// (poszczególne bajty)
+	printf(
+		"A1: %x %x %x %x\n",
+		(aa[0] >> 8) & 0xff, aa[0] & 0xff,
+		(aa[0] >> 8) & 0xff, aa[0] & 0xff
+	);
+	// efekt też jest oczywisty:  A1: 12 34 12 34
+	
+	// każemy na te same dane patrzeć jako na liczby 8 bitowe
+	// (poszczególne bajty)
+	uint8_t* bb = (uint8_t*) aa;
+	
+	printf("B0: %x %x %x %x\n", bb[0], bb[1], bb[2], bb[3]);
+	// czego się teraz spodziewamy?
+	//  - wypisze nam tylko połowę oryginalnej tablicy
+	//  - ale dokładny wynik zależy od architektury na której uruchamiamy
+	//    program (big endian vs little endian)
+}
+\end{CodeFrame*}
+
+Fakt, że różne komputery ten sam ciąg zero-jedynkowy mogą interpretować jako różne liczby (w zależności od architektury ,,big endian'' vs ,,little endian''), powoduje że przy wymianie danych między systemami konieczne jest ustalenie sposobu tej interpretacji (np. protokoły sieciowe takie jak IP używają ,,big endian'') lub zawarcie tej informacji w wymienianych danych (kodowania Unicode UTF-16 i UTF-32 zawierają na początku danych znacznik BOM).
+
+\begin{teacherOnly}
+\begin{minipage}[t]{0.38\textwidth}
+wynik na \emph{little endian} (np. x86):
+\begin{Verbatim}
+A0: 1234 5678 9abc deff
+A1: 12 34 12 34
+B0: 34 12 78 56
+\end{Verbatim}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.58\textwidth}
+wynik na \emph{big endian} (np. sparc) – zapis analogiczny do "ludzkiego" zapisu liczb:
+\begin{Verbatim}
+A0: 1234 5678 9abc deff
+A1: 12 34 12 34
+B0: 12 34 56 78
+\end{Verbatim}
+\end{minipage}
+\end{teacherOnly}
+
+\section{Zadania}
+\begin{Zadanie}{}{helloworld1}
+Napisz program wypisujący "Hello World".
+\end{Zadanie}
+
+\begin{Zadanie}{}{}
+Zmodyfikuj program z zadania \ref{helloworld1} tak aby z użyciem pętli wypisywał ten napis 10 razy.
+\end{Zadanie}
+
+\begin{Zadanie}{}{podnapis1}
+Napisz funkcję \Verb#wypisz#, która z użyciem pętli będzie wypisywała poszczególne znaki podanego napisu od wskazanej do wskazanej pozycji.
+
+Wywołanie \Verb#wypisz("! Hello World !", 3, 6);# powinno spowodować wypisanie \Verb#ello#.
+\end{Zadanie}
+
+\begin{Zadanie}{}{}
+Zmodyfikuj program z zadania \ref{podnapis1} tak aby funkcja korzystała z arytmetyki wskaźnikowej, zamiast iteracji po numerze znaku w napisie.
+
+\begin{rozwiazanie}{c}
+#include <stdio.h>
+
+void wypisz(char* n, int b, int e) {
+	char* end = n+e;
+	for (n=n+b; n<=end; ++n)
+		printf("%c", *n);
+	printf("\n");
+}
+
+int main(){
+	wypisz("! Hello World !", 3, 6);
+}
+\end{rozwiazanie}
+\end{Zadanie}
+
 \copyrightFooter{
-	© Matematyka dla Ciekawych Świata, 2017-2018.\\
+	© Matematyka dla Ciekawych Świata, 2017-2019.\\
 	© Robert Ryszard Paciorek <rrp@opcode.eu.org>, 2003-2019.\\
 	Kopiowanie, modyfikowanie i redystrybucja dozwolone pod warunkiem zachowania informacji o autorach.
 }
