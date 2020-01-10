@@ -476,6 +476,7 @@ oraz funkcje wyszukujące i modyfikujące napisy:
 		# to wypisz pozycję i pod-napis od tej pozycji do końca
 		if (ii)
 			printf("# %d %s\n", ii, substr($i, ii))
+		# zwróć uwagę że w AWK liczy elementy napisy od 1 a nie od 0
 	}
 	print $0
 \end{minted}
@@ -484,14 +485,16 @@ oraz funkcje wyszukujące i modyfikujące napisy:
 \noindent
 AWK obsługuje także tablice asocjacyjne pozwala to np. policzyć powtórzenia słów:
 
-\begin{oframed}\noindent\shell{echo "aa bb aa ee dd aa dd" | awk }\Verb@ '{@\vspace{-0.95em}
+\begin{oframed}\noindent\shell{echo "aa bb aa ee dd aa dd" | awk }\Verb@ '@\vspace{-0.95em}
 \begin{minted}{awk}
 	BEGIN {RS="[ \t\n]+"; FS=""}
 	{slowa[$0]++}
-	{printf("rekord: %d done\n", NR)}
+	# może być kilka bloków {} pasujących do rekordu
+	# jeżeli nie użyjemy next przetworzone zostaną wszystkie
+	# {printf("rekord: %d done\n", NR)}
 	END {for (s in slowa) printf("%s: %s\n", s, slowa[s])}
 \end{minted}
-\vspace{-0.95em}\Verb@}'@\end{oframed}
+\vspace{-0.95em}\Verb@'@\end{oframed}
 
 Podobny efekt możemy uzyskać stosując "uniq -c" (który wypisuje unikalne wiersze wraz z ich ilością)
 na odpowiednio przygotowanym napisie (spacje zastąpione nową linią, a linie posortowane):
