@@ -164,7 +164,7 @@ w \emph{zmiennych}:
 W pierwszych dwóch linijkach następuje \emph{przypisanie} wartości 3 do zmiennej~\Verb{x} oraz 
 wartości 4 do zmiennej~\Verb{y}.
 Od tej pory możemy korzystać z tych zmiennych, np. do obliczenia wartości wyrażenia $(x^2 + y^2)$.
-\teacher{\\Pokazać, co się dzieje, jak odwołamy się do nieistniejącej zmiennej.}
+\teacher{\textbf{\\Pokazać, co się dzieje, jak odwołamy się do nieistniejącej zmiennej.\\Powiedzieć kilka słów na temat (czytania) komunikatów o błędach!}}
 
 \subsubsection{Moduły i zaawansowany kalkulator {\Symbola 🤔}}
 Python pozwala na wykonywanie bardziej zaawansowanych obliczeń.
@@ -185,7 +185,15 @@ jednak pisanie dłuższych fragmentów kodu w tej konsoli staje się już bardzo
 Drugą metodą korzystania z Pythona jest pisanie kodu programu (skryptu) w pliku tekstowym
 i uruchamianie tego kodu w konsoli.
 
-Utwórz plik \Verb{mojProgram.py}  z następującą zawartością:\noParBreak
+\begin{ProTip}{Moduły {\Symbola 🤔}}
+Nazwa pliku powinna być inna niż nazwy importowanych modułów, czyli jeżeli w kodzie mamy \Verb#import abc# to nasz plik nie powinien nazywać się \Verb#abc.py#,
+w przeciwnym razie zamiast wskazanego modułu Python będzie próbował zaimportować nasz plik.
+\end{ProTip}
+
+Utwórz plik \Verb{mojProgram.py}\footnote{
+	Pliki z skryptami Pythona tradycyjnie mają rozszerzenie \Verb{.py}.
+	Nie jest ono jednak wymagane --- interpreter Pythona wykona kod z pliku o dowolnym rozszerzeniu a także z pliku bez rozszerzenia.
+} z następującą zawartością:\noParBreak
 \begin{CodeFrame*}[python]{}
 x = 3
 y = 4
@@ -193,10 +201,7 @@ print(x**2 + y**2)
 \end{CodeFrame*}
 
 W celu wykonania kodu zapisanego w pliku uruchom interpreter Pythona z jednym argumentem,
-będącym nazwą tego pliku\footnote{
-	Pliki z skryptami Pythona tradycyjnie mają rozszerzenie \Verb{.py}.
-	Nie jest ono jednak wymagane --- interpreter Pythona wykona kod z pliku o dowolnym rozszerzeniu a także z pliku bez rozszerzenia.
-}: \Verb{python3 mojProgram.py}.
+będącym nazwą tego pliku: \Verb{python3 mojProgram.py}.
 
 \begin{ProTip}{Porada}
 Zachowuj pliki z programami pisanymi w trakcie zajęć, używając nazw które pozwolą Ci łatwo zidentyfikować dany program.
@@ -396,6 +401,8 @@ print( a - 2, kwadrat(4) )
 
 \begin{Zadanie}{}{funkcja_suma2}
 Napisz funkcję, która przyjmuje dwa argumenty i zwraca ich sumę. Użyj jej do obliczenia (wypisania na konsolę) wartości kilku różnych sum.
+
+\teacher{Warto zwrócić uwagę na to zadnie - w połączeniu z wcześniejszym \ref{funkcja_suma} jest ono dobrą okazją do wyjaśnienia różnicy między „funkcja wypisuje” a „funkcja zwraca”.}
 \end{Zadanie}
 
 \begin{Zadanie}{}{pole_kola}
@@ -728,6 +735,9 @@ while a <= 20:
 
 Zwróć uwagę, że wewnątrz pętli \python{while} (tak samo jak innych konstrukcji używających wciętego bloku - takich jak \python{for}, czy \python{if})
 może znajdować się więcej niż jedno polecenie. Trzeba tylko pamiętać, aby wszystkie były poprzedzone takim samym wcięciem.
+
+Pętla \python{while} jest też naturalnym wyborem gdy w Pythonie chcemy przechodzić przez jakiś zakres liczb z krokiem nie całkowitym
+	(wcześniej poznana instrukcja \python{range}, stosowana do iterowania po zakresie liczbowym w pętli \python{for}, wymaga aby krok był całkowity).
 
 \begin{Zadanie}{}{zadanie_suma3}
 Rozwiąż zadanie \ref{zadanie_suma2} używając pętli \python{while}
