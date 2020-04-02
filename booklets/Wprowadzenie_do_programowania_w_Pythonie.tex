@@ -40,7 +40,6 @@
 
 \maketitle
 
-%  BEGIN: Wprowadzenie
 \begin{teacherOnly}
 \section*{Dla prowadzącego}
 Skrypt jest w dwóch wersjach: dla uczniów i dla prowadzącego.
@@ -60,11 +59,12 @@ Nie trzeba robić wszystkich zadań ze skryptu. Prowadzący powinien, w zależno
 które zostaną zadane jako praca domowa, a które zostaną pominięte.
 \end{teacherOnly}
 
+%  BEGIN: Wprowadzenie
 \section{Wprowadzenie}
 
-Na zajęciach będziemy programować w języku Python w wersji 3.
+Na najbliższych kilku zajęciach będziemy programować w języku Python w wersji 3.
 \begin{teacherOnly}
-Może paść pytanie dlaczego Python a nie np. C++.
+Może paść pytanie dlaczego akurat Python.
 Podstawowym powodem jest to że Python jest wygodniejszy w uczeniu (m.in. kod pythonowy realizujący tą samą funkcjonalność, przy takim samym poziomie obsługi błędów, etc
 i podobnej czytelności praktycznie zawsze jest krótszy od kodu C, a potrafi być krótszy kilkukrotnie, więc np. łatwiej go pokazać na rzutniku).
 Ponadto:
@@ -93,10 +93,11 @@ Może paść pytanie dlaczego warto spróbować pracy w Linuxie. Powodów jest k
 \end{itemize}
 \end{teacherOnly}
 
-Zwróćcie uwagę, aby korzystać z wersji Pythona o numerze rozpoczynającym się od 3 (np. 3.6.0), a nie starszej, lecz wciąż używanej wersji 2.
+Zwróćcie uwagę, aby korzystać z wersji Pythona o numerze rozpoczynającym się od 3 (np. 3.7.1), a nie starszej, lecz wciąż używanej wersji 2.
 Wersje te różnią się tak znacząco, że programy, które będziemy pisać na zajęciach nie będą działać w drugiej wersji Pythona.
 
-Skrypt ten jest wprowadzeniem do programowania w Pythonie i omawia wszystkie najważniejsze elementy tego języka.
+Skrypt ten
+jest dość kompletnym wprowadzeniem do programowania w Pythonie i omawia wszystkie najważniejsze elementy tego języka.
 Zagadnienia bardziej zaawansowane, treści dodatkowe i ciekawostki zostały oznaczone ikonką {\Symbola 🤔} (Thinking Face Emoji).
 \teacher{W mniej zaawansowanych grupach rozdziały oznaczone {\Symbola 🤔} można spokojnie pominąć.}
 
@@ -108,6 +109,8 @@ W konsoli tej początkowo wypisane są pewne informacje (m.in. używana wersja P
 oraz znak zachęty (w Pythonie najczęściej~\Verb{>>>}).
 Interpreter oczekuje, iż po tym znaku wpiszemy polecenie i naciśniemy Enter.
 Wynik polecenia zostanie wypisany w kolejnym wierszu.
+
+\teacher{\textbf{Zwrócić uwagę na rozróżnianie konsoli pythonowej i bashowej - inny znak zachęty}}
 
 Najprostszym sposobem użycia konsoli Pythona jest użycie jej jako kalkulatora --- wpisujemy działanie
 do obliczenia, naciskamy Enter i w kolejnym wierszu otrzymujemy wynik działania.
@@ -396,17 +399,21 @@ print( a - 2, kwadrat(4) )
 \begin{CodeFrame}{auto}
 47 16
 \end{CodeFrame}
+%  END: Funkcje
 
 \vspace{-13pt}
 
+%  BEGIN: Zadanie - funkcja_suma2
 \begin{Zadanie}{}{funkcja_suma2}
-Napisz funkcję, która przyjmuje dwa argumenty i zwraca ich sumę. Użyj jej do obliczenia (wypisania na konsolę) wartości kilku różnych sum.
+Napisz funkcję, która przyjmuje dwa argumenty i \ul[black]{zwraca} ich sumę. Użyj jej do obliczenia (oraz wypisania na konsolę) wartości kilku różnych sum.
+\\\textit{Wskazówka: \python{print()} powinien być użyty na zewnątrz tej funkcji.}
 
 \teacher{Warto zwrócić uwagę na to zadnie - w połączeniu z wcześniejszym \ref{funkcja_suma} jest ono dobrą okazją do wyjaśnienia różnicy między „funkcja wypisuje” a „funkcja zwraca”.}
 \end{Zadanie}
+%  END: Zadanie - funkcja_suma2
 
+%  BEGIN: Zadania - funkcje dodatkowe
 \begin{Zadanie}{}{pole_kola}
-
 Napisz funkcję, która oblicza i zwraca pole koła o podanym promieniu. Użyj jej do obliczenia powierzchni koła o promieniu 13.
 
 \teacher{W razie potrzeby można wymyślić całą gamę zadań analogicznych do tego, np. obliczanie pola powierzchni trapezu, kuli, objętości stożka, kuli, etc.}
@@ -433,8 +440,9 @@ gdzie A, B, C i X zastąpione są wartościami argumentów przekazanych do funkc
 	\Verb{2x^2 + 7x + -2 dla x = 3 wynosi 37}
 \end{teacherOnly}
 \end{Zadanie}
+%  END: Zadania - funkcje dodatkowe
 
-
+%  BEGIN: Funkcje2
 \subsubsection{Argumenty domyślne i nazwane {\Symbola 🤔}}
 
 Możliwe jest podanie wartości domyślnych dla wybranych argumentów funkcji. Utworzy to z nich argumenty opcjonalne, które nie muszą być podawane przy wywołaniu funkcji.
@@ -481,7 +489,7 @@ Analizując działanie powyższego kodu zwrócić uwagę na:
 \item możliwość dostępu do globalnych zmiennych w funkcji dopóki ich nie zasłonimy zmienną lokalną (tak używamy zmiennej \Verb{c})
 \item możliwość zmodyfikowania zmiennej globalnej gdy jest zadeklarowana w funkcji jako \python{global}
 \end{itemize}
-%  END: Funkcje
+%  END: Funkcje2
 
 %  BEGIN: Pętla for
 \subsection{Pętla \python{for}}
@@ -585,7 +593,9 @@ for x in range(10, 20, 3):
 \normalsize Wszystkie przedziały w Pythonie są domknięte z lewej strony i otwarte z prawej strony,
 tzn. zawierają swój lewy koniec i nie zawierają swojego prawego końca.
 \end{ProTip}
+%  END: Lista kolejnych liczb naturalnych
 
+%  BEGIN: Zadanie - suma_poteg
 \begin{Zadanie}{}{suma_poteg}
 Napisz program obliczający sumę $1^2 + 2^2 + 3^2 + \ldots + 99^2 + 100^2$. \teacher{(wynik: 338350)}
 
@@ -596,7 +606,7 @@ for x in range(101):
 print(sum)
 \end{rozwiazanie}
 \end{Zadanie}
-%  END: Lista kolejnych liczb naturalnych
+%  END: Zadanie - suma_poteg
 
 %  BEGIN: Zadanie - suma liczb
 \begin{Zadanie}{}{zadanie_suma2}
@@ -689,7 +699,9 @@ W naszym przykładzie sprawdzaliśmy, czy wartość zmiennej \Verb{x} występuje
 
 Zauważ, że dla x wynoszącego 0 spełnione są dwa warunki (pierwszy i środkowy), w takim wypadku decydująca jest kolejność warunków i w konstrukcji
 \python{if}/\python{elif} wykonany zostanie jedynie kod związany z pierwszym pasującym warunkiem.
+%  END: Instrukcja warunkowa if
 
+%  BEGIN: Zadanie - funkcja_znak
 \begin{Zadanie}{}{funkcja_znak}
 Napisz funkcję \python{znak(liczba)} która wypiszę informację o znaku podanej liczby (wyróżniając zero) i zwróci jej wartość bezwzględną.
 Wywołanie funkcji \Verb{znak} powinno wyglądać następująco:
@@ -708,7 +720,7 @@ print(a, b, c)
 7 13 0
 \end{CodeFrame}
 \end{Zadanie}
-%  END: Instrukcja warunkowa if
+%  END: Zadanie - funkcja_znak
 
 %  BEGIN: Zadanie - nie podzielne
 \begin{Zadanie}{}{niepodzielne}
@@ -988,10 +1000,10 @@ def wskap(lista):
 \end{rozwiazanie}
 \end{Zadanie}
 
-\begin{Zadanie}{}{funkcja_wyiksuj} 
-Napisz funkcję \python{wyiksuj(napis)}, która wypisze dany \Verb{napis}, zastępując każdą małą literę  polskiego alfabetu małą literą x i
-każdą wielką literę polskiego alfabetu wielką literą X, natomiast resztę znaków pozostawi bez zmian.
-Np. dla napisu \Verb{'Python 3.6.1 (default, Dec 2015, 13:05:11)'} program powinien wypisać: \Verb{Xxxxxx 3.6.1 (xxxxxxx, Xxx 2015, 13:05:11)}
+\begin{Zadanie}{}{funkcja_wyiksuj}
+Napisz funkcję \python{wyiksuj(napis)}, która zwróci dany \Verb{napis}, zastępując każdą małą literę przez \Verb{x} i
+każdą wielką literę przez \Verb{X}, natomiast resztę znaków pozostawi bez zmian.
+Np. dla napisu \Verb{'Python 3.6.1 (default, Dec 2015, 13:05:11)'} funkcja powinna zwrócić napis: \Verb{Xxxxxx 3.6.1 (xxxxxxx, Xxx 2015, 13:05:11)}
 
 \begin{teacherOnly}
 \noindent Wskazówka:\\
@@ -1076,13 +1088,17 @@ W tym wypadku załączamy fragment standardowej biblioteki Pythona o nazwie \pyt
 
 Base64 jest jednym z kodowań pozwalających na zapis danych binarnych w postaci ograniczonego zbioru znaków drukowalnych,
 co pozwala m.in. na osadzanie danych binarnych (np. obrazki) w plikach tekstowych (np. dokumenty html, pliki źródłowe programów).
+%  END: Kodowania znaków
 
-\begin{Zadanie}{}{dekodowanie_utf8_w_base64} %  [2 pkt]
+%  BEGIN: Zadanie - dekodowanie_utf8_w_base64
+\begin{Zadanie}{}{dekodowanie_utf8_w_base64}
 Napisz program dekodujący napis kodowany w UTF8 zakodowany przy pomocy base64 mający postać:
 \python{b'UHl0aG9uIGplc3QgZmFqbnkg8J+Yjg==\n'}.\\
 Wskazówka: dane wejściowe funkcji \python{decode()} muszą być typu "bytes", można to uzyskać poprzedzając napis prefiksem \Verb{b}, tak jak powyżej.
 \end{Zadanie}
+%  END: Zadanie - dekodowanie_utf8_w_base64
 
+%  BEGIN: Konwersja znak - numer unicode
 \subsubsection{Konwersja pomiędzy znakiem a jego numerem}
 
 Możliwe jest także konwertowanie pomiędzy liczbowym numerem znaku Unicode, a napisem go reprezentującym i w drugą stronę --- służą do tego odpowiednio funkcje \python{chr()} i \python{ord()}.
@@ -1096,7 +1112,7 @@ print(hex(ord("∞")), hex(ord("\u221e")), hex(ord(chr(0x221e))) )
 \teacher{
 Warto skomentować że powyższy przykład demonstruje równoważność poszczególnych zapisów (drukują taki sam znak na konsoli, generują taki sam numer unicodowy).
 }
-%  END: Kodowania znaków
+%  END: Konwersja znak - numer unicode
 
 %  BEGIN: Wyrażenia regularne 01
 \subsection{Wyrażenia regularne {\Symbola 🤔}}
@@ -1173,7 +1189,9 @@ Zwróć uwagę na:
 	\end{itemize}
 	Po każdym z operatorów powtórzeń (\Verb@. ? + {n,m}@) możemy dodać pytajnik (\Verb@.? ?? +? {n,m}?@) aby wskazać że ma on dopasowywać najmniejszy możliwy fragment, czyli ma działać nie zachłannie.
 \end{itemize}
+%  END: Wyrażenia regularne 01
 
+%  BEGIN: Wyrażenia regularne zadania
 \begin{Zadanie}{}{regex_czy_slowo}
 Napisz funkcję która sprawdzi z użyciem wyrażeń regularnych czy dany napis jest słowem (tzn. nie zawiera spacji).
 \end{Zadanie}
@@ -1181,7 +1199,7 @@ Napisz funkcję która sprawdzi z użyciem wyrażeń regularnych czy dany napis 
 \begin{Zadanie}{}{regex_czy_liczba}
 Napisz funkcję która sprawdzi z użyciem wyrażeń regularnych czy dany napis jest liczbą (tzn. jest złożony z cyfr i kropki, a na początku może wystąpić + albo -).
 \end{Zadanie}
-%  END: Wyrażenia regularne 01
+%  END: Wyrażenia regularne zadania
 
 %  BEGIN: Napisy - zadania 02
 \subsection{Zadania dodatkowe}
@@ -1231,7 +1249,7 @@ Napisz funkcję, korzystającą z dopasowywania wyrażeń regularnych, która b�
 %  END: Wyrażenia regularne - zadania dodatkowe
 
 
-%  BEGIN: Zmienne i ich typy 01
+%  BEGIN: Typy zmiennych
 \student{\clearpage}
 \section{Zmienne i ich typy}
 
@@ -1308,7 +1326,7 @@ print(x, type(x), x.__sizeof__())
 13 <class 'int'> 28
 \end{CodeFrame}
 \end{teacherOnly}
-%  END: Zmienne i ich typy 01
+%  END: Typy zmiennych
 
 %  BEGIN: Listy 01
 \subsection{Listy}
@@ -1412,8 +1430,8 @@ print(l)
 Zwróć uwagę że sortowanie i odwracanie modyfikuje istniejącą listę a nie tworzy kopii.
 %  END: Obiektowość
 
-%  BEGIN: Obiektowość - zadania 01
-\begin{Zadanie}{}{obiektowo_string} 
+%  BEGIN: Zadanie - obiektowo_string
+\begin{Zadanie}{}{obiektowo_string}
 Zapoznaj się z dokumentacją klasy odpowiedzialnej za napisy (\Verb{str}),
 zwróć szczególną uwagę na metody \Verb{split}, \Verb{find}, \Verb{replace}.
 Korzystając z metod klasy \Verb{str} napisz funkcję \Verb{parse} która dla napisu będącego jej argumentem
@@ -1426,17 +1444,17 @@ Funkcja powinna działać w następujący sposób:
 ['Ala', 'ma kota', 'i inne', 'zwierzeta']
 \end{Verbatim}
 \end{Zadanie}
-%  END: Obiektowość - zadania 01
+%  END: Zadanie - obiektowo_string
 
-%  BEGIN: Obiektowość - zadania 02
-\begin{Zadanie}{}{obiektowo_sortuj} %  [1 pkt]
+%  BEGIN: Zadanie - obiektowo_sortuj
+\begin{Zadanie}{}{obiektowo_sortuj}
 Korzystając z metod klasy \Verb{list} i/lub funkcji \python{sorted()} napisz funkcję która sortuje podaną listę w kolejności malejącej.
-\end{Zadanie}{}{} % 
+\end{Zadanie}
 
 \begin{Zadanie}{}{obiektowo_sortuj2}
 Napisz funkcję \python{sortuj(lista)} która zwróci posortowaną listę. Funkcja nie może zmodyfikować oryginalnej listy.
 \end{Zadanie}
-%  END: Obiektowość - zadania 02
+%  END: Zadanie - obiektowo_sortuj
 
 %  BEGIN: Słowniki
 \subsection{Słowniki}
@@ -1477,8 +1495,10 @@ jest element o kluczu 'bd'
 a => yy
 15 => True
 \end{CodeFrame}
+%  END: Słowniki
 
-\begin{Zadanie}{}{licz_powtorzenia} 
+%  BEGIN: Zadania - licz_powtorzenia
+\begin{Zadanie}{}{licz_powtorzenia}
 Napisz funkcję \Verb{zlicz} która dla podanej listy policzy powtórzenia jej elementów. Przykład użycia:
 \begin{Verbatim}
  > zlicz(["AX", "B", "AX"])
@@ -1488,8 +1508,10 @@ B wystepuje 1 razy
 Wskazówka: Użyj słownika, w którym element będzie stanowił klucz, a krotność jego wystąpień wartość.
 Możesz użyć metody \python{get()} do pobierania wartości z słownika, jeżeli w nim jest lub wartości domyślnej w przeciwnym wypadku - szczegóły zobacz w dokumentacji
 \end{Zadanie}
+%  END: Zadania - licz_powtorzenia
 
-\begin{Zadanie}{}{parsuj_klucz_wartosc} %  [3 pkt]
+%  BEGIN: Zadania - parsuj_klucz_wartosc
+\begin{Zadanie}{}{parsuj_klucz_wartosc}
 Napisz funkcję która konwertuje listę napisów postaci \python{klucz=wartosc} na słownik.
 Funkcja musi dokonywać podziału napisów z listy w oparciu o pierwsze wystąpienie znaku równości przy pomocy metody \python{find()} typu przechowującego napisy (\Verb{str}).
 Funkcja musi dodawać kolejne napisy do słownika w taki sposób że część przed znakiem równości stanowi klucz, a część po znaku równości stanowi wartość.\\
@@ -1498,7 +1520,9 @@ Np. dla listy postaci: \python{["aa=13", "b=Ala=kot", "f=xyz"]} funkcja powinna 
 {'b': 'Ala=kot', 'aa': '13', 'f': 'xyz'}
 \end{Verbatim}
 \end{Zadanie}
+%  END: Zadania - parsuj_klucz_wartosc
 
+%  BEGIN: Sortowanie słownika
 \subsubsection{Sortowanie słownika}
 
 Jak już wspomnieliśmy słownik nie zachowuje porządku elementów. Jeżeli chcemy uzyskać posortowaną listę kluczy,
@@ -1530,7 +1554,7 @@ print(lista)
 \begin{CodeFrame}{auto}
 [('5', 3), ('bd', 20), ('a', 101)]
 \end{CodeFrame}
-%  END: Słowniki
+%  END: Sortowanie słownika
 
 %  BEGIN: Funkcje jako argumenty
 \subsection{Funkcje jako argumenty funkcji {\Symbola 🤔}}
@@ -1573,7 +1597,9 @@ print(a, b, d(3,4))
 \begin{Zadanie}{}{slownik_zamiast_ifelse}
 Zastanów się czy konstrukcję if/elif w funkcji \python{dzialanie()} można by zastąpić słownikiem, jak to ewentualnie zrobić i jakie mogłoby mieć to zalety bądź wady?
 \end{Zadanie}
+%  END: Funkcje jako argumenty
 
+%  BEGIN: Zadania - funkcja_jako_argument
 \begin{Zadanie}{}{funkcja_jako_argument}
 Napisz funkcję która przyjmuje dwa argumenty: listę oraz funkcję. Funkcja ma za zadanie wykonać przekazaną do niej funkcję na każdym elemencie listy. Przykład użycia:
 \begin{Verbatim}
@@ -1583,7 +1609,7 @@ Napisz funkcję która przyjmuje dwa argumenty: listę oraz funkcję. Funkcja ma
 3
 \end{Verbatim}
 \end{Zadanie}
-%  END: Funkcje jako argumenty
+%  END: Zadania - funkcja_jako_argument
 
 %  BEGIN: Zmienna, obiekt i referencja
 \subsection{Zmienna, obiekt i referencja {\Symbola 🤔}}
@@ -1877,6 +1903,49 @@ plik = open('dane.txt', 'rt', encoding='utf8')
 napis = plik.read()
 plik.close()
 \end{CodeFrame*}
+
+\subsubsection{Czekanie na dane}
+
+Niekiedy nasz program musi poczekać na jakieś dane (np. wprowadzane z standardowego wejścia przez użytkownika).
+Typowo funkcje odczytu (takie jak \python{sys.stdin.read()}, \python{sys.stdin.readline()}, \python{input()}) czekają na koniec wczytywanych danych lub na koniec linii.
+Komplikacja pojawia się kiedy chcielibyśmy aby nasz program miał ograniczenie czasowe takiego oczekiwania lub czekał na pojawienie się danych w jednym z kilku źródeł.
+W takich przypadkach przydatna jest funkcja systemowa \python{select()}, którą w Pythonie znajdziemy w module \textit{select}.
+
+\begin{CodeFrame*}[python]{}
+import sys, os, select
+
+rdfd, _, _ = select.select([sys.stdin], [], [], 3.0)
+
+if not rdfd:
+	print("czas minął")
+
+for fd in rdfd:
+	print("czytam z:", fd)
+	a = os.read(fd.fileno(), 1024)
+	print("wczytałem:", a)
+\end{CodeFrame*}
+
+Funkcja \python{select()} przyjmuje 3 listy „deskryptorów plików” (czyli tego co zwraca np. funkcja \python{open()}) oraz ilość sekund, którą ma czekać na początek danych. Pierwsza lista związana jest z plikami z których chcemy czytać, druga pisać, a trzecia z plikami na których czekamy na wyjątkowe warunki. Funkcja ta zwraca również 3 takie listy, ale zawierające jedynie deskryptory plików na których pożądana operacja jest możliwa (np. są dane do wczytania, można zapisać dane).
+
+Funkcja \python{select()} kończy działanie gdy pojawią się jakiekolwiek dane (nie czeka na koniec danych – EOF). Zauważ, że do odczytu zastosowana została funkcja \python{os.read()} a nie metoda \python{fd.read()}, wynika to z faktu, iż \python{fd.read()} czeka na EOF lub podaną ilość bajtów, a \python{os.read()} wczytuje to co jest dostępne i ogranicza jedynie maksymalną ilość wczytywanych danych (resztę możemy doczytać kolejnym wywołaniem).
+
+\begin{teacherOnly}
+Można pokazać różnicę w zachowaniu poniższego kodu z os.read() i fd.read() dla różnej ilości wprowadzanych znaków – np. 1 i 5
+\begin{Verbatim}
+import sys, os, select, time
+
+while True:
+	time.sleep(3)
+	rdfd, _, _ = select.select([sys.stdin], [], [], 3.0)
+	if not rdfd:
+		print("czas minął")
+	for fd in rdfd:
+		print("czytam z:", fd)
+		#a = os.read(fd.fileno(), 3)
+		a = fd.read(3)
+		print("wczytałem:", a)
+\end{Verbatim}
+\end{teacherOnly}
 %  END: Pliki
 
 %  BEGIN: Obsługa błędów
@@ -1911,6 +1980,278 @@ raise BaseException("jakiś błąd")
 \end{CodeFrame*}
 %  END: Obsługa błędów
 
+%  BEGIN: Podstawy programowania równoległego
+\section{Podstawy programowania równoległego}
+
+\subsection{procesy i fork()}
+
+Aby w systemie mógł działać więcej niż 1 proces konieczna jest możliwość utworzenia nowego procesu (potomka) z poziomu procesu aktualnie działającego (rodzica). Możliwe są dwa podejścia:
+\begin{itemize}
+	\item utworzenie "czystego" procesu uruchamiającego podany kod programu z podanymi argumentami (spawn)
+	\item utworzenie kopii aktualnego procesu, która zacznie wykonywać się niezależnie od momentu rozgałęzienia (fork)
+\end{itemize}
+W przypadku zastosowania fork proces potomny otrzymuje kopię pamięci rodzica (ma dostęp do wszystkich jego zmiennych oraz zasobów uzyskanych przed fork(); dalsze operacje na zmiennych są niezależne). Po utworzeniu kopi procesu można (ale nie trzeba) zastąpić wykonywany w nim program innym poprzez funkcje z rodziny exec. Cechy te powodują że mechanizm fork jest bardziej elastyczny od spawn.
+
+\begin{CodeFrame*}[python]{}
+import os
+
+print("nasz pid to:", os.getpid())
+
+pid = os.fork()
+if pid == 0:
+	print("jesteśmy w procesie potomnym, nasz pid to:", os.getpid())
+else:
+	print("jesteśmy w rodzicu, pid naszego potomka to:", pid)
+\end{CodeFrame*}
+
+\begin{teacherOnly}
+Bardziej rozbudowany przykład do demonstacji życia procesów:
+\begin{Verbatim}
+import os, time, signal
+
+print("nasz pid to:", os.getpid())
+
+pid = os.fork()
+if pid == 0:
+	print("jesteśmy w procesie potomnym, nasz pid to:", os.getpid())
+	time.sleep(4);  print("potomek 1")
+	time.sleep(7);  print("potomek 2")
+else:
+	print("jesteśmy w rodzicu, pid naszego potomka to:", pid)
+	time.sleep(5);  print("rodzic 1")
+	time.sleep(4);  print("zabijam potomka")
+	os.kill(pid, signal.SIGTERM)
+	time.sleep(5);  print("rodzic 2")
+\end{Verbatim}
+\end{teacherOnly}
+
+\subsection{wywołanie zewnętrznej komendy}
+
+Najprostszym sposobem uruchomienia innej komendy z poziomu Pythona jest użycie funkcji \Verb{system()} z modułu \Verb{os}:
+
+\begin{CodeFrame*}[python]{}
+import os
+
+inStr = "Ala ma kota\nKot ma psa\n..."
+
+os.system('echo -en "' + inStr + '" | grep -v A')
+\end{CodeFrame*}
+
+Jak widać przekazujemy do niej napis takiej samej postaci jak wyglądałby komenda uruchamiana w terminalu.
+Mechanizm ten nie daje jednak zbyt dużej kontroli nad uruchamianiem tego polecenia
+(nie pozwala na proste odebranie jego standardowego wyjścia, przekazanie wejścia również wymaga dodatkowego zabiegu w postaci dodania komendy echo, itd.).
+Bardziej elastycznym rozwiązaniem jest pythonowy moduł \textit{subprocess}:
+
+\begin{CodeFrame*}[python]{}
+import subprocess
+
+inStr = "Ala ma kota\nKot ma psa\n..."
+
+# uruchamiamy subprocess z grep'em
+res = subprocess.run(["grep", "-v", "A"], input=inStr.encode(), stdout=subprocess.PIPE)
+print("Kod powrotu to: " + str(res.returncode))
+print("Standardowe wyjście z komendy to: " + res.stdout.decode())
+# warto zwrócić uwagę na kodowanie i dekodowanie napisów
+# (przekazywanych/odbieranych przez stdin/stdout) do / z utf-8
+
+# jeżeli chcemy korzystać np. z znaków uogólniających powłoki lub podać
+# komendę jako pojedynczy napis (a nie listę argumentów) to można użyć
+# opcji shell=True:
+subprocess.run(["ls -ld /etc/pa*"], shell=True)
+# jeżeli potrzebujemy tylko rozbicia napisu na listę argumentów można
+# użyć shlex.split()
+
+# run() pozwala także (obok subprocess.PIPE) na przekazywanie
+# istniejących deskryptorów (lub subprocess.DEVNULL, co ignoruje wyjście)
+# w ramach stdin, stdout, stderr
+
+# moduł subprocess oferuje także funkcję Popen() dającą większą kontrolę
+# nad uruchamianiem komendy
+\end{CodeFrame*}
+
+
+\subsection{komunikacja międzyprocesowa}
+
+W systemie wieloprocesowym konieczne jest zapewnienie mechanizmów komunikacji pomiędzy procesami, zwłaszcza jeżeli grupa procesów ma realizować wspólne zadanie.
+
+Jednym z takich mechanizmów (można powiedzieć że nawet podstawowym) jest poznane już wcześniej łącze nie nazwane
+	(pipe, uzyskiwane np. w bashowej linii poleceń przy pomocy \Verb{|}) pozwalające na przekazywanie strumienia danych od jednego do kolejnego procesu.
+Podobnie działa łącze nazwane z tym że nie jest uzyskiwane w wyniku funkcji \Verb{pipe()} a otwarcia specjalnego pliku (utworzonego \Verb{mkfifo()}) przez dwa procesy (jeden do czytania drugi do pisania).
+
+Innymi mechanizmami komunikacji międzyprocesowej są m.in:
+\begin{itemize}
+	\item sygnały \teacher{o nich będziemy mówić na dalszych zajęciach}
+	\item kolejki komunikatów
+	\item pamięć współdzielona
+\end{itemize}
+
+Stosowanie pamięci współdzielonej wymaga często też stosowania mechanizmów ochrony dostępu do niej (wejścia do „krytycznych sekcji” kodu). Koncepcja takiej ochrony wygląda następująco:
+\begin{Verbatim}
+if !blokada:
+	blokada = True
+	# działania na pamięci wspólnej
+	blokada = False
+\end{Verbatim}
+Jednak nie może być zrealizowana w tak prosty sposób, gdzyż przełączenie procesów może nastąpić pomiędzy sprawdzeniem warunku na zmiennej \Verb{blokada} a zmianą jej wartości
+	(lub mogą one działać idealnie równolegle i w tym samym momencie sprawdzać wartość zmiennej \Verb{blokada}).
+Dlatego do ochrony sekcji krytycznych stosuje się mechanizmy systemowe takie jak semafory i lock'i.
+
+\subsection{wątki}
+
+Oprócz możliwości pełnego rozgałęzienia procesu (utworzenia potomka), możliwe jest także tworzenie wątków (zwanych też lekkimi procesami) w ramach bieżącego procesu.
+Wątek (w odróżnieniu od procesu potomnego) korzysta z tej samej pamięci (przestrzeni adresowej) co oryginalny proces i wszystkie inne jego wątki (czyli \textit{out of the box} mają pamięć współdzieloną).
+Jednak każdy wątek posiada niezależny stos (umieszczany w innym fragmencie współdzielonej pamięci), który jest używany m.in. do przechowywania zmiennych lokalnych (w tym argumentów funkcji),
+	czyli dopóki ograniczamy się do zmiennych lokalnych nie ma potrzeby stosowania ochrony sekcji krytycznych ze względu na dostęp do pamięci.
+
+\subsection{„Python-way”}
+
+Zaprezentowane powyżej podejście korzysta w dużej mierze z funkcji analogicznych do funkcji systemowych biblioteki standardowej C zgromadzonych w module \textit{os}.
+Python oferuje obok wspomnianego modułu \textit{subprocess} także inne własne mechanizmy związane z tworzeniem wielu procesów poprzez moduł \textit{multiprocessing}
+	oraz oferuje wsparcie dla wątków w module \textit{threading}\footnote{
+		Należy mieć na uwadze iż pythonowe wątki są niepełnowartościowe - ze względu na konstrukcję interpretera CPython,
+		jedynie jeden wątek w danej chwili może być aktywny - wykorzystywać CPU, pozostałe mogą jedynie czekać.
+	}.
+Jednak, jako że w ramach tego kursu nie będziemy zajmować się programowaniem równoległym jako takim, to modułów tych nie omówimy w tym skrypcie ani na zajęciach.
+Zainteresowanym polecam zapoznanie się z \url{http://vip.opcode.eu.org/#Procesy_i_wątki}.
+%  END: Podstawy programowania równoległego
+
+%  BEGIN: Biblioteki
+\section{Biblioteki}
+
+Ideą korzystania z funkcji w trakcie tworzenia programu jest zapewnienie jego większej czytelności oraz unikanie powtarzania kodu robiącego to samo w wielu miejscach programu – kod umieszczamy w funkcji którą tylko wywołujemy z odpowiednimi argumentami i odbieramy wynik działania (np. poprzez zwracaną wartość). Rozwinięciem tej ideii są biblioteki stanowiące zbiory funkcji oraz struktur danych (własnych typów zmiennych) służących do realizacji określonych zadań.
+
+Do tej pory korzystaliśmy z elementów standardowej biblioteki dostarczanej z Pythonem. W rozdziale tym zaprezentujemy kilka różnych przykładowych bibliotek (w tym wchodzących w skład biblioteki standardowej Pythona), jednak żadnej z nich nie będziemy tutaj szczegółowo omawiać, gdyż nie miałoby to większego sensu. Istnieje ogromna liczba bibliotek dedykowanych różnym celom (obsługa formatów plików, standardów komunikacyjnych, tworzenie grafiki, ...) i nie ma sensu uczyć się ich bez realnej potrzeby zastosowania – programowanie w dużej mierze polega na wyszukiwaniu właściwych bibliotek, zapoznawaniu się z ich dokumentacją i wykorzystywaniu ich w własnych programach. W przypadku Pythona biblioteki najczęściej mają postać modułów pythonowych, które włączamy poprzez deklarację \python{include}.
+
+\teacher{Poniższe przykłady mają zaprezentować potencjał możliwy do uzyskania dzięki dostępnym bibliotekom oraz to że są one dużym ułatwieniem dla programisty.}
+
+\subsection{XML}
+
+Extensible Markup Language (XML) jest tekstowym formatem wymiany danych. W odróżnieniu od formatu klasycznego formatu utożsamiającego linię z rekordem złożonym z pól oddzielanych wskazanym separatorem może on w łatwy sposób opisywać bardziej złożoną (drzewiastą a nie tabelkową) postać danych. Dokument XML składa się z zagnieżdżonych w sobie znaczników, każdy z nich może posiadać atrybuty oraz wartość, którą jest tekst zawierający lub nie kolejne znaczniki. Kolejność występowania elementów w dokumencie jest znacząca. Każdy znacznik otwierający posiada odpowiadający mu znacznik zamykający (np. \Verb{<b>aa</b>}), znaczniki bez wartości mogą być samo-zamykające (np. \Verb{<g />}). Dokumenty HTML mogą być zgodne z wymogami formalnymi XML tym samym stanowiąc dokumenty XML.
+
+Do obsługi XML w Pythonie można skorzystać np. z modułu \textit{ElementTree} (ale nie jest on jedyną biblioteką której możemy użyć):
+\begin{CodeFrame*}[python]{}
+import xml.etree.ElementTree as xml
+
+txt = """<a>
+	<b>A<h>qwe ... rty</h></b> ABCD... &amp;&apos; HIJ...
+	<c x="q" w="p p">EE FĄ</c> <g y="zz" />
+	<c x="pp">123 <d rr="oo">456</d> 78 90.</c>
+</a>"""
+
+rootNode = xml.fromstring(txt)
+
+print("nazwa głównego elementu to:", rootNode.tag)
+print("jego potomkowie to:")
+for subNode in rootNode:
+	print(" ", subNode.tag, ":", xml.tostring(subNode, encoding="unicode"))
+
+# możemy pobrać listę potomków o określonej nazwie
+# albo od razu po nich iterować pętlą for subNode in rootNode.iter("c"):
+cSubNodes = list( rootNode.iter("c") )
+if cSubNodes:
+	for subNode in cSubNodes:
+		print('element "c" ma atrybuty': subNode.attrib
+else
+	print('nie ma elementów "c"')
+
+# możemy też używać iteratorów bezpośrednio, np:
+print("pierwszy węzeł c ma atrybuty:")
+try:
+	ci = rootNode.iter("c")
+	print(next(ci).attrib)
+except StopIteration:
+	print(" [brak takiego węzła]")
+\end{CodeFrame*}
+
+\textit{ElementTree} pozwala też na modyfikowanie XMLa poprzez zmianę/dodawanie/usuwanie atrybutów, czy też całych tagów.
+
+Innym sposobem zapisu ustrukturyzowanych danych w postaci tekstowej jest JSON. Przypomina on trochę output funkcji print z podanym do niej słownikiem lub listą. Do jego obsługi w Pythonie słuzy moduł \textit{json}:
+
+\begin{CodeFrame*}[python]{}
+import json, pprint
+
+a='''{
+	"info": "bbb",
+	"ver": 31,
+	"d": [
+		{"a": 21, "b": {"x": 1, "y": 2}, "c": [9, 8, 7]},
+		{"a": 17, "b": {"x": 6, "y": 7}, "c": [6, 5, 4]}
+	]
+}'''
+
+# interpretacja napisu jako zbioru danych w formacie json
+d = json.loads(a)
+
+# wypisanie zbioru danych
+pprint.pprint(d) # pprint ładnie formatuje złożone zbiory danych
+
+# jak widać jest to zagnieżdżona struktura list i słowników
+# odpowiadająca 1 do 1 temu co było w napisie
+
+# dostęp do poszczególnych elementów: "po pythonowemu"
+print(d["d"][1]["b"])
+d["d"][1]["b"]["x"] = "XXX"
+
+# wygenerowanie json'a w oparciu o zmienną pythonową
+c = json.dumps(d, ensure_ascii=False)
+print(c)
+\end{CodeFrame*}
+
+\subsection{SQL}
+
+Innym sposobem przechowywania danych niż w postaci plików tekstowych są systemy baz danych.
+Standardowym językiem używanym do komunikacji z systemami bazodanowymi jest SQL.
+Pomimo jego standaryzacji istnieją różnice w składni zapytań dla poszczególnych silników bazodanowych (takich jak: MariaDB, PostgreSQL, SQLite, ...).
+
+Typowo komunikacja z bazą danych odbywa się za pośrednictwem biblioteki odpowiedzialnej za nawiązanie połączenia z serwerem i przekazywanie do niego zapytań SQL.
+Wymaga to działania osobnego procesu (często nawet na innej maszynie) obsługującego silnik bazodanowy, co jest pożądanym rozwiązaniem dla baz danych z których równocześnie może korzystać wielu klientów.
+Typowym przykładem może być komunikacja skryptów jakiegoś serwisu interetowego z bazą danych.
+
+Jednak takie podejście nie jest wygodne w rozwiązaniach nie wymagających współdzielenia bazy danych.
+Do zastosowań takich można użyć biblioteki SQLite, która pozwala na łatwe stosowanie bazy SQLowej do wewnętrznych potrzeb aplikacji, bez konieczności uruchamiania osobnego systemu bazodanowego.
+SQLite można wykorzystywać także bezpośrednio z poziomu Pythona, dzięki modułowi \textit{sqlite3}:
+
+\begin{CodeFrame*}[python]{}
+
+import sqlite3
+import os.path
+
+if os.path.isfile('example.db'):
+	create = False
+else:
+	create = True
+
+conn = sqlite3.connect('example.db')
+c = conn.cursor()
+
+if create:
+	print("create new db")
+	c.execute("CREATE TABLE users (uid INT PRIMARY KEY, name TEXT);")
+	c.execute("CREATE TABLE posts (pid INT PRIMARY KEY, uid INT, text TEXT);")
+	
+	c.execute("INSERT INTO users VALUES (21, 'user A');")
+	c.execute("INSERT INTO users VALUES (2671, 'user B');")
+	
+	c.execute("INSERT INTO posts VALUES (1, 21, 'abc ..');")
+	c.execute("INSERT INTO posts VALUES (2, 21, 'qwe xyz');")
+	c.execute("INSERT INTO posts VALUES (3, 2671, 'test');")
+
+	conn.commit()
+
+maxUid = 100
+for r in c.execute("SELECT * FROM users WHERE uid < ?;", (maxUid,)):
+	print(r)
+
+for r in c.execute("SELECT u.name, p.text FROM users AS u JOIN posts AS p ON (u.uid = p.uid);"):
+	print(r)
+\end{CodeFrame*}
+
+\subsection{GUI}
+
+Przykłady użycia 3 różnych graficznych interfejsów użytkownika z poziomu Pythona można znaleźć na \url{http://vip.opcode.eu.org/#Graficzny_interfejs_użytkownika}.
+W odróżnieniu od poprzednich przykładów, te biblioteki nie wchodzą w skład pythonowskiej biblioteki standardowej i mogą wymagać doinstalowania odpowiednich pakietów oprogramowania.
+%  END: Biblioteki
+
 
 %  BEGIN: Literatura dodatkowa
 \student{\clearpage}%\vspace{2cm}}
@@ -1929,9 +2270,9 @@ raise BaseException("jakiś błąd")
 \rozwiazania
 
 \copyrightFooter{
-	© Matematyka dla Ciekawych Świata, 2016-2019.\\
+	© Matematyka dla Ciekawych Świata, 2016-2020.\\
 	© Łukasz Mazurek, 2016-2017.\\
-	© Robert Ryszard Paciorek <rrp@opcode.eu.org>, 2018-2019.\\
+	© Robert Ryszard Paciorek <rrp@opcode.eu.org>, 2018-2020.\\
 	Kopiowanie, modyfikowanie i redystrybucja dozwolone pod warunkiem zachowania informacji o autorach.\\
 }
 \end{document}

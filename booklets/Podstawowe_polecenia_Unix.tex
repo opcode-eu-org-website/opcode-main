@@ -102,7 +102,7 @@ Możemy także przekierować standardowe wyjście do pliku (przy pomocy~\Verb{>}
 
 % BEGIN: vi i vim
 \subsection{vi i vim}
-\Verb{vi} jest chyba najbardziej zaawansowanym edytorem, którego obecność gwarantuje standard POSIX.
+\Verb{vi} jest chyba najbardziej zaawansowanym edytorem, którego obecność gwarantuje standard POSIX\footnote{IEEE Std 1003.1-2017 (The Open Group Base Specifications Issue 7, 2018 edition), XCU part \url{https://pubs.opengroup.org/onlinepubs/9699919799/}}.
 \Verb{vim} jest mocno rozbudowanym jego klonem, oferującym bardzo zaawansowane funkcjonalności, powszechnie stosowanym jako zamiennik oryginalnego \Verb{vi}.
 \Verb{vim} obsługuje 3 podstawowe tryby pracy: komend (służący do wydawania opisanych niżej poleceń), wizualny (służący do zaznaczania i wydawania niektórych komend), edycji (wstawiania/nadpisywania - służący do wprowadzania tekstu).
 Podstawowa klawiszologia:
@@ -217,14 +217,14 @@ Podstawowa klawiszologia:
 			\texttt{-L} wypisuj informacje o wskazywanych przez linki symboliczne plikach\\
 		do ważniejszych elementów wyrażenia należy zaliczyć:\\
 			\texttt{-name "wyrażenie"} pliki których nazwa pasuje do wyrażenia korzystającego z shellowych znaków uogólniających\\
-				komenda find (w odróżnieniu np. od ls) samodzielnie interpretują wyrażenia zawierające shellowe znaki uogólniające, w związku z czym konieczne może się okazać zabezpieczenie ich przed interpretacją przez powłokę np. przy pomocy umieszczenia wewnątrz pojedynczych cudzysłowów\\
-			\texttt{-iname "wyrażenie"} jak -name, tyle że nie rozróżnia wielkości liter\\
+				komenda find (w odróżnieniu np. od \texttt{ls}) samodzielnie interpretują wyrażenia zawierające shellowe znaki uogólniające, w związku z czym konieczne może się okazać zabezpieczenie ich przed interpretacją przez powłokę np. przy pomocy umieszczenia wewnątrz pojedynczych cudzysłowów\\
+			\texttt{-iname "wyrażenie"} jak \texttt{-name}, tyle że nie rozróżnia wielkości liter\\
 			\texttt{-path "wyrażenie"} pliki których ścieżka pasuje do wyrażenia korzystającego z shellowych znaków uogólniających\\
-			\texttt{-ipath "wyrażenie"} jak -path, tyle że nie rozróżnia wielkości liter\\
+			\texttt{-ipath "wyrażenie"} jak \texttt{-path}, tyle że nie rozróżnia wielkości liter\\
 			\texttt{-regex "wyrażenie"} pliki których ścieżka pasuje do wyrażenia regularnego\\
-			\texttt{-iregex "wyrażenie"} jak -regexp, tyle że nie rozróżnia wielkości liter\vspace{6pt}\\
+			\texttt{-iregex "wyrażenie"} jak \texttt{-regexp}, tyle że nie rozróżnia wielkości liter\vspace{6pt}\\
 			%
-			\texttt{warunek -o warunek} łączy warunki sumą logiczną OR zamiast domyślnego iloczynu logicznego AND\\
+			\texttt{warunek -o warunek} łączy warunki sumą logiczną „OR” (zamiast domyślnego iloczynu logicznego „AND”)\\
 			\texttt{! warunek} negacja warunku\vspace{6pt}\\
 			%
 			\texttt{-mtime [+|-]n} pliki których modyfikacja odbyła się \texttt{n}*24 godziny temu\\
@@ -335,7 +335,7 @@ Systemy unix'owe posiadają drzewiasty system plików zaczynający się w katalo
 	      zawierający konfiguracje ogólnosystemowe
 	\item \Verb{/var}
 	      zawierający dane programów i usług (takie jak kolejka poczty, harmonogramy zadań, bazy danych)
-	\item \Verb{/home}  
+	\item \Verb{/home}
 	      zawierający katalogi domowe użytkowników (często montowany z innego systemu plików, dlatego też root ma swój katalog domowy w \texttt{/root}, aby był dostępny nawet gdy takie montowanie nie doszło do skutku)
 	\item \Verb{/tmp}
 	      zawierający pliki tymczasowe (typowo czyszczony przy starcie systemu); w Linuxie występuje też \texttt{/run} przeznaczony do trzymania danych tymczasowych działających usług takich jak numery pid, blokady, itp
@@ -354,6 +354,7 @@ Z punktu widzenia programisty czy też użytkownika (prawie) wszystko jest pliki
 
 \setcounter{subsection}{0} % \subsection{zadania}
 
+% BEGIN: system plikow - zadania
 \begin{Zadanie}{}{lsetc}
 Wyświetlić nazwy (mogą być wraz z pełną ścieżką) wszystkich plików i katalogów znajdujących się bezpośrednio w \texttt{/etc/} których druga litera to \texttt{a} natomiast trzecia to \texttt{p} lub \texttt{s}.
 
@@ -371,6 +372,7 @@ Utworzyć w katalogu \texttt{/tmp} linki symboliczne \texttt{ll1} i \texttt{ll2}
 \begin{Zadanie}{}{findetc2}
 Zmodyfikuj rozwiązanie zadania \ref{findetc} tak aby wyświetlać szczegóły (w tym datę modyfikacji) dla wyszukanych plików.
 \end{Zadanie}
+% END: system plikow - zadania
 
 
 % BEGIN: ssh
