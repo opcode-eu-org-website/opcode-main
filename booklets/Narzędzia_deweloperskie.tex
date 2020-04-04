@@ -27,7 +27,7 @@
 	%Projekt ,,Matematyka dla Ciekawych Świata'',\\
 	Robert Ryszard Paciorek\\\normalsize\ttfamily <rrp@opcode.eu.org>
 }
-\date  {2019-05-05}
+\date  {2020-03-30}
 
 \makeatletter\hypersetup{
 	pdftitle = {\@title}, pdfauthor = {\@author}
@@ -129,6 +129,95 @@ Adres repozytorium może być m.in. postaci: \Verb{https://[login@]serwer/sciezk
 	\item pobieranie zmian z (wskazanego) zasobu zdalnego: \Verb{git pull [nazwa]}
 \end{itemize}
 
+\subsection{Zadania}
+
+\begin{Zadanie}{}{git_init}
+\begin{enumerate}
+\item utwórz katalog \Verb#repo1# zawierający dwa pliki tekstowe z dowolną zawartością (różną)
+\item utwórz w tym katalogu repozytorium git i sprawdź jego stan (status)
+\item dodaj do niego wszystkie pliki z tego katalogu i sprawdź stan repozytorium
+\item zakomituj zmiany i sprawdź stan repozytorium
+\end{enumerate}
+\end{Zadanie}
+
+\begin{Zadanie}{}{git_modyfikacja}
+Działając w \Verb#repo1# utworzonym w zadaniu \ref{git_init}
+\begin{enumerate}
+\item zmodyfikuj zawartość jednego z plików
+\item sprawdź stan repozytorium
+\item zmodyfikuj zawartość drugiego z plików
+% \item wyświetl różnicę pomiędzy zawartośią kopii roboczej a zawartością repozytorium
+\item wyświetl tę różnicę tylko dla jednego z plików
+\item zakomituj zmiany
+\item wyświetl historię zmian w repozytorium
+\end{enumerate}
+\end{Zadanie}
+
+\begin{Zadanie}{}{git_clone}
+Sklonuj repozytorium \Verb#repo1# jako \Verb#repo2#
+\end{Zadanie}
+
+\begin{Zadanie}{}{git_rm}
+Działając w \Verb#repo2# utworzonym w zadaniu \ref{git_clone}
+\begin{enumerate}
+\item usuń z repozytorium jeden z plików tekstowych
+\item zmień nazwę drugiego z plików tekstowych
+\item sprawdź stan repozytorium
+\item zakomituj zmiany
+\item wyświetl historię zmian w repozytorium, z pokazaniem informacji o nazwach zmienianych plików
+\end{enumerate}
+\end{Zadanie}
+
+\begin{Zadanie}{}{git_pull1}
+Zaktualizuj stan \Verb#repo1#, tak aby odzwierciedlał zmiany dokonane w \Verb#repo2#
+\end{Zadanie}
+
+\begin{Zadanie}{}{git_merge}
+\begin{enumerate}
+\item zmodyfikuj plik tekstowy zarówno w \Verb#repo1#, jak i w \Verb#repo2# (w różny - sprzeczny sposób)
+\item zakomituj zmiany w \Verb#repo1# i w \Verb#repo1#
+\item spróbuj zaktualizować stan \Verb#repo1#, tak aby odzwierciedlał zmiany dokonane w \Verb#repo2#
+\item sprawdź stan repozytorium
+\item rozwiąż konflikt
+\item sprawdź stan repozytorium
+\item wyświetl historię zmian pokazującą wykres gałęzi w których były dokonywane zmiany
+\item spróbuj zaktualizować stan \Verb#repo2#, tak aby odzwierciedlał zmiany dokonane w \Verb#repo1#
+\end{enumerate}
+\end{Zadanie}
+
+\begin{Zadanie}{}{git_checkout}
+\begin{enumerate}
+\item przywrócić stan kopii roboczej do stanu repozytorium z przed zadania \ref{git_merge}
+\item sprawdź stan repozytorium
+\item wyświetl zawartość pliku modyfikowanego w zadaniu \ref{git_merge}
+\item powróć do normalnego stanu repozytorium
+\item sprawdź stan repozytorium
+\end{enumerate}
+\end{Zadanie}
+
+\begin{Zadanie}{}{git_show}
+Wyświetl zawartość pliku modyfikowanego w \ref{git_merge} przed dokonaniem tych modyfikacji bez przełączania kopii roboczej na ówczesny stan repozytorium.
+\end{Zadanie}
+
+\begin{Zadanie}{}{git_diff}
+Wyświetl różnicę stanu obecnego pliku modyfikowanego w \ref{git_merge} i stanu przed dokonaniem tych modyfikacji
+\end{Zadanie}
+
+\begin{Zadanie}{}{git_branch}
+\begin{enumerate}
+\item utwórz nowy branch w \Verb#repo1# o nazwie \Verb#test# i przełącz się na niego
+\item zmodyfikuj plik tekstowy w ramach tego brancha i zakomituj zmiany
+\item wyświetl informacje na temat branchy
+\item wróć do domyślnej gałęzi "master" i wyświetl zawartość modyfikowanego pliku oraz stan repozytorium
+\end{enumerate}
+\end{Zadanie}
+
+\begin{Zadanie}{}{git_pull2}
+\begin{enumerate}
+\item zaciągnij zmiany dokonane w zadaniu \ref{git_branch} z \Verb#repo1# do \Verb#repo2# tak aby znalazły się one w brachu o nazwie test
+\item wyświetl stan repozytorium, informacje na temat branchy oraz dwa najnowsze wpisy z historii repozytorium
+\end{enumerate}
+\end{Zadanie}
 
 \section{make}
 
@@ -233,6 +322,33 @@ installGSym:
 # standardowo $(CC) zawiera ścieżkę do komilatora C,
 #   a $(CFLAGS) zawiera flagi kompilacji
 \end{CodeFrame*}
+
+\subsection{Zadania}
+
+\begin{Zadanie}{}{makefile1}
+Poniższe polecenia utworzą prosty program w C:
+\begin{Verbatim}
+echo 'void wypisz();' > wypisz.h
+echo '#include <stdio.h>' > wypisz.c
+echo '#include "wypisz.h"' >> wypisz.c
+echo 'void wypisz() { printf("Hello world!\n"); }' >> wypisz.c
+echo '#include "wypisz.h"' > main.c
+echo 'int main() { wypisz(); return 0; }' >> main.c
+\end{Verbatim}
+
+Może on zostać skompilowany przy pomocy poleceń:
+\begin{Verbatim}
+gcc -o wypisz.o -c wypisz.c
+gcc -o main.o -c main.c
+gcc -o hello main.o wypisz.o
+\end{Verbatim}
+
+Napisz plik \Verb#Makefile#, który zautomatyzuje kompilację tego projektu. Plik powinien uwzględniać zależności pomiędzy elementami projektu (plik hello wymaga dwóch plików .o, pliki .o wymagają odpowiednich plików .c i .h). Plik powinien pozawalać na określenie używanego kompilatora przy pomocy zmiennej środowiskowej.
+\end{Zadanie}
+
+\begin{Zadanie}{}{makefile2}
+Dodaj do pliku \Verb#Makefile# z zadania \ref{makefile1} regułę \Verb#clean#, która usunie wszystkie utworzone w wyniku kompilacji pliku. Reguła powinna działać nawet jeżeli w katalogu znajdzie się plik o nazwie \Verb#clean#.
+\end{Zadanie}
 
 \section{Generatory plików Makefile}
 
@@ -352,9 +468,10 @@ target_link_libraries(Run ${Libraries})
 SCons jest alternatywnym rozwiązaniem wobec zestawu \Verb{cmake} + \Verb{make},
 pozwalającym na tworzenie plików zarządzających procesem budowania w postaci skryptów Pythona. 
 
+\rozwiazania
 
 \copyrightFooter{
-	© Robert Paciorek, 2015-2019.\\
+	© Robert Paciorek, 2015-2020.\\
 	Kopiowanie, modyfikowanie i redystrybucja dozwolone pod warunkiem zachowania informacji o autorach.
 }
 \end{document}
