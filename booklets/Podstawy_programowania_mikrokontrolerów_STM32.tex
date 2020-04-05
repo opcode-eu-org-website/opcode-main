@@ -1,0 +1,133 @@
+% Copyright (c) 2017-2019 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2019 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\documentclass{pdfBooklets}
+\usepackage[printwatermark]{xwatermark}
+\title{Programowanie mikrokontrolerów STM32}
+\author{%
+	Projekt ,,Matematyka dla Ciekawych Świata'',\\
+	Krzysztof Lasocki\\\normalsize\ttfamily <krz.lasocki@gmail.com>
+}
+\date  {2020-04-04}
+
+\makeatletter\hypersetup{
+	pdftitle = {\@title}, pdfauthor = {\@author}
+}\makeatother
+
+
+\begin{document}
+
+\maketitle
+
+\newwatermark[allpages,color=red!50,angle=45,scale=3,xpos=0,ypos=0]{Wersja robocza}
+
+Skrypt opisuje podstawy programowania mikrokontrolerów STM32. Będziemy używać
+popularnej, dostępnej i prostej płytki ``Blue Pill''. Programy będą pisane w języku
+C z pomocą biblioteki \Verb$libopencm3$.
+
+\section{Instalacja i przygotowanie narzędzi}
+
+Przed rozpoczęciem pracy z STM32 należy zainstalować następujące narzędzia i biblioteki:
+
+\begin{itemize}
+  \item Toolchain arm-none-eabi (\Verb$gcc-arm-none-eabi$) oraz (\Verb$binutils-arm-none-eabi$)
+  \item Implementację libC (\Verb$libstdc++-arm-none-eabi-newlib$)
+  \item Narzędzie do programowania przez UART (\Verb$stm32flash$)
+  \item Bibliotekę \Verb$libopencm3$
+\end{itemize}
+Wszystkie oprócz ostatniego dostępne są w repozytoriach Debiana (i systemów na nim opartych)
+\begin{CodeFrame*}[bash]{}
+sudo apt install gcc-arm-none-eabi binutils-arm-none-eabi libstdc++-arm-none-eabi stm32flash
+\end{CodeFrame*}
+
+Instalacja i kompilacja \Verb$libopencm3$ odbywa się w następujący sposób
+
+\begin{CodeFrame*}[bash]{}
+git clone https://github.com/libopencm3/libopencm3.git
+make
+\end{CodeFrame*}
+
+\section{Przygotowanie mikronotrolera}
+\textit{tutaj opisać co i jak polutować. Obrazki? to powinno być też pokazane przed właściwymi ćwiczeniami}
+\begin{ProTip}{\normalfont{\strong{Ostrożnie}}}
+  Podczas pracy grot (metalowa końcówka) lutownicy jest rozgrzany do 200-400 stopni Celsjusza. Zachowaj ostrożność
+  podczas jej używania. Zapamiętaj:
+  \begin{itemize}
+  \item Zawsze odkładaj lutownicę do stojaka. Nigdy nie kładź jej luzem na stole.
+  \item Nigdy nie łap za metalowy koniec lutownicy.
+  \item Nie wolno łapać spadającej lutownicy. Nie martw się, zawszę można kupić nową
+  \item Grot lutownicy jest gorący przez jakiś czas po wyłączeniu
+  \item Nie zostawiaj włączonej lutownicy bez opieki
+  \item Przed lutowaniem musisz odłączyć układ od zasilania
+  \end{itemize}
+\end{ProTip}
+
+Jeżeli Twój mikrokontroler nie ma przylutowanych pinów, musisz przylutować je samemu. Przymierz i odetnij
+obcążkami dwa odcinki listwy kołkowej pasujące do otworów na brzegach płytki mikrokontrolera. Włóż piny do otworków
+na płytce. Odwiń lub wyciągnij odcinek cyny ze szpulki. Aby zalutować pin w otworze, najpierw dotknij grotem lutownicy
+miejsca, które będziesz lutować. Po około sekundzie, dotknij pinu końcówką odcinka cyny.
+
+Postaraj się aby listwy kołkowe były prostopadle do płytki. Jeżeli masz odcinek damskiej listwy, możesz za jego pomocą
+umiejscowić piny które lutujesz. Możesz też użyć do tego płytki stykowej. Lutowanie zacznij od czterech pinów na rogach płytki.
+
+
+\section{Płytka stykowa}
+  Płytka stykowa pozwala na szybkie prototypowanie układów. Posiada ona macierz dziurek. Pod nimi są umieszczone
+  blaszki które łączą sąsiednie dziurki w taki sposób, że każde 5 dziurek w pionie jest ze sobą połączone elektrycznie.
+  
+  Wyżłobienie w środku płytki służy do 
+
+
+
+\section{Połączenie mikronotrolera}
+\textit {tutaj warto by powrzucać zdjęcia lub rysunki}
+
+\begin{ProTip}{\normalfont{\strong{Uwaga}}}
+  Przed podłączaniem lub dokonywaniem jakichkolwiek zmian w układzie, odłącz go od zasilania. Unikniesz
+  w ten sposób ryzyka zwarcia i uszkodzenia elementów.
+\end{ProTip}
+
+Aby zaprogramować mikrokontroler musisz podłączyć go do przejściówki USB-UART. Umieść płytkę ``okrakiem'' nad przerwą
+w płytce stykowej. Za pomocą pasujących kabelków podłącz następujące piny przejściówki (nie podłączaj jeszcze
+przejściówki do komputera) do pinów na mikrokontrolerze:
+\begin{itemize}
+\item masę (GND) do (dowolnej) masy miktrokontrolera (GND lub G)
+\item RX do TX mikrokontrolera (pin A9)
+\item TX do RX mikrokontrolera (pin A10)
+\item 3v3 do 3v3 mikrokontrolera (lub, jeżeli Twoja przejściówka nie ma pinu 3v3, podłącz pin 5V do pinu 5V na
+  mikrokontrolerze)
+\end{itemize}
+
+Za pomocą obcążków lub pęsety przełóż górną (patrząc na mikrokontroler tak aby port USB był po lewej) zworkę na
+pozycję ``1''
+
+Sprawdź wszystkie połączenia i podłącz przejściówkę do portu USB komputera. Powinna zaświecić się tylko czerwona dioda
+\textit{PWR}
+
+
+
+
+
+\end{document}
+
+

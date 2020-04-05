@@ -29,3 +29,16 @@
 	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 	SOFTWARE.
+
+To compile the tex toolkit, several packages are necesary (list written
+after getting the tools to work, based on aptitude log)
+
+    texlive-latex-base
+    texlive-latex-extra
+    texlive-xetex
+    texlive-luatex
+    poppler-utils:amd64 0.71.0-5 -> 0.48.0-2+deb9u2  (this had to be manually downgraded and put on hold)
+    pdf2svg
+    psutils
+    texlive-font-utils
+    fonts-symbola
