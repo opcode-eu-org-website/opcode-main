@@ -1,5 +1,6 @@
 % Copyright (c) 2017-2019 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
 % Copyright (c) 2017-2019 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% Copyright (c) 2017-2019 Krzysztof Lasocki <krz.lasocki@gmail.com>
 % 
 % MIT License
 % 
@@ -41,7 +42,7 @@
 
 \newwatermark[allpages,color=red!50,angle=45,scale=3,xpos=0,ypos=0]{Wersja robocza}
 
-Skrypt opisuje podstawy programowania mikrokontrolerów STM32. Będziemy używać
+Skrypt opisuje podstawy programowania mikrokontrolerów STM32. Podczas kursu będziemy używać
 popularnej, dostępnej i prostej płytki ``Blue Pill''. Programy będą pisane w języku
 C z pomocą biblioteki \Verb$libopencm3$.
 
@@ -56,6 +57,7 @@ Przed rozpoczęciem pracy z STM32 należy zainstalować następujące narzędzia
   \item Bibliotekę \Verb$libopencm3$
 \end{itemize}
 Wszystkie oprócz ostatniego dostępne są w repozytoriach Debiana (i systemów na nim opartych)
+
 \begin{CodeFrame*}[bash]{}
 sudo apt install gcc-arm-none-eabi binutils-arm-none-eabi libstdc++-arm-none-eabi stm32flash
 \end{CodeFrame*}
@@ -66,38 +68,6 @@ Instalacja i kompilacja \Verb$libopencm3$ odbywa się w następujący sposób
 git clone https://github.com/libopencm3/libopencm3.git
 make
 \end{CodeFrame*}
-
-\section{Przygotowanie mikronotrolera}
-\textit{tutaj opisać co i jak polutować. Obrazki? to powinno być też pokazane przed właściwymi ćwiczeniami}
-\begin{ProTip}{\normalfont{\strong{Ostrożnie}}}
-  Podczas pracy grot (metalowa końcówka) lutownicy jest rozgrzany do 200-400 stopni Celsjusza. Zachowaj ostrożność
-  podczas jej używania. Zapamiętaj:
-  \begin{itemize}
-  \item Zawsze odkładaj lutownicę do stojaka. Nigdy nie kładź jej luzem na stole.
-  \item Nigdy nie łap za metalowy koniec lutownicy.
-  \item Nie wolno łapać spadającej lutownicy. Nie martw się, zawszę można kupić nową
-  \item Grot lutownicy jest gorący przez jakiś czas po wyłączeniu
-  \item Nie zostawiaj włączonej lutownicy bez opieki
-  \item Przed lutowaniem musisz odłączyć układ od zasilania
-  \end{itemize}
-\end{ProTip}
-
-Jeżeli Twój mikrokontroler nie ma przylutowanych pinów, musisz przylutować je samemu. Przymierz i odetnij
-obcążkami dwa odcinki listwy kołkowej pasujące do otworów na brzegach płytki mikrokontrolera. Włóż piny do otworków
-na płytce. Odwiń lub wyciągnij odcinek cyny ze szpulki. Aby zalutować pin w otworze, najpierw dotknij grotem lutownicy
-miejsca, które będziesz lutować. Po około sekundzie, dotknij pinu końcówką odcinka cyny.
-
-Postaraj się aby listwy kołkowe były prostopadle do płytki. Jeżeli masz odcinek damskiej listwy, możesz za jego pomocą
-umiejscowić piny które lutujesz. Możesz też użyć do tego płytki stykowej. Lutowanie zacznij od czterech pinów na rogach płytki.
-
-
-\section{Płytka stykowa}
-  Płytka stykowa pozwala na szybkie prototypowanie układów. Posiada ona macierz dziurek. Pod nimi są umieszczone
-  blaszki które łączą sąsiednie dziurki w taki sposób, że każde 5 dziurek w pionie jest ze sobą połączone elektrycznie.
-  
-  Wyżłobienie w środku płytki służy do 
-
-
 
 \section{Połączenie mikronotrolera}
 \textit {tutaj warto by powrzucać zdjęcia lub rysunki}
@@ -124,7 +94,190 @@ pozycję ``1''
 Sprawdź wszystkie połączenia i podłącz przejściówkę do portu USB komputera. Powinna zaświecić się tylko czerwona dioda
 \textit{PWR}
 
+Możesz sprawdzić połączenie z mikrokontrolerem używając \Verb$stm32flash$ do obliczenia sumy kontrolnej pamięci mikrokontrolera.
+Jeżeli polecenie poniżej nie zgłosi błędów, wszystko działa poprawnie.
 
+\begin{CodeFrame*}[bash]{}
+stm32flash -C /dev/ttyUSB0
+\end{CodeFrame*}
+
+
+
+\section{Pierwszy program}
+\textit{zintegrować z repo przykładów kodu}\\
+Odpowiednikiem programu ``Hello, world!'' w elektronice jest program migający diodą LED. Zapisz poniższy kod źródłowy w pliku z
+rozszerzeniem \Verb$.c$
+
+\begin{CodeFrame*}[c]{}
+#ifndef STM32F1
+#define STM32F1
+#endif
+
+
+#include <libopencm3/stm32/rcc.h>
+#include <libopencm3/stm32/gpio.h>
+
+int main(){
+  // Uruchomienie peryferium portu C
+  // Włączenie sygnału zegara dla portu C
+  rcc_periph_clock_enable(RCC_GPIOC);
+  // Ustawienie pinu C13 w trybie wyjścia
+  gpio_set_mode(GPIOC, GPIO_MODE_OUTPUT_2_MHZ,
+		GPIO_CNF_OUTPUT_PUSHPULL, GPIO13);
+
+  while(1){
+    // Poczekaj chwilkę
+    for (int i = 0; i < 150000; i++) __asm__("nop");
+    // Przełącz stan pinu 13 w porcie C
+    gpio_toggle(GPIOC, GPIO13);
+      
+  }
+}
+\end{CodeFrame*}
+
+Skompiluj i wgraj program za pomocą
+
+\begin{CodeFrame*}[bash]{}
+make
+make install
+\end{CodeFrame*}
+
+Jeśli \Verb$stm32flash$ wyszedł bez błędu, przełóż górną zworkę na pozycję zero i wciśnij przycisk reset. Możesz też odłączyć i podłączyć ponownie
+zasilanie do płytki. Jeśli wszystko poszło dobrze, zielona dioda na płytce powinna zacząć migać
+
+
+\begin{ProTip}{\normalfont{\strong{Uwaga}}}
+  Zworka, którą przestawiasz, decyduje w jakim trybie uruchomi się procesor. Pozycja ``0'' oznacza normalny start i rozpoczęcie
+  wykonywania programu z pamięci.
+  
+  Pozycja ``1'' uruchamia procesor w trybie bootloadera, za pomocą którego wgrywamy program. Zawsze, gdy chcesz uruchomić program po
+  wgraniu, upenij się, że zworka jest w pozycji ``0''. Nie zapomnij wcisnąć przycisku reset po zaprogramowaniu mikrokontrolera.
+\end{ProTip}
+
+
+
+Przyjrzyjmy się powyższemu plikowi linia po linii, aby zrozumieć, dlaczego nasz program działa.
+
+
+\begin{CodeFrame*}[c]{}
+#include <libopencm3/stm32/rcc.h>
+#include <libopencm3/stm32/gpio.h>
+
+\end{CodeFrame*}
+
+Dołączamy dwa pliki nagłówkowe z biblioteki \Verb$libopencm3$ aby móc używać jej funkcji. Możliwe jest pisanie kodu w ``czystym'' C
+(lub nawet w asemblerze), ale kod w ten sposób napisany będzie mniej czytelny i mniej przenośny.
+\footnote{Oraz niewiele szybszy.}
+
+\begin{CodeFrame*}[c]{}
+int main() { 
+\end{CodeFrame*}
+
+Jak każdy program w C, funkcją początkową jest \verb$main$. W tym przypadku nie bierze ona żadnych argumentów. Mimo \Verb$int$ w
+definicji, nie zwraca ona żadnej wartości. W elektronice, \Verb$main$ z reguły nigdy nie kończy pracy (powrót z niej najczęściej
+kończy się skokiem do wektora resetu i zresetowaniem mikronontrolera)
+
+\begin{CodeFrame*}[c]{}
+  rcc_periph_clock_enable(RCC_GPIOC);
+  gpio_set_mode(GPIOC, GPIO_MODE_OUTPUT_2_MHZ,
+		GPIO_CNF_OUTPUT_PUSHPULL, GPIO13);
+\end{CodeFrame*}
+
+Po rozpoczęciu programu konfigurujemy peryferia. W tym programie używamy portu C aby migać diodą, która jest podłączona do pinu C13
+(13. bit portu C). Przed rozpoczęciem jakichkolwiek działań z tym peryferium musimy uruchomić jego zegar\footnotemark (wywołaniem makra
+\Verb$rcc_periph_clock_enable$ z odpowiednim parametrem)
+\footnotetext{Taka dowolność we włączaniu lub wyłączaniu sygnału zegara do peryferiów pozwala projektantom oszczędzać energię.
+  Jest to bardzo ważne np. przy układach zasilanych bateriami. W układach CMOS, kiedy nie następują zmiany stanów, pobór energii
+  jest praktycznie znikomy, więc to, czy sygnał zegara nieużywanego peryferium jest zatrzymany lub nie, znacznie wpływa na pobór prądu}
+
+Następnie konfigurujemy pin C13 jako wyjście \textit{push-pull}. Domyślnie wszytkie piny GPIO są skonfigurowane jako wejścia.
+\textit{może coś więcej?}
+
+
+\begin{CodeFrame*}[c]{}
+  while(1){
+    // Poczekaj chwilkę
+    for (int i = 0; i < 150000; i++) __asm__("nop");
+    // Przełącz stan pinu 13 w porcie C
+    gpio_toggle(GPIOC, GPIO13); 
+  }
+\end{CodeFrame*}
+
+Jak mówiłem wcześniej, procedura main z reguły nie wychodzi. Zamiast tego kończy się nieskończoną pętlą. W pętli, procesor najpierw
+wykonuje \textit{nop}, czyli tzw. pustą instrukcję 150000 razy\footnotemark. Następnie funkcja \Verb$gpio_toggle$ zmienia stan pinu 13
+w porcie C na przeciwny, co powoduje zapalenie lub zgaszenie LEDa.
+\footnotetext{W brew pozorom ta funkcja nie zabierze 150 tys. cykli procesora, tylko znacznie więcej. Zwiększenie wartości zmiennej,
+  porównanie i skok warunkowy zajmują czas. Nie jest to precyzyjna metoda odmierzania czasu.}
+
+
+
+\section{Obsługa standardowego wejścia/wyjścia}
+
+
+\textit{tbd}
+
+\section{Lektury uzupełniające}
+\begin{itemize}
+
+  % Link za długi?
+  %https://www.st.com/resource/en/reference_manual/cd00171190-stm32f101xx-stm32f102xx-stm32f103xx-stm32f105xx-and-stm32f107xx-advanced-arm-based-32-bit-mcus-stmicroelectronics.pdf
+\item \emph{Tzw. \textit{reference manual} dla STM32F103} (\url{link za dlugi}) - obszerny dokument opisujący w jaki sposób programować
+  mikrokontroler. Zawiera szczegółówe opisy działania peryferiów, listę rejestrów i pól bitowych wraz ich funkcjami oraz
+  adresami \footnotemark. Najważniejszy dokument przy programowaniu mikrokontrolera
+  
+  \footnotetext{W STM32 opis adresów jest rozbity pomiędzy \textit{reference manual} i kartę katalogową.}
+
+\item \emph{Karta katalogowa STM32F103}\\ (\url{https://www.st.com/resource/en/datasheet/stm32f103c8.pdf}) opisująca pinout i
+  parametry mikrokontrolera.
+
+\item \emph{Dokumentacja \Verb$libopencm3$}\\ (\url{http://libopencm3.org/docs/latest/html/}) opisująca funkcje i makra dostępne
+  w bibliotece.
+  
+\item \emph{Przykładowy kod napisany z użyciem \Verb$libopencm3$} (\url{https://github.com/libopencm3/libopencm3-examples}) 
+  
+\item \emph{Vademecum informatyki praktycznej} (\url{http://vip.opcode.eu.org/}) - zbiór materiałów na temat elektroniki i programowania.
+
+\end{itemize}
+
+
+
+
+\clearpage
+\section{Zadania domowe}
+\newtheorem{ZadanieDomowe}{Zadanie domowe}
+
+\begin{ZadanieDomowe} [1pkt]
+W jaki sposób zmienić częstotliwość migania LEDa w pierwszym programie? Zmień ten program tak aby LED migał (około) dwa razy szybciej.
+\end{ZadanieDomowe}
+
+\begin{ZadanieDomowe} [2pkt]
+  
+\end{ZadanieDomowe}
+
+\begin{ZadanieDomowe} [3pkt]
+  % Tutaj chodzi o użycie printf-a, putchar-a lub uart_send_blocking
+  Napisz program, który za pomocą zaimplementowanej w ćwiczeniu \textit{XXX} funkcji wejścia/wyjścia wypisze na UART
+  ``trójkąt z gwiazdek'' jak poniżej
+  
+  \begin{CodeFrame*}[text]{}
+    *
+    **
+    ***
+    ****
+    *****
+    ******
+    *******
+    ********
+  \end{CodeFrame*}
+\end{ZadanieDomowe}
+
+
+\copyrightFooter{
+	© Matematyka dla Ciekawych Świata, 2017-2019.\\
+	© Robert Ryszard Paciorek <rrp@opcode.eu.org>, 2003-2019.\\
+	© Krzysztof Lasocki <krz.lasocki@gmail.com>, 2003-2019.\\
+	Kopiowanie, modyfikowanie i redystrybucja dozwolone pod warunkiem zachowania informacji o autorach.
+}
 
 
 

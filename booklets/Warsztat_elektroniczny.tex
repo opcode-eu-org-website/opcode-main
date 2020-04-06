@@ -1,0 +1,58 @@
+
+\documentclass{pdfBooklets}
+\usepackage[printwatermark]{xwatermark}
+\title{Programowanie mikrokontrolerów STM32}
+\author{%
+	Projekt ,,Matematyka dla Ciekawych Świata'',\\
+	Krzysztof Lasocki\\\normalsize\ttfamily <krz.lasocki@gmail.com>
+}
+\date  {2020-04-04}
+
+\makeatletter\hypersetup{
+	pdftitle = {\@title}, pdfauthor = {\@author}
+}\makeatother
+
+
+\begin{document}
+
+\maketitle
+
+\newwatermark[allpages,color=red!50,angle=45,scale=3,xpos=0,ypos=0]{Wersja robocza}
+
+\textit{o czym to w ogole jest? napisac slowo wstepne}
+
+\section{Przygotowanie mikronotrolera}
+\textit{tutaj opisać co i jak polutować. Obrazki? to powinno być też pokazane przed właściwymi ćwiczeniami}
+\begin{ProTip}{\normalfont{\strong{Ostrożnie}}}
+  Podczas pracy grot (metalowa końcówka) lutownicy jest rozgrzany do 200-400 stopni Celsjusza. Zachowaj ostrożność
+  podczas jej używania. Zapamiętaj:
+  \begin{itemize}
+  \item Zawsze odkładaj lutownicę do stojaka. Nigdy nie kładź jej luzem na stole.
+  \item Nigdy nie łap za metalowy koniec lutownicy.
+  \item Nie wolno łapać spadającej lutownicy. Nie martw się, zawszę można kupić nową
+  \item Grot lutownicy jest gorący przez jakiś czas po wyłączeniu
+  \item Nie zostawiaj włączonej lutownicy bez opieki
+  \item Przed lutowaniem musisz odłączyć układ od zasilania
+  \end{itemize}
+\end{ProTip}
+
+Jeżeli Twój mikrokontroler nie ma przylutowanych pinów, musisz przylutować je samemu. Przymierz i odetnij
+obcążkami dwa odcinki listwy kołkowej pasujące do otworów na brzegach płytki mikrokontrolera. Włóż piny do otworków
+na płytce. Odwiń lub wyciągnij odcinek cyny ze szpulki. Aby zalutować pin w otworze, najpierw dotknij grotem lutownicy
+miejsca, które będziesz lutować. Po około sekundzie, dotknij pinu końcówką odcinka cyny.
+
+Postaraj się aby listwy kołkowe były prostopadle do płytki. Jeżeli masz odcinek damskiej listwy, możesz za jego pomocą
+umiejscowić piny które lutujesz. Możesz też użyć do tego płytki stykowej. Lutowanie zacznij od czterech pinów na rogach płytki.
+
+
+\section{Płytka stykowa}
+  Płytka stykowa pozwala na szybkie prototypowanie układów. Posiada ona macierz dziurek. Pod nimi są umieszczone
+  blaszki które łączą sąsiednie dziurki w taki sposób, że każde 5 dziurek w pionie jest ze sobą połączone elektrycznie.
+  
+  Wyżłobienie w środku płytki służy do 
+
+
+
+
+
+\end{document}
