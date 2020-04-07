@@ -6,10 +6,20 @@ SVGICONURL  := https://bytebucket.org/OpCode-eu-org/svgiconset/raw/HEAD/other/
 export PATH := $(shell realpath $(MAINDIR)/TextUtils/convert):$(PATH)
 
 
+.PHONY: all installDependencies init upload
 all: | init
 	$(MAKE) buildAll
 	[ "$(abspath $(MAINDIR))" = "$(PWD)" ] && (cd booklets &&    $(MAKE) -f ../Makefile buildAll) || true
 	[ "$(abspath $(MAINDIR))" = "$(PWD)" ] && (cd LaTeX-demos && $(MAKE) -f ../Makefile buildAll) || true
+
+installDependencies:
+	cd $(MAINDIR)/TextUtils && make installDependencies
+	apt install  texlive-xetex texlive-luatex texlive-latex-extra texlive-font-utils fonts-symbola
+	@ if ! which sch2img.sh > /dev/null; then \
+		echo "Cant't find sch2img.sh in PATH"; \
+		echo "You should download and install EDA libs (with dependencies!) from https://bitbucket.org/OpCode-eu-org/eda-libs"; \
+		return 3; \
+	fi
 
 init: | check-submodules $(TEXBUILDDIR)/pdfArticle.cls $(TEXBUILDDIR)/labels4easylist.sty $(TEXBUILDDIR)/vtable.sty $(TEXBUILDDIR)/ehhline.sty
 	@ echo "init done"
@@ -33,7 +43,7 @@ $(TEXBUILDDIR)/pdfArticle.cls $(TEXBUILDDIR)/labels4easylist.sty $(TEXBUILDDIR)/
 
 .PHONY: check-submodules update-submodules
 
-check-submodules: $(MAINDIR)/OpCode-core/lib/base.css $(MAINDIR)/TextUtils/convert/xml2xhtml.py $(MAINDIR)/OpCode-vip/vademecum/images-src4web
+check-submodules: $(MAINDIR)/OpCode-core/lib/base.css $(MAINDIR)/TextUtils/Makefile $(MAINDIR)/OpCode-vip/vademecum/images-src4web
 
 $(MAINDIR)/OpCode-core/% $(MAINDIR)/TextUtils/% $(MAINDIR)/OpCode-vip/%:
 	git submodule update --init
