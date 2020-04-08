@@ -46,60 +46,6 @@ Skrypt opisuje podstawy programowania mikrokontrolerów STM32. Podczas kursu bę
 popularnej, dostępnej i prostej płytki ``Blue Pill''. Programy będą pisane w języku
 C z pomocą biblioteki \Verb$libopencm3$.
 
-\section{Instalacja i przygotowanie narzędzi}
-
-Przed rozpoczęciem pracy z STM32 należy zainstalować następujące narzędzia i biblioteki:
-
-\begin{itemize}
-  \item Toolchain arm-none-eabi (\Verb$gcc-arm-none-eabi$) oraz (\Verb$binutils-arm-none-eabi$)
-  \item Implementację libC (\Verb$libstdc++-arm-none-eabi-newlib$)
-  \item Narzędzie do programowania przez UART (\Verb$stm32flash$)
-  \item Bibliotekę \Verb$libopencm3$
-\end{itemize}
-Wszystkie oprócz ostatniego dostępne są w repozytoriach Debiana (i systemów na nim opartych)
-
-\begin{CodeFrame*}[bash]{}
-sudo apt install gcc-arm-none-eabi binutils-arm-none-eabi libstdc++-arm-none-eabi stm32flash
-\end{CodeFrame*}
-
-Instalacja i kompilacja \Verb$libopencm3$ odbywa się w następujący sposób
-
-\begin{CodeFrame*}[bash]{}
-git clone https://github.com/libopencm3/libopencm3.git
-make
-\end{CodeFrame*}
-
-\section{Połączenie mikronotrolera}
-\textit {tutaj warto by powrzucać zdjęcia lub rysunki}
-
-\begin{ProTip}{\normalfont{\strong{Uwaga}}}
-  Przed podłączaniem lub dokonywaniem jakichkolwiek zmian w układzie, odłącz go od zasilania. Unikniesz
-  w ten sposób ryzyka zwarcia i uszkodzenia elementów.
-\end{ProTip}
-
-Aby zaprogramować mikrokontroler musisz podłączyć go do przejściówki USB-UART. Umieść płytkę ``okrakiem'' nad przerwą
-w płytce stykowej. Za pomocą pasujących kabelków podłącz następujące piny przejściówki (nie podłączaj jeszcze
-przejściówki do komputera) do pinów na mikrokontrolerze:
-\begin{itemize}
-\item masę (GND) do (dowolnej) masy miktrokontrolera (GND lub G)
-\item RX do TX mikrokontrolera (pin A9)
-\item TX do RX mikrokontrolera (pin A10)
-\item 3v3 do 3v3 mikrokontrolera (lub, jeżeli Twoja przejściówka nie ma pinu 3v3, podłącz pin 5V do pinu 5V na
-  mikrokontrolerze)
-\end{itemize}
-
-Za pomocą obcążków lub pęsety przełóż górną (patrząc na mikrokontroler tak aby port USB był po lewej) zworkę na
-pozycję ``1''
-
-Sprawdź wszystkie połączenia i podłącz przejściówkę do portu USB komputera. Powinna zaświecić się tylko czerwona dioda
-\textit{PWR}
-
-Możesz sprawdzić połączenie z mikrokontrolerem używając \Verb$stm32flash$ do obliczenia sumy kontrolnej pamięci mikrokontrolera.
-Jeżeli polecenie poniżej nie zgłosi błędów, wszystko działa poprawnie.
-
-\begin{CodeFrame*}[bash]{}
-stm32flash -C /dev/ttyUSB0
-\end{CodeFrame*}
 
 
 
