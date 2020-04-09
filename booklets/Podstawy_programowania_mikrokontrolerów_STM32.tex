@@ -88,18 +88,17 @@ make
 make install
 \end{CodeFrame*}
 
-Jeśli \Verb$stm32flash$ wyszedł bez błędu, przełóż górną zworkę na pozycję zero i wciśnij przycisk reset. Możesz też odłączyć i podłączyć ponownie
-zasilanie do płytki. Jeśli wszystko poszło dobrze, zielona dioda na płytce powinna zacząć migać
-
+Jeśli \Verb$stm32flash$ wyszedł bez błędów, Twój program powinien się uruchomić. Zielona dioda na płytce powinna zacząć migać.
 
 \begin{ProTip}{\normalfont{\strong{Uwaga}}}
-  Zworka, którą przestawiasz, decyduje w jakim trybie uruchomi się procesor. Pozycja ``0'' oznacza normalny start i rozpoczęcie
-  wykonywania programu z pamięci.
+  Płytka BluePill której używamy posiada zworki kontrolujące tryb uruchomienia mikrokontrolera (piny \Verb$BOOT0$ i \Verb$BOOT1$.
+  Zworka, którą przestawiłeś/aś (\Verb$BOOT0$) na ``1'' podczas przygotowywania mikronotrolera do pracy powoduje uruchomienie w
+  trybie bootloadera. Po zaprogramowaniu, \Verb$stm32flash$ wydaje bootlaoderowi polecenie uruchomienia programu.\\
   
-  Pozycja ``1'' uruchamia procesor w trybie bootloadera, za pomocą którego wgrywamy program. Zawsze, gdy chcesz uruchomić program po
-  wgraniu, upenij się, że zworka jest w pozycji ``0''. Nie zapomnij wcisnąć przycisku reset po zaprogramowaniu mikrokontrolera.
+  Jeśli chcesz, aby mikrokontroler automatycznie uruchamiał program po podłączeniu zasilania, możesz ustawić obie zworki na ``0''. Nie zapomnij
+  jednak ustawić ich z powrotem do trybu bootloadera, jeśli chcesz ponownie wgrać program.
+  
 \end{ProTip}
-
 
 
 Przyjrzyjmy się powyższemu plikowi linia po linii, aby zrozumieć, dlaczego nasz program działa.

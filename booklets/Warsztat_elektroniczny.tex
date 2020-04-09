@@ -1,6 +1,10 @@
 
 \documentclass{pdfBooklets}
 \usepackage[printwatermark]{xwatermark}
+\usepackage{tikz}
+
+
+
 \title{Warsztat Elektroniczny}
 \author{%
 	Projekt ,,Matematyka dla Ciekawych Świata'',\\
@@ -31,11 +35,11 @@ Multimetr to przyrząd pomiarowy który posiada wiele funkcji. Najczęściej są
 (do pomiaru natężenia, potocznie zwanego prądem) oraz omomierz (do pomiaru rezystancji). Często spotyka się także funkcje:
 \begin{itemize}
 \item \emph{Test połączeń} (\textit{continuity mode}), oznaczany symbolem fali dźwiękowej (lub nuty), służy do sprawdzania połączeń elektrycznych.
-  Miernik wydaje dźwięk jeśli między przewodami jest połączenie
+  Miernik wydaje dźwięk jeśli między przewodami jest połączenie.
 \item \emph{Pomiar diód} (\textit{diode check}), oznaczony symbolem diody, służy to sprawdzania diód i innych elementów półprzewodnikowych.
-  Wyświetla spadek napięcia na testowanym złączu półprzewodnikowym. Czasem jest połączony z poprzednią funkcją, w takim przypadku wyświetla wartość
-  oporu.
-\item \emph{Test tranzystorów} (pomiar h\textsubscript{FE}), służący do pomiaru wzmocnienia tranzystora. Najczęściej posiada oddzielne gniazdo na mierniku.
+  Wyświetla spadek napięcia na testowanym złączu półprzewodnikowym.
+\item \emph{Test tranzystorów} (pomiar h\textsubscript{FE}), służący do pomiaru wzmocnienia tranzystora. Najczęściej posiada oddzielne gniazdo
+  na mierniku.
 \item \emph{Pomiar pojemności}, służy do pomiarów kondensatorów
 \item \emph{Pomiar temperatury}, najczęściej za pomocą termopary (dołączana do miernika).
 \end{itemize}
@@ -54,16 +58,17 @@ W zależności od modelu, multimetr może posiadać od dwóch do czterech gniazd
 \item Wejście amperomierza, oznaczone symbolem \textbf{A}. Najczęściej również jest obok niego podany maksymalny dopuszczalny prąd
   oraz czas pomiaru
 \end{itemize}
-
-
+\begin{center}
+  {\noindent\includegraphics[width=0.9\textwidth,clip=true]{dmm_terminals.png}}\\
+  Wejścia trzech różnych multimetrów. Pomiędzy wejściami zaznaczone są maksymalne wartości napięcia lub natężenia i informacja o zabezpieczeniach
+  (``FUSED'') bądź ich braku (``UNFUSED'').\\
+  Od lewej: typowy model z trzema wejściami, model z czterema wejściami, model z trzema wejściami (bez miliamperomierza)
+\end{center}
 
 Przy wyborze multimetru należy zwrócić uwagę na jego wejścia. Modele z czterema wejściami są preferowane (zapewnia to izolację woltomierza
-od amperomierza). Przyrząd musi być też opisany jako ``FUSED'', czyli posiadać bezpiecznik na zakresie amperomierza (oraz opcjonalnie,
-także miliamperomierza).
+od amperomierza). Przyrząd musi być też opisany jako ``FUSED'', czyli posiadać bezpiecznik na zakresie miliamperomierza (oraz opcjonalnie,
+także amperomierza).
 \\
-
-Między wejściami COM a pozostałymi nadrukowane są maksymalne dopuszczalne wartości napięcia (dla wejścia woltomierza) oraz natężenia
-prądu (dla amperomierza)
 
 \subsection{Woltomierz}
 Woltomierz to przyrząd służący do pomiaru napięcia elektrycznego między dwoma punktami. Z tego powodu, woltomierz podłączamy
@@ -76,13 +81,18 @@ Amperomierz (tudzież miliamperomierz) służy do pomiaru prądu płynącego w g
 \\
 
 Podłączenie amperomierza równolegle powoduje zwarcie. Nie należy więc odkładać miernika ustawionego na zakres amperów, szczególnie
-w przypadku modeli które używają tego samego gniazda do pomiaru oporności lub napięcia. Skutki pomyłki mogą być fatalne.
+w przypadku modeli które używają tego samego gniazda także do pomiaru oporności lub napięcia. Skutki pomyłki mogą być fatalne.
 
 \subsection{Omomierz}
 Omomierz jest przyrządem służącym do pomiaru oporności. Jego zasada działania jest dosyć prosta - składa się on ze źrodła małego napięcia
-(lub prądu) które pojawia się na końcówkach kabli pomiarowych, i mierzy jaki prąd płynie przez element testowany. W praktyce służy
+które pojawia się na końcówkach kabli pomiarowych, i mierzy jaki prąd płynie przez element testowany. W praktyce służy
 tylko do pomiarów oporników. Trzeba pamiętać o tym, że jeżeli mierzymy element umieszczony w układzie, to jego oporność będzie zawsze
 niższa od oczekiwanej. Zasadniczo nie wykonuje się za jego pomocą pomiarów we włączonych układach.
+\\
+Przy pomiarach większych oporników (ponad 100k$\Omega$) należy uważać aby nie dotykać palcami końcówek sond, ponieważ opór Twojego ciała
+zaniży pomiar. Lepiej jest położyć opornik na stole i przycisnąć jego nóżki za pomocą końcówek sond.
+
+
 
 \subsection{Inne funkcje multimetru}
 
@@ -91,43 +101,50 @@ niższa od oczekiwanej. Zasadniczo nie wykonuje się za jego pomocą pomiarów w
 \subsection{Dokonywanie pomiarów}
 
 Zależnie od wielkości fizycznej, którą chcemy zmierzyć, czerwony (dodatni) przewód miernika musi być podłączony do odpowiadającego
-mu gniazda. Czarny przewód (ujemny, masa) należy zawsze podłączyć do gniazda \textbf{COM}.
+mu gniazda. Czarny przewód (ujemny, masa) należy zawsze podłączyć do gniazda \textbf{COM}. Miernik musimy ustawić na pomiar danej
+wielkości.
 \\
 
-Przy wykonywaniu pomiaru nieznanego napięcia należy rozpocząć od największego zakresu miernika i stopniowo zmniejszać zakres aż
+Przy wykonywaniu pomiaru nieznanej wartości należy rozpocząć od największego zakresu miernika i stopniowo zmniejszać zakres aż
 otrzymamy najdokładniejszy wynik. W przypadku gdy mierzona wartość przekracza aktualny zakres, miernik to zasygnalizuje, najczęściej
 wyświetlając ``\textbf{1}'' (po lewej stronie ekranu), lub ``\textbf{OL}''. W takiej sytuacji należy przełączyć zakres na większy.
 \\
 
-Przy pomiarze napięcia w jakimś punkcie układu, najczęściej masę miernika
-podlączamy do masy układu. Drugą sondę podłączamy do mierzonego punku. Jeśli chcemy zmierzyć napięcie na jakimś elemencie (np. oporniku),
+Przy pomiarze \textbf{napięcia} w jakimś punkcie układu, najczęściej masę miernika
+podłączamy do masy układu. Drugą sondę podłączamy do mierzonego punktu. Jeśli chcemy zmierzyć napięcie na jakimś elemencie (np. oporniku),
 masę miernika (czarną sondę) dotykamy do punktu w którym oczekujemy niższego napięcia, a czerwoną do punktu w którym oczekujemy
 wyższego napięcia. Jeżeli podłączymy sondy odwrotnie, po prostu dostaniemy wynik z przeciwnym znakiem. Woltomierz należy podłączać równolegle.
 \\
 
-Przy pomiarze natężenia w jakiejś gałęzi układu należy zachować szczególną ostrożność. Podobnie jak wyżej, zaczynamy pomiar na największym
+Przy pomiarze \textbf{natężenia} w jakiejś gałęzi układu należy zachować szczególną ostrożność. Podobnie jak wyżej, zaczynamy pomiar na największym
 zakresie miernika. W przeciwieństwie do woltomierza, amperomierz należy podłączyć szeregowo. Ponieważ opór wewnętrzny amperomierza jest bardzo
 niski (<1 $\Omega$), należy uważać, aby nie zrobić zwarcia
 \\
 
-Pomiaru oporności dokonujemy dotykając końcówkami sond końcówek opornika (lub innego elementu). Dla oporników kolejność kabli nie ma znaczenia
+Pomiaru \textbf{oporności} dokonujemy dotykając końcówkami sond końcówek opornika (lub innego elementu). Dla oporników kolejność kabli nie ma znaczenia
 (opór jest identyczny niezależnie od kierunku płynięcia prądu).
 \\
 
 Test połączenia służy do sprawdzania połączeń w układach. Przy wyłączonym zasilaniu dotykamy sondami do punktów, pomiędzy którymi chcemy
 sprawdzić połączenie. Jeżli punkty są połączone miernik zasygnalizuje to brzęczykiem. Ta funkcja jest szczególnie przydatna przy sprawdzaniu
-prototypów na płytkach stykowych
+prototypów na płytkach stykowych. Jeżeli Twój multimetr nie ma tej funkcji możesz użyć omomierza (bezpośrednie połączenie ma znikomy opór,
+maksymalnie kilka $\Omega$)
 \\
 
 Tester diód (i innych elementów półprzewodnikowych) pozwala sprawdzić polaryzację złącza półprzewodnikowego w elemencie. W tym celu dotykamy
 sondami do obu końców testowanego elementu. Jeżeli ``trafiliśmy'' z polaryzacją sond (podłączyliśmy czarną sondę, COM, do katody, a czerwoną
 dodatnią, do anody), to miernik powinien pokazać spadek napięcia na złączu.
-W przeciwnym razie pokaże przekroczenie zakresu.
+W przeciwnym razie pokaże przekroczenie zakresu. Z reguły zakres spadków napięć jakie można w tym trybie zmierzyć jest poniżej 2V, więc
+większość diód LED pokaże spadek napięcia poza skalą (niektóre diody LED mogą się bardzo słabo świecić podczas pomiaru jeśli polaryzacja
+sond jest prawidłowa)
+
+
 
 \section{Płytka stykowa}
 Płytka stykowa pozwala na szybkie prototypowanie układów bez konieczności lutowania. Składa się ona z macierzy dziurek,
 pod którymi są umieszczone blaszki łączące sąsiednie dziurki. Blaszki są umieszczone w taki sposób, aby łączyły wszystkie
 5 dziurek w kolumnie.
+\\
 
 Przez środek płytki stykowej przechodzi odstęp bez dziurek. Otworki w tej samej kolumnie, ale po przeciwnych jego
 stronach nie są ze sobą połączone elektrycznie. Służy ono do umieszczania tam układów scalonych w obudowach DIP.
@@ -136,6 +153,11 @@ Standardowo, po wyprodukowaniu układu, jego nóżki są rozgięte do zewnątrz.
 Najłatwiej jest dogiąć jedną stronę na raz, na przykład o blat stołu. Nie należy doginać nóżek pojedynczo, np. za pomocą obcążków.
 Nie należy też niepotrzebnie rozginać nóżek, ponieważ po kilkunastu zgięciach mogą odpaść.
 \\
+
+\begin{center}
+  \noindent\includegraphics[width=0.9\textwidth]{dip_ic.png}\\
+  Tak umieszczamy układy scalone w płytce stykowej. Po lewej stronie widać półokrągle wcięcie na obudowie. Pin 1 jest po lewej na dole.
+\end{center}
 
 Na brzegach płytki najczęściej znajdują się podłużne listwy, w których znajdują się grupy takich samych otworków jak
 na płytce, pogrupowanych w grupy 2 x 5. Niektóre płytki posiadają też nadrukowane kreski oraz znaki + i -. Te listwy
@@ -151,6 +173,12 @@ niespodzianek przy prototypowaniu.
 \begin{ProTip}{\normalfont{\strong{Uwaga}}}
   Przed wprowadzaniem jakichkolwiek zmian na płytce stykowej odłącz zasilanie
 \end{ProTip}
+
+\begin{Zadanie}{}{}
+Za pomocą funkcji testu połączeń swojego miernika, sprawdź, czy Twoja płytka stykowa ma rozdzielone szyny zasilania.
+\end{Zadanie}
+
+
 
 \section{Układy scalone}
 Układy scalone pozwalają szybko i sprawnie konstruować skomplikowane układy elektroniczne przy minimum nakłądu i kosztu. Dzięki nim możemy
@@ -173,7 +201,7 @@ Przy podłączaniu układu scalonego ważne jest aby nie pomylić numerów pinó
 
 
 \section{Przygotowanie mikronotrolera}
-\textit{tutaj opisać co i jak polutować. Obrazki? to powinno być też pokazane przed właściwymi ćwiczeniami}
+\textit{tutaj opisać co i jak polutować. Obrazki?}
 \begin{ProTip}{\normalfont{\strong{Ostrożnie}}}
   Bardzo możliwe, że Twój mikrokontroler nie będzie miał przylutowanych pinów do połączenia z płytką stykową.
   W takim wypdaku będziesz musiał/musiała użyć lutownicy aby je przylutować.\\
@@ -204,7 +232,7 @@ Postaraj się aby listwy kołkowe były prostopadle do płytki. Jeżeli masz odc
 umiejscowić piny które lutujesz. Możesz też użyć do tego płytki stykowej. Lutowanie zacznij od czterech pinów na rogach płytki.
 
 
-\section{Instalacja i przygotowanie narzędzi}
+\subsection{Instalacja i przygotowanie narzędzi}
 
 Do programowania STM32 potrzebne jest kilka narzędzi
 
@@ -229,7 +257,7 @@ cd libopencm3
 make
 \end{CodeFrame*}
 
-\section{Połączenie mikronotrolera}
+\subsection{Połączenie mikronotrolera}
 \textit {tutaj warto by powrzucać zdjęcia lub rysunki}
 
 \begin{ProTip}{\normalfont{\strong{Uwaga}}}
@@ -244,12 +272,11 @@ przejściówki do komputera) do pinów na mikrokontrolerze:
 \item masę (GND) do (dowolnej) masy miktrokontrolera (GND lub G)
 \item RX do TX mikrokontrolera (pin A9)
 \item TX do RX mikrokontrolera (pin A10)
-\item 3v3 do 3v3 mikrokontrolera (lub, jeżeli Twoja przejściówka nie ma pinu 3v3, podłącz pin 5V do pinu 5V na
-  mikrokontrolerze)
+\item 5V do 5V mikrokontrolera
 \end{itemize}
 
 Za pomocą obcążków lub pęsety przełóż górną (patrząc na mikrokontroler tak aby port USB był po lewej) zworkę na
-pozycję ``1''
+pozycję ``1''.
 
 Sprawdź wszystkie połączenia i podłącz przejściówkę do portu USB komputera. Na mikrokontrolerze powinna zaświecić się tylko czerwona dioda
 \textit{PWR}
@@ -261,6 +288,7 @@ Jeżeli polecenie poniżej nie zgłosi błędów, wszystko działa poprawnie.
 stm32flash -C /dev/ttyUSB0
 \end{CodeFrame*}
 
+Tak przygotowany mikrokontroler jest gotowy do pracy.
 
 
 
