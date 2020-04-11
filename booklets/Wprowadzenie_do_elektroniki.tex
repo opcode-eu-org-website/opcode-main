@@ -1,5 +1,5 @@
-% Copyright (c) 2017-2019 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
-% Copyright (c) 2017-2019 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
 % 
 % MIT License
 % 
@@ -28,7 +28,7 @@
 	Projekt ,,Matematyka dla Ciekawych Świata'',\\
 	Robert Ryszard Paciorek\\\normalsize\ttfamily <rrp@opcode.eu.org>
 }
-\date  {2019-07-15}
+\date  {2019-04-11}
 
 \makeatletter\hypersetup{
 	pdftitle = {\@title}, pdfauthor = {\@author}
@@ -47,19 +47,6 @@ Dlatego dla podtrzymania stałej różnicy potencjałów konieczne jest istnieni
 
 \section{Podstawowe pojęcia}
 
-\begin{teacherOnly}
-	\begin{easylist}[itemize]
-	& prawo Ohma i rezystor
-		&& rezystancyjny dzielnik napięcia \url{http://ln.opcode.eu.org/dzielnik}
-			% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+10.20027730826997+54+5+50%0Ag+336+320+336+336+0%0Aw+336+192+416+192+0%0Ar+416+256+416+320+0+1000%0Ag+416+320+416+336+0%0Ar+336+112+336+192+0+500%0As+416+192+416+256+0+1+false%0As+480+192+480+256+0+1+false%0Ag+480+320+480+336+0%0Ar+480+256+480+320+0+100%0Aw+416+192+480+192+0%0AR+336+112+336+80+0+0+40+12+0+0+0.5%0Aw+480+192+560+192+0%0Ap+560+192+560+320+1+0%0Ag+560+320+560+336+0%0Ar+336+192+336+320+0+500%0A38+10+0+2+24+Voltage%0A
-		&& czy opór to jedyny parametr rezystora?
-			&&& mamy też dokładność, stabilność temperaturową, napięciową, ...
-			&&& ... ale przede wszystkim moc
-	& prawa Kirchhoffa
-	& rysowanie schematów wg elektronika – potencjały zasilania i masy, zamiast bateryjki
-	\end{easylist}
-\end{teacherOnly}
-
 \subsection{Napięcie elektryczne}
     Napięcie elektryczne $U$ pomiędzy punktem A i B (jakiegoś obwodu)
     jest to różnica potencjału elektrycznego w punkcie A i w punkcie B.
@@ -71,12 +58,23 @@ Dlatego dla podtrzymania stałej różnicy potencjałów konieczne jest istnieni
    Masa (oznaczana jako GND) jest to
    umowny potencjał zerowy, względem którego wyraża się inne potencjały w układzie (co umożliwia traktowanie ich jako różnic potencjałów - napięć elektrycznych). Potencjał ten może być równy potencjałowi ziemi (masie ochronnej PE), bądź może być z nim nie związany (układy izolowane).
 
+\begin{ProTip}{Schematy elektryczne wg. elektronika}
+Typowo elektronicy na schematach nie rysują źródeł napięcia (np. w postaci symbolu baterii\footnote{chyba że chodzi o podkreślenie, iż dane zasilanie faktycznie odbywa się z baterii lub akumulatora}),
+zamiast tego umieszczają znaczniki potencjałów zasilania (np. +5V, +3V3, Vcc, Vbus) względem masy i znaczniki masy (GND, {\Symbola ⏚}).
+
+\vspace{3pt}Typowo potencjały wyższe umieszcza się na schemacie wyżej a niższe niżej (czyli 5V będzie na górze, a GND na dole), a przepływ prąd odbywa się w relacji od lewej do prawej i z góry na dół.
+Jest to ogólna reguła, ułatwiająca czytanie schematów, nie jest ona jednak wyrocznią i trafiają się od niej odstępstwa, podyktowane zwiększeniem czytelności schematu.
+
+\vspace{3pt}Schematy zamieszczane w tym skrypcie rysowane są według tych zasad.
+\end{ProTip}
+
 \subsection{Natężenie prądu}
     Natężenie prądu elektrycznego $I$ (określane skrótowo jako prąd)
     jest to stosunek przemieszczonego ładunku do czasu jego przepływu.
 
-\subsection{Napięcie i prąd}
-Dla elementów liniowych (np. zwykły kawałek przewodu) zachodzi proporcjonalność natężenia prądu płynącego przez taki element do napięcia pomiędzy jego końcami: $R=\frac{U}{I}$. Stosunek ten nazywamy oporem (rezystancję).
+\section{Prawo Ohma}
+Dla elementów liniowych (np. zwykły kawałek przewodu) zachodzi proporcjonalność natężenia prądu płynącego przez taki element do napięcia pomiędzy jego końcami: $R=\frac{U}{I}$.
+Zależność ta nosi nazwę prawa Ohma\footnote{Prawo Ohma nie jest uniwersalnym prawem przyrody, a jedynie relacją empiryczną spełnioną w pewnym zakresie parametrów dla niektórych materiałów.}, a stosunek ten nazywamy oporem (rezystancję).
 
 \section{Prawa Kirchhoffa}
 Węzeł układu (sam w sobie, pomijając zjawiska pasożytnicze) nie jest w stanie gromadzić ładunku elektrycznego zatem: \emph{Suma prądów wpływających do węzła jest równa sumie prądów wypływających z tego węzła.}
@@ -85,38 +83,6 @@ Jeżeli rozważamy obwód zamknięty od punktu A z potencjałem $V_A$ to sumują
 
 
 \section{Elementy bierne}
-
-\begin{teacherOnly}
-	\begin{easylist}[itemize]
-	& kondensator
-		&& "magazynuje napięcie"
-		&& zastosowania:
-		&&& stabilizacja napięcia
-		&&& odcinanie składowej sygnały zmiennego (rozwarcie dla prądu stałego, ale przewodzi zmienny)
-		&&& opóźnienie zmiany jakiegoś sygnału (stała czasowa) => 
-			\url{http://ln.opcode.eu.org/cap}
-			%https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+16.13108636308289+50+5+50%0Av+96+336+96+64+0+0+40+5+0+0+0.5%0AS+256+144+256+64+0+1+false+0+3%0Aw+96+64+240+64+0%0Aw+272+64+400+64+0%0Ac+256+144+256+256+0+0.00019999999999999998+0.001%0Ar+256+256+256+336+0+100%0Aw+96+336+256+336+0%0Aw+256+336+400+336+0%0Ar+400+64+400+336+0+1000%0Ao+4+128+0+4102+0.009765625+0.00009765625+0+2+4+3%0A38+4+0+0.000009999999999999999+0.00101+Capacitance%0A
-	& cewka – mówiliśmy o magazynowaniu ...
-		&& "magazynuje prąd"
-		&& gdzie występuje (w jakich bardziej złożonych elementach) - transformator, przekaźnik
-		&& sterowanie przez tranzystor => dioda zabezpieczająca
-	& dioda
-		&& przewodzi w jednym kierunku
-		&& element nieliniowy -> łamie prawo Ohma
-		&& dioda prostownicza i dioda świecąca
-			&&& rezystor przy diodzie świecącej -> na diodzie stały spadek napięcia w kierunku przewodzenia => \url{http://ln.opcode.eu.org/led}
-				% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+10.20027730826997+50+1+50%0A172+336+176+336+128+0+7+3.5300000000000002+5+-2+0+0.5+Voltage%0Aw+336+320+336+352+1%0Ag+336+352+336+368+0%0Ad+336+256+336+320+2+default-led%0Ar+336+176+336+256+0+1000%0Aw+336+256+400+256+0%0Aw+336+320+400+320+0%0Ap+400+256+400+320+1+0%0Aw+336+176+400+176+0%0As+400+176+400+256+0+1+false%0A
-			&&& dioda prostownicza – prostownik jedno połówkowy \url{http://ln.opcode.eu.org/prost1} i mostek prostowniczy \url{http://ln.opcode.eu.org/prost2}
-				% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+13.097415321081861+55+5+50%0Av+112+320+112+96+0+1+40+5+0+0+0.5%0Ar+416+96+416+320+0+640%0Ad+112+96+416+96+2+default%0Aw+112+320+416+320+0%0Ao+0+64+0+4102+5+0.0125+0+2+1+0%0A
-				% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+10.20027730826997+53+5+50%0Av+160+352+160+64+0+1+40+5+0+0+0.5%0Aw+160+64+304+64+0%0Aw+304+64+304+128+0%0Ad+304+128+368+192+2+default%0Ad+304+256+368+192+2+default%0Ad+240+192+304+128+2+default%0Ad+240+192+304+256+2+default%0Aw+304+256+304+352+0%0Aw+304+352+160+352+0%0Aw+240+192+240+288+0%0Aw+368+192+416+192+0%0Aw+240+288+416+288+0%0Ar+416+192+416+288+0+100%0Ax+463+248+557+251+4+20+load%0Ao+0+64+0+4098+5+0.05+0+2+12+0%0A
-		&& czy może przewodzić w drugą stronę -> dioda Zenera
-		&& dzielnik napięcia z diodą Zenera =>  \url{http://ln.opcode.eu.org/zener}
-			%https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+10.20027730826997+54+5+50%0Az+336+288+336+160+3+default-zener%0Ag+336+288+336+304+0%0Aw+336+160+416+160+0%0Ar+416+224+416+288+0+1000%0Ag+416+288+416+304+0%0Ar+272+160+336+160+0+500%0As+416+160+416+224+0+1+false%0As+480+160+480+224+0+1+false%0Ag+480+288+480+304+0%0Ar+480+224+480+288+0+100%0Aw+416+160+480+160+0%0AR+272+160+192+160+0+0+40+11.68+0+0+0.5%0Aw+480+160+560+160+0%0Ap+560+160+560+288+1+0%0Ag+560+288+560+304+0%0A38+11+0+2+24+Voltage%0A
-		&& fotodioda
-		&& dioda LED jako detektor światła (jeżeli będzie czas!)
-	\end{easylist}
-	\clearpage
-\end{teacherOnly}
 
 \begin{wrapfigure}{r}{0.35\textwidth}
   \begin{center}
@@ -127,18 +93,52 @@ Jeżeli rozważamy obwód zamknięty od punktu A z potencjałem $V_A$ to sumują
 \end{wrapfigure}
 
 \subsection{Rezystor}
+\begin{teacherOnly}
+	\begin{easylist}[itemize]
+		& czy opór to jedyny parametr rezystora? \todo{jako dodatkowy akapit}
+			&&& mamy też dokładność, stabilność temperaturową, napięciową, ...
+			&&& ... ale przede wszystkim moc
+		& prawo Ohma i rezystor
+		& rezystancyjny dzielnik napięcia
+	\end{easylist}
+\end{teacherOnly}
+
 Rezystor (opornik) wprowadza do układu rezystancję związaną z swoją wartością nominalną. Typowo służy do ograniczania wartości prądu przez niego przepływającego.
 
 Powoduje wydzielanie się energii (cieplnej) związanej z stratami na rezystancji - moc wydzielana dana jest zależnościami: $P = UI = \frac{U^2}{R} = I^2R$, czyli przy stałym napięciu przyłożonym do rezystora im większy jego opór tym mniejsza moc się wydzieli (gdyż popłynie mniejszy prąd), ale przy stałym prądzie płynącym przez rezystor moc rośnie wraz ze wzrostem oporu.
 
-\teacher{\vspace{8pt}\noindent Czy opór to jedyny parametr rezystora? Wspomnieć o parametrze dotyczącym mocy wydzielanej.}
+Rezystor jest elementem spełniającym prawo Ohma\footnote{Jest to zasadniczo jedyny element elektroniczny, który podlega temu prawu. Niektóre z elementów (jak kondensatory i cewki) podlegają rozszerzeniu prawa Ohma dla prądu przemiennego. Wiele innych elementów (jak np. diody i tranzystory) nie podlegają prawu Ohma.}.
+
+\subsubsection{rezystancyjny dzielnik napięcia}
+
+Jednym z najprostszych, użytecznych obwodów są dwa rezystory połączone szeregowo z źródłem napięcia. Układ taki nazywamy rezystancyjnym dzielnikiem napięcia. Pozwala on na uzyskanie napięcia niższego od napięcia źródła zgodnie z proporcją użytych rezystorów. Zobacz symulację: \url{http://ln.opcode.eu.org/dzielnik}.
+	% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+10.20027730826997+54+5+50%0Ag+336+320+336+336+0%0Aw+336+192+416+192+0%0Ar+416+256+416+320+0+1000%0Ag+416+320+416+336+0%0Ar+336+112+336+192+0+500%0As+416+192+416+256+0+1+false%0As+480+192+480+256+0+1+false%0Ag+480+320+480+336+0%0Ar+480+256+480+320+0+100%0Aw+416+192+480+192+0%0AR+336+112+336+80+0+0+40+12+0+0+0.5%0Aw+480+192+560+192+0%0Ap+560+192+560+320+1+0%0Ag+560+320+560+336+0%0Ar+336+192+336+320+0+500%0A38+10+0+2+24+Voltage%0A
+Zwróć uwagę że napięcie wyjściowe z takiego układu jest bardzo zależne od pobieranego prądu / wielkości dołączonego obciążenia (w tym celu możesz użyć przełączników umieszczonych w symulowanym układzie).
 
 \subsection{Kondensator}
-Kondensator wprowadza do układu pojemność związaną z swoją wartością nominalną. 
+\begin{teacherOnly}
+	\begin{easylist}[itemize]
+		& "magazynuje napięcie"
+		& zastosowania:
+		&& stabilizacja napięcia
+		&& opóźnienie zmiany jakiegoś sygnału (stała czasowa) => \url{http://ln.opcode.eu.org/cap}
+		&& odcinanie składowej sygnały zmiennego (rozwarcie dla prądu stałego, ale przewodzi zmienny)
+	\end{easylist}
+\end{teacherOnly}
 
+Kondensator wprowadza do układu pojemność związaną z swoją wartością nominalną.
 Pojemność wyraża zdolność do gromadzenia ładunku przez dany element - im większa pojemność tym więcej ładunku (przy takim samym przyłożonym napięciu) zgromadzi element. $C = \frac{q}{U}$
 
-Typowo służy do ograniczania zmian napięcia (poprzez gromadzenie energii w polu elektrycznym). Czas potrzebny do zmiany napięcia na kondensatorze dany jest zależnością: $\Delta T = \frac{C \cdot \Delta U}{I}$
+Kondensator typowo służy do ograniczania zmian napięcia (poprzez gromadzenie energii w polu elektrycznym) lub wprowadzenia opóźnienia (stałej czasowej) związanej z jego ładowaniem / rozładowywaniem.
+Czas potrzebny do zmiany napięcia na kondensatorze dany jest zależnością: $\Delta T = \frac{C \cdot \Delta U}{I}$.
+
+Zobacz symulację procesu ładowania / rozładowywania kondensatora: \url{http://ln.opcode.eu.org/cap}
+	% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+16.13108636308289+50+5+50%0Av+96+336+96+64+0+0+40+5+0+0+0.5%0AS+256+144+256+64+0+1+false+0+3%0Aw+96+64+240+64+0%0Aw+272+64+400+64+0%0Ac+256+144+256+256+0+0.00019999999999999998+0.001%0Ar+256+256+256+336+0+100%0Aw+96+336+256+336+0%0Aw+256+336+400+336+0%0Ar+400+64+400+336+0+1000%0Ao+4+128+0+4102+0.009765625+0.00009765625+0+2+4+3%0A38+4+0+0.000009999999999999999+0.00101+Capacitance%0A
+(klikając na przełącznik w górnej części schematu  można wybierać pomiędzy rozładowywaniem a ładowaniem kondensatora, zwróć uwagę na różną wartość oporu użytego do tych operacji).
+
+Innym częstym zastosowaniem jest kondensatora jest odcinanie składowej stałej – kondensator stanowi rozwarcie dla prądu stałego, ale przewodzi prąd zmienny (ze względu na prąd związany z jego ładowanie / rozładowywaniem).
+Zobacz symulację: \url{http://ln.opcode.eu.org/cap_ac}
+	% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+16.13108636308289+50+5+50%0Aw+112+144+256+144+1%0Ac+256+144+256+256+0+0.00019999999999999998+-0.8719567578156338%0Ar+256+256+256+336+0+100%0Aw+112+336+256+336+0%0Av+112+336+112+144+0+1+20.000500000000002+5+0+0+0.5%0Ao+1+128+0+4102+5+0.00009765625+0+2+1+3%0A38+1+0+0.000009999999999999999+0.00101+Capacitance%0A38+4+3+0.001+40+Frequency%0A
 
 \begin{Zadanie}{}{}
 \noindent\begin{minipage}[b]{0.55\textwidth}
@@ -152,11 +152,59 @@ Zbuduj układ przedstawiony na schemacie i zaobserwuj zmianę napięcia na konde
 \end{Zadanie}
 
 \subsection{Cewka}
-Cewka (dławik) wprowadza do układu indukcyjność związaną z swoją wartością nominalną. Typowo służy do ograniczania zmian prądu (poprzez gromadzenie energii w polu magnetycznym). Czas potrzebny zmiany prądu płynącego przez cewkę (dławik stawia opór takiej zmianie tak jak kondensator zmianie napięcia) dany jest zależnością: $\Delta T = \frac{L \cdot \Delta I}{U}$
+\begin{teacherOnly}
+	\begin{easylist}[itemize]
+		& mówiliśmy o magazynowaniu ... cewka "magazynuje prąd"
+		& gdzie występuje (w jakich bardziej złożonych elementach) - transformator, przekaźnik
+		& sterowanie przez tranzystor => dioda zabezpieczająca
+	\end{easylist}
+\end{teacherOnly}
 
-\teacher{\vspace{8pt}\noindent Opowiedzieć o cewkach w przekaźnikach i transformatorach}
+Cewka (dławik) wprowadza do układu indukcyjność związaną z swoją wartością nominalną. Samodzielnie występująca cewka typowo służy do ograniczania zmian prądu (poprzez gromadzenie energii w polu magnetycznym). Czas potrzebny zmiany prądu płynącego przez cewkę (dławik stawia opór takiej zmianie tak jak kondensator zmianie napięcia) dany jest zależnością: $\Delta T = \frac{L \cdot \Delta I}{U}$
 
-\subsection{Dioda}
+\subsubsection{Przekaźniki, styczniki i transformatory}
+
+Cewki możemy spotkać w urządzeniach takich jak przekaźniki, czy styczniki\footnote{Zasadniczo przekaźnik i stycznik jest to to samo urządzenie. Przyjmuje się rozróżnienie w nazewnictwie - przekaźniki przełączają mniejsze prądy niż styczniki.}.
+Nawinięte na odpowiednim rdzeniu pełnią one tam funkcję elektromagnesu odpowiedzialnego za zmianę fizycznej pozycji styków prowadzącą do ich zwarcia lub rozwarcia (przełączania).
+
+Innym urządzeniem opartym o cewki są transformatory - wykorzystują one kilka cewek na wspólnym rdzeniu do przekazywania energii poprzez pole magnetyczne (jedna z cewek dzięki przepływowi zmiennego prądu elektrycznego wytwarza zmienne pole magnetyczne, inna dzięki zmiennemu polu magnetycznemu wytwarza przemienny prąd elektryczny). Transformator typowo służy do zmiany napięcia lub separacji galwanicznej obwodów.
+
+\subsubsection{Rozłączanie cewki}
+
+Jako że cewka jest elementem który dąży do zachowania płynącego przez niego prądu, to w przypadku rozwarcia obwodu zawierającego cewkę napięcie na niej będzie rosło i bez problemów może wielokrotnie przekroczyć napięcie zasilania.
+Zobacz symulację: \url{http://ln.opcode.eu.org/cewka} (rozłącz przełącznik i zaobserwój co dzieje się z napięceim na cewce).
+	% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+12.050203812241895+46+5+50%0Av+96+336+96+144+0+0+40+5+0+0+0.5%0Ac+256+144+256+256+0+2e-8+2.185811780586783%0Ar+256+256+256+336+0+100%0Al+336+144+336+336+0+1+0.2814236307368567%0Aw+256+144+336+144+0%0Aw+336+336+256+336+0%0As+96+144+256+144+0+0+false%0Ar+96+336+256+336+0+10%0Ao+1+16+0+4354+640+0.00009765625+0+2+3+0%0A38+1+0+0.000009999999999999999+0.00101+Capacitance%0A
+Zjawisko to bywa użyteczne i jest wykorzystywane w niektórych układach (np. przetwornicach podnoszących napięcie), ale często bywa też niepożądane, a nawet bardzo szkodliwe – może prowadzić do uszkadzania innych elementów w obwodzie (w szczególności elementu przełączającego).
+
+Aby przeciwdziałać temu zjawisku można dołączyć równolegle do cewki odpowiednio mały opór, który pozwoli na rozładowanie się cewki.
+Wadą takiego rozwiązania są straty związane z przewodzeniem przez ten rezystor w momencie gdy cewka jest zasilona.
+Warto zauważyć że pojawiające się na cewce napięcie ma odwrotny znak (kierunek) niż spadek napięcia na tym elemencie w trakcie pracy.
+Pozwala to na podłączenie równolegle z cewką elementu który przewodzi tylko w jednym kierunku\footnote{
+	Nawet jeżeli element ten fizycznie jest obok elementu przełączającego powinien być podłączany równolegle do cewki a nie do elementu przełączającego.
+}, w taki sposób aby w normalnym stanie nie przewodził, a po odłączeniu zasilania cewki pozwalał na jej rozładowanie.
+Takim elementem jest dioda.
+
+% END: Elektronika - intro
+
+% BEGIN: Elektronika - Dioda
+\section{Dioda}
+\begin{teacherOnly}
+	\begin{easylist}[itemize]
+		& przewodzi w jednym kierunku
+		& element nieliniowy -> łamie prawo Ohma
+		& dioda prostownicza i dioda świecąca
+			&& rezystor przy diodzie świecącej -> na diodzie stały spadek napięcia w kierunku przewodzenia
+			&& dioda prostownicza – prostownik jedno połówkowy \url{http://ln.opcode.eu.org/prost1} i mostek prostowniczy \url{http://ln.opcode.eu.org/prost2} \todo{jako subsubsection}
+				% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+13.097415321081861+55+5+50%0Av+112+320+112+96+0+1+40+5+0+0+0.5%0Ar+416+96+416+320+0+640%0Ad+112+96+416+96+2+default%0Aw+112+320+416+320+0%0Ao+0+64+0+4102+5+0.0125+0+2+1+0%0A
+				% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+10.20027730826997+53+5+50%0Av+160+352+160+64+0+1+40+5+0+0+0.5%0Aw+160+64+304+64+0%0Aw+304+64+304+128+0%0Ad+304+128+368+192+2+default%0Ad+304+256+368+192+2+default%0Ad+240+192+304+128+2+default%0Ad+240+192+304+256+2+default%0Aw+304+256+304+352+0%0Aw+304+352+160+352+0%0Aw+240+192+240+288+0%0Aw+368+192+416+192+0%0Aw+240+288+416+288+0%0Ar+416+192+416+288+0+100%0Ax+463+248+557+251+4+20+load%0Ao+0+64+0+4098+5+0.05+0+2+12+0%0A
+		& czy może przewodzić w drugą stronę -> dioda Zenera
+		& dzielnik napięcia z diodą Zenera =>  \url{http://ln.opcode.eu.org/zener} \todo{jako subsubsection}
+			%https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+10.20027730826997+54+5+50%0Az+336+288+336+160+3+default-zener%0Ag+336+288+336+304+0%0Aw+336+160+416+160+0%0Ar+416+224+416+288+0+1000%0Ag+416+288+416+304+0%0Ar+272+160+336+160+0+500%0As+416+160+416+224+0+1+false%0As+480+160+480+224+0+1+false%0Ag+480+288+480+304+0%0Ar+480+224+480+288+0+100%0Aw+416+160+480+160+0%0AR+272+160+192+160+0+0+40+11.68+0+0+0.5%0Aw+480+160+560+160+0%0Ap+560+160+560+288+1+0%0Ag+560+288+560+304+0%0A38+11+0+2+24+Voltage%0A
+		& fotodioda
+		& dioda LED jako detektor światła (jeżeli będzie czas!)
+	\end{easylist}
+\end{teacherOnly}
+
 Dioda idealna to element przewodzący prąd tylko w jednym kierunku. Rzeczywiste diody przewodzą prąd zdecydowanie chętniej w jednym kierunku niż w drugim (na ogół przewodzenie w kierunku zaporowym się pomija) ponadto charakteryzują je cechy zależne od technologi wykonania takie jak:
 \begin{itemize}
 \item spadek napięcia w kierunku przewodzenia (typowo dla diod krzemowych 0.6V - 0.7V, a dla diod Schottky’ego 0.3V)
@@ -170,12 +218,30 @@ Dioda idealna to element przewodzący prąd tylko w jednym kierunku. Rzeczywiste
     \includegraphics[width=0.25\textwidth]{img/elektronika/diody}
   \end{center}
 \end{wrapfigure}
+
+\noindent
 Ponadto stosowane są m.in.:
 \begin{itemize}
 \item diody Zenera - wykorzystuje się (charakterystyczną dla danego typu) wartość napięcia przebicia do uzyskania w układzie spadku napięcia o tej wartości,
 \item diody świecące (LED) - emitujące światło w trakcie przewodzenia (na elemencie występuje stały spadek napięcia, jasność zależy od natężenia prądu),
 \item fotodiody - będące detektorami oświetlenia (przewodzenie spolaryzowanej w kierunku zaporowym zależy od ilości padającego na element światła, niespolaryzowana pod wpływem oświetlenia staje się źródłem prądu).
 \end{itemize}
+
+\begin{ProTip}{{\Symbola ❢} PAMIĘTAJ {\Symbola ❢}}
+Dioda jest elementem dla którego nie jest spełnione prawo Ohma. Dioda charakteryzuje się prawie stałym spadkiem napięcia w kierunku przewodzenia.
+
+\vspace{5pt}
+Dlatego, jeżeli do diody przyłożymy napięcie większe od jej napięcia przewodzenia (np. do czerwonej diody LED o spadku około 1.7V przyłożymy napięcie 5V) przez układ taki popłynie bardzo duży prąd (często równy prądowi zwarciowemu naszego źródła), co doprowadzi do zniszczenia diody. Zobacz symulację: \url{http://ln.opcode.eu.org/led}
+	% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+10.20027730826997+50+1+50%0A172+336+176+336+128+0+7+3.5300000000000002+5+-2+0+0.5+Voltage%0Aw+336+320+336+352+1%0Ag+336+352+336+368+0%0Ad+336+256+336+320+2+default-led%0Ar+336+176+336+256+0+1000%0Aw+336+256+400+256+0%0Aw+336+320+400+320+0%0Ap+400+256+400+320+1+0%0Aw+336+176+400+176+0%0As+400+176+400+256+0+1+false%0A
+
+\vspace{5pt}
+Dlatego diody podłączamy prawie zawsze\footnote{Istotnymi wyjątkami są: prostownik (gdzie rolę tego rezystora pełni obciążenie) oraz zasilanie diody ze źródła prądowego.} z szeregowym rezystorem służącym do ograniczenia prądu.
+\end{ProTip}
+
+\begin{Zadanie}{}{}
+Wróć do symulacji związanej z cewką \url{http://ln.opcode.eu.org/cewka} i spróbuj dodać diodę równolegle do cewki taki sposób aby wyeliminować powstawanie przepięć.
+Zobacz też że dodanie diody równolegle z elementem przełączającym nie pozwala na rozwiązanie problemu.
+\end{Zadanie}
 
 \begin{Zadanie}{}{}
 \noindent\begin{minipage}[b]{0.7\textwidth}
@@ -188,8 +254,6 @@ Zaobserwuj że zmianie ulega wartość prądu płynącego w takim obwodzie i że
 \end{minipage}
 \end{Zadanie}
 
-\teacher{\vspace{8pt}\noindent Omówić prostownik jednopołówkowy i mostek prostowniczy}
-
 \begin{Zadanie}{}{}
 \noindent\begin{minipage}[b]{0.6\textwidth}
 Zbuduj układ przedstawiony na schemacie (nazywany mostkiem Gretza) i zauważ że polaryzacja wyjścia (podłączonego do woltomierza) jest niezależna od polaryzacji wejścia (czyli od tego czy biegun dodatni będzie przyłączony do in1 czy in2, a ujemny odpowiednio in2 lub in1).
@@ -199,7 +263,7 @@ Zbuduj układ przedstawiony na schemacie (nazywany mostkiem Gretza) i zauważ ż
 \includegraphics[width=\textwidth]{img/elektronika/zad3}
 \end{minipage}
 \end{Zadanie}
-% END: Elektronika - intro
+% END: Elektronika - Dioda
 
 % BEGIN: Elektronika - Tranzystory
 \section{Tranzystory}
@@ -218,11 +282,11 @@ Zbuduj układ przedstawiony na schemacie (nazywany mostkiem Gretza) i zauważ ż
 		&& typy (N- vs P- oraz wzbogacony vs zubożony) i sposób sterowania => \url{http://ln.opcode.eu.org/mosfet}
 			% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+10.634267539816555+50+5+50%0Ar+240+144+240+304+0+300%0Aw+240+336+240+352+0%0Af+192+320+240+320+0+1.5+0.02%0AR+368+144+368+96+0+0+40+12+0+0+0.5%0Ag+240+352+240+368+0%0AS+192+320+128+320+0+1+false+0+2%0AR+128+304+80+304+0+0+40+5+0+0+0.5%0Ag+128+336+128+368+0%0Af+448+224+496+224+33+1.5+0.02%0Aw+496+144+496+208+0%0Ar+496+240+496+352+0+300%0Ag+496+352+496+368+0%0Aw+240+144+368+144+0%0Aw+368+144+496+144+0%0AR+384+208+336+208+0+0+40+12+0+0+0.5%0AS+448+224+384+224+0+1+false+0+2%0AR+384+240+336+240+0+0+40+5+0+0+0.5%0A
 		&& izolowana bramka - sterowanie z 3 pozycyjnego przełącznika 5V NC 0V (zapytać o stan NC) => \textbf{POKAZAĆ} że zostaje w stanie w jakim był, dlatego często sterowanie z pół-mostka, wspomnieć o ESD
-	& mostek i pół-mostek H (w oparciu o schemat z switchami)
+	& mostek i pół-mostek H (w oparciu o schemat z switchami) \todo{jako subsubsection}
 		&& \url{http://ln.opcode.eu.org/mostek}
 			% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+10.20027730826997+50+5+43%0As+384+128+384+192+0+1+false%0As+512+128+512+192+0+1+false%0As+512+256+512+320+0+1+false%0As+384+256+384+320+0+1+false%0Aw+384+192+384+224+0%0Ap+384+224+512+224+1+0%0Aw+512+224+512+192+0%0Aw+512+224+512+256+0%0Aw+384+224+384+256+0%0Ag+384+320+384+336+0%0Ag+512+320+512+336+0%0AR+448+96+448+64+0+0+40+5+0+0+0.5%0Aw+448+96+448+128+0%0Aw+448+128+512+128+0%0Aw+448+128+384+128+0%0Aw+224+128+160+128+0%0Aw+224+96+224+128+0%0AR+224+96+224+64+0+0+40+5+0+0+0.5%0Ag+160+320+160+336+0%0Aw+160+224+160+256+0%0Aw+160+192+160+224+0%0As+160+256+160+320+0+1+false%0As+160+128+160+192+0+1+false%0Aw+160+224+224+224+2%0A
 		&& do czego służy cały (silniki), a do czego można użyć pół (wyjście o ustalonych poziomach)?
-	& wspomnieć o triakach – przełączanie w obwodach AC
+	& wspomnieć o triakach – przełączanie w obwodach AC \todo{jako ramka?}
 	\end{easylist}
 \end{teacherOnly}
 
@@ -293,11 +357,11 @@ Aby wprowadzić tranzystor MOSFET w stan przewodzenia należy podać $U_{GS} \gg
 
 \teacher{\vspace{8pt}\noindent Omówić mostek H oraz półmostek H}
 
-\begin{Zadanie}{}{}
-\fixme{Zbuduj układ stabilizacji napięcia w oparciu o diodę Zenera i tranzystor. Zastanów się nad sposobem działania tego układu – w tym celu dokonaj pomiarów napięcia wyjściowego oraz napięcia na bazie tranzystora w zależności od napięcia wejściowego}
-\end{Zadanie}
-
-\fixme{zadania dodatkowe: stabilizator z diodą zenera, stabilizator z zenerem i tranzystorem, mostek prostowniczy, budowa bramki z tranzystorów}
+% \begin{Zadanie}{}{}
+% \fixme{Zbuduj układ stabilizacji napięcia w oparciu o diodę Zenera i tranzystor. Zastanów się nad sposobem działania tego układu – w tym celu dokonaj pomiarów napięcia wyjściowego oraz napięcia na bazie tranzystora w zależności od napięcia wejściowego}
+% \end{Zadanie}
+% 
+% \fixme{zadania dodatkowe: stabilizator z diodą zenera, stabilizator z zenerem i tranzystorem, mostek prostowniczy, budowa bramki z tranzystorów}
 
 \begin{Zadanie}{}{}
 Narysuj schemat układu półmostka H z zastosowaniem tranzystorów bipolarnych (NPN i PNP) jako elementów przełączających.
@@ -343,7 +407,7 @@ Następnie omówić działanie układu, pokazać na pojedynczym LED że oświetl
 \end{minipage}
 \end{teacherOnly}
 
-\teacher{\newpage}
+\clearpage
 
 \begin{teacherOnly}
 	\begin{easylist}[itemize]
@@ -383,7 +447,7 @@ Bramki są układami elektronicznymi realizującymi podstawowe, opisane powyżej
 		Nóżki numer 10 i 9 są wejściami pewnej bramki logicznej, której wyjście jest na nóżce numer 8. Sporządź tablicę prawdy dla tej bramki i zidentyfikuj co to za bramka.
 		\vspace{0.25cm}
 	}\hfill\parbox[b]{0.25\textwidth}{
-		\includegraphics[height=0.22\textwidth,angle=90,origin=c]{img/elektronika/DIP14}
+		\includegraphics[height=0.22\textwidth,angle=90,origin=c]{img/elektronika/DIP14-zadanie}
 		\vspace{-0.5cm}
 	}
 \end{minipage}
@@ -480,7 +544,6 @@ Zatrzask jest elementem reagującym na poziom sygnału na wejściu "enable" (E).
 
 Przerzutnik jest elementem reagującym na zbocze sygnału na wejściu "clock" (CLK). W zależności od konstrukcji może reagować na zbocze narastające, opadające albo na oba (wtedy na jednym realizuje odczyt wejść a na drugim zmianę stanu wyjść).
 
-\student{\clearpage}
 \subsection{zatrzask i przerzutnik D}
 
 \begin{wrapfigure}{r}{0.7\textwidth}
@@ -617,7 +680,7 @@ Istnieje wiele zestandaryzowanych interfejsów zarówno szeregowych jak i równo
 	\end{easylist}
 \end{teacherOnly}
 
-\subsection{układy o programowalnej strukturze</dfn> (PLD)}
+\subsection{układy o programowalnej strukturze (PLD)}
 
 Są to układy w których programowany jest układ bramek, przerzutników, itp. "umieszczanych" w kości oraz ich połączeń.
 
@@ -697,13 +760,15 @@ Podaj wartość napięcia (względem GND) w punkach T2, T3, T4. Odpowiedź krót
 Oszacuj wartość prądu płynącego przez R8 oraz wartość prądu płynącego przez R10. Odpowiedź krótko uzasadnij.
 \end{ZadanieDomowe}
 
+\begin{center}
+    \includegraphics[width=0.48\textwidth]{img/elektronika/praca_domowa-B}
+    \hspace{0.05\textwidth}
+    \includegraphics[width=0.42\textwidth]{img/elektronika/praca_domowa-C}
+\end{center}
+
 \begin{ZadanieDomowe} [1pkt]
 Podaj wartość napięcia (względem GND) w punkcie T5. Przyjmujemy iż użyte bramki działają na poziomie napięć 5V (prawda) / 0V (fałsz). Odpowiedź krótko uzasadnij.
 \end{ZadanieDomowe}
-
-\begin{center}
-    \includegraphics[width=0.95\textwidth]{img/elektronika/praca_domowa-B}
-\end{center}
 
 \begin{ZadanieDomowe} [2pkt]
 Zapoznaj się z dokumentacją układu 74HC574 (np. \url{https://assets.nexperia.com/documents/data-sheet/74HC_HCT574.pdf}) i opisz sposób jego użycia (wraz z sposobem sterowania) jako modułu podłączonego do 8 bitowej magistrali równoległej w roli układu wejściowego oraz w roli układu wyjściowego.
@@ -714,8 +779,8 @@ Zapoznaj się z dokumentacją układu 74HC595 (np. \url{http://www.ti.com/lit/ds
 \end{ZadanieDomowe}
 
 \copyrightFooter{
-	© Matematyka dla Ciekawych Świata, 2017-2019.\\
-	© Robert Ryszard Paciorek <rrp@opcode.eu.org>, 2003-2019.\\
+	© Matematyka dla Ciekawych Świata, 2017-2020.\\
+	© Robert Ryszard Paciorek <rrp@opcode.eu.org>, 2003-2020.\\
 	Kopiowanie, modyfikowanie i redystrybucja dozwolone pod warunkiem zachowania informacji o autorach.
 }
 \end{document}
