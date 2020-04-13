@@ -262,14 +262,14 @@ Do programowania STM32 potrzebne jest kilka narzędzi
 \begin{itemize}
   \item Toolchain arm-none-eabi (\Verb$gcc-arm-none-eabi$) oraz (\Verb$binutils-arm-none-eabi$)
   \item Implementację libC (\Verb$libstdc++-arm-none-eabi-newlib$)
-  \item Narzędzie do programowania przez UART (\Verb$stm32flash$)
+  \item Narzędzie do programowania przez UART (\Verb$stm32flash$) oraz program terminalowy do obsługi prortów szeregowych (\Verb$picocom$)
   \item Bibliotekę \Verb$libopencm3$
 \end{itemize}
 Wszystkie oprócz ostatniego dostępne są w repozytoriach Debiana (i systemów na nim opartych). Możesz je zainstalować
 za pomocą polecenia
 
 \begin{CodeFrame*}[bash]{}
-sudo apt install gcc-arm-none-eabi binutils-arm-none-eabi libstdc++-arm-none-eabi stm32flash
+sudo apt install gcc-arm-none-eabi binutils-arm-none-eabi libstdc++-arm-none-eabi stm32flash picocom
 \end{CodeFrame*}
 
 Instalacja i kompilacja \Verb$libopencm3$ odbywa się w następujący sposób:
@@ -315,6 +315,13 @@ Tak przygotowany mikrokontroler jest gotowy do pracy.
 
 
 
+
+\copyrightFooter{
+	© Matematyka dla Ciekawych Świata, 2017-2019.\\
+	© Robert Ryszard Paciorek <rrp@opcode.eu.org>, 2003-2019.\\
+	© Krzysztof Lasocki <krz.lasocki@gmail.com>, 2003-2019.\\
+	Kopiowanie, modyfikowanie i redystrybucja dozwolone pod warunkiem zachowania informacji o autorach.
+}
 
 
 
