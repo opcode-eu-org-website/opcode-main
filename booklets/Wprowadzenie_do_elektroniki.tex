@@ -95,7 +95,7 @@ Jeżeli rozważamy obwód zamknięty od punktu A z potencjałem $V_A$ to sumują
 \subsection{Rezystor}
 \begin{teacherOnly}
 	\begin{easylist}[itemize]
-		& czy opór to jedyny parametr rezystora? \todo{jako dodatkowy akapit}
+		& czy opór to jedyny parametr rezystora?
 			&&& mamy też dokładność, stabilność temperaturową, napięciową, ...
 			&&& ... ale przede wszystkim moc
 		& prawo Ohma i rezystor
@@ -109,11 +109,22 @@ Powoduje wydzielanie się energii (cieplnej) związanej z stratami na rezystancj
 
 Rezystor jest elementem spełniającym prawo Ohma\footnote{Jest to zasadniczo jedyny element elektroniczny, który podlega temu prawu. Niektóre z elementów (jak kondensatory i cewki) podlegają rozszerzeniu prawa Ohma dla prądu przemiennego. Wiele innych elementów (jak np. diody i tranzystory) nie podlegają prawu Ohma.}.
 
-\subsubsection{rezystancyjny dzielnik napięcia}
+\subsubsection{inne parametry rezystora}
+Rzeczywisty rezystor oprócz samej wartości oporu elektrycznego charakteryzują też inne parametry, m.in. takie jak:
+\begin{itemize}
+\item maksymalna moc która może zostać wydzielona na danym elemencie,
+\item dokładność, czyli to jak bardzo opór danego elementu może być odległy od wartości nominalnej,
+\item stabilność oporu w funkcji w funkcji temperatury oraz w funkcji napięcia przyłożonego do elementu.
+\end{itemize}
+
+\subsubsection{rezystancyjny dzielnik napięcia}\label{dzielnik}
 
 Jednym z najprostszych, użytecznych obwodów są dwa rezystory połączone szeregowo z źródłem napięcia. Układ taki nazywamy rezystancyjnym dzielnikiem napięcia. Pozwala on na uzyskanie napięcia niższego od napięcia źródła zgodnie z proporcją użytych rezystorów. Zobacz symulację: \url{http://ln.opcode.eu.org/dzielnik}.
 	% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+10.20027730826997+54+5+50%0Ag+336+320+336+336+0%0Aw+336+192+416+192+0%0Ar+416+256+416+320+0+1000%0Ag+416+320+416+336+0%0Ar+336+112+336+192+0+500%0As+416+192+416+256+0+1+false%0As+480+192+480+256+0+1+false%0Ag+480+320+480+336+0%0Ar+480+256+480+320+0+100%0Aw+416+192+480+192+0%0AR+336+112+336+80+0+0+40+12+0+0+0.5%0Aw+480+192+560+192+0%0Ap+560+192+560+320+1+0%0Ag+560+320+560+336+0%0Ar+336+192+336+320+0+500%0A38+10+0+2+24+Voltage%0A
-Zwróć uwagę że napięcie wyjściowe z takiego układu jest bardzo zależne od pobieranego prądu / wielkości dołączonego obciążenia (w tym celu możesz użyć przełączników umieszczonych w symulowanym układzie).
+Zwróć uwagę że napięcie wyjściowe z takiego układu jest bardzo zależne od pobieranego prądu / wielkości dołączonego obciążenia (w tym celu możesz użyć przełączników umieszczonych w symulowanym układzie), z tego powodu dzielnik rezystancyjny stosowany jest głównie w przypadkach gdy wiemy że obciążenie będzie pobierało niewielki prąd.
+
+Rezystancyjny dzielnik napięcia jest bardzo często stosowany w celu proporcjonalnego podziału (obniżenia) napięcia wejściowego nieznanej (zmiennej) wielkości (np. celem jego pomiaru, przy użyciu miernika o ograniczonej skali),
+a nie w celu uzyskania napięcia wyjściowego o konkretnej wartości (co można uzyskać w lepszy - bardziej stabilny sposób).
 
 \subsection{Kondensator}
 \begin{teacherOnly}
@@ -140,6 +151,8 @@ Innym częstym zastosowaniem jest kondensatora jest odcinanie składowej stałej
 Zobacz symulację: \url{http://ln.opcode.eu.org/cap_ac}
 	% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+16.13108636308289+50+5+50%0Aw+112+144+256+144+1%0Ac+256+144+256+256+0+0.00019999999999999998+-0.8719567578156338%0Ar+256+256+256+336+0+100%0Aw+112+336+256+336+0%0Av+112+336+112+144+0+1+20.000500000000002+5+0+0+0.5%0Ao+1+128+0+4102+5+0.00009765625+0+2+1+3%0A38+1+0+0.000009999999999999999+0.00101+Capacitance%0A38+4+3+0.001+40+Frequency%0A
 
+Najistotniejszym parametrem rzeczywistych kondensatorów oprócz pojemności nominalnej jest maksymalne napięcie przy którym może pracować oprócz tego istotne mogą być parametry takie jak rezystancja wewnętrzna, maksymalna temperatura w której kondensator może pracować, żywotność tego elementu, itd.
+
 \begin{Zadanie}{}{}
 \noindent\begin{minipage}[b]{0.55\textwidth}
 Zbuduj układ przedstawiony na schemacie i zaobserwuj zmianę napięcia na kondensatorze w momencie załączania, wyłączania zasilania.
@@ -160,7 +173,9 @@ Zbuduj układ przedstawiony na schemacie i zaobserwuj zmianę napięcia na konde
 	\end{easylist}
 \end{teacherOnly}
 
-Cewka (dławik) wprowadza do układu indukcyjność związaną z swoją wartością nominalną. Samodzielnie występująca cewka typowo służy do ograniczania zmian prądu (poprzez gromadzenie energii w polu magnetycznym). Czas potrzebny zmiany prądu płynącego przez cewkę (dławik stawia opór takiej zmianie tak jak kondensator zmianie napięcia) dany jest zależnością: $\Delta T = \frac{L \cdot \Delta I}{U}$
+Cewka (dławik) wprowadza do układu indukcyjność związaną z swoją wartością nominalną. Samodzielnie występująca cewka typowo służy do ograniczania zmian prądu (poprzez gromadzenie energii w polu magnetycznym). Czas potrzebny zmiany prądu płynącego przez cewkę (dławik stawia opór takiej zmianie tak jak kondensator zmianie napięcia) dany jest zależnością: $\Delta T = \frac{L \cdot \Delta I}{U}$.
+
+Głównym (ale nie jedynym) parametrem rzeczywistej cewki oprócz indukcyjności jest maksymalny prąd który może przewodzić.
 
 \subsubsection{Przekaźniki, styczniki i transformatory}
 
@@ -172,7 +187,7 @@ Innym urządzeniem opartym o cewki są transformatory - wykorzystują one kilka 
 \subsubsection{Rozłączanie cewki}
 
 Jako że cewka jest elementem który dąży do zachowania płynącego przez niego prądu, to w przypadku rozwarcia obwodu zawierającego cewkę napięcie na niej będzie rosło i bez problemów może wielokrotnie przekroczyć napięcie zasilania.
-Zobacz symulację: \url{http://ln.opcode.eu.org/cewka} (rozłącz przełącznik i zaobserwój co dzieje się z napięceim na cewce).
+Zobacz symulację: \url{http://ln.opcode.eu.org/cewka} (rozłącz przełącznik i zaobserwuj co dzieje się z napięciem na cewce).
 	% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+12.050203812241895+46+5+50%0Av+96+336+96+144+0+0+40+5+0+0+0.5%0Ac+256+144+256+256+0+2e-8+2.185811780586783%0Ar+256+256+256+336+0+100%0Al+336+144+336+336+0+1+0.2814236307368567%0Aw+256+144+336+144+0%0Aw+336+336+256+336+0%0As+96+144+256+144+0+0+false%0Ar+96+336+256+336+0+10%0Ao+1+16+0+4354+640+0.00009765625+0+2+3+0%0A38+1+0+0.000009999999999999999+0.00101+Capacitance%0A
 Zjawisko to bywa użyteczne i jest wykorzystywane w niektórych układach (np. przetwornicach podnoszących napięcie), ale często bywa też niepożądane, a nawet bardzo szkodliwe – może prowadzić do uszkadzania innych elementów w obwodzie (w szczególności elementu przełączającego).
 
@@ -194,12 +209,9 @@ Takim elementem jest dioda.
 		& element nieliniowy -> łamie prawo Ohma
 		& dioda prostownicza i dioda świecąca
 			&& rezystor przy diodzie świecącej -> na diodzie stały spadek napięcia w kierunku przewodzenia
-			&& dioda prostownicza – prostownik jedno połówkowy \url{http://ln.opcode.eu.org/prost1} i mostek prostowniczy \url{http://ln.opcode.eu.org/prost2} \todo{jako subsubsection}
-				% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+13.097415321081861+55+5+50%0Av+112+320+112+96+0+1+40+5+0+0+0.5%0Ar+416+96+416+320+0+640%0Ad+112+96+416+96+2+default%0Aw+112+320+416+320+0%0Ao+0+64+0+4102+5+0.0125+0+2+1+0%0A
-				% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+10.20027730826997+53+5+50%0Av+160+352+160+64+0+1+40+5+0+0+0.5%0Aw+160+64+304+64+0%0Aw+304+64+304+128+0%0Ad+304+128+368+192+2+default%0Ad+304+256+368+192+2+default%0Ad+240+192+304+128+2+default%0Ad+240+192+304+256+2+default%0Aw+304+256+304+352+0%0Aw+304+352+160+352+0%0Aw+240+192+240+288+0%0Aw+368+192+416+192+0%0Aw+240+288+416+288+0%0Ar+416+192+416+288+0+100%0Ax+463+248+557+251+4+20+load%0Ao+0+64+0+4098+5+0.05+0+2+12+0%0A
+			&& dioda prostownicza – prostownik jedno połówkowy i mostek prostowniczy
 		& czy może przewodzić w drugą stronę -> dioda Zenera
-		& dzielnik napięcia z diodą Zenera =>  \url{http://ln.opcode.eu.org/zener} \todo{jako subsubsection}
-			%https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+10.20027730826997+54+5+50%0Az+336+288+336+160+3+default-zener%0Ag+336+288+336+304+0%0Aw+336+160+416+160+0%0Ar+416+224+416+288+0+1000%0Ag+416+288+416+304+0%0Ar+272+160+336+160+0+500%0As+416+160+416+224+0+1+false%0As+480+160+480+224+0+1+false%0Ag+480+288+480+304+0%0Ar+480+224+480+288+0+100%0Aw+416+160+480+160+0%0AR+272+160+192+160+0+0+40+11.68+0+0+0.5%0Aw+480+160+560+160+0%0Ap+560+160+560+288+1+0%0Ag+560+288+560+304+0%0A38+11+0+2+24+Voltage%0A
+		& dzielnik napięcia z diodą Zenera
 		& fotodioda
 		& dioda LED jako detektor światła (jeżeli będzie czas!)
 	\end{easylist}
@@ -231,12 +243,32 @@ Ponadto stosowane są m.in.:
 Dioda jest elementem dla którego nie jest spełnione prawo Ohma. Dioda charakteryzuje się prawie stałym spadkiem napięcia w kierunku przewodzenia.
 
 \vspace{5pt}
-Dlatego, jeżeli do diody przyłożymy napięcie większe od jej napięcia przewodzenia (np. do czerwonej diody LED o spadku około 1.7V przyłożymy napięcie 5V) przez układ taki popłynie bardzo duży prąd (często równy prądowi zwarciowemu naszego źródła), co doprowadzi do zniszczenia diody. Zobacz symulację: \url{http://ln.opcode.eu.org/led}
+Dlatego, jeżeli do diody przyłożymy napięcie większe od jej napięcia przewodzenia (np. do czerwonej diody LED o spadku około 1.7V przyłożymy napięcie 5V) przez układ taki popłynie bardzo duży prąd (często równy prądowi zwarciowemu naszego źródła), co doprowadzi do zniszczenia diody.
+
+Zobacz symulację: \url{http://ln.opcode.eu.org/led}
 	% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+10.20027730826997+50+1+50%0A172+336+176+336+128+0+7+3.5300000000000002+5+-2+0+0.5+Voltage%0Aw+336+320+336+352+1%0Ag+336+352+336+368+0%0Ad+336+256+336+320+2+default-led%0Ar+336+176+336+256+0+1000%0Aw+336+256+400+256+0%0Aw+336+320+400+320+0%0Ap+400+256+400+320+1+0%0Aw+336+176+400+176+0%0As+400+176+400+256+0+1+false%0A
 
 \vspace{5pt}
-Dlatego diody podłączamy prawie zawsze\footnote{Istotnymi wyjątkami są: prostownik (gdzie rolę tego rezystora pełni obciążenie) oraz zasilanie diody ze źródła prądowego.} z szeregowym rezystorem służącym do ograniczenia prądu.
+Z tego powodu diody podłączamy prawie zawsze\footnote{Istotnymi wyjątkami są: prostownik (gdzie rolę tego rezystora pełni obciążenie) oraz zasilanie diody ze źródła prądowego.} z szeregowym rezystorem służącym do ograniczenia prądu.
 \end{ProTip}
+
+\subsection{prostownik}
+
+Prostownik służy do zamiany napięcia przemiennego (zmieniającego znak) na napięcie zmienne o stałym znaku.
+Funkcję tą może pełnić nawet pojedyncza dioda – mamy wtedy do czynienia z prostownikiem jednopołówkowym,
+	charakteryzującym się tym że napięcie na jego wyjściu spada przez połowę okresu wynosi zero – zobacz symulację \url{http://ln.opcode.eu.org/prost1}.
+	% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+13.097415321081861+55+5+50%0Av+112+320+112+96+0+1+40+5+0+0+0.5%0Ar+416+96+416+320+0+640%0Ad+112+96+416+96+2+default%0Aw+112+320+416+320+0%0Ao+0+64+0+4102+5+0.0125+0+2+1+0%0A
+Lepszym i częściej stosowanym rozwiązaniem jest prostownik pełnookresowy (dwupołówkowy). Najczęstszą jego realizacją jest tzw. mostek Graetza, czyli układ 4 diod połączonych w taki sposób iż dwie z nich zawsze (w każdym punkcie napięcia wejściowego) przewodzą – zobacz symulację \url{http://ln.opcode.eu.org/prost2}.
+	% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+10.20027730826997+53+5+50%0Av+160+352+160+64+0+1+40+5+0+0+0.5%0Aw+160+64+304+64+0%0Aw+304+64+304+128+0%0Ad+304+128+368+192+2+default%0Ad+304+256+368+192+2+default%0Ad+240+192+304+128+2+default%0Ad+240+192+304+256+2+default%0Aw+304+256+304+352+0%0Aw+304+352+160+352+0%0Aw+240+192+240+288+0%0Aw+368+192+416+192+0%0Aw+240+288+416+288+0%0Ar+416+192+416+288+0+100%0Ax+463+248+557+251+4+20+load%0Ao+0+64+0+4098+5+0.05+0+2+12+0%0A
+Wadą takiego układu jest znaczny spadek napięcia na mostku, wynoszący dwukrotność spadku napięcia na pojedynczej diodzie.
+
+Istnieją również układy prostowników napięcia trójfazowego, charakteryzują się one m.in. niższymi tętnieniami napięcia wyjściowego – dla prostowników jednofazowych wacha się ono (pomijając spadki na diodach) od $0$ do $V_{LN}\sqrt{2}$, a dla pełnookresowego trójfazowego od $V_{LL}\sqrt{2}\sin{60}$ do $V_{LL}\sqrt{2}$ (gdzie $V_{LN}$ to napięcie skuteczne pomiędzy fazą a przewodem neutralnym, a $V_{LL} = V_{LN}\sqrt{3}$ to napięcie skuteczne międzyfazowe). Zobacz symulację: \url{http://ln.opcode.eu.org/prost3}.
+	% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+2.008553692318767+45+5+50%0Av+144+144+224+144+0+1+40+5+0+0+0.5%0Ad+352+144+352+80+2+default%0Ad+352+336+352+144+2+default%0Ad+400+208+400+80+2+default%0Ad+400+336+400+208+2+default%0Ar+512+160+512+256+0+100%0Ax+559+216+653+219+4+20+load%0Av+144+208+224+208+0+1+40+5+0+2.0943951023931953+0.5%0Av+144+272+224+272+0+1+40+5+0+4.1887902047863905+0.5%0Aw+144+144+144+208+0%0Aw+144+208+144+272+0%0Aw+224+208+400+208+0%0Aw+224+144+352+144+0%0Ad+304+272+304+80+2+default%0Aw+224+272+304+272+0%0Ad+304+336+304+272+2+default%0Aw+304+336+352+336+0%0Aw+352+336+400+336+0%0Aw+304+80+352+80+0%0Aw+352+80+400+80+0%0Aw+400+80+512+80+0%0Aw+512+80+512+160+0%0Aw+400+336+512+336+0%0Aw+512+336+512+256+0%0Ao+5+64+0+4098+10+0.1+0+8+5+3+0+0+0+3+7+0+7+3+8+0+8+3%0A
+
+\subsection{dzielnik napięcia z diodą Zenera}
+
+W rozdziale \ref{dzielnik} omawialiśmy rezystancyjny dzielnik napięcia złożony z dwóch rezystorów. Wadą takiego układu była duża zależność napięcia wyjściowego od obciążenia. Zjawisko to można ograniczyć zastępując jeden z rezystorów (ten równolegle połączony z obciążeniem) diodą Zenera w polaryzacji zaporowej, która charakteryzuje się dość stałym spadkiem napięcia. Zobacz symulację \url{http://ln.opcode.eu.org/zener}, zauważ że nadal nie jest to rozwiązanie idealne, ale znacznie bardziej stabilne od poprzedniego.
+	%https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+10.20027730826997+54+5+50%0Az+336+288+336+160+3+default-zener%0Ag+336+288+336+304+0%0Aw+336+160+416+160+0%0Ar+416+224+416+288+0+1000%0Ag+416+288+416+304+0%0Ar+272+160+336+160+0+500%0As+416+160+416+224+0+1+false%0As+480+160+480+224+0+1+false%0Ag+480+288+480+304+0%0Ar+480+224+480+288+0+100%0Aw+416+160+480+160+0%0AR+272+160+192+160+0+0+40+11.68+0+0+0.5%0Aw+480+160+560+160+0%0Ap+560+160+560+288+1+0%0Ag+560+288+560+304+0%0A38+11+0+2+24+Voltage%0A
 
 \begin{Zadanie}{}{}
 Wróć do symulacji związanej z cewką \url{http://ln.opcode.eu.org/cewka} i spróbuj dodać diodę równolegle do cewki taki sposób aby wyeliminować powstawanie przepięć.
@@ -272,21 +304,16 @@ Zbuduj układ przedstawiony na schemacie (nazywany mostkiem Gretza) i zauważ ż
 	\begin{easylist}[itemize]
 	& tranzystor bipolarny
 		&& przewodzenie regulowane napięciem baza - emiter (NPN)
-		&& praca w trybie klucza (stan nasycenia i zatkania) => \url{http://ln.opcode.eu.org/npn}
-			% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+10.634267539816555+43+2+50%0Aw+352+256+352+304+1%0Aw+352+224+352+176+1%0Ag+352+304+352+320+0%0At+304+240+352+240+0+1+0.5443348655921529+0.6600527943196096+100%0Aw+240+240+304+240+1%0Ar+160+240+240+240+0+10000%0Ar+352+112+352+176+0+1005%0Aw+352+176+464+176+2%0AR+352+112+352+64+0+0+40+12+0+0+0.5%0AR+96+224+48+224+0+0+40+3.25+0+0+0.5%0Aw+160+240+160+288+0%0Aw+240+240+240+288+0%0As+160+288+240+288+0+1+false%0AS+160+240+96+240+0+1+false+0+2%0Ag+96+256+96+272+0%0A38+6+0+10+2000+Obci%C4%85%C5%BCenie%0A38+9+0+0+5+Vin%0A
+		&& praca w trybie klucza (stan nasycenia i zatkania) 
 		&& praca jako wzmacniacz => POKAZAĆ w tym samym układzie co klucz i powiedzieć dlaczego tak się nie używa (rozrzut bety)
 		&& rezystor bazy - po co jest? analogia do diody
-		&& NPN i PNP - różnice w sposobie sterowania => różnice w zastosowaniach, \url{http://ln.opcode.eu.org/pnp}
-			% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+10.634267539816555+43+2+50%0Aw+320+176+320+224+1%0Aw+320+144+320+96+1%0Ag+320+288+320+304+0%0Aw+208+160+272+160+1%0Ar+128+160+208+160+0+10000%0Aw+320+224+432+224+2%0AR+320+96+320+48+0+0+40+12+0+0+0.5%0AR+64+176+16+176+0+0+40+5+0+0+0.5%0Aw+128+160+128+208+0%0Aw+208+160+208+208+0%0As+128+208+208+208+0+1+false%0AS+128+160+64+160+0+1+false+0+2%0Ar+320+224+320+288+0+1005%0At+272+160+320+160+0+-1+11.999999998799002+-9.999983063835316e-10+100%0AR+64+144+16+144+0+0+40+12+0+0+0.5%0A38+7+0+0+5+Vin%0A
+		&& NPN i PNP - różnice w sposobie sterowania => różnice w zastosowaniach
 	& inne rodzaje tranzystorów - (MOS)FET
-		&& typy (N- vs P- oraz wzbogacony vs zubożony) i sposób sterowania => \url{http://ln.opcode.eu.org/mosfet}
-			% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+10.634267539816555+50+5+50%0Ar+240+144+240+304+0+300%0Aw+240+336+240+352+0%0Af+192+320+240+320+0+1.5+0.02%0AR+368+144+368+96+0+0+40+12+0+0+0.5%0Ag+240+352+240+368+0%0AS+192+320+128+320+0+1+false+0+2%0AR+128+304+80+304+0+0+40+5+0+0+0.5%0Ag+128+336+128+368+0%0Af+448+224+496+224+33+1.5+0.02%0Aw+496+144+496+208+0%0Ar+496+240+496+352+0+300%0Ag+496+352+496+368+0%0Aw+240+144+368+144+0%0Aw+368+144+496+144+0%0AR+384+208+336+208+0+0+40+12+0+0+0.5%0AS+448+224+384+224+0+1+false+0+2%0AR+384+240+336+240+0+0+40+5+0+0+0.5%0A
+		&& typy (N- vs P- oraz wzbogacony vs zubożony) i sposób sterowania
 		&& izolowana bramka - sterowanie z 3 pozycyjnego przełącznika 5V NC 0V (zapytać o stan NC) => \textbf{POKAZAĆ} że zostaje w stanie w jakim był, dlatego często sterowanie z pół-mostka, wspomnieć o ESD
-	& mostek i pół-mostek H (w oparciu o schemat z switchami) \todo{jako subsubsection}
-		&& \url{http://ln.opcode.eu.org/mostek}
-			% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+10.20027730826997+50+5+43%0As+384+128+384+192+0+1+false%0As+512+128+512+192+0+1+false%0As+512+256+512+320+0+1+false%0As+384+256+384+320+0+1+false%0Aw+384+192+384+224+0%0Ap+384+224+512+224+1+0%0Aw+512+224+512+192+0%0Aw+512+224+512+256+0%0Aw+384+224+384+256+0%0Ag+384+320+384+336+0%0Ag+512+320+512+336+0%0AR+448+96+448+64+0+0+40+5+0+0+0.5%0Aw+448+96+448+128+0%0Aw+448+128+512+128+0%0Aw+448+128+384+128+0%0Aw+224+128+160+128+0%0Aw+224+96+224+128+0%0AR+224+96+224+64+0+0+40+5+0+0+0.5%0Ag+160+320+160+336+0%0Aw+160+224+160+256+0%0Aw+160+192+160+224+0%0As+160+256+160+320+0+1+false%0As+160+128+160+192+0+1+false%0Aw+160+224+224+224+2%0A
+	& mostek i pół-mostek H (w oparciu o schemat z switchami)
 		&& do czego służy cały (silniki), a do czego można użyć pół (wyjście o ustalonych poziomach)?
-	& wspomnieć o triakach – przełączanie w obwodach AC \todo{jako ramka?}
+	& wspomnieć o triakach – przełączanie w obwodach AC
 	\end{easylist}
 \end{teacherOnly}
 
@@ -298,10 +325,10 @@ Prąd przepływający pomiędzy kolektorem a emiterem jest funkcją prądu przep
 Napięcie pomiędzy kolektorem a emiterem wynosi: $U_{CE} = U_{zasilania} - I_C \cdot R_{load}$.
 Napięcie to nie może jednak spaść poniżej wartości minimalnej wynoszącej około 0.2V, gdy z powyższych zależności wynikałby taki spadek to tranzystor pracuje w stanem nasycenia i $U_{CE} \approx 0.2V$.
 
-\begin{wrapfigure}{r}{0.55\textwidth}
+\begin{wrapfigure}{r}{0.6\textwidth}
   \begin{center}
-    \includegraphics[width=0.5\textwidth]{img/elektronika/npn_pnp}
-    \vspace{-20pt}
+    \includegraphics[width=0.55\textwidth]{img/elektronika/npn_pnp}
+    \vspace{-10pt}
   \end{center}
 \end{wrapfigure}
 
@@ -309,12 +336,30 @@ Aby wprowadzić tranzystor NPN w stan zatkania należy podać na jego bazę pote
 
 Aby wprowadzić tranzystor NPN w stan nasycenia należy na jego bazę wprowadzić potencjał większy od potencjałów emitera i kolektora, uzyskuje się to poprzez wprowadzenie do tranzystora prądu bazy $I_B \gg \frac{U_{zasilania}}{\beta R_{load}}$.
 
+Zobacz symulację pokazującą pracę tranzystora NPN w trybie klucza: \url{http://ln.opcode.eu.org/npn}.
+	% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+10.634267539816555+43+2+50%0Aw+352+256+352+304+1%0Aw+352+224+352+176+1%0Ag+352+304+352+320+0%0At+304+240+352+240+0+1+0.5443348655921529+0.6600527943196096+100%0Aw+240+240+304+240+1%0Ar+160+240+240+240+0+10000%0Ar+352+112+352+176+0+1005%0Aw+352+176+464+176+2%0AR+352+112+352+64+0+0+40+12+0+0+0.5%0AR+96+224+48+224+0+0+40+3.25+0+0+0.5%0Aw+160+240+160+288+0%0Aw+240+240+240+288+0%0As+160+288+240+288+0+1+false%0AS+160+240+96+240+0+1+false+0+2%0Ag+96+256+96+272+0%0A38+6+0+10+2000+Obci%C4%85%C5%BCenie%0A38+9+0+0+5+Vin%0A
+Zwróć uwagę na wartości napięć i prądów.
+
+Zobacz co dzieje się przy próbie podłączenia bazy tranzystora do potencjału znacznie wyższego niż potencjał emitera – złącze baza-emiter jest takim samym złączem z jakim mamy do czynienia w diodzie i tak jak w przypadku diody występuje na nim stały spadek napięcia (nie działa tu prawo Ohma). Dlatego aby ograniczyć prąd płynący tą gałęzią i zapobiec zniszczeniu tranzystora konieczne jest zastosowanie rezystora.
+
+\begin{teacherOnly}
+Pokazać pracę w trybie wzmacniacza w tym samym układzie – zmieniać suwakiem napięcie wejściowe Vin w zakresie 0.2 - 1.6V => prąd kolektora 100 razy większy od prądu bazy (wzmocnienie).
+Powiedzieć dlaczego tego układu wzmacniacza się nie używa.
+\end{teacherOnly}
+
 \subsection{PNP}
 Podobnie jak w NPE tyle że prąd przepływający pomiędzy emiterem a kolektorem jest funkcją prądu przepływającego pomiędzy emiterem a bazą.
 
 Aby wprowadzić tranzystor PNP w stan zatkania należy podać na jego bazę potencjał większy lub równy potencjałowi emitera (zakładamy że potencjał emitera jest nie mniejszy niż kolektora - co ma miejsce w typowych warunkach polaryzacji tranzystora PNP), czyli $U_{BE} \geq 0$.
 
 Aby wprowadzić tranzystor PNP w stan nasycenia należy na jego bazę wprowadzić potencjał mniejszy od potencjałów emitera i kolektora, uzyskuje się to poprzez wyprowadzenie z tranzystora prądu bazy $I_B \gg \frac{U_{zasilania}}{\beta R_{load}}$.
+
+Zobacz symulację pokazującą pracę tranzystora PNP w trybie klucza: \url{http://ln.opcode.eu.org/pnp}.
+	% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+10.634267539816555+43+2+50%0Aw+320+176+320+224+1%0Aw+320+144+320+96+1%0Ag+320+288+320+304+0%0Aw+208+160+272+160+1%0Ar+128+160+208+160+0+10000%0Aw+320+224+432+224+2%0AR+320+96+320+48+0+0+40+12+0+0+0.5%0AR+64+176+16+176+0+0+40+5+0+0+0.5%0Aw+128+160+128+208+0%0Aw+208+160+208+208+0%0As+128+208+208+208+0+1+false%0AS+128+160+64+160+0+1+false+0+2%0Ar+320+224+320+288+0+1005%0At+272+160+320+160+0+-1+11.999999998799002+-9.999983063835316e-10+100%0AR+64+144+16+144+0+0+40+12+0+0+0.5%0A38+7+0+0+5+Vin%0A
+Zwróć uwagę na podobieństwa i różnice w stosunku do tranzystora NPN –
+	w obu wypadkach tranzystor przewodzi gdy płynie prąd bazy, ale ma on różne kierunki (w NPN wpływa on bazą do tranzystora, a w PNP wypływa z niego),
+	w obu wypadkach tranzystor zostaje zatkany gdy potencjał bazy zrówna się z potencjałem emitera (ale w NPN potencjał emitera jest typowo najniższym z potencjałów w układzie, często równym masie, a w PNP najwyższym, często równym potencjałowi zasilania).
+Zauważ także, że tutaj również potrzebujemy rezystora ograniczającego prąd bazy.
 
 \subsection{N-MOSFET}
 
@@ -353,9 +398,42 @@ Aby wprowadzić tranzystor MOSFET w stan zatkania należy podać $U_{GS} < U_{GS
 \item P-MOSFET z kanałem wzbogaconym musi to być wartość poniżej potencjału źródła.
 \end{itemize}
 Aby wprowadzić tranzystor MOSFET w stan przewodzenia należy podać $U_{GS} \gg U_{GS (th)}$.
+
+\vspace{12pt}
+
+Zobacz symulację pokazującą pracę tranzystorów MOSFET w trybie klucza: \url{http://ln.opcode.eu.org/mosfet}.
+	% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+10.634267539816555+50+5+50%0Ar+240+144+240+304+0+300%0Aw+240+336+240+352+0%0Af+192+320+240+320+0+1.5+0.02%0AR+368+144+368+96+0+0+40+12+0+0+0.5%0Ag+240+352+240+368+0%0AS+192+320+128+320+0+1+false+0+2%0AR+128+304+80+304+0+0+40+5+0+0+0.5%0Ag+128+336+128+368+0%0Af+448+224+496+224+33+1.5+0.02%0Aw+496+144+496+208+0%0Ar+496+240+496+352+0+300%0Ag+496+352+496+368+0%0Aw+240+144+368+144+0%0Aw+368+144+496+144+0%0AR+384+208+336+208+0+0+40+12+0+0+0.5%0AS+448+224+384+224+0+1+false+0+2%0AR+384+240+336+240+0+0+40+5+0+0+0.5%0A
+Zauważ podobieństwo w sterowaniu do trnzystorów NPN i PNP (N-MOSFET przewodzi gdy potencjał bramki odpowiednio wyższy od drenu, P-MOSFET gdy odpowiednio niższy, obciążenie N-MOSFET włączane analogicznie jak NPN, a P-MOSFET jak PNP),
+	zauważ różnice (bramka jest izolowanie, nie płynie nią prąd\footnote{z pominięciem prądu związanego z przeładowaniem pojemności (pasożytniczego kondensatora)}, nie ma zatem potrzeby używania tam rezystora).
+
+\teacher{Opowiedzieć o zagadnieniu niepodłączonej bramki - pozostaje to co było, potem antena. Wspomnieć o ESD.}
 % END: Elektronika - Tranzystory
 
-\teacher{\vspace{8pt}\noindent Omówić mostek H oraz półmostek H}
+% BEGIN: Elektronika - mostek H
+\subsection{Mostek H}
+
+\begin{wrapfigure}{r}{0.2\textwidth}
+  \begin{center}
+    \vspace{-27pt}
+    \includegraphics[width=0.17\textwidth]{img/elektronika/mostek_H_switche}
+    \vspace{-27pt}
+  \end{center}
+\end{wrapfigure}
+
+Mostek H jest to układ (oparty o 4 przełączniki, których rolę mogą pełnić klucze tranzystorowe) pozwalający na zmianę polaryzacji zasilania podłączonego do niego odbiornika. Układ taki złożony jest z dwóch identycznych gałęzi (S1 + S2 oraz S3 + S4, każda włączona pomiędzy dwoma biegunami zasilania). Pojedyncza taka gałąź nazywana jest pół-mostkiem i składa się z dwóch kluczy które powinny być sterowane przeciwstawnie (aby wyeliminować możliwość zwarcia zasilania z masą). Układ pół-mostka może być wykorzystywany także samodzielnie jako uniwersalny układ klucza pozwalającego na załączanie odbiornika zarówno od strony napięcia dodatniego jak i od strony masy (w zależności od sposobu jego podłączenia) lub przełączania dwóch odbiorników (jednego umieszczonego pomiędzy zasilaniem a wyjściem mostka, a drugiego pomiędzy wyjściem a masą).
+
+Rolę kluczy (przełączników) w ramach mostka mogą pełnić tranzystory PNP (jako S1, S3) i NPN (jako S2, S4) albo analogicznie tranzystory P-MOSFET i N-MOSFET.
+
+\begin{teacherOnly}
+Można pokazać: \url{http://ln.opcode.eu.org/mostek}
+	% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+10.20027730826997+50+5+43%0As+384+128+384+192+0+1+false%0As+512+128+512+192+0+1+false%0As+512+256+512+320+0+1+false%0As+384+256+384+320+0+1+false%0Aw+384+192+384+224+0%0Ap+384+224+512+224+1+0%0Aw+512+224+512+192+0%0Aw+512+224+512+256+0%0Aw+384+224+384+256+0%0Ag+384+320+384+336+0%0Ag+512+320+512+336+0%0AR+448+96+448+64+0+0+40+5+0+0+0.5%0Aw+448+96+448+128+0%0Aw+448+128+512+128+0%0Aw+448+128+384+128+0%0Aw+224+128+160+128+0%0Aw+224+96+224+128+0%0AR+224+96+224+64+0+0+40+5+0+0+0.5%0Ag+160+320+160+336+0%0Aw+160+224+160+256+0%0Aw+160+192+160+224+0%0As+160+256+160+320+0+1+false%0As+160+128+160+192+0+1+false%0Aw+160+224+224+224+2%0A
+Ale trzeba zwrócić uwagę na ograniczenie symulatora (niepodłączone to potencjał masy).
+\end{teacherOnly}
+% END: Elektronika - mostek H
+
+\begin{ProTip}{Przełączanie AC}
+Tranzystory stosowane są powszechnie do przełączania w obwodach prądu stałego. Istnieją także elementy półprzewodnikowe mogące pełnić funkcję przełączającą w obwodach prądu przemiennego - współcześnie są to przede wszystkim triaki.
+\end{ProTip}
 
 % \begin{Zadanie}{}{}
 % \fixme{Zbuduj układ stabilizacji napięcia w oparciu o diodę Zenera i tranzystor. Zastanów się nad sposobem działania tego układu – w tym celu dokonaj pomiarów napięcia wyjściowego oraz napięcia na bazie tranzystora w zależności od napięcia wejściowego}
@@ -366,8 +444,6 @@ Aby wprowadzić tranzystor MOSFET w stan przewodzenia należy podać $U_{GS} \gg
 \begin{Zadanie}{}{}
 Narysuj schemat układu półmostka H z zastosowaniem tranzystorów bipolarnych (NPN i PNP) jako elementów przełączających.
 \end{Zadanie}
-
-\teacher{\vspace{8pt}\noindent Wspomnieć o triakach - przełączanie w obwodach AC}
 
 % % \noindent\begin{minipage}[t]{0.7\textwidth}
 % % \begin{Zadanie}{}{}
