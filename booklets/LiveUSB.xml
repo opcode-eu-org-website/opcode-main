@@ -17,7 +17,7 @@
 		<a href="LiveUSB.pdf"><img src="lib/pdfFile.svg" alt="Pobierz jako PDF" title="Pobierz jako PDF"/></a>
 	</p>
 </div>
-<p id="updateInfo">(aktualizacja: 2019-05-19)</p>
+<p id="updateInfo">(aktualizacja: 2020-04-09)</p>
 
 <section>
 <p>Live USB możemy bardzo prosto utworzyć instalując system z użyciem debootastrapa i uzupełniając go w chroocie o jądro, gruba i potrzebne nam narzędzia.</p>
@@ -209,7 +209,7 @@ HWTOOLS="sysstat lm-sensors hddtemp
 	hdparm sdparm smartmontools
 	picocom jpnevulator
 	ipmitool pcmciautils"
-FSTOOLS="lvm2 mdadm dmsetup multipath-tools
+FSTOOLS="lvm2 mdadm dmsetup multipath-tools cryptsetup-bin
 	parted gdisk
 	e2fsprogs xfsprogs btrfs-progs dosfstools
 	nfs-kernel-server"

@@ -1,5 +1,5 @@
-% Copyright (c) 2017-2019 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
-% Copyright (c) 2017-2019 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
 % 
 % MIT License
 % 
@@ -28,7 +28,7 @@
 	Projekt ,,Matematyka dla Ciekawych Świata'',\\
 	Robert Ryszard Paciorek\\\normalsize\ttfamily <rrp@opcode.eu.org>
 }
-\date  {2020-03-21}
+\date  {2020-04-08}
 
 \makeatletter\hypersetup{
 	pdftitle = {\@title}, pdfauthor = {\@author}
@@ -41,6 +41,7 @@
 
 \maketitle
 
+% BEGIN: podstawy programowania w bashu
 \section{Zmienne}
 
 Określanie typów zmiennych w bashu odbywa się na podstawie wartości znajdującej się w zmiennej.
@@ -61,6 +62,8 @@ echo  $zmiennaA ${zmiennaA}AA
 echo "$zmiennaA ${zmiennaA}AA"
 echo '$zmiennaA ${zmiennaA}AA'
 \end{CodeFrame*}
+
+Jeżeli chcemy aby zmienna była widoczna przez programy uruchamiane z naszej powłoki (w tym przez kolejne instancje bash'a, odpowiedzialne np. za wykonywanie kodu skryptu uruchamianego z pliku) należy ją wyeksportować za pomocą polecenia \Verb#export zmienna# (zwróć uwagę na brak dolara w tym miejscu).
 
 \section{Podstawowe operacje}
 Aby wykonać działania arytmetyczne należy umieścić je wewnątrz \Verb{$((} i \Verb{))}
@@ -109,6 +112,16 @@ a=`echo 'print(3/2)' | python3`
 b=$(echo '3/2' | bc -l)
 echo $a $b
 \end{CodeFrame*}
+
+\begin{ProTip}{inne polecenia}
+Programowanie w bashu w dużej mierze polega na wywoływaniu innych programów (np. takich jak sed, grep, find, awk).
+Sam bash oferuje jedynie podstawowe konstrukcje składniowe, obsługę zmiennych i pewnych podstawowych operacji na nich.
+
+Na te zewnętrzne polecenia można patrzeć trochę jak na biblioteki w innych językach programowania –
+	komendy gwarantowane przez standard stanowią „bibliotekę standardową” basha,
+	a inne (np. użyty w powyższym przykładzie artmetyki zmiennoprzecinkowej python) stanowią dodatkowe opcjonalne „biblioteki”, które pozwalają na łatwiejsze i szybsze rozwiązywanie problemów.
+W zasadzie podobnie można patrzeć na wywołania zewnętrznych programów w ramach kodu Pythona, C czy innych języków (niekiedy łatwiej jest zrobić np. \Verb#system("mv plik nowyplik")# niż zakodować to bezpośrednio w Pythonie czy w C).
+\end{ProTip}
 
 
 \section{Uruchamianie kodu z pliku}
@@ -167,11 +180,6 @@ while read a b; do echo $a; done < /etc/group
 unset IFS # przywracamy domyślne zachowanie read poprzez usunięcie zmiennej IFS
 \end{CodeFrame*}
 
-\begin{Zadanie}{}{petla_linki_html}
-Napisz pętle, która wypisze wszystkie pliki nieukryte z bieżącego katalogu w postaci linków HTML, czyli:
-dla pliku o nazwie \Verb{ABC} powinna wypisać \Verb{<a href="ABC">ABC</a>}. Przedstaw zarówno rozwiązanie z użyciem pętli \Verb{for}, jak i pętli \Verb{while}.
-\end{Zadanie}
-
 \subsection{Instrukcja if}
 
 Poznane wcześniej obliczanie wartości wyrażeń logicznych najczęściej stosowane jest w instrukcji warunkowej \Verb{if}\footnote{
@@ -211,10 +219,6 @@ lub \Verb{||} (wykonaj gdy poprzednia zwróciła nie zero -- false):
 grep '^root:' /etc/passwd > /dev/null && echo /etc/passwd zawiera root-a;
 \end{CodeFrame*}
 
-\begin{Zadanie}{}{warunek_istnienie_pliku}
-Napisz warunek, który sprawdzi czy \Verb{/tmp/abc} istnieje i jest katalogiem.
-\end{Zadanie}
-
 \subsection{Instrukcja case}
 Instrukcja \Verb{case} służy do rozważania wielu przypadków opartych na równości zmiennej z podanymi napisami.
 \teacher{Zwróć uwagę na podobieństwo do switch z C/C++ oraz różnicę - operuje na napisach a nie liczbach}
@@ -238,7 +242,7 @@ esac
 W bashu każda funkcja może przyjmować dowolną ilość parametrów pozycyjnych
 (w identyczny sposób obsługiwane są argumenty linii poleceń dla całego skryptu).
 Ilość parametrów znajduje się w zmiennej \Verb{$#}, lista wszystkich parametrów w \Verb{$@},
-a do kolejnych parametrów możemy odwoływać się z użyciem \Verb{$1}, \Verb{$2}, itd.
+a do kolejnych parametrów możemy odwoływać się z użyciem \Verb{$1}, \Verb#$2#, itd.
 
 \begin{CodeFrame*}[bash]{}
 f1() {
@@ -268,6 +272,17 @@ Zwróć uwagę że w nawiasach po nazwie funkcji nie podajemy przyjmowanych argu
 
 Wywołanie funkcji nie różni się niczym od wywołania programów czy instrukcji wbudowanych
 (możemy używać przekierowań strumieni wejścia, wyjścia, czy też przechwycić wyjście do zmiennej). Powyższą funkcję możemy wywołać np. w następujący sposób: \Verb{f1 a "b c"   d}
+% END: podstawy programowania w bashu
+
+% BEGIN: podstawy programowania w bashu - zadania
+\begin{Zadanie}{}{petla_linki_html}
+Napisz pętle, która wypisze wszystkie pliki nieukryte z bieżącego katalogu w postaci linków HTML, czyli:
+dla pliku o nazwie \Verb{ABC} powinna wypisać \Verb{<a href="ABC">ABC</a>}. Przedstaw zarówno rozwiązanie z użyciem pętli \Verb{for}, jak i pętli \Verb{while}.
+\end{Zadanie}
+
+\begin{Zadanie}{}{warunek_istnienie_pliku}
+Napisz warunek, który sprawdzi czy \Verb{/tmp/abc} istnieje i jest katalogiem.
+\end{Zadanie}
 
 \begin{Zadanie}{}{funkcja_n_razy_napis}
 Napisać funkcję przyjmującą dwa argumenty - liczbę i napis; funkcja ma wypisać napis tyle razy ile wynosi podana liczba.
@@ -281,8 +296,9 @@ Napisać funkcję przyjmującą jeden argument - liczbę kotów i wypisującą:
 \end{itemize}
 Dla uproszczenia należy założyć że podana ilość kotów jest w zakresie od 1 do 9.
 \end{Zadanie}
+% END: podstawy programowania w bashu - zadania
 
-
+% BEGIN: Wbudowane przetwarzanie napisów w bashu
 \section{Przetwarzanie napisów}
 
 \subsection{Wbudowane}
@@ -367,7 +383,9 @@ w tym wypisywanie w różnych systemach liczbowych przy pomocy \Verb@printf@\foo
 \begin{CodeFrame*}[bash]{}
 printf "0o%o %d 0x%x\n" 0xf 010 3
 \end{CodeFrame*}
+% END: Wbudowane przetwarzanie napisów w bashu
 
+% BEGIN: grep cut sed
 \subsection{grep, cut, sed, ...}
 
 Jako że większość operacji bashowych wiąże się z uruchamianiem zewnętrznych programów,
@@ -426,7 +444,9 @@ a=/proc/sys/net/core/
 basename $a
 dirname $a
 \end{CodeFrame*}
+% END: grep cut sed
 
+% BEGIN: AWK
 \subsection{awk}
 
 Awk jest interpreterem prostego skryptowego języka umożliwiający przetwarzanie tekstowych baz danych postaci \texttt{linia=rekord}, gdzie pola oddzielane ustalonym separatorem (można powiedzieć że łączy funkcjonalność komend takich jak grep, cut, sed z prostym językiem programowania).
@@ -502,7 +522,7 @@ na odpowiednio przygotowanym napisie (spacje zastąpione nową linią, a linie p
 echo "aa bb aa ee dd aa dd" | tr ' ' '\n' | sort | uniq -c
 \end{CodeFrame*}
 Jednak rozwiązanie awk można łatwo zmodyfikować aby wypisywało pierwsze wystąpienie linii bez sortowania pliku.
-
+% END: AWK
 
 \subsection{Zadania dodatkowe}
 
@@ -536,8 +556,8 @@ polecenie powinno wypisać:\\
 \rozwiazania
 
 \copyrightFooter{
-	© Matematyka dla Ciekawych Świata, 2017-2019.\\
-	© Robert Ryszard Paciorek <rrp@opcode.eu.org>, 2003-2019.\\
+	© Matematyka dla Ciekawych Świata, 2017-2020.\\
+	© Robert Ryszard Paciorek <rrp@opcode.eu.org>, 2003-2020.\\
 	Kopiowanie, modyfikowanie i redystrybucja dozwolone pod warunkiem zachowania informacji o autorach.
 }
 \end{document}

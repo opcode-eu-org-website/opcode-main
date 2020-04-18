@@ -30,8 +30,25 @@
 	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 	SOFTWARE.
 
-To compile the tex toolkit, several packages are necesary (list written
-after getting the tools to work, based on aptitude log)
+
+
+## Install dependencies
+
+
+
+To build pdf booklets and xhtml files from this repo you must install dependencies:
+
+1. download and install *Libraries and tools for free EDA suites (gEDA/gschem and pcb-rnd)* from [https://bitbucket.org/OpCode-eu-org/eda-libs](https://bitbucket.org/OpCode-eu-org/eda-libs) with its dependencies:
+    1. `git clone https://bitbucket.org/OpCode-eu-org/eda-libs && cd eda-libs`
+    2. `make installLibs; sudo make installTools; sudo make installDependencies`
+2. run `make init` in main dir of this repo
+3. run `sudo make installDependencies` in main dir of this repo
+
+After this you can build all document by run `make all` or single document by run `make dokumentName` in source dir for this document (for example `cd booklets; make Podstawowe_polecenia_Unix`).
+
+### Package dependencies
+
+To compile the tex toolkit, several packages are necesary (on Debian Buster)
 
     texlive-latex-base
     texlive-latex-extra
@@ -42,3 +59,4 @@ after getting the tools to work, based on aptitude log)
     psutils
     texlive-font-utils
     fonts-symbola
+

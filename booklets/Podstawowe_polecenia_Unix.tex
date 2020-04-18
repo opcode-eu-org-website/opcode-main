@@ -1,5 +1,5 @@
-% Copyright (c) 2017-2019 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
-% Copyright (c) 2017-2019 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
 % 
 % MIT License
 % 
@@ -28,7 +28,7 @@
 	Projekt ,,Matematyka dla Ciekawych Świata'',\\
 	Robert Ryszard Paciorek\\\normalsize\ttfamily <rrp@opcode.eu.org>
 }
-\date  {2019-07-05}
+\date  {2020-04-08}
 
 \makeatletter\hypersetup{
 	pdftitle = {\@title}, pdfauthor = {\@author}
@@ -426,6 +426,7 @@ Najprostszą metą kopiowania plików pomiędzy różnymi systemami jest wykorzy
 
 \setcounter{subsection}{0} % \subsection{zadania}
 
+% BEGIN: zadania - ssh
 \begin{Zadanie}{}{sshls}
 Wylistuj zawartość /etc/ z wskazanej maszyny zdalnej.
 \end{Zadanie}
@@ -433,6 +434,7 @@ Wylistuj zawartość /etc/ z wskazanej maszyny zdalnej.
 \begin{Zadanie}{}{remote_copy}
 Skopiuj plik /etc/hostname z wskazanej maszyny zdalnej do /tmp/hostname.
 \end{Zadanie}
+% END: zadania - ssh
 
 % BEGIN: grep
 \section{Operacje na plikach}
@@ -560,22 +562,31 @@ Wspomnieć także o opcji -x wymagającej dopasowania całej linii.
 
 \setcounter{subsection}{0} % \subsection{zadania}
 
+% BEGIN: zadania - unix napisy 01
 \begin{Zadanie}{}{upper_false}
 Wyświetl plik \texttt{/etc/passwd} z zastąpionym \texttt{false} przez \texttt{FALSE}.
 \end{Zadanie}
 
-\begin{Zadanie}{}{lsetc2}
-Zmodyfikuj rozwiązanie zadania \ref{lsetc} w taki sposób aby wyświetlone były tylko nazwy plików bez ścieżek. Przedstaw rozwiązanie z użyciem i bez użycia komendy \texttt{cd}.
+\begin{Zadanie}{}{ls_nazwy}
+Polecenie \Verb#ls -1d /etc/p*# wyświetla pełne ścieżki do plików, znajdujących się (bezpośrednio) w \texttt{/etc/}, których nazwa zaczyna się literą \texttt{p}.
+Przekieruj standardowe wyjście tej komendy do takiego ciągu poleceń aby uzyskać tylko nazwy tych plików (bez ścieżki).
 \end{Zadanie}
 
-\begin{Zadanie}{}{wyszukaj_napis} % [1pkt]
+\begin{Zadanie}{}{wyszukaj_napis}
 Napisz polecenie które wyszuka wszystkie wystąpienia napisu \Verb{nameserver} w plikach znajdujących się w katalogu \Verb{/etc} (wraz z jego podkatalogami).
 \end{Zadanie}
+% END: zadania - unix napisy 01
 
-\begin{Zadanie}{}{wyszukaj_napis2} % [1pkt]
+% BEGIN: zadania - unix napisy 02
+\begin{Zadanie}{}{wyszukaj_napis2}
 Zmodyfikuj rozwiązanie zadania \ref{wyszukaj_napis} tak aby wyłącznie wypisywało nazwy plików (mogą być ze ścieżką) zawierających wyszukiwany napis.
 \end{Zadanie}
 
+\begin{Zadanie}{}{lsetc2}
+Wyświetlić same nazwy (bez ścieżki) wszystkich plików i katalogów znajdujących się bezpośrednio w \texttt{/etc/} których druga litera to \texttt{a} natomiast trzecia to \texttt{p} lub \texttt{s}.
+Przedstaw rozwiązanie z użyciem i bez użycia komendy \texttt{cd}.
+\end{Zadanie}
+% END: zadania - unix napisy 02
 
 % BEGIN: Użytkownicy, uprawnienia i procesy
 \section{Użytkownicy, uprawnienia i procesy}
@@ -623,43 +634,6 @@ Wszystkie poniższe komendy przyjmują opcję \texttt{-R} powodującą rekursywn
 		program pozwalający na wykonywanie uprzywilejowanych komend przez wyznaczonych użytkowników
 \end{itemize}
 
-\begin{teacherOnly}
-\subsection*{System operacyjny}
-\begin{easylist}[itemize]
-	& proces startu
-		&& "co komputer zaczyna robić po włączeniu?"
-		&& zasysanie instrukcji przez procesor
-		&& załadowanie i uruchomienie bootloadera
-		&& załadowanie i uruchomienie jądra
-		&& opcja init
-	& funkcje systemu operacyjnego
-		&& procesy
-			&&& co to jest proces
-			&&& wątki (wątek vs proces)
-			&&& szeregowanie zadań
-			&&& drzewo procesów (rodzice)
-			&&& ew. algorytmy szeregowania
-			&&& fork()
-			&&& sygnały
-				&&&& kill
-				&&&& czy proces może nie umżeć? ... pokazać: wynik ps, wskazać pid bash'a, zrobić kill bash
-				&&&& wiele różnych sygnałów ... Ctr+C ... Ctrl+Z ... info o zakończeniu potomka ...
-		&& obsługa plików
-			&&& wszystko jest plikiem
-			&&& select(), czyli czekanie na dane ...
-		&& obsługa dostępu do pamięci
-			&&& pokazać rysując na tablicy stronnicowanie
-			&&& pamięć współdzielona
-				&&&& problem  if a==1: a=0
-				&&&& semafory
-		&& obsługa dostępu do urządzeń
-			&&& interfejsy sieciowe, itd
-		&& standardowe usługi
-			&&& cron
-			&&& mail
-\end{easylist}
-\end{teacherOnly}
-
 \subsection{Procesy i zasoby}
 \begin{itemize}
 	\item \Verb{ps [opcje]}
@@ -676,6 +650,32 @@ Wszystkie poniższe komendy przyjmują opcję \texttt{-R} powodującą rekursywn
 	\item \Verb{killall [opcje] nazwa}
 		przesyła sygnał do procesów o pasującej nazwie
 \end{itemize}
+
+\begin{ProTip}{kill i zabijanie procesu}
+Polecenie kill domyślnie wysyła sygnał SIGTERM, który jest prośbą o zakończenie procesu (proces może ją uszanować lub nie, np. zignorować). Więc sam kill nie zabija procesu.
+
+Wiele sygnałów może zostać przechwyconych i obsłużonych (zignorowanych) przez proces do którego są adresowane. Istnieją także sygnały, które nie mogą zostać obsłużone bądź zignorowane są to m.in.:
+	SIGKILL (zakończenie procesu bez dania mu jakiejkolwiek szansy zrobienia czegoś na „do widzenia”, wysyłany przez \Verb#kill -9#),
+	SIGSTOP (wstrzymanie procesu).
+\end{ProTip}
+
+\begin{ProTip}{Ctrl+C / Ctrl+Z / Ctrl+D}
+\textbf{Ctrl+C} wysyła sygnał SIGINT do procesu zajmującego terminal na którym został on wprowadzony. Sygnał ten jest prośbą o zakończenie procesu, którą proces może uszanować lub nie (np. może całkiem zignorować lub poprosić o potwierdzenie). Jest on podobny do SIGTERM, jednak jest innym sygnałem i może być inaczej obsłużony (np. w SIGTERM nie ma większego sensu pytać o potwierdzenie).
+
+\vspace{6pt}\textbf{Ctrl+Z} wysyła sygnał SIGTSTP do procesu zajmującego terminal na którym został on wprowadzony. Sygnał ten jest prośbą o wstrzymanie procesu i oddanie terminala, prośba ta może być zignorowana przez proces. Proces przerwany w ten sposób może być wznowiony poleceniem \Verb#fg# (które wznowi go jako pierwszoplanowy – okupujący terminal) lub \Verb#bg# (które wznowi go jako jako proces w tle – oddając terminal, przodkowi który go posiadał wcześniej).
+
+\vspace{6pt}\textbf{Ctrl+D} nie wysyła żadnego sygnału, działa tylko gdy proces czyta dane z terminala (podłączonego zazwyczaj do jego standardowego wejścia). Wysyła on do terminala znak EOT (End-of-Transmission), w efekcie czego:
+\begin{itemize}
+	\item (jeżeli bufor wejściowy jest niepusty) terminal wypycha bufor wejściowy do programu (tak jak po wprowadzeniu nowej linii), albo
+	\item (jeżeli nie ma znaków w buforze) terminal zamyka strumień wprowadzanych danych do programu
+\end{itemize}
+Program nie otrzymuje w strumieniu znaku EOT (jest on przechwycony przez terminal).
+Zamknięcie strumienia wejściowego na ogół prowadzi także do zakończenia działania programu, jednak (w odróżnieniu od Ctrl-C) pozwala programowi na normalne przetworzenie wprowadzonych danych.
+\end{ProTip}
+
+\begin{ProTip}{Ctrl+S / Ctrl+Q}
+\textbf{Ctrl+S} wstrzymuje przewijanie (odświeżanie) terminala, aby wznowić należy użyć \textbf{Ctrl+Q}.
+\end{ProTip}
 % END: Użytkownicy, uprawnienia i procesy
 
 % BEGIN: Planowanie zadań
@@ -694,6 +694,86 @@ Typowo system zapewnia usługę uruchamiania zadań o zadanym czasie. Z usługi 
 	Niekiedy dostępny jest także \texttt{anacron} pozwalający na mniej precyzyjne planowanie zadań.
 % END: Planowanie zadań
 
+% BEGIN: System operacyjny - intro
+\section{System operacyjny}
+\begin{teacherOnly}
+\begin{easylist}[itemize]
+	& \textbf{proces startu}
+		&& "co komputer zaczyna robić po włączeniu?"
+		&& zasysanie instrukcji przez procesor
+		&& załadowanie i uruchomienie bootloadera
+		&& załadowanie i uruchomienie jądra
+		&& opcja init
+	& funkcje systemu operacyjnego
+		&& procesy
+			&&& co to jest proces
+			&&& wątki (wątek vs proces)
+			&&& \textbf{szeregowanie zadań}
+			&&& drzewo procesów (rodzice)
+			&&& ew. algorytmy szeregowania
+			&&& fork()
+			&&& sygnały
+				&&&& kill
+				&&&& czy proces może nie umrzeć? ... pokazać: wynik ps, wskazać pid bash'a, zrobić kill bash
+				&&&& wiele różnych sygnałów ... Ctr+C ... Ctrl+Z ... info o zakończeniu potomka ...
+		&& obsługa plików
+			&&& wszystko jest plikiem
+			&&& select(), czyli czekanie na dane ...
+		&& \textbf{obsługa dostępu do pamięci}
+			&&& pokazać rysując na tablicy stronnicowanie
+			&&& pamięć współdzielona
+				&&&& problem  if a==1: a=0
+				&&&& semafory
+		&& obsługa dostępu do urządzeń
+			&&& interfejsy sieciowe, itd
+		&& standardowe usługi
+			&&& cron
+			&&& mail
+\end{easylist}
+\end{teacherOnly}
+
+System operacyjny jest programem uruchamianym po starcie komputera (co prawda nie jako pierwszym, ale zastępującym / usuwającym z pamięci uruchomione wcześniej, więc najstarszym z działających).
+% END: System operacyjny - intro
+
+% BEGIN: Proces uruchamiania komputera
+\subsection{Proces startu}
+
+Po otrzymaniu sygnału resetu (także przy uruchamianiu systemu - "Power-on Reset") procesor po inicjalizacji rejestrów zaczyna wykonywanie kodu znajdującego się pod jakimś ustalonym adresem (typowo w wbudowanej lub zewnętrznej pamięci typu ROM lub Flash). W zależności od danej architektury / procesrora może to być m.in.: bezpośrednio kod programu użytkownika, wbudowany bootloader danego procesora umożliwiający dalsze ładowanie np. z karty SD, zewnętrzny niskopoziomowy bootloader (np. u-boot).
+
+W przypadku architektur zgodnych z x86 jest to BIOS, który po zakończeniu procesu inicjalizacji sprzętu i testów rozruchowych ładuje do pamięci kod znajdujący się w pierwszym sektorze dysku twardego (sektorze rozruchowym rozpoczynającym się od adresu zerowego) i uruchamia go (przekazuje do niego kontrolę). Znajduje się tam kod (lub tylko początek kodu) programu rozruchowego, którego zadaniem jest załadowanie systemu operacyjnego. W przypadku współczesnych systemów linuxowych jest to zazwyczaj GRUB.
+
+Start systemu rozpoczyna się od załadowania do pamięci obrazu jądra wraz z parametrami oraz (opcjonalnie) initrd i przekazania kontroli do jądra przez program rozruchowy (np. GRUB). W przypadku jądra linuxowego i korzystania z initrd obraz ten przekształcany jest na RAM-dysk w trybie zapisu-odczytu i montowany jako rootfs z którego uruchamiany jest \Verb#/sbin/init# (którego podstawowym zadaniem jest zamontowanie właściwego rootfs). Po jego zakończeniu (lub od razu gdy nie używamy initrd) uruchamiany jest program wskazany w opcji \Verb#init=# jądra (domyślnie typowo \Verb#/sbin/init#) z rootfs wskazanego w opcji \Verb#root=# jądra. W opcji \Verb#init=# można wskazać dowolny program lub skrypt (uruchomiony zostanie z prawami root'a).
+% END: Proces uruchamiania komputera
+
+% BEGIN: Co robi system operacyjny
+\subsection{Rola systemu operacyjnego}
+
+System operacyjny jest oprogramowaniem odpowiedzialnym za zarządzanie zasobami systemu komputerowego (sprzętem, ale nie tylko) oraz uruchomionymi na nim aplikacjami. Do najistotniejszych zadań systemu operacyjnego zalicza się podział czasu procesora i szeregowanie zadań oraz zarządzanie pamięcią - w szczególności obsługa pamięci wirtualnej, najczęściej z wykorzystaniem mechanizmu stronicowania.
+
+Oprócz tego system zajmuje się także zarządzaniem plikami, wejściem/wyjściem (najczęściej jest ono realizowane w oparciu o przerwania (IRQ), ale znane są także modele programowego we/wy polegającego na aktywnym czekaniu), obsługą urządzeń (wejście/wyjście, sterowniki, dostęp), obsługą sieci (stos protokołów sieciowych), itd.
+
+Współczesne systemy korzystają z co najmniej dwóch poziomów pracy - uprzywilejowanego poziomu "nadzorcy" w którym działa jądro systemu operacyjnego oraz trybu użytkownika. Operacje I/O muszą odbywać się w trybie uprzywilejowanym. Również pamięć posiada obszar chroniony, w którym umieszczany jest m.in. tablica wektorów przerwań (inaczej zmiana adresu w tym wektorze mogłaby doprowadzić do przejęcia systemu w trybie uprzywilejowanym).
+% END: Co robi system operacyjny
+
+% BEGIN: Zarządzanie procesami
+\subsubsection{Zarządzanie procesami}
+
+Jednym z głównych zadań systemu operacyjnego jest zarządzanie procesami na nim uruchomionymi - obejmuje to zarówno czynności związane z ich tworzeniem oraz kończeniem, jak też szeregowanie zadań. To system operacyjny przejmuje okresowo procesor (z użyciem przerwania zegarowego), aby podjąć decyzję (w oparciu o jakiś algorytm szeregowania zadań) który/które z porcesów gotowych do działania (czyli takich, które aktualnie nie oczekują na "coś") ma dostać przydział czasu porcesora.
+% END: Zarządzanie procesami
+
+% BEGIN: Zarządzanie pamięcią
+\subsubsection{Zarządzanie pamięcią}
+
+Drugą podstawową funkcją systemu operacyjnego, wspomnianą na początku, jest zarządzanie pamięcią. Zarządzanie pamięcią polega na odpowiednim mapowaniu adresów logicznych (używanych przez procesy) na adresy fizyczne (używane przez procesor), korzysta ono z wsparcia sprzętowego ze strony procesora.
+
+Jest to najczęściej realizowane w oparciu o wspomniany mechanizm stronicowania. Polega to na podziale pamięci dostępnej pamięci fizycznej na jednakowe bloki zwane ramkami oraz podziale pamięci logicznej na jednakowe bloki (o tej całej wielkości co ramki) zwane stronami. Strony które są wykorzystywane przez program są mapowane na dowolne ramki pamięci fizycznej (w przypadku gdy dana strona nie zamapowana - w zależności od okoliczności błąd braku strony lub błąd ochrony strony).
+
+Rozwiązuje to problem fragmentacji zewnętrznej, polegającej na braku spójnego obszaru pamięci o żądanej długości pomimo iż łączna ilość wolnej pamięci jest dostateczna, jednak nie rozwiązuje problemu fragmentacji wewnętrznej, polegającej na przydzielaniu zbyt dużych fragmentów pamięci dla procesu (a wręcz można powiedzieć że go pogłębia).
+
+Mechanizm ten wymaga trzymania tablicy wolnych ramek, tablicy stron dla każdego procesu (zawierającej przypisania mapowań stron danego procesu na ramki) oraz wykonywania tłumaczenia adresów logicznych (strona + przesunięcie na stronie). Także sama tablica stron procesu procesu może być stronicowania (mamy tablicę która informuje nas że przypisania stron w danym zakresie adresów są przechowywane w jakiejś ramce).
+
+Strony i ramki mogą być współdzielone pomiędzy procesami (np. przy rozgałęzianiu procesu strony są kopiowane dopiero gdy zajdzie taka potrzeba). W przypadku braku miejsca w pamięci fizycznej wybrane strony nieaktywnego aktualnie procesu mogą być umieszczane na dysku (swap).
+% END: Zarządzanie pamięcią
 
 \section{Literatura dodatkowa}
  Więcej informacji o podstawach działania w systematach ,,unixowych'' oraz pełniejsza lista poleceń zamieszczona została pod adresem \url{http://vip.opcode.eu.org/#Systemy_unix-owate}.
@@ -701,8 +781,8 @@ Typowo system zapewnia usługę uruchamiania zadań o zadanym czasie. Z usługi 
 \rozwiazania
 
 \copyrightFooter{
-	© Matematyka dla Ciekawych Świata, 2017-2019.\\
-	© Robert Ryszard Paciorek <rrp@opcode.eu.org>, 2003-2019.\\
+	© Matematyka dla Ciekawych Świata, 2017-2020.\\
+	© Robert Ryszard Paciorek <rrp@opcode.eu.org>, 2003-2020.\\
 	Kopiowanie, modyfikowanie i redystrybucja dozwolone pod warunkiem zachowania informacji o autorach.
 }
 \end{document}
