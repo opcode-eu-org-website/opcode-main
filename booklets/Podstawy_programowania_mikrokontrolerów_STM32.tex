@@ -1,0 +1,579 @@
+% Copyright (c) 2017-2019 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2019 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% Copyright (c) 2017-2019 Krzysztof Lasocki <krz.lasocki@gmail.com>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\documentclass{pdfBooklets}
+\usepackage[printwatermark]{xwatermark}
+\title{Programowanie mikrokontrolerów STM32}
+\author{%
+	Projekt ,,Matematyka dla Ciekawych Świata'',\\
+	Krzysztof Lasocki\\\normalsize\ttfamily <krz.lasocki@gmail.com>
+}
+\date  {2020-04-04}
+
+\makeatletter\hypersetup{
+	pdftitle = {\@title}, pdfauthor = {\@author}
+}\makeatother
+
+
+\begin{document}
+
+\maketitle
+
+\newwatermark[allpages,color=red!50,angle=45,scale=3,xpos=0,ypos=0]{Wersja robocza}
+
+Skrypt opisuje podstawy programowania mikrokontrolerów STM32. Podczas kursu będziemy używać
+popularnej, dostępnej i prostej płytki ``Blue Pill''. Programy będą pisane w języku
+C z pomocą biblioteki \Verb$libopencm3$. Każde z ćwiczeń to oddzielny program, więc kod powinien znajdować się
+w oddzielnym katalogu. Za każdym razem gdy tworzysz nowy katalog na kod, skopiuj do niego plik Makefile aby łatwo
+go skompilować i wgrać na mikrokontroler.
+
+
+
+
+\section{Pierwszy program}
+\textit{zintegrować z repo przykładów kodu}\\
+Odpowiednikiem programu ``Hello, world!'' w elektronice jest program migający diodą LED. Zapisz poniższy kod źródłowy w pliku z
+rozszerzeniem \Verb$.c$
+
+\begin{CodeFrame*}[c]{}
+#ifndef STM32F1
+#define STM32F1
+#endif
+
+
+#include <libopencm3/stm32/rcc.h>
+#include <libopencm3/stm32/gpio.h>
+
+int main(){
+  // Uruchomienie peryferium portu C
+  // Włączenie sygnału zegara dla portu C
+  rcc_periph_clock_enable(RCC_GPIOC);
+  // Ustawienie pinu C13 w trybie wyjścia
+  gpio_set_mode(GPIOC, GPIO_MODE_OUTPUT_2_MHZ,
+		GPIO_CNF_OUTPUT_PUSHPULL, GPIO13);
+
+  while(1){
+    // Poczekaj chwilkę
+    for (int i = 0; i < 150000; i++) __asm__("nop");
+    // Przełącz stan pinu 13 w porcie C
+    gpio_toggle(GPIOC, GPIO13);
+      
+  }
+}
+\end{CodeFrame*}
+
+Skompiluj i wgraj program za pomocą
+
+\begin{CodeFrame*}[bash]{}
+make
+make install
+\end{CodeFrame*}
+
+Jeśli \Verb$stm32flash$ wyszedł bez błędów, Twój program powinien się uruchomić. Zielona dioda na płytce powinna zacząć migać.
+
+\begin{ProTip}{\normalfont{\strong{Uwaga}}}
+  Płytka BluePill której używamy posiada zworki kontrolujące tryb uruchomienia mikrokontrolera (piny \Verb$BOOT0$ i \Verb$BOOT1$).
+  Zworka, którą przestawiłeś/aś (\Verb$BOOT0$) na ``1'' podczas przygotowywania mikronotrolera do pracy powoduje uruchomienie w
+  trybie bootloadera. Po zaprogramowaniu, \Verb$stm32flash$ wydaje bootlaoderowi polecenie uruchomienia programu.\\
+  
+  Jeśli chcesz, aby mikrokontroler automatycznie uruchamiał program po podłączeniu zasilania, możesz ustawić obie zworki na ``0''. Nie zapomnij
+  jednak ustawić ich z powrotem do trybu bootloadera, jeśli chcesz ponownie wgrać program.
+  
+\end{ProTip}
+
+
+Przyjrzyjmy się powyższemu plikowi linia po linii, aby zrozumieć, dlaczego nasz program działa.
+
+
+\begin{CodeFrame*}[c]{}
+#include <libopencm3/stm32/rcc.h>
+#include <libopencm3/stm32/gpio.h>
+
+\end{CodeFrame*}
+
+Dołączamy dwa pliki nagłówkowe z biblioteki \Verb$libopencm3$ aby móc używać jej funkcji. Możliwe jest pisanie kodu w ``czystym'' C
+(lub nawet w asemblerze), ale kod w ten sposób napisany będzie mniej czytelny i mniej przenośny.
+\footnote{Oraz niewiele szybszy.}
+
+\begin{CodeFrame*}[c]{}
+int main() { 
+\end{CodeFrame*}
+
+Jak każdy program w C, funkcją początkową jest \verb$main$. W tym przypadku nie bierze ona żadnych argumentów. Mimo \Verb$int$ w
+definicji, nie zwraca ona żadnej wartości. W elektronice, \Verb$main$ z reguły nigdy nie kończy pracy (powrót z niej najczęściej
+kończy się skokiem do wektora resetu i zresetowaniem mikronontrolera)
+
+\begin{CodeFrame*}[c]{}
+  rcc_periph_clock_enable(RCC_GPIOC);
+  gpio_set_mode(GPIOC, GPIO_MODE_OUTPUT_2_MHZ,
+		GPIO_CNF_OUTPUT_PUSHPULL, GPIO13);
+\end{CodeFrame*}
+
+Po rozpoczęciu programu konfigurujemy peryferia. W tym programie używamy portu C aby migać diodą, która jest podłączona do pinu C13
+(13. bit portu C). Przed rozpoczęciem jakichkolwiek działań z tym peryferium musimy uruchomić jego zegar\footnotemark (wywołaniem makra
+\Verb$rcc_periph_clock_enable$ z odpowiednim parametrem)
+\footnotetext{Taka dowolność we włączaniu lub wyłączaniu sygnału zegara do peryferiów pozwala projektantom oszczędzać energię.
+  Jest to bardzo ważne np. przy układach zasilanych bateriami. W układach CMOS, kiedy nie następują zmiany stanów, pobór energii
+  jest praktycznie znikomy, więc to, czy sygnał zegara nieużywanego peryferium jest zatrzymany lub nie, znacznie wpływa na pobór prądu}
+
+Następnie konfigurujemy pin C13 jako wyjście \textit{push-pull}. Domyślnie wszytkie piny GPIO są skonfigurowane jako wejścia.
+\textit{może coś więcej?}
+
+
+\begin{CodeFrame*}[c]{}
+  while(1){
+    // Poczekaj chwilkę
+    for (int i = 0; i < 150000; i++) __asm__("nop");
+    // Przełącz stan pinu 13 w porcie C
+    gpio_toggle(GPIOC, GPIO13); 
+  }
+\end{CodeFrame*}
+
+Jak mówiłem wcześniej, procedura main z reguły nie wychodzi. Zamiast tego kończy się nieskończoną pętlą. W pętli, procesor najpierw
+wykonuje \texttt{nop}, czyli tzw. pustą instrukcję 150000 razy\footnotemark. Następnie funkcja \Verb$gpio_toggle$ zmienia stan pinu 13
+w porcie C na przeciwny, co powoduje zapalenie lub zgaszenie LEDa.
+\footnotetext{W brew pozorom ta funkcja nie zabierze 150 tys. cykli procesora, tylko znacznie więcej. Zwiększenie wartości zmiennej,
+  porównanie i skok warunkowy zajmują czas. Nie jest to precyzyjna metoda odmierzania czasu.}
+
+\begin{Zadanie}{}{}
+  Zmień ten program tak, aby dioda LED migała około dwa razy wolniej.
+\end{Zadanie}
+
+
+
+\section{Obsługa wejść}
+W tym ćwiczeniu pokażę, jak odczytywać stany logiczne pinów GPIO procesora oraz jak na ich podstawie podejmować
+decyzje. Skopiuj poniższy kod, zapisz w pliku z rozszerzeniem \Verb$.c$, skompiluj podobnie jak w poprzednim przykładzie.
+\\
+
+Na płytce stykowej zbuduj układ wg. poniższego schematu:
+\\
+
+\textit{schemat tbd}
+
+
+\begin{CodeFrame*}[c]{}
+#include <libopencm3/stm32/rcc.h>
+#include <libopencm3/stm32/gpio.h>
+
+int main(){
+  // Uruchomienie peryferiów portów A, C
+  // Włączenie sygnału zegara dla portów A, C
+  rcc_periph_clock_enable(RCC_GPIOA);
+  rcc_periph_clock_enable(RCC_GPIOC);
+
+  gpio_set_mode(GPIOC, GPIO_MODE_OUTPUT_2_MHZ,
+		GPIO_CNF_OUTPUT_PUSHPULL, GPIO13);
+  //Ustawienie pinu A0 w trybie wejścia
+  gpio_set_mode(GPIOA, GPIO_MODE_INPUT,
+		GPIO_CNF_INPUT_FLOAT, GPIO0);
+
+  int16_t stan_a;
+  while(1){
+    for (int i = 0; i < 150000; i++) __asm__("nop");
+    stan_a = gpio_port_read(GPIOA);
+    // Przełącz stan pinu 13 w porcie C bazując na wejściu na porcie A
+    if(stan_a & 0x01){
+      gpio_set(GPIOC, GPIO13);
+    }else{
+      gpio_clear(GPIOC, GPIO13);
+    }
+  }
+}
+\end{CodeFrame*}
+
+Po naciśnięciu przycisku na płytce stykowej, powinna zapalić się zielona dioda led.
+\\
+
+Omówmy teraz powyższy program krok po kroku.
+
+\begin{CodeFrame*}[c]{}
+  // Uruchomienie peryferiów portów A, C
+  // Włączenie sygnału zegara dla portów A, C
+  rcc_periph_clock_enable(RCC_GPIOA);
+  rcc_periph_clock_enable(RCC_GPIOC);
+
+  gpio_set_mode(GPIOC, GPIO_MODE_OUTPUT_2_MHZ,
+		GPIO_CNF_OUTPUT_PUSHPULL, GPIO13);
+  //Ustawienie pinu A0 w trybie wejścia
+  gpio_set_mode(GPIOA, GPIO_MODE_INPUT,
+		GPIO_CNF_INPUT_FLOAT, GPIO0);
+
+\end{CodeFrame*}
+
+Podobnie jak w poprzednim ćwiczeniu, musimy włączyć używane peryferia włączając ich sygnał zegara. Tym razem używamy
+dwóch portów GPIO - portu C (do którego jest podłączona dioda) oraz portu A (do którego podłączony jest przycisk).
+Z tego powodu trzeba uruchomić je oba (kolejność nie ma znaczenia)
+
+Podobnie jak pin C13, pin A0 też należy skofigurować\footnotemark. Ustawiamy go jako wejście, bez podciągania
+(wmyuszania jakiegoś stanu, gdy nic nie jest podłączone - mówimy wtedy, że wejście jest pływające).
+\\
+
+\footnotetext{\textit{A może lepiej skofigurować jako pullup i wyrzucić pullup ze schematu?} Wejście pływające (\textit{Input, Input floating}) jest domyślną kofiguracją wejścia. To wywołanie
+  funkcji nic nie zmienia, ale umieściliśmy je tutaj w ramach przykładu}
+
+
+Same w sobie, wejścia pływające nie mają niczego, co mogło by wymusić na nich stabilny stan logiczny. Zjawiska indukcji
+elektromagnetycznej (spowodowane m.in. stałym, 50Hz szumem od sieci elektrycznej) indukują na nich losowe napięcia
+(w pewnym małym zakresie, lecz wystarczająco dużym, aby powodować nieustalone stany logiczne). Z tego powodu
+nieużywane wejścia z reguły podłącza się do znanego potencjału (GND lub napięcia zasilania układu) aby zapobeigać
+stanom nieustalonym. W mikrokontrolerach można też włączyć wbudowane rezystory podciągające.
+
+Pływającego wejścia można użyć jako źródła liczb losowych\footnote{Jest to jedna z prostszych wersji takiego
+  generatora, wcale nie pozbawiona innych wad}
+
+
+
+
+\begin{CodeFrame*}[c]{}
+  int16_t stan_a;
+\end{CodeFrame*}
+
+Definiujemy zmienną do której będziemy poźniej wczytywać stan portu. W przypadku STM32 port ma 16 bitów szerokości - więc użycie 16-bitowej liczby jest najsensowniejsze.
+
+\begin{CodeFrame*}[c]{}
+while(1){
+    for (int i = 0; i < 150000; i++) __asm__("nop");
+    stan_a = gpio_port_read(GPIOA);
+\end{CodeFrame*}
+
+Podobnie jak w poprzednim przykładzie, po zakończeniu inicjalizacji mikrokontrolera (ustawienia GPIO), program
+wchodzi w nieskończoną pętlę. Za każdą iteracją wczytujemy do niej stan portu A. 
+
+\begin{CodeFrame*}[c]{}
+// Przełącz stan pinu 13 w porcie C bazując na wejściu na porcie A
+    if(stan_a & 0x01){
+      gpio_set(GPIOC, GPIO13);
+    }else{
+      gpio_clear(GPIOC, GPIO13);
+    }
+\end{CodeFrame*}
+
+W instrukcji warunkowej program sprawdza, czy najmłodszy bit zmiennej jest równy 1. \texttt{0x01} to tzw. maska bitowa.
+Zauważ, że wynik operacji \texttt{\Verb$stan_a & 0x01$} jest 1 jeden gdy najmłodszy bit jest równy 1. Tego typu
+konstrukcje są powszechnie spotykane w programach mikrokontrolerowych. Jeśli chcielibyśmy sprawdzić inny bit (np. bit na 5 miejscu), użylibyśmy maski, która składa się z samych zer oprócz piątego bitu. Można ją wyrazić jako
+\Verb$0x01 << 5$ (jedynka przesunięta o 5 miejsc w lewo). Kompilator zamieni to wyrażenie na stałą.
+
+Jeśli warunek wynosi jeden, wykonuje się funkcja \Verb$gpio_set$, która gasi diodę. W przeciwnym wypadku, funkcja
+\Verb$gpio_clear$ przełącza pin C13 w stan niski, powodując zapalenie diody.
+\\
+
+W ten sposób doszliśmy do końca programu. Pętla jest nieskończona, więc mikroprocesor będzie periodycznie wykonywał
+jej zawartość, sterując diodą LED odpowiednio do stanu na A0.
+
+\textit{przepisać to bardziej zrozumiale?}
+
+\begin{Zadanie}{}{}
+  Jaką maską bitową można sprawdzić czy bit nr. 1 jest w stanie wysokim? A jaką można sprawdzić to samo, ale
+  dla wszystkich bitów parzystych (na pozycjach 0, 2, 4 ... 14\footnote{16 bitowa liczba ma bity ``ponumerowane'' od 0 do 15})?
+\end{Zadanie}
+
+\begin{Zadanie}{}{}
+  Zastanów się jakie zmiany należy wykonać w tym programie, aby reagował on na przycisk podłączony do pinu A1.
+  Sprawdź swoje przypuszczenia odpowiednio modyfikując układ i program.
+\end{Zadanie}
+
+\begin{Zadanie}{}{}
+  Zmodyfikuj ten program tak, aby dioda zapalała się tylko, gdy stan logiczny wejścia się zmienia.\\
+  \textit{Wskazówka: co zawiera zmienna \texttt{\Verb$stan_a$} tuż przed załadowaniem jej nowym stanem? Pamiętaj
+  o stanach nieustalonych.}
+\end{Zadanie}
+
+\section{UART}
+UART to jeden z popularniejszych protokołów przesyłania danych. Jest podstawą wielu innych protokołów, i obecny praktycznie wszędzie
+W tym ćwiczeniu dowiesz się jak zaprogramować peryferium UARTu w swoim mikrokontrolerze. Pokażemy też w jaki sposób ``połączyć'' znane Ci funkcje
+wejścia/wyjścia w taki sposób aby odbywało się ono przez UART. Na początek skopiuj poniższy kod do pliku z rozszerzeniem \Verb$.c$:
+
+\begin{CodeFrame*}[c]{}
+#include <libopencm3/stm32/rcc.h>
+#include <libopencm3/stm32/gpio.h>
+
+#include <stdio.h>
+
+#include "uart.h"
+int main(){
+  rcc_periph_clock_enable(RCC_GPIOC);
+  gpio_set_mode(GPIOC, GPIO_MODE_OUTPUT_2_MHZ,
+		GPIO_CNF_OUTPUT_PUSHPULL, GPIO13);
+  usart_setup();
+  while(1){
+    for (int i = 0; i < 150000; i++) __asm__("nop");
+    gpio_toggle(GPIOC, GPIO13);
+    printf("Hello, World!\n");
+  }
+}
+\end{CodeFrame*}
+
+Na pierwszy rzut oka ten program wydaje się być bardzo podobny do ćwiczenia pierwszego. Pojawiły się jednak dwa nowe pliki nagłówkowe
+oraz dwa wywołania nowych funkcji. Pierwszy plik nagłówkowy to znany Ci \Verb$stdio.h$, który definiuje funkcje wejścia/wyjścia. Drugi, \Verb$uart.h$
+najduje się w cudzysłowiach, co oznacza że jest to plik lokalny. Poniżej jest jego zawartość:
+
+\begin{CodeFrame*}[c]{}
+#ifndef _uart_h
+#define _uart_h
+
+int _write(int fd, char *ptr, int len);
+void usart_setup(void);
+
+  
+#endif
+\end{CodeFrame*}
+
+Zapisz ten plik nagłówkowy jako \Verb$uart.h$.
+
+W pliku zdefiniowane są dwie funkcje, \Verb$_write$ oraz \Verb$usart_setup$. Przyjrzyjmy się plikowi \Verb$uart.c$:
+\begin{CodeFrame*}[c]{}
+#include "uart.h"
+#include <libopencm3/stm32/usart.h>
+#include <libopencm3/stm32/gpio.h>
+
+
+void usart_setup(void)
+{
+	/* Setup GPIO pin GPIO_USART1_TX/GPIO9 on GPIO port A for transmit. */
+	gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_50_MHZ,
+		      GPIO_CNF_OUTPUT_ALTFN_PUSHPULL, GPIO_USART1_TX);
+
+	/* Setup UART parameters. */
+	usart_set_baudrate(USART1, 9600);
+	usart_set_databits(USART1, 8);
+	usart_set_stopbits(USART1, USART_STOPBITS_1);
+	usart_set_mode(USART1, USART_MODE_TX);
+	usart_set_parity(USART1, USART_PARITY_NONE);
+	usart_set_flow_control(USART1, USART_FLOWCONTROL_NONE);
+
+	/* Finally enable the USART. */
+	usart_enable(USART1);
+}
+
+int _write(int fd, char *ptr, int len){
+	int i = 0;
+	/*
+	 * Write "len" of char from "ptr" to file id "fd"
+	 * Return number of char written.
+	 *
+	 * Only work for STDOUT, STDIN, and STDERR
+	 */
+	if (fd > 2) {
+	      return -1;
+	}
+	while (*ptr && (i < len)) {
+	  	usart_send_blocking(USART1, *ptr);
+		if (*ptr == '\n') {
+			usart_send_blocking(USART1, '\r');
+		}
+		i++; 
+		ptr++;
+	}
+	return i;
+}
+
+\end{CodeFrame*}
+
+Zapisz go do pliku \Verb$uart.c$.
+
+Funkcja \Verb$usart_setup$ konfiguruje peryferium USART.
+
+\begin{CodeFrame*}[c]{}
+gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_50_MHZ,
+              GPIO_CNF_OUTPUT_ALTFN_PUSHPULL, GPIO_USART1_TX);
+\end{CodeFrame*}
+
+Najpierw należy ustawić pin A9 w trybie \Verb$GPIO_CNF_OUTPUT_ALTFN_PUSHPULL$, czyli włączyć go jako
+pin wyjściowy w trybie jego drugiej funkcji (\emph{ALTFN - Alternative Function}). W STM32 większość z pinów pełni dwie funkcje - domyślną z nich jest
+GPIO, a drugą odpowiednia funkcja peryferium. W celu użycia drugiej funkcji danego pinu, musimy go w taki sposób skonfigurować. W tym przypadku
+TX znajduje się na pinie A9 (do którego podłączasz programator - ponieważ programowanie STM32 odbywa się przez UART\footnote{Można również przez
+SWD lub JTAG, ale do tego potrzebne są inne pogramatory. Twoja przejściówka USB-UART pełni tutaj także drugą rolę jako programator}.
+
+\begin{CodeFrame*}[c]{}
+        /* Setup UART parameters. */
+	usart_set_baudrate(USART1, 9600);
+	usart_set_databits(USART1, 8);
+	usart_set_stopbits(USART1, USART_STOPBITS_1);
+	usart_set_mode(USART1, USART_MODE_TX);
+	usart_set_parity(USART1, USART_PARITY_NONE);
+	usart_set_flow_control(USART1, USART_FLOWCONTROL_NONE);
+\end{CodeFrame*}
+
+Następnie konfigurowany jest sam UART. Tutaj ustawiamy typowe wartości - prędkość 9600 baud\footnotemark, 8 bitów danych, 1 bit stopu.
+Ustawaimy USART w trybie nadawania (odbieranie jest wyłączone). Ustawiamy brak bitu parzystości i brak kontroli przepływu
+
+\footnotetext{\emph{baud} (czyt. bod) to określenie jednostki symbol/sek. Prędkość transmisji w tej jednostce nazywa się \emph{baudrate}. W naszym
+  przypadku symbolem jest stan niski/wysoki (bit). Z reguły baudrate nie jest równy przepustowości łącza, ponieważ wlicza się do niego też symbole
+  które nie przenoszą danych(w przypadku UARTa są to bity startu,
+  stopu i ew. parzystości).}
+
+
+\begin{CodeFrame*}[c]{}
+  usart_enable(USART1);
+\end{CodeFrame*}
+
+Na końcu procedury uruchamiamy USART.
+
+
+Przejdźmy teraz do funkcji \Verb$_write$. Ta funkcja to nasz STM-owy odpowiednik funkcji \Verb$write$ z jądra linuksa. Służy ona do wypisania ciągu
+bajtów o podanej długości na podany deskryptor pliku.
+
+\begin{CodeFrame*}[c]{}
+  int i = 0;
+  
+  if (fd > 2) {
+    return -1;
+  }
+\end{CodeFrame*}
+W naszym przypadku ignoruje ona wszystkie deskryptory powyżej 2 (w normalnym środowisku do tych deskryptorów podłączone były by otwarte pliki w systemie
+plików. Jeśli chcielibyśmy dodać w naszym programie obsługę plików, np. przez kartę SD albo jakiś wirtualny system plików, w tym miejscu
+należało by wprowadzić pierwszą zmianę).
+\begin{CodeFrame*}[c]{}
+  while (*ptr && (i < len)) {
+    usart_send_blocking(USART1, *ptr);
+    if (*ptr == '\n') {
+      usart_send_blocking(USART1, '\r');
+    }
+    i++; 
+    ptr++;
+  }
+\end{CodeFrame*}
+
+Następnie deifiniujemy pętle while która wykona się \Verb$len$ razy lub aż dojdzie do znaku zerowego w napisie\footnote{Prawdziwy \Verb$write$ nie
+  spawdza tego drugiego warunku, ale ta wersja będzie służyć tylko do wypisywania napisów na UART}. Pętla wywołuje funkcję \Verb$usart_send_blocking$
+z parametrem USART1 i znakiem który aktualnie będzie wypisany. W ten sposób napis podany jako parametr będzie wypisany znak po znaku.
+
+Warunek porównujący znak ze znakiem nowej linii i wstawiający znak powrotu karetki jest potrzeby aby po znaku nowej linii kursor w terminalu powrócił
+na początek linii.
+
+
+\begin{CodeFrame*}[c]{}
+  return i;
+\end{CodeFrame*}
+
+Na końcu zwraca ilość wypisanych znaków (tak jak prawdziwa funkcja \Verb$write$).
+
+Ta funkcja jest potrzebna (mimo tego, że nigdzie jej bezpośrednio nie wywołujemy) do tego aby funkcje z \Verb$stdio.h$ mogły komunikować się ze światem.
+Jak widac jest to ograniczona wersja prawdziwej funkcji write, która dostarcza ``sztuczną'' obsługę plików \Verb$stdin$, \Verb$stdout$, i \Verb$stderr$
+w naszym środowisku. 
+
+To właśnie tą funkcję będą wywoływać \Verb$printf$, \Verb$puts$ w ramach ostatecznego wypisania danych na wyjście.
+
+Wracając do pliku \Verb$main.c$:
+
+\begin{CodeFrame*}[c]{}
+  while(1){
+    for (int i = 0; i < 150000; i++) __asm__("nop");
+    gpio_toggle(GPIOC, GPIO13);
+    printf("Hello, World!\n");
+  }
+\end{CodeFrame*}
+
+Ta pętla oprócz znanego już migania diodą wypisuje ``Hello, World!'' na standardowe wyjście (teraz podłączone do UARTa) za każdą iteracją.
+
+
+Upewnij się, że wszystkie 3 pliki są zapisane a następnie skompiluj i wgraj ten program za pomocą:
+
+\begin{CodeFrame*}[bash]{}
+  make
+  make install
+\end{CodeFrame*}
+
+a następnie uruchom \Verb$picocom$ aby zobaczyć co dzieje się na porcie szeregowym:
+
+
+\begin{CodeFrame*}[bash]{}
+  picocom /dev/ttyUSB0
+\end{CodeFrame*}
+
+\section{Przetwornik analogowo-cyfrowy}
+\section{Komunikacja $I^2C$}
+
+\section{Assembler}
+\textit{Co to \Verb$__asm__$ i kiedy się go używa. Pułapki oszukiwania kompilatora}
+
+
+\section{Lektury uzupełniające}
+\begin{itemize}
+
+  % Link za długi
+  %https://www.st.com/resource/en/reference_manual/cd00171190-stm32f101xx-stm32f102xx-stm32f103xx-stm32f105xx-and-stm32f107xx-advanced-arm-based-32-bit-mcus-stmicroelectronics.pdf
+\item Tzw. \emph{reference manual} dla STM32F103 (\url{http://ln.opcode.eu.org/stm_rm0008}) - obszerny dokument opisujący w jaki sposób programować
+  mikrokontroler. Zawiera szczegółówe opisy działania peryferiów, listę rejestrów i pól bitowych wraz ich funkcjami oraz
+  adresami \footnotemark. Najważniejszy dokument przy programowaniu mikrokontrolera
+  
+  \footnotetext{W STM32 opis adresów jest rozbity pomiędzy \textit{reference manual} i kartę katalogową.}
+
+\item \emph{Karta katalogowa STM32F103}\\ (\url{https://www.st.com/resource/en/datasheet/stm32f103c8.pdf}) opisująca pinout i
+  parametry mikrokontrolera.
+
+\item \emph{Dokumentacja \Verb$libopencm3$}\\ (\url{http://libopencm3.org/docs/latest/html/}) opisująca funkcje i makra dostępne
+  w bibliotece.
+  
+\item \emph{Przykładowy kod napisany z użyciem \Verb$libopencm3$} (\url{https://github.com/libopencm3/libopencm3-examples}) 
+  
+\item \emph{Vademecum informatyki praktycznej} (\url{http://vip.opcode.eu.org/}) - zbiór materiałów na temat elektroniki i programowania.
+
+\end{itemize}
+
+
+
+
+\clearpage
+\section{Zadania domowe}
+\newtheorem{ZadanieDomowe}{Zadanie domowe}
+
+\begin{ZadanieDomowe} [1pkt]
+W jaki sposób zmienić częstotliwość migania LEDa w pierwszym programie? Zmień ten program tak aby LED migał (około) dwa razy szybciej.
+\end{ZadanieDomowe}
+
+\begin{ZadanieDomowe} [2pkt]
+  % Tutaj chodzi o użycie printf-a, putchar-a lub uart_send_blocking
+  Napisz program, który za pomocą zaimplementowanej w ćwiczeniu \textit{XXX} funkcji wejścia/wyjścia wypisze na UART
+  ``trójkąt z gwiazdek'' jak poniżej
+  
+  \begin{CodeFrame*}[text]{}
+    *
+    **
+    ***
+    ****
+    *****
+    ******
+    *******
+    ********
+  \end{CodeFrame*}
+\end{ZadanieDomowe}
+
+\begin{ZadanieDomowe} [3pkt]
+  
+\end{ZadanieDomowe}
+
+\copyrightFooter{
+	© Matematyka dla Ciekawych Świata, 2017-2019.\\
+	© Robert Ryszard Paciorek <rrp@opcode.eu.org>, 2003-2019.\\
+	© Krzysztof Lasocki <krz.lasocki@gmail.com>, 2003-2019.\\
+	Kopiowanie, modyfikowanie i redystrybucja dozwolone pod warunkiem zachowania informacji o autorach.
+}
+
+
+
+\end{document}
+
+

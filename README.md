@@ -30,7 +30,11 @@
 	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 	SOFTWARE.
 
+
+
 ## Install dependencies
+
+
 
 To build pdf booklets and xhtml files from this repo you must install dependencies:
 
@@ -41,3 +45,18 @@ To build pdf booklets and xhtml files from this repo you must install dependenci
 3. run `sudo make installDependencies` in main dir of this repo
 
 After this you can build all document by run `make all` or single document by run `make dokumentName` in source dir for this document (for example `cd booklets; make Podstawowe_polecenia_Unix`).
+
+### Package dependencies
+
+To compile the tex toolkit, several packages are necesary (on Debian Buster)
+
+    texlive-latex-base
+    texlive-latex-extra
+    texlive-xetex
+    texlive-luatex
+    poppler-utils:amd64 0.71.0-5 -> 0.48.0-2+deb9u2  (this had to be manually downgraded and put on hold)
+    pdf2svg
+    psutils
+    texlive-font-utils
+    fonts-symbola
+
