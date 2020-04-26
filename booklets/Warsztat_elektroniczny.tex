@@ -123,9 +123,33 @@ Przy pomiarach większych oporników (ponad 100k$\Omega$) należy uważać aby n
 zaniży pomiar. Lepiej jest położyć opornik na stole i przycisnąć jego nóżki za pomocą końcówek sond.
 
 
-% \subsection{Inne funkcje multimetru}
-% 
-% \todo{tbd}
+\subsection{Inne funkcje multimetrów}
+Oprócz podstawowych funkcji\footnotemark, większość nowoczesnych multimetrów posiada także funkcje pomiaru diód oraz tranzystorów.
+Funkcja pomiaru diód jest najczęściej oznaczona symbolem diody półprzewodnikowej i korzysta z tej samej pary złącz, co woltomierz i omomierz.
+Aby zmierzyć spadek napięcia na diodzie należy dotknąć sondą podłączoną do masu (COM) do katody, a sondą dotanią do anody. Miernik wyświetli
+spadek napęcia na złączu diody. Jeżeli miernik wskazuje wynik poza skalą, może to oznaczać, że polaryzacja diody jest odwrotna lub spadek
+napięcia na jej złączu jest większy niż zakres pomiaru (który najczęściej wynosi mniej niż 2V).
+
+\footnotetext{Mierniki które posiadają tylko te trzy funkcje nazywane są po angielsku VOM (Volt-ohm-milliammmeter). Najczęściej są to mierniki
+  analogowe}
+
+Funkcja pomiaru współczynnika wzmocnienia transyzstora bipolarnego jest z reguły oznaczana \textbf{hFE} (od symbolu stosowanego do
+oznaczenia tej wartości\footnote{Czasami oznaczanego też jako \Beta}, Pomiar tranzystora za pomocą multimetru polega na umieszczeniu go w odpowiedni sposób w gnieździe pomiarowym
+w multimetrze. Jego emiter, baza oraz kolektor (oznaczane \textbf{E}, \textbf{B} i \textbf{C} odpowiednio) muszą trafić w odpowiednie
+otwory w odpowiedniej połowie gniazda (\textbf{PNP} oraz \textbf{NPN} zależnie od typu tranzystora). Gniadzo jest tak skontstruowane, że
+pasują do niego tranzystory o dowolnej kolejności wyprowadzeń. Kolejność dla Twojego tranzystora jest opisana w jego karcie katalogowej.
+Po umieszczeniu tranzystora w gnieździe, na ekranie miernika pojawia się wartość jego hFE.
+
+% \todo{umieścić zdjęcie pokazujące to gniazdo}
+
+Niektóre mierniki posiadają także funkcje pomiaru pojemności elektrycznej kondensatora. W zależności od konstrukcji połączenie testowanego
+kondensatora odbywa się albo poprzez umieszczenie go w gnieździe miernika albo podłączenie sond do wyprowadzeń kondensatora. Należy pamiętać
+o tym, że trzeba ustawić zakres w podobny sposób przy innych pomiarach oraz o tym że \textbf{nie należy mierzyć pojemności naładowanych
+  kondensatorów}. Funkcja przydaje się przy sprawdzaniu kondensatorów ceramicznych lub foliowych o pojemnościach od kilku nF do
+kilkudziesięciu uF. Na kondensatorach elektrolitycznych lub tantalowych (o większych pojemnościach) wartość pojemności jest z reguły napisana na obudowie.
+
+Oprócz opisanych wyżej funkcji niektóre multimetry mogą mieć także funkcje pomiaru temperatury (poprzez termoparę lub termistor podłączane do
+specjalnego złącza na mierniku) oraz pomiar częstotliwości.
 
 \subsection{Dokonywanie pomiarów}
 
@@ -139,13 +163,13 @@ otrzymamy najdokładniejszy wynik. W przypadku gdy mierzona wartość przekracza
 wyświetlając ``\textbf{1}'' (po lewej stronie ekranu), lub ``\textbf{OL}''. W takiej sytuacji należy przełączyć zakres na większy.
 \\
 
-Przy pomiarze \textbf{napięcia} w jakimś punkcie układu, najczęściej masę miernika
+Przy pomiarze \textbf{napięcia} w danym punkcie układu, najczęściej masę miernika
 podłączamy do masy układu. Drugą sondę podłączamy do mierzonego punktu. Jeśli chcemy zmierzyć napięcie na jakimś elemencie (np. oporniku),
 masę miernika (czarną sondę) dotykamy do punktu w którym oczekujemy niższego napięcia, a czerwoną do punktu w którym oczekujemy
 wyższego napięcia. Jeżeli podłączymy sondy odwrotnie, po prostu dostaniemy wynik z przeciwnym znakiem. Woltomierz należy podłączać równolegle.
 \\
 
-Przy pomiarze \textbf{natężenia} w jakiejś gałęzi układu należy zachować szczególną ostrożność. Podobnie jak wyżej, zaczynamy pomiar na największym
+Przy pomiarze \textbf{natężenia} w danej gałęzi układu należy zachować szczególną ostrożność. Podobnie jak wyżej, zaczynamy pomiar na największym
 zakresie miernika. W przeciwieństwie do woltomierza, amperomierz należy podłączyć szeregowo. Ponieważ opór wewnętrzny amperomierza jest bardzo
 niski (<1 $\Omega$), należy uważać, aby nie zrobić zwarcia
 \\
@@ -246,7 +270,14 @@ Nastaw ograniczenie prądowe na około 40mA.
 
 
 \section{Przygotowanie mikronotrolera}
-\todo{tutaj opisać co i jak polutować. Obrazki?}
+\begin{Ramka}{}\begin{center}
+  {\noindent\includegraphics[width=0.99\textwidth,clip=true]{lutowanie.png}}\\
+  \small
+  Lutowanie pinu mikrokontrolera. Listwy kołkowe zostały umieszczone w płytce stykowej aby je umiejscowić. Zaczynając od lewego górnego zdjęcia,
+  zgodnie z ruchem wskazówek zegara: Umiejscowione piny, ogrzanie pinu i pola lutowniczego na płytce mikronotrolera, dotknięcie spoiwem (cyną),
+  gotowy lut (oraz jego przybliżenie).
+\end{center}\end{Ramka}
+
 
 Bardzo możliwe, że Twój mikrokontroler nie będzie miał przylutowanych pinów do połączenia z płytką stykową.
 W takim wypdaku będziesz musiał/musiała użyć lutownicy aby je przylutować.\\
@@ -272,11 +303,19 @@ lutownicy jest bardzo gorący. Lutownicę należy trzymać tylko i wyłącznie z
 \\
 
 Aby zalutować pin w otworze, najpierw dotknij grotem lutownicy
-miejsca, które będziesz lutować. Po około sekundzie, dotknij pinu końcówką odcinka cyny.
+miejsca, które będziesz lutować (pola lutowniczego) oraz pinu. Po około sekundzie, dotknij pinu końcówką odcinka cyny.
 \\
 
 Postaraj się aby listwy kołkowe były prostopadle do płytki. Jeżeli masz odcinek damskiej listwy, możesz za jego pomocą
 umiejscowić piny które lutujesz. Możesz też użyć do tego płytki stykowej. Lutowanie zacznij od czterech pinów na rogach płytki.
+\\
+
+Kształt gotowego lutu powinien być stożkowaty. Jeżeli jest obły, oznacza to zbyt dużą ilość cyny. Kuliste luty prawdopodobnie nie związały z
+płytką (pole lutownicze nie było ogrzane). Jeśli lut nie jest błyszczący, oznacza to, że niepoprawnie związał. W takim wypadku spróbuj dodać
+topnika (np. kalafonii).
+
+Umiejętne lutowanie wymaga trochę praktyki, ale nie jest skomplikowane. Pamiętaj aby lutować w dobrze wentylowanym pomieszczeniu oraz po
+zakończeniu umyć ręce.
 
 \subsection{Instalacja i przygotowanie narzędzi}
 
