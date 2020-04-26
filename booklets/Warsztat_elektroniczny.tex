@@ -1,5 +1,3 @@
-
-\documentclass{pdfBooklets}
 % Copyright (c) 2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
 % Copyright (c) 2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
 % Copyright (c) 2020 Krzysztof Lasocki <krz.lasocki@gmail.com>
@@ -24,11 +22,10 @@
 % OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 % SOFTWARE.
 
+\documentclass{pdfBooklets}
 
 \usepackage[printwatermark]{xwatermark}
 \usepackage{tikz}
-
-
 
 \title{Warsztat Elektroniczny}
 \author{%
@@ -42,17 +39,24 @@
 }\makeatother
 
 
+\newtcolorbox{Ramka}[1][]{
+	colback=white,
+	colbacktitle=white,
+	coltitle=black,
+	colframe=white!50!black,
+	fontupper=\small,
+	enhanced,
+	before skip=13pt plus 2pt,
+	#1
+}
+
 \begin{document}
 
 \maketitle
 
 \newwatermark[allpages,color=red!50,angle=45,scale=3,xpos=0,ypos=0]{Wersja robocza}
 
-\textit{o czym to w ogole jest? napisac slowo wstepne. Uoporządkować rozdziały}
-
-\section{Przetwornica zasilająca}
-
-\textit{tbd}
+% \todo{o czym to w ogole jest? napisac slowo wstepne. Uoporządkować rozdziały}
 
 \section{Obsługa multimetru}
 
@@ -83,17 +87,18 @@ W zależności od modelu, multimetr może posiadać od dwóch do czterech gniazd
 \item Wejście amperomierza, oznaczone symbolem \textbf{A}. Najczęściej również jest obok niego podany maksymalny dopuszczalny prąd
   oraz czas pomiaru
 \end{itemize}
-\begin{center}
-  {\noindent\includegraphics[width=0.9\textwidth,clip=true]{dmm_terminals.png}}\\
+
+\begin{Ramka}{}\begin{center}
+  {\noindent\includegraphics[width=0.99\textwidth,clip=true]{dmm_terminals.png}}\\
+  \small
   Wejścia trzech różnych multimetrów. Pomiędzy wejściami zaznaczone są maksymalne wartości napięcia lub natężenia i informacja o zabezpieczeniach
   (``FUSED'') bądź ich braku (``UNFUSED'').\\
   Od lewej: typowy model z trzema wejściami, model z czterema wejściami, model z trzema wejściami (bez miliamperomierza)
-\end{center}
+\end{center}\end{Ramka}
 
 Przy wyborze multimetru należy zwrócić uwagę na jego wejścia. Modele z czterema wejściami są preferowane (zapewnia to izolację woltomierza
 od amperomierza). Przyrząd musi być też opisany jako ``FUSED'', czyli posiadać bezpiecznik na zakresie miliamperomierza (oraz opcjonalnie,
 także amperomierza).
-\\
 
 \subsection{Woltomierz}
 Woltomierz to przyrząd służący do pomiaru napięcia elektrycznego między dwoma punktami. Z tego powodu, woltomierz podłączamy
@@ -118,10 +123,9 @@ Przy pomiarach większych oporników (ponad 100k$\Omega$) należy uważać aby n
 zaniży pomiar. Lepiej jest położyć opornik na stole i przycisnąć jego nóżki za pomocą końcówek sond.
 
 
-
-\subsection{Inne funkcje multimetru}
-
-\textit{tbd}
+% \subsection{Inne funkcje multimetru}
+% 
+% \todo{tbd}
 
 \subsection{Dokonywanie pomiarów}
 
@@ -151,7 +155,7 @@ Pomiaru \textbf{oporności} dokonujemy dotykając końcówkami sond końcówek o
 \\
 
 Test połączenia służy do sprawdzania połączeń w układach. Przy wyłączonym zasilaniu dotykamy sondami do punktów, pomiędzy którymi chcemy
-sprawdzić połączenie. Jeżli punkty są połączone miernik zasygnalizuje to brzęczykiem. Ta funkcja jest szczególnie przydatna przy sprawdzaniu
+sprawdzić połączenie. Jeżeli punkty są połączone miernik zasygnalizuje to brzęczykiem. Ta funkcja jest szczególnie przydatna przy sprawdzaniu
 prototypów na płytkach stykowych. Jeżeli Twój multimetr nie ma tej funkcji możesz użyć omomierza (bezpośrednie połączenie ma znikomy opór,
 maksymalnie kilka $\Omega$)
 \\
@@ -161,88 +165,93 @@ sondami do obu końców testowanego elementu. Jeżeli ``trafiliśmy'' z polaryza
 dodatnią, do anody), to miernik powinien pokazać spadek napięcia na złączu.
 W przeciwnym razie pokaże przekroczenie zakresu. Z reguły zakres spadków napięć jakie można w tym trybie zmierzyć jest poniżej 2V, więc
 większość diód LED pokaże spadek napięcia poza skalą (niektóre diody LED mogą się bardzo słabo świecić podczas pomiaru jeśli polaryzacja
-sond jest prawidłowa)
-
-
-
-\section{Płytka stykowa}
-Płytka stykowa pozwala na szybkie prototypowanie układów bez konieczności lutowania. Składa się ona z macierzy dziurek,
-pod którymi są umieszczone blaszki łączące sąsiednie dziurki. Blaszki są umieszczone w taki sposób, aby łączyły wszystkie
-5 dziurek w kolumnie.
+sond jest prawidłowa).
 \\
 
-Przez środek płytki stykowej przechodzi odstęp bez dziurek. Otworki w tej samej kolumnie, ale po przeciwnych jego
-stronach nie są ze sobą połączone elektrycznie. Służy ono do umieszczania tam układów scalonych w obudowach DIP.
-Układy wkłada się ``okrakiem'' nad tym odstępem, tak aby każda z nóżek trafiła do dziurki w oddzielnej kolumnie.
-Standardowo, po wyprodukowaniu układu, jego nóżki są rozgięte do zewnątrz. Jeżeli układ nie pasuje, to trzeba je troche dogiąć.
-Najłatwiej jest dogiąć jedną stronę na raz, na przykład o blat stołu. Nie należy doginać nóżek pojedynczo, np. za pomocą obcążków.
-Nie należy też niepotrzebnie rozginać nóżek, ponieważ po kilkunastu zgięciach mogą odpaść.
-\\
-
-\begin{center}
-  \noindent\includegraphics[width=0.9\textwidth]{dip_ic.png}\\
-  Tak umieszczamy układy scalone w płytce stykowej. Po lewej stronie widać półokrągle wcięcie na obudowie. Pin 1 jest po lewej na dole.
-\end{center}
-
-Na brzegach płytki najczęściej znajdują się podłużne listwy, w których znajdują się grupy takich samych otworków jak
-na płytce, pogrupowanych w grupy 2 x 5. Niektóre płytki posiadają też nadrukowane kreski oraz znaki + i -. Te listwy
-służą do doprowadzania zasilania do układu na płytce. Otworki w jednej linii wzdłuż płytki są połączone elektrycznie - tworzą tzw.
-szynę zasilania. Napięcia zasilania (+ oraz -) z przetwornicy należy podłączać zgodnie z ew. nadrukami na płytce. Zmniejsza to ryzyko
-kosztownej pomyłki.
-\\
-
-Umieszczając inne elementy w płytce stykowej należy pamiętać, jak połączone są otworki - to znaczy, jeżeli chcemy
-połączyć dwa elementy, to ich odpowiednie ``nóżki'' muszą być umieszczone w tej samej kolumnie.
-\\
-
-W niektórych płytkach para szyn jest rozdzielona w połowie, i należy o tym pamiętać, ponieważ nie ma na to reguły.
-Możesz sprawdzić czy Twoja płytka ma rozdzielone szyny za pomocą multimetru (w trybie omomierza lub testu przewodnictwa). Pozwoli to uniknąć
-niespodzianek przy prototypowaniu.
-
-\begin{ProTip}{\normalfont{\strong{Uwaga}}}
-  Przed wprowadzaniem jakichkolwiek zmian na płytce stykowej odłącz zasilanie
-\end{ProTip}
-
-\begin{Zadanie}{}{}
-Za pomocą funkcji testu połączeń swojego miernika, sprawdź, czy Twoja płytka stykowa ma rozdzielone szyny zasilania.
-\end{Zadanie}
-
-\begin{Zadanie}{}{}
-  Znajdź w swoim zestawie opornik 1k$\Omega$ (możesz użyć multimetru, pamiętaj, że oporniki mają typową tolerancję 5\Verb$%$, więc jest mało prawodopodobne, że znajdziesz opornik który ma dokładnie 1000$\Omega$). Jaki prąd popłynie, gdy podłączysz go do napięcia 9V? Potwierdź swoje obliczenia
-  za pomocą multimetru.
-\end{Zadanie}
-
-\begin{Zadanie}{}{}
-  Jaka moc wydzieli się na oporniku z poprzedniego zadania?
-\end{Zadanie}
+W niektórych multimetrach tester diody jest wspólny z testem połączeń, czyli multimetr sygnalizuje buzzerem sytuację,
+gdy spadek tego napięcia jest odpowiednio mały (co oznacza że mierzone punkty są ze sobą zwarte (lub połączone bardzo małym oporem).
 
 
+\section{Przetwornica zasilająca}
 
-\section{Układy scalone}
-Układy scalone pozwalają szybko i sprawnie konstruować skomplikowane układy elektroniczne przy minimum nakłądu i kosztu. Dzięki nim możemy
-używać gotowych bloków cyfrowych (np. licznik, sumator, bramka logiczna) oraz analogowych (regulator napięcia, wzmacniacz operacyjny,
-przełączniki anlogowe itp.) zamiast musieć budować je od postaw z elementów elektronicznych. Produkowane są układy o bardzo różnych stopniach
-integracji - od bardzo niskich, takich jak np. bramki logiczne, do bardzo wysokich, jak np. gotowe komputery (tzw. SoC - system on a chip).
-\\
+Przetwornica z regulacją napięcia i ograniczenia prądowego będzie pełniła funkcję (stosunkowo taniego i przenośnego) zasilacza laboratoryjnego.
 
-Na razie skupimy się na prostszych układach - a dokładniej na ich obudowie.
+\subsection{Uruchomienie}
 
-Każdy układ w obudowie DIP ma oznaczony pin nr. 1. Z reguły to oznaczenie ma formę wklęsłego półokręgo na jednym z końców układu albo
-okrągłego znaczka przy jednym z pinów na narożniku. W przypadku tego drugiego, pin przy którym znajduje się to oznaczenie to pin nr 1.
-W przypadku oznaczonego końca układu, jeżeli obrócisz układ tak aby oznaczenie było na górze, pin nr 1 to lewy górny. W obu przypadkach kolejne piny
-liczy się idąc przeciwnie do ruchu wskazówek zegara. Przedstawia to poniższy rysunek:
+\begin{wrapfigure}{r}{0.35\textwidth}
+  \begin{center}
+    \vspace{-40pt}
+    \includegraphics[width=0.33\textwidth]{warsztat_elektroniczny/przewody_zasilające.jpg}
+    \vspace{-40pt}
+  \end{center}
+\end{wrapfigure}
 
-\textit{jakis schemat obudowy z ponumerowanymi pinami}
+\subsubsection{Zasilanie przetwornicy}
 
-Przy podłączaniu układu scalonego ważne jest aby nie pomylić numerów pinów (nóżek). Każdy z nich ma z góry określoną funkcję.
+Nasza przetwornica może być zasilona z baterii 9V lub zasilacza wtyczkowego 12V DC.
+Zarówno gniazdo baterii jak i zasilacz może być wyposażone w wtyk DC 2.5/5.5 lub 2.1/5.5 (taki jak widoczny na zdjęciu obok) lub bezpośrednio wyprowadzone przewody.
+W przypadku zastosowania wtyku DC będzie możliwe łatwe odłączanie zasilania od przetwornicy, jednak konieczne jest wtedy użycie także odpowiedniego gniazda DC
 
+\vspace{13pt}\noindent
+Pierwszym etapem uruchomienia jest sprawdzenie polaryzacji naszego źródła zasilania. W tym celu:
+\begin{itemize}
+	\item \textbf{odłączamy} przewody zasilające od przetwornicy – niektóre z przetwornic nie są odporne na niepoprawną polaryzację wejścia i doprowadzi ona do ich zniszczenia.
+	\item wkładamy wtyk DC do gniazda DC
+	\item włączamy multimetr i nastawiamy go na pomiar napięcia stałego (DC) w zakresie do 20V
+	\item dbając o to aby przewody zasilające nie stykały się ze sobą (aby uniknąć zwarcia) podłączamy zasilanie, czyli wkładamy zasilacz wtyczkowy do gniazdka, podłączamy baterię do złącza baterii
+	\item dokonujemy pomiaru napięcia na przewodach zasilających, zamieniając sondy multimetru i obserwując kiedy wykaże on napiecie ujemy ustalamy polaryzację zasilania
+	\item zapisujemy jaki kolor przewodu odpowiada masie, a jaki biegunowi dodatniemu
+	\item wyłączamy zasilanie – wyjmujemy wtyk DC z gniazdka DC lub odłączamy baterię od złącza lub wyjmujemy zasilacz wtyczkowy z gniazdka
+\end{itemize}
+Teraz możemy przykręcić przewody zasilające do naszej przetwornicy. Należy zwrócić szczególną uwagę aby podłączyć je do zacisków wejściowych (oznaczonych jako \texttt{IN}) z zachowaniem polaryzacji:
+\begin{itemize}
+	\item przewód na którym mieliśmy masę / biegun ujemny podłączamy do IN- / GND
+	\item przewód na którym mieliśmy biegun dodatni podłączamy do IN+
+\end{itemize}
+
+\begin{wrapfigure}{r}{0.4\textwidth}
+  \begin{center}
+    \vspace{-40pt}
+    \includegraphics[width=0.4\textwidth]{warsztat_elektroniczny/moduł_XL4015_LCD_2.jpg}
+    \vspace{-50pt}
+  \end{center}
+\end{wrapfigure}
+
+\subsubsection{Regulacja przetwornicy}
+
+W celu sprawdzenia działania przetwornicy:
+\begin{itemize}
+	\item do wyjścia przetwornicy podłącz multimetr nastawiony na zakres pomiaru napięcia stałego (DC) do 20V
+	\item włącz zasilanie przetwornicy – wkładamy wtyk DC do gniazdka DC lub podłączamy baterię od złącza lub wkładamy zasilacz wtyczkowy z gniazdka
+	\item multimetr wyświetla napięcie na wyjściu przetwornicy, jeżeli nasza przetwornica posiada wbudowany woltomierz to wskazania obu przyrządów powinny być podobne (mogą się różnić o ułamkowe Volta).
+\end{itemize}
+
+Przetwornica posiada dwa potencjomtery – jeden służy do regulacji napięcia drugi ograniczenia prądowego. Zazwyczaj są podpisane, ale jeżeli nie możemy łatwo ustalić który za co odpowiada.
+W tym celu przy pomocy odpowiedniego wkrętaka obróć śrubkę regulacyjną potencjomertu i zobacz jak wypływa to na napięcie wyjściowe.
+
+Nastaw napięcie wyjściowe na 5V. Drugi potencjometr odpowiedzialny jest za regulację prądu. Ustaw go w okolicy wartości minimalnej:
+\begin{enumerate}
+	\item pokręć nim aż do oporu lub kliku w stronę, która odpowiadała za zmniejszanie napięcia w potencjmoetrze odpowiedzialnym za regulację napięcia
+	\item zrób niewielki obrót w przeciwną stronę
+\end{enumerate}
+Następnie:
+\begin{enumerate}
+	\item odłącz multimetr od wyjścia przetwornicy, nastaw na pomiar prądu do 10A lub 20A i podłącz sondy do odpowiednich gniazd w mierniku.
+	\item przytknij na krótko (około 1 – 2 sekund) sondy do zacisków wyjściowych i zaobserwuj wskazanie multimetru.
+\end{enumerate}
+Jeżeli wskazanie było duże (około ampera lub kilku) obrócić potencjometr odpowiedzialny za regulację prądu w przeciwnym kierunku i ponów procedurę pomiaru.
+Jeżeli obyło ono poniżej 0.2A przestaw multimetr na zakres 200mA, przełóż sondy do odpowiednich gniazd i ponownie dokonaj pomiar.
+
+Nastaw ograniczenie prądowe na około 40mA.
 
 
 \section{Przygotowanie mikronotrolera}
-\textit{tutaj opisać co i jak polutować. Obrazki?}
+\todo{tutaj opisać co i jak polutować. Obrazki?}
+
+Bardzo możliwe, że Twój mikrokontroler nie będzie miał przylutowanych pinów do połączenia z płytką stykową.
+W takim wypdaku będziesz musiał/musiała użyć lutownicy aby je przylutować.\\
+
 \begin{ProTip}{\normalfont{\strong{Ostrożnie}}}
-  Bardzo możliwe, że Twój mikrokontroler nie będzie miał przylutowanych pinów do połączenia z płytką stykową.
-  W takim wypdaku będziesz musiał/musiała użyć lutownicy aby je przylutować.\\
   Podczas pracy, grot (metalowa końcówka) lutownicy jest rozgrzany do 200-400 stopni Celsjusza. Zachowaj ostrożność
   podczas jej używania. Zapamiętaj:
   \begin{itemize}
@@ -268,17 +277,6 @@ miejsca, które będziesz lutować. Po około sekundzie, dotknij pinu końcówk�
 
 Postaraj się aby listwy kołkowe były prostopadle do płytki. Jeżeli masz odcinek damskiej listwy, możesz za jego pomocą
 umiejscowić piny które lutujesz. Możesz też użyć do tego płytki stykowej. Lutowanie zacznij od czterech pinów na rogach płytki.
-
-\begin{Zadanie}{}{}
-  Znajdź dokumentację (kartę katalogową) do rejestru przesuwnego, który kupiłeś/aś (CD4094 lub 74HC595).
-  Odczytaj, jakie jest największe napięcie zasilania tego układu (\textit{supply voltage}, w sekcji
-  \textit{Absolute maximum ratings}).
-
-  \textit{Wskazówka: Najlepiej szukać dokumentacji pochodzącej od producenta.}
-\end{Zadanie}
-
-
-
 
 \subsection{Instalacja i przygotowanie narzędzi}
 
@@ -313,8 +311,9 @@ make
   w ten sposób ryzyka zwarcia i uszkodzenia elementów.
 \end{ProTip}
 
-Aby zaprogramować mikrokontroler musisz podłączyć go do przejściówki USB-UART. Umieść płytkę ``okrakiem'' nad przerwą
-w płytce stykowej. Za pomocą pasujących kabelków podłącz następujące piny przejściówki (nie podłączaj jeszcze
+Aby zaprogramować mikrokontroler musisz podłączyć go do przejściówki USB-UART.
+% Umieść płytkę ``okrakiem'' nad przerwą w płytce stykowej.
+Za pomocą pasujących kabelków podłącz następujące piny przejściówki (nie podłączaj jeszcze
 przejściówki do komputera) do pinów na mikrokontrolerze:
 \begin{itemize}
 \item masę (GND) do (dowolnej) masy miktrokontrolera (GND lub G)
@@ -337,6 +336,87 @@ stm32flash -C /dev/ttyUSB0
 \end{CodeFrame*}
 
 Tak przygotowany mikrokontroler jest gotowy do pracy.
+
+
+\section{Płytka stykowa}
+Płytka stykowa pozwala na szybkie prototypowanie układów bez konieczności lutowania. Składa się ona z macierzy dziurek,
+pod którymi są umieszczone blaszki łączące sąsiednie dziurki. Blaszki są umieszczone w taki sposób, aby łączyły wszystkie
+5 dziurek w kolumnie.
+\\
+
+Przez środek płytki stykowej przechodzi odstęp bez dziurek. Otworki w tej samej kolumnie, ale po przeciwnych jego
+stronach nie są ze sobą połączone elektrycznie. Służy ono do umieszczania tam układów scalonych w obudowach DIP.
+Układy wkłada się ``okrakiem'' nad tym odstępem, tak aby każda z nóżek trafiła do dziurki w oddzielnej kolumnie.
+Standardowo, po wyprodukowaniu układu, jego nóżki są rozgięte do zewnątrz. Jeżeli układ nie pasuje, to trzeba je troche dogiąć.
+Najłatwiej jest dogiąć jedną stronę na raz, na przykład o blat stołu. Nie należy doginać nóżek pojedynczo, np. za pomocą obcążków.
+Nie należy też niepotrzebnie rozginać nóżek, ponieważ po kilkunastu zgięciach mogą odpaść.
+\\
+
+\begin{Ramka}{}\begin{center}
+  \noindent\includegraphics[width=0.95\textwidth]{dip_ic.png}\\
+  Tak umieszczamy układy scalone w płytce stykowej. Po lewej stronie widać półokrągle wcięcie na obudowie. Pin 1 jest po lewej na dole.
+\end{center}\end{Ramka}
+
+Umieszczając inne elementy w płytce stykowej należy pamiętać, jak połączone są otworki - to znaczy, jeżeli chcemy
+połączyć dwa elementy, to ich odpowiednie ``nóżki'' muszą być umieszczone w tej samej kolumnie.
+\\
+
+Na brzegach płytki najczęściej znajdują się podłużne listwy, w których znajdują się grupy takich samych otworków jak
+na płytce, pogrupowanych w grupy 2 x 5. Niektóre płytki posiadają też nadrukowane kreski oraz znaki + i -. Te listwy
+służą do doprowadzania zasilania do układu na płytce. Otworki w jednej linii wzdłuż płytki są połączone elektrycznie - tworzą tzw.
+szynę zasilania. Napięcia zasilania (+ oraz -) z przetwornicy należy podłączać zgodnie z ew. nadrukami na płytce. Zmniejsza to ryzyko
+kosztownej pomyłki.
+\\
+
+W niektórych płytkach para szyn jest rozdzielona w połowie, i należy o tym pamiętać, ponieważ nie ma na to reguły.
+Możesz sprawdzić czy Twoja płytka ma rozdzielone szyny za pomocą multimetru (w trybie omomierza lub testu przewodnictwa). Pozwoli to uniknąć
+niespodzianek przy prototypowaniu.
+
+\begin{ProTip}{\normalfont{\strong{Uwaga}}}
+  Przed wprowadzaniem jakichkolwiek zmian na płytce stykowej odłącz zasilanie
+\end{ProTip}
+
+\begin{Zadanie}{}{}
+Za pomocą funkcji testu połączeń swojego miernika, sprawdź, czy Twoja płytka stykowa ma rozdzielone szyny zasilania.
+\end{Zadanie}
+
+\begin{Zadanie}{}{}
+  Znajdź w swoim zestawie opornik 1k$\Omega$ (możesz użyć multimetru, pamiętaj, że oporniki mają typową tolerancję 5\Verb$%$, więc jest mało prawodopodobne, że znajdziesz opornik który ma dokładnie 1000$\Omega$). Jaki prąd popłynie, gdy podłączysz go do napięcia 9V? Potwierdź swoje obliczenia
+  za pomocą multimetru.
+\end{Zadanie}
+
+\begin{Zadanie}{}{}
+  Jaka moc wydzieli się na oporniku z poprzedniego zadania?
+\end{Zadanie}
+
+
+\section{Układy scalone}
+Układy scalone pozwalają szybko i sprawnie konstruować skomplikowane układy elektroniczne przy minimum nakłądu i kosztu. Dzięki nim możemy
+używać gotowych bloków cyfrowych (np. licznik, sumator, bramka logiczna) oraz analogowych (regulator napięcia, wzmacniacz operacyjny,
+przełączniki anlogowe itp.) zamiast musieć budować je od postaw z elementów elektronicznych. Produkowane są układy o bardzo różnych stopniach
+integracji - od bardzo niskich, takich jak np. bramki logiczne, do bardzo wysokich, jak np. gotowe komputery (tzw. SoC - system on a chip).
+\\
+
+Na razie skupimy się na prostszych układach - a dokładniej na ich obudowie.
+
+Każdy układ w obudowie DIP ma oznaczony pin nr. 1. Z reguły to oznaczenie ma formę wklęsłego półokręgo na jednym z końców układu albo
+okrągłego znaczka przy jednym z pinów na narożniku. W przypadku tego drugiego, pin przy którym znajduje się to oznaczenie to pin nr 1.
+W przypadku oznaczonego końca układu, jeżeli obrócisz układ tak aby oznaczenie było na górze, pin nr 1 to lewy górny. W obu przypadkach kolejne piny
+liczy się idąc przeciwnie do ruchu wskazówek zegara. Przedstawia to poniższy rysunek:
+
+\textit{jakis schemat obudowy z ponumerowanymi pinami}
+
+Przy podłączaniu układu scalonego ważne jest aby nie pomylić numerów pinów (nóżek). Każdy z nich ma z góry określoną funkcję.
+
+
+\begin{Zadanie}{}{}
+  Znajdź dokumentację (kartę katalogową) do rejestru przesuwnego, który kupiłeś/aś (CD4094 lub 74HC595).
+  Odczytaj, jakie jest największe napięcie zasilania tego układu (\textit{supply voltage}, w sekcji
+  \textit{Absolute maximum ratings}).
+
+  \textit{Wskazówka: Najlepiej szukać dokumentacji pochodzącej od producenta.}
+\end{Zadanie}
+
 
 
 \copyrightFooter{
