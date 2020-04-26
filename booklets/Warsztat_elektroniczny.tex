@@ -26,7 +26,7 @@
 
 \usepackage[printwatermark]{xwatermark}
 \usepackage{tikz}
-
+\usetikzlibrary{circuits.ee.IEC}
 \title{Warsztat Elektroniczny}
 \author{%
 	Projekt ,,Matematyka dla Ciekawych Świata'',\\
@@ -49,6 +49,28 @@
 	before skip=13pt plus 2pt,
 	#1
 }
+% Symbol DC
+
+\newcommand{\mathdirectcurrent}{\mathrel{\mathpalette\mathdirectcurrentinner\relax}}
+\newcommand{\mathdirectcurrentinner}[2]{%
+  \settowidth{\dimen0}{$#1=$}%
+  \vbox to .85ex {\offinterlineskip
+    \hbox to \dimen0{\hss\leaders\hrule\hskip.85\dimen0\hss}
+    \vskip.35ex
+    \hbox to \dimen0{\hss
+      \leaders\hrule\hskip.17\dimen0
+      \hskip.17\dimen0
+      \leaders\hrule\hskip.17\dimen0
+      \hskip.17\dimen0
+      \leaders\hrule\hskip.17\dimen0
+    \hss}
+    \vfill
+  }%
+}
+% symbol diody
+\newcommand\esymbol[1]{\tikz[circuit ee IEC] \draw (0,0) -- (.1,0) node [#1,anchor=west,name=s] {} (s.east) -- +(.1,0);}
+
+\newcommand{\textdirectcurrent}{\mathdirectcurrentinner{\textstyle}{}}
 
 \begin{document}
 
@@ -56,24 +78,31 @@
 
 \newwatermark[allpages,color=red!50,angle=45,scale=3,xpos=0,ypos=0]{Wersja robocza}
 
-% \todo{o czym to w ogole jest? napisac slowo wstepne. Uoporządkować rozdziały}
+Elektronika to dziedzina nauki zajmująca się praktycznym wykorzystaniem prądu elektrycznego w postaci sygnałów do przetwarzania
+informacji. Aby sprawnie eksplorować tę dziedzinę, warto rozpocząć od zapoznania się z podstawowymi pojęciami i narzędziami w
+elektronice. Ten skrypt opisuje elementy niezbędne do pracy w małym warsztacie, który umożliwi Ci eksperymenty elektroniczne.
+Omówimy obsługę multimetru oraz przetwornicy, a także podstawy lutowania i bezpieczeństwa pracy w domowym warsztacie elektronicznym.
+
+\todo{Kolejność: ... lutowanie, płytka stykowa, układy scalone, podłączenie stm32}
 
 \section{Obsługa multimetru}
 
-Multimetr to przyrząd pomiarowy który posiada wiele funkcji. Najczęściej są to woltomierz (do pomiaru napięcia), amperomierz
-(do pomiaru natężenia, potocznie zwanego prądem) oraz omomierz (do pomiaru rezystancji). Często spotyka się także funkcje:
+Multimetr (zwany też miernikiem) to podstawowy przyrząd pomiarowy każdego elektronika. Zgodnie z nazwą posiada wiele funkcji pomiarowych.
+Najczęściej są to woltomierz (do pomiaru napięcia stałego \textbf{V$\mathdirectcurrent$} i zmiennego \textbf{V$\sim$}),
+amperomierz (do pomiaru natężenia prądu stałego \textbf{A$\mathdirectcurrent$} i zmiennego \textbf{A$\sim$}, potocznie zwanego prądem)
+oraz omomierz (do pomiaru rezystancji, \textbf{$\Omega$}). Często multrimetr posiada także funkcje:
 \begin{itemize}
-\item \emph{Test połączeń} (\textit{continuity mode}), oznaczany symbolem fali dźwiękowej (lub nuty), służy do sprawdzania połączeń elektrycznych.
-  Miernik wydaje dźwięk jeśli między przewodami jest połączenie.
-\item \emph{Pomiar diód} (\textit{diode check}), oznaczony symbolem diody, służy to sprawdzania diód i innych elementów półprzewodnikowych.
+\item \textbf{Test połączeń} (\textit{continuity mode}), oznaczany symbolem fali dźwiękowej (lub nuty), służy do sprawdzania połączeń elektrycznych.
+  Miernik wydaje dźwięk jeśli między sondami pomiarowymi (przewodami) jest połączenie.
+\item \textbf{Pomiar diod} (\textit{diode check}), oznaczony symbolem diody \esymbol{diode}, służy do sprawdzania diod i innych elementów półprzewodnikowych.
   Wyświetla spadek napięcia na testowanym złączu półprzewodnikowym.
-\item \emph{Test tranzystorów} (pomiar h\textsubscript{FE}), służący do pomiaru wzmocnienia tranzystora. Najczęściej posiada oddzielne gniazdo
+\item \textbf{Test tranzystorów} (pomiar h\textsubscript{FE}), służący do pomiaru wzmocnienia tranzystora. Najczęściej posiada oddzielne gniazdo
   na mierniku.
-\item \emph{Pomiar pojemności}, służy do pomiarów kondensatorów
-\item \emph{Pomiar temperatury}, najczęściej za pomocą termopary (dołączana do miernika).
+\item \textbf{Pomiar pojemności}, oznaczany symbolem \esymbol{capacitor} służy do pomiarów pojemności kondensatorów
+\item \textbf{Pomiar temperatury}, ocznaczany symbolem \textbf{$^{\circ}$C} najczęściej za pomocą termopary (dołączana do miernika).
 \end{itemize}
 
-Multimetr zachowuje się tak jak przyrząd pomiarowy którego funkcjonalność jest aktualnie wybrana. Oznacza to że należy go podłączać
+Multimetr zachowuje się tak jak przyrząd pomiarowy, którego funkcjonalność jest aktualnie wybrana. Oznacza to że należy go podłączać
 tak samo, jak odpowiednie przyrządy pomiarowe. 
 
 \subsection{Połączenie miernika}
@@ -81,119 +110,130 @@ W zależności od modelu, multimetr może posiadać od dwóch do czterech gniazd
 \begin{itemize}
 \item Masa, oznaczana \textbf{COM} (od słowa \textit{common}). Tutaj podłącza się czarny przewód
 \item Wejście pomiarowe dla woltomierza, ozn. symbolem \textbf{V}. Często także jest to wejście omomierza, oznaczone \textbf{$\Omega$},
-  oraz testu diód (ozn. symbolem diody)
+  oraz testu diod (ozn. symbolem diody \esymbol{diode})
 \item Wejście miliamperomierza, oznaczone symbolem \textbf{mA}. Jeżeli Twój miernik posiada trzy wejścia, to najczęściej jest ono
-  tym samym wejściem, co poprzednie.
+  tym samym wejściem, co wejście woltomierza.
 \item Wejście amperomierza, oznaczone symbolem \textbf{A}. Najczęściej również jest obok niego podany maksymalny dopuszczalny prąd
-  oraz czas pomiaru
+  oraz czas pomiaru.
 \end{itemize}
 
 \begin{Ramka}{}\begin{center}
   {\noindent\includegraphics[width=0.99\textwidth,clip=true]{dmm_terminals.png}}\\
   \small
-  Wejścia trzech różnych multimetrów. Pomiędzy wejściami zaznaczone są maksymalne wartości napięcia lub natężenia i informacja o zabezpieczeniach
-  (``FUSED'') bądź ich braku (``UNFUSED'').\\
+  Wejścia trzech różnych multimetrów. Pomiędzy wejściami zaznaczone są maksymalne wartości napięcia lub natężenia i informacja o zabezpieczeniach  (``FUSED'') bądź ich braku (``UNFUSED'').\\
   Od lewej: typowy model z trzema wejściami, model z czterema wejściami, model z trzema wejściami (bez miliamperomierza)
 \end{center}\end{Ramka}
 
-Przy wyborze multimetru należy zwrócić uwagę na jego wejścia. Modele z czterema wejściami są preferowane (zapewnia to izolację woltomierza
+Przy wyborze multimetru należy zwrócić uwagę na jego wejścia. Modele z czterema wejściami są preferowane (zapewnia to izolację funkcji woltomierza
 od amperomierza). Przyrząd musi być też opisany jako ``FUSED'', czyli posiadać bezpiecznik na zakresie miliamperomierza (oraz opcjonalnie,
-także amperomierza).
+także amperomierza). Pozwoli to uniknąć uszkodzenia multimetru w wypadku przekroczenia dopuszczalnego natężenia prądu.
 
 \subsection{Woltomierz}
-Woltomierz to przyrząd służący do pomiaru napięcia elektrycznego między dwoma punktami. Z tego powodu, woltomierz podłączamy
-\textbf{równolegle} do elementu, który badamy, lub między dwoma punktami w układzie. Opór woltomierza jest możliwie duży (rzeczywiste
-woltomierze mają opór około 1-10 M$\Omega$, woltomierz idealny ma nieskoczenie wysoki).
+Woltomierz to przyrząd służący do pomiaru napięcia elektrycznego między dwoma punktami. Z tego powodu
+\textbf{woltomierz podłączamy równolegle} do elementu, który badamy, lub między dwoma punktami w układzie. Opór woltomierza jest możliwie duży (rzeczywiste
+woltomierze mają opór około 1-10 M$\Omega$, woltomierz idealny ma opór nieskoczenie wysoki).
 
 \subsection{Amperomierz}
-Amperomierz (tudzież miliamperomierz) służy do pomiaru prądu płynącego w gałęzi obwodu. Z tego powodu, amperomierz podłączamy
-\textbf{szeregowo} z innymi elementami obwodu. Opór amperomierza jest możliwie mały (idealny amperomierz ma nieskończenie niski opór).
+Amperomierz (tudzież miliamperomierz) służy do pomiaru prądu płynącego w gałęzi obwodu. Z tego powodu
+\textbf{amperomierz podłączamy szeregowo} z innymi elementami obwodu. Opór amperomierza jest możliwie mały (idealny amperomierz
+ma nieskończenie niski opór).
 \\
 
 Podłączenie amperomierza równolegle powoduje zwarcie. Nie należy więc odkładać miernika ustawionego na zakres amperów, szczególnie
-w przypadku modeli które używają tego samego gniazda także do pomiaru oporności lub napięcia. Skutki pomyłki mogą być fatalne.
+w przypadku modeli, które używają tego samego gniazda do pomiaru oporności lub napięcia. Skutki pomyłki mogą być fatalne dla
+urządzenia - bezpiecznik się spali.
 
 \subsection{Omomierz}
-Omomierz jest przyrządem służącym do pomiaru oporności. Jego zasada działania jest dosyć prosta - składa się on ze źrodła małego napięcia
-które pojawia się na końcówkach kabli pomiarowych, i mierzy jaki prąd płynie przez element testowany. W praktyce służy
-tylko do pomiarów oporników. Trzeba pamiętać o tym, że jeżeli mierzymy element umieszczony w układzie, to jego oporność będzie zawsze
-niższa od oczekiwanej. Zasadniczo nie wykonuje się za jego pomocą pomiarów we włączonych układach.
+Omomierz jest przyrządem służącym do pomiaru oporności. Jego zasada działania jest dosyć prosta. Składa się on ze źrodła małego napięcia, które pojawia się na końcówkach przewodów pomiarowych. Gdy przyłożymy sondy do elementu mierzonego, omomierz zmierzy jaki prąd płynie przez element testowany i wyświetli jego opór.
 \\
+
+Omomierz w praktyce służy tylko do pomiarów oporników. Trzeba pamiętać o tym, że jeżeli mierzymy element umieszczony w układzie,
+to jego oporność będzie zawsze niższa od oczekiwanej. Taki opornik jest połączony równolegle z innymi elementami obwodu o
+nieznanym oporze, skąd wynika błąd pomiaru.
+Zasadniczo nie wykonuje się za jego pomocą pomiarów oporników we włączonych układach.
+\\
+
 Przy pomiarach większych oporników (ponad 100k$\Omega$) należy uważać aby nie dotykać palcami końcówek sond, ponieważ opór Twojego ciała
 zaniży pomiar. Lepiej jest położyć opornik na stole i przycisnąć jego nóżki za pomocą końcówek sond.
 
 
 \subsection{Inne funkcje multimetrów}
-Oprócz podstawowych funkcji\footnotemark, większość nowoczesnych multimetrów posiada także funkcje pomiaru diód oraz tranzystorów.
-Funkcja pomiaru diód jest najczęściej oznaczona symbolem diody półprzewodnikowej i korzysta z tej samej pary złącz, co woltomierz i omomierz.
-Aby zmierzyć spadek napięcia na diodzie należy dotknąć sondą podłączoną do masu (COM) do katody, a sondą dotanią do anody. Miernik wyświetli
-spadek napęcia na złączu diody. Jeżeli miernik wskazuje wynik poza skalą, może to oznaczać, że polaryzacja diody jest odwrotna lub spadek
-napięcia na jej złączu jest większy niż zakres pomiaru (który najczęściej wynosi mniej niż 2V).
+Oprócz podstawowych funkcji (pomiaru napięcia, natężenia i oporu)\footnotemark, większość nowoczesnych multimetrów posiada także funkcje pomiaru diod oraz tranzystorów.
+\\
 
-\footnotetext{Mierniki które posiadają tylko te trzy funkcje nazywane są po angielsku VOM (Volt-ohm-milliammmeter). Najczęściej są to mierniki
-  analogowe}
+Funkcja pomiaru diod jest najczęściej oznaczona symbolem diody półprzewodnikowej (\esymbol{diode}) i korzysta z tej samej pary złącz, co woltomierz i omomierz.
+Aby zmierzyć spadek napięcia na diodzie należy dotknąć sondą podłączoną do masy (COM) do katody, a sondą dodatnią do anody. Miernik wyświetli
+spadek napęcia na złączu diody. Jeżeli miernik wskazuje wynik poza skalą, może to oznaczać, że polaryzacja diody jest odwrotna (sondy są przyłożone na odwrót).
+Może też okazać się, że spadek napięcia na jej złączu jest większy niż zakres pomiaru (który najczęściej wynosi do 2V).
+\\
 
-Funkcja pomiaru współczynnika wzmocnienia transyzstora bipolarnego jest z reguły oznaczana \textbf{hFE} (od symbolu stosowanego do
-oznaczenia tej wartości\footnote{Czasami oznaczanego też jako \Beta}, Pomiar tranzystora za pomocą multimetru polega na umieszczeniu go w odpowiedni sposób w gnieździe pomiarowym
-w multimetrze. Jego emiter, baza oraz kolektor (oznaczane \textbf{E}, \textbf{B} i \textbf{C} odpowiednio) muszą trafić w odpowiednie
-otwory w odpowiedniej połowie gniazda (\textbf{PNP} oraz \textbf{NPN} zależnie od typu tranzystora). Gniadzo jest tak skontstruowane, że
+\footnotetext{Mierniki, które posiadają tylko te trzy funkcje nazywane są po angielsku VOM (Volt-ohm-milliammeter). Najczęściej są to mierniki
+  analogowe.}
+
+Funkcja pomiaru współczynnika wzmocnienia tranzystora bipolarnego jest z reguły oznaczana \textbf{hFE} (od symbolu stosowanego do
+oznaczenia tej wartości $\text{h}_{FE}$)\footnote{Czasami oznaczanego też jako $\beta$, beta.}. Pomiar tranzystora za pomocą multimetru polega na umieszczeniu jego nóżek w \textbf{odpowiedni sposób} w gnieździe pomiarowym
+w multimetrze. Jego emiter, baza oraz kolektor (oznaczane \textbf{E}, \textbf{B} i \textbf{C} odpowiednio) muszą trafić w
+otwory w odpowiedniej połowie gniazda (\textbf{PNP} oraz \textbf{NPN} zależnie od typu tranzystora). Trzeba go obrócić tak, żeby emiter trafił do \textbf{E}, baza do \textbf{B} a kolektor do \textbf{C}. Gniadzo jest tak skontstruowane, że
 pasują do niego tranzystory o dowolnej kolejności wyprowadzeń. Kolejność dla Twojego tranzystora jest opisana w jego karcie katalogowej.
-Po umieszczeniu tranzystora w gnieździe, na ekranie miernika pojawia się wartość jego hFE.
-
+Po umieszczeniu tranzystora w gnieździe, na ekranie miernika pojawia się wartość jego współczynnika wzmocnienia $\text{h}_{FE}$.
 % \todo{umieścić zdjęcie pokazujące to gniazdo}
+\\
 
 Niektóre mierniki posiadają także funkcje pomiaru pojemności elektrycznej kondensatora. W zależności od konstrukcji połączenie testowanego
-kondensatora odbywa się albo poprzez umieszczenie go w gnieździe miernika albo podłączenie sond do wyprowadzeń kondensatora. Należy pamiętać
-o tym, że trzeba ustawić zakres w podobny sposób przy innych pomiarach oraz o tym że \textbf{nie należy mierzyć pojemności naładowanych
-  kondensatorów}. Funkcja przydaje się przy sprawdzaniu kondensatorów ceramicznych lub foliowych o pojemnościach od kilku nF do
-kilkudziesięciu uF. Na kondensatorach elektrolitycznych lub tantalowych (o większych pojemnościach) wartość pojemności jest z reguły napisana na obudowie.
+kondensatora odbywa się poprzez umieszczenie go w specjalnym gnieździe na obudowie miernika albo przez podłączenie sond do wyprowadzeń kondensatora. Należy pamiętać
+o tym, że trzeba ustawić zakres w podobny sposób jak przy innych pomiarach. Uwaga - \textbf{nie należy mierzyć pojemności naładowanych
+  kondensatorów}. Funkcja pomiaru pojemności przydaje się przy sprawdzaniu kondensatorów ceramicznych lub foliowych o pojemnościach od kilku nF do kilkudziesięciu uF. Na kondensatorach elektrolitycznych lub tantalowych (o większych pojemnościach) wartość
+pojemności jest z reguły napisana na obudowie.
+\\
 
-Oprócz opisanych wyżej funkcji niektóre multimetry mogą mieć także funkcje pomiaru temperatury (poprzez termoparę lub termistor podłączane do
+Oprócz opisanych wyżej funkcji, niektóre multimetry mogą mieć także funkcje pomiaru temperatury (poprzez \textbf{termoparę}
+lub \textbf{termistor} podłączane do
 specjalnego złącza na mierniku) oraz pomiar częstotliwości.
 
 \subsection{Dokonywanie pomiarów}
 
 Zależnie od wielkości fizycznej, którą chcemy zmierzyć, czerwony (dodatni) przewód miernika musi być podłączony do odpowiadającego
-mu gniazda. Czarny przewód (ujemny, masa) należy zawsze podłączyć do gniazda \textbf{COM}. Miernik musimy ustawić na pomiar danej
+mu gniazda. Czarny przewód (ujemny, masa) należy zawsze podłączyć do gniazda \textbf{COM}. Miernik ustawiamy na pomiar danej
 wielkości.
 \\
 
 Przy wykonywaniu pomiaru nieznanej wartości należy rozpocząć od największego zakresu miernika i stopniowo zmniejszać zakres aż
 otrzymamy najdokładniejszy wynik. W przypadku gdy mierzona wartość przekracza aktualny zakres, miernik to zasygnalizuje, najczęściej
-wyświetlając ``\textbf{1}'' (po lewej stronie ekranu), lub ``\textbf{OL}''. W takiej sytuacji należy przełączyć zakres na większy.
+wyświetlając ``\textbf{1}'' (po lewej stronie ekranu), lub ``\textbf{OL}'' (\emph{overload}). Oba znaki oznaczają to samo, czyli wartość powyżej zakresu. W takiej sytuacji trzeba przełączyć zakres na większy.
 \\
 
-Przy pomiarze \textbf{napięcia} w danym punkcie układu, najczęściej masę miernika
-podłączamy do masy układu. Drugą sondę podłączamy do mierzonego punktu. Jeśli chcemy zmierzyć napięcie na jakimś elemencie (np. oporniku),
-masę miernika (czarną sondę) dotykamy do punktu w którym oczekujemy niższego napięcia, a czerwoną do punktu w którym oczekujemy
+Przy pomiarze \textbf{napięcia} w danym punkcie układu, najczęściej masę miernika (czarną sondę)
+podłączamy do masy układu. Drugą sondę (czerwoną) podłączamy do mierzonego punktu. Jeśli chcemy zmierzyć napięcie na jakimś elemencie (np. oporniku),
+masą miernika dotykamy do punktu, w którym oczekujemy niższego napięcia, a czerwoną do punktu, w którym oczekujemy
 wyższego napięcia. Jeżeli podłączymy sondy odwrotnie, po prostu dostaniemy wynik z przeciwnym znakiem. Woltomierz należy podłączać równolegle.
 \\
 
 Przy pomiarze \textbf{natężenia} w danej gałęzi układu należy zachować szczególną ostrożność. Podobnie jak wyżej, zaczynamy pomiar na największym
 zakresie miernika. W przeciwieństwie do woltomierza, amperomierz należy podłączyć szeregowo. Ponieważ opór wewnętrzny amperomierza jest bardzo
-niski (<1 $\Omega$), należy uważać, aby nie zrobić zwarcia
+niski (<1~$\Omega$), trzeba uważać, aby nie zrobić zwarcia.
 \\
 
-Pomiaru \textbf{oporności} dokonujemy dotykając końcówkami sond końcówek opornika (lub innego elementu). Dla oporników kolejność kabli nie ma znaczenia
+Pomiaru \textbf{oporności} dokonujemy dotykając końcówkami sond pomiarowych końcówek opornika (lub innego elementu). Dla oporników kolejność przewodów nie ma znaczenia
 (opór jest identyczny niezależnie od kierunku płynięcia prądu).
 \\
 
 Test połączenia służy do sprawdzania połączeń w układach. Przy wyłączonym zasilaniu dotykamy sondami do punktów, pomiędzy którymi chcemy
-sprawdzić połączenie. Jeżeli punkty są połączone miernik zasygnalizuje to brzęczykiem. Ta funkcja jest szczególnie przydatna przy sprawdzaniu
-prototypów na płytkach stykowych. Jeżeli Twój multimetr nie ma tej funkcji możesz użyć omomierza (bezpośrednie połączenie ma znikomy opór,
-maksymalnie kilka $\Omega$)
+sprawdzić połączenie. Jeżeli punkty są połączone, to miernik zasygnalizuje to brzęczykiem. Ta funkcja jest szczególnie przydatna przy sprawdzaniu
+prototypów na płytkach stykowych, lub przy sprawdzaniu prawidłowości połączeń w urządzeniu, które diagnozujemy. Jeżeli Twój
+multimetr nie ma tej funkcji, to możesz użyć omomierza (bezpośrednie połączenie ma znikomy opór, maksymalnie kilka~$\Omega$).
 \\
 
-Tester diód (i innych elementów półprzewodnikowych) pozwala sprawdzić polaryzację złącza półprzewodnikowego w elemencie. W tym celu dotykamy
+Tester diod (i innych elementów półprzewodnikowych) pozwala sprawdzić polaryzację złącza półprzewodnikowego w elemencie. W tym celu dotykamy
 sondami do obu końców testowanego elementu. Jeżeli ``trafiliśmy'' z polaryzacją sond (podłączyliśmy czarną sondę, COM, do katody, a czerwoną
 dodatnią, do anody), to miernik powinien pokazać spadek napięcia na złączu.
 W przeciwnym razie pokaże przekroczenie zakresu. Z reguły zakres spadków napięć jakie można w tym trybie zmierzyć jest poniżej 2V, więc
-większość diód LED pokaże spadek napięcia poza skalą (niektóre diody LED mogą się bardzo słabo świecić podczas pomiaru jeśli polaryzacja
+większość diod LED pokaże spadek napięcia poza skalą (niektóre diody LED mogą się bardzo słabo świecić podczas pomiaru jeśli polaryzacja
 sond jest prawidłowa).
 \\
 
-W niektórych multimetrach tester diody jest wspólny z testem połączeń, czyli multimetr sygnalizuje buzzerem sytuację,
-gdy spadek tego napięcia jest odpowiednio mały (co oznacza że mierzone punkty są ze sobą zwarte (lub połączone bardzo małym oporem).
+W niektórych multimetrach test diody jest wspólny z testem połączeń. W takim wypadku, w trybie testu multimetr sygnalizuje
+buzzerem sytuację, gdy spadek napięcia jest odpowiednio mały. Oznacza to, że mierzone punkty są ze sobą zwarte
+(lub połączone bardzo małym oporem).
 
 
 \section{Przetwornica zasilająca}
@@ -201,6 +241,7 @@ gdy spadek tego napięcia jest odpowiednio mały (co oznacza że mierzone punkty
 Przetwornica z regulacją napięcia i ograniczenia prądowego będzie pełniła funkcję (stosunkowo taniego i przenośnego) zasilacza laboratoryjnego.
 
 \subsection{Uruchomienie}
+\subsubsection{Zasilanie przetwornicy}
 
 \begin{wrapfigure}{r}{0.35\textwidth}
   \begin{center}
@@ -210,26 +251,34 @@ Przetwornica z regulacją napięcia i ograniczenia prądowego będzie pełniła 
   \end{center}
 \end{wrapfigure}
 
-\subsubsection{Zasilanie przetwornicy}
 
 Nasza przetwornica może być zasilona z baterii 9V lub zasilacza wtyczkowego 12V DC.
-Zarówno gniazdo baterii jak i zasilacz może być wyposażone w wtyk DC 2.5/5.5 lub 2.1/5.5 (taki jak widoczny na zdjęciu obok) lub bezpośrednio wyprowadzone przewody.
-W przypadku zastosowania wtyku DC będzie możliwe łatwe odłączanie zasilania od przetwornicy, jednak konieczne jest wtedy użycie także odpowiedniego gniazda DC
+Zarówno gniazdo baterii jak i zasilacz może być wyposażone we wtyk DC 2.5/5.5 lub 2.1/5.5 (taki jak widoczny na zdjęciu obok) lub bezpośrednio wyprowadzone przewodu.
+W przypadku zastosowania wtyku DC będzie możliwe łatwe odłączanie zasilania od przetwornicy. Jednak konieczne jest wtedy użycie także odpowiedniego gniazda DC.
+
+\begin{ProTip}{\normalfont{\strong{Uwaga}}}
+  \textbf{Niektóre przetwornice nie są odporne na niepoprawną polaryzację wejścia. Odwrotne podłączenie napięcia do wejścia takiej przetwornicy doprowadzi do jej zniszczenia. Dlatego odłącz przetwornicę od kabli zasilających zanim sprawdzisz ich polaryzację.}
+\end{ProTip}
 
 \vspace{13pt}\noindent
-Pierwszym etapem uruchomienia jest sprawdzenie polaryzacji naszego źródła zasilania. W tym celu:
+Niezależnie od tego, czy do zasilania przetwornicy używamy baterii, czy zasilacza wtyczkowego, musimy~\textbf{sprawdzić
+  polaryzację przewodów, które będziemy podłączać do przetwornicy}. 
+\\
+
+W tym celu:
 \begin{itemize}
-	\item \textbf{odłączamy} przewody zasilające od przetwornicy – niektóre z przetwornic nie są odporne na niepoprawną polaryzację wejścia i doprowadzi ona do ich zniszczenia.
-	\item wkładamy wtyk DC do gniazda DC
-	\item włączamy multimetr i nastawiamy go na pomiar napięcia stałego (DC) w zakresie do 20V
-	\item dbając o to aby przewody zasilające nie stykały się ze sobą (aby uniknąć zwarcia) podłączamy zasilanie, czyli wkładamy zasilacz wtyczkowy do gniazdka, podłączamy baterię do złącza baterii
-	\item dokonujemy pomiaru napięcia na przewodach zasilających, zamieniając sondy multimetru i obserwując kiedy wykaże on napiecie ujemy ustalamy polaryzację zasilania
-	\item zapisujemy jaki kolor przewodu odpowiada masie, a jaki biegunowi dodatniemu
-	\item wyłączamy zasilanie – wyjmujemy wtyk DC z gniazdka DC lub odłączamy baterię od złącza lub wyjmujemy zasilacz wtyczkowy z gniazdka
+	\item \textbf{odłączamy przewody zasilające od przetwornicy}.
+	\item wkładamy wtyk DC do gniazda DC zasilacza.
+	\item włączamy multimetr i nastawiamy go na pomiar napięcia stałego (DC) w zakresie do 20V.
+	\item dbając o to, aby przewody zasilające nie zetknęły się ze sobą (aby uniknąć zwarcia) podłączamy zasilanie, czyli wkładamy zasilacz wtyczkowy do gniazdka lub podłączamy baterię do złącza baterii.
+	\item dokonujemy pomiaru napięcia na przewodach zasilających, podłączając czerwoną sondę (dodatnią) do czerwonego przewodu, a masę (czarną sondę) do czarnego przewodu.
+        \item Multimetr powinien wskazać dodatnie napięcie. Jeżeli wskazuje ujemne, to znaczy, że polaryzacja naszego przewodu~zasilającego jest odwrotna. W takiej sytuacji \textbf{czerwony} przewód od zasilacza (lub baterii) jest \textbf{ujemny} a \textbf{czarny} jest \textbf{dodatni}. Jeśli multimetr wskazuje napięcie dodatnie, oznacza to, że kolory przewodów są zgodne z polaryzacją. 
+	\item zapisujemy jaki kolor przewodu odpowiada masie, a jaki biegunowi dodatniemu.
+	\item \textbf{wyłączamy zasilanie} – wyjmujemy wtyk DC z gniazdka DC, odłączamy baterię od złącza lub wyjmujemy zasilacz wtyczkowy z gniazdka.
 \end{itemize}
-Teraz możemy przykręcić przewody zasilające do naszej przetwornicy. Należy zwrócić szczególną uwagę aby podłączyć je do zacisków wejściowych (oznaczonych jako \texttt{IN}) z zachowaniem polaryzacji:
+Teraz możemy przykręcić przewody zasilające do naszej przetwornicy. Należy zwrócić szczególną uwagę aby podłączyć je do zacisków wejściowych (oznaczonych jako \texttt{IN}) z zachowaniem ustalonej przez nas polaryzacji:
 \begin{itemize}
-	\item przewód na którym mieliśmy masę / biegun ujemny podłączamy do IN- / GND
+	\item przewód na którym mieliśmy masę (biegun ujemny) podłączamy do IN- / GND
 	\item przewód na którym mieliśmy biegun dodatni podłączamy do IN+
 \end{itemize}
 
@@ -245,42 +294,36 @@ Teraz możemy przykręcić przewody zasilające do naszej przetwornicy. Należy 
 
 W celu sprawdzenia działania przetwornicy:
 \begin{itemize}
-	\item do wyjścia przetwornicy podłącz multimetr nastawiony na zakres pomiaru napięcia stałego (DC) do 20V
-	\item włącz zasilanie przetwornicy – wkładamy wtyk DC do gniazdka DC lub podłączamy baterię od złącza lub wkładamy zasilacz wtyczkowy z gniazdka
-	\item multimetr wyświetla napięcie na wyjściu przetwornicy, jeżeli nasza przetwornica posiada wbudowany woltomierz to wskazania obu przyrządów powinny być podobne (mogą się różnić o ułamkowe Volta).
+	\item do wyjścia przetwornicy podłączamy multimetr nastawiony na zakres pomiaru napięcia stałego (DC) do 20V.
+	\item włączamy zasilanie przetwornicy – wkładamy wtyk DC do gniazdka DC, podłączamy baterię od złącza lub wkładamy zasilacz wtyczkowy z gniazdka.
+	\item multimetr wyświetla napięcie na wyjściu przetwornicy. Jeżeli nasza przetwornica posiada wbudowany woltomierz to wskazania obu przyrządów powinny być podobne (mogą się różnić o ułamkowe części wolta).
 \end{itemize}
+\vspace*{\baselineskip}
 
-Przetwornica posiada dwa potencjomtery – jeden służy do regulacji napięcia drugi ograniczenia prądowego. Zazwyczaj są podpisane, ale jeżeli nie możemy łatwo ustalić który za co odpowiada.
-W tym celu przy pomocy odpowiedniego wkrętaka obróć śrubkę regulacyjną potencjomertu i zobacz jak wypływa to na napięcie wyjściowe.
+
+Przetwornica posiada dwa potencjometry – jeden służy do regulacji napięcia, a drugi do regulacji ograniczenia prądowego. Zazwyczaj są podpisane, ale jeżeli nie są, to możemy łatwo ustalić, który za co odpowiada.
+W tym celu, przy pomocy odpowiedniego wkrętaka, obróć śrubkę regulacyjną potencjometru od napięcia i zobacz jak wpływa to na napięcie wyjściowe.
 
 Nastaw napięcie wyjściowe na 5V. Drugi potencjometr odpowiedzialny jest za regulację prądu. Ustaw go w okolicy wartości minimalnej:
-\begin{enumerate}
-	\item pokręć nim aż do oporu lub kliku w stronę, która odpowiadała za zmniejszanie napięcia w potencjmoetrze odpowiedzialnym za regulację napięcia
-	\item zrób niewielki obrót w przeciwną stronę
-\end{enumerate}
+\begin{itemize}
+	\item pokręć nim aż do oporu lub kliknięcia w tę samą stronę, która odpowiadała za zmniejszanie napięcia w potencjometrze od regulacji napięcia.
+	\item zrób pół obrotu w przeciwną stronę.
+\end{itemize}
 Następnie:
-\begin{enumerate}
+\begin{itemize}
 	\item odłącz multimetr od wyjścia przetwornicy, nastaw na pomiar prądu do 10A lub 20A i podłącz sondy do odpowiednich gniazd w mierniku.
 	\item przytknij na krótko (około 1 – 2 sekund) sondy do zacisków wyjściowych i zaobserwuj wskazanie multimetru.
-\end{enumerate}
+\end{itemize}
 Jeżeli wskazanie było duże (około ampera lub kilku) obrócić potencjometr odpowiedzialny za regulację prądu w przeciwnym kierunku i ponów procedurę pomiaru.
-Jeżeli obyło ono poniżej 0.2A przestaw multimetr na zakres 200mA, przełóż sondy do odpowiednich gniazd i ponownie dokonaj pomiar.
+Jeżeli było ono poniżej 0.2A przestaw multimetr na zakres 200mA, przełóż sondy do odpowiednich gniazd i ponownie dokonaj pomiar.
 
 Nastaw ograniczenie prądowe na około 40mA.
 
 
-\section{Przygotowanie mikronotrolera}
-\begin{Ramka}{}\begin{center}
-  {\noindent\includegraphics[width=0.99\textwidth,clip=true]{lutowanie.png}}\\
-  \small
-  Lutowanie pinu mikrokontrolera. Listwy kołkowe zostały umieszczone w płytce stykowej aby je umiejscowić. Zaczynając od lewego górnego zdjęcia,
-  zgodnie z ruchem wskazówek zegara: Umiejscowione piny, ogrzanie pinu i pola lutowniczego na płytce mikronotrolera, dotknięcie spoiwem (cyną),
-  gotowy lut (oraz jego przybliżenie).
-\end{center}\end{Ramka}
-
+\section{Przygotowanie mikrokontrolera STM32}
 
 Bardzo możliwe, że Twój mikrokontroler nie będzie miał przylutowanych pinów do połączenia z płytką stykową.
-W takim wypdaku będziesz musiał/musiała użyć lutownicy aby je przylutować.\\
+W takim wypadku będziesz musiał/musiała użyć lutownicy, aby je przylutować.\\
 
 \begin{ProTip}{\normalfont{\strong{Ostrożnie}}}
   Podczas pracy, grot (metalowa końcówka) lutownicy jest rozgrzany do 200-400 stopni Celsjusza. Zachowaj ostrożność
@@ -288,47 +331,62 @@ W takim wypdaku będziesz musiał/musiała użyć lutownicy aby je przylutować.
   \begin{itemize}
   \item Zawsze odkładaj lutownicę do stojaka. Nigdy nie kładź jej luzem na stole.
   \item Nigdy nie łap za metalowy koniec lutownicy.
-  \item Nie wolno łapać spadającej lutownicy. Nie martw się, zawszę można kupić nową
-  \item Grot lutownicy jest gorący przez jakiś czas po wyłączeniu
-  \item Nie zostawiaj włączonej lutownicy bez opieki
-  \item Przed lutowaniem musisz odłączyć układ od zasilania
+  \item Nie wolno łapać spadającej lutownicy. Nie martw się, zawszę można kupić nową.
+  \item Grot lutownicy jest gorący przez jakiś czas po wyłączeniu.
+  \item Nie zostawiaj włączonej lutownicy bez opieki.
+  \item \textbf{Przed lutowaniem musisz odłączyć układ (lub urządzenie) od zasilania}.
   \end{itemize}
 \end{ProTip}
 
+\todo{kilka słów o lutownicy. jaki typ, moc, akcesoria, parametry}
+
+\begin{Ramka}{}\begin{center}
+  {\noindent\includegraphics[width=0.99\textwidth,clip=true]{lutowanie.png}}\\
+  \small
+  \textbf{Lutowanie pinu mikrokontrolera.} Listwy kołkowe zostały umieszczone w płytce stykowej, aby je umiejscowić. \textit{Zaczynając od lewego górnego zdjęcia,
+    zgodnie z ruchem wskazówek zegara:} Umiejscowienie pinu. Ogrzanie pinu i pola lutowniczego na płytce mikrokontrolera.
+  Dotknięcie spoiwem (cyną).
+  Gotowy lut (oraz jego przybliżenie).
+\end{center}\end{Ramka}
+\vspace*{\baselineskip}
+
 Jeżeli Twój mikrokontroler nie ma przylutowanych pinów, musisz przylutować je samemu. Przymierz i odetnij
 obcążkami dwa odcinki listwy kołkowej pasujące do otworów na brzegach płytki mikrokontrolera. Włóż piny do otworków
-na płytce. następnie odwiń lub wyciągnij odcinek cyny ze szpulki. Włącz lutownicę i odłóż ją na stojak. Jeżeli twoja lutownica
-ma ustawienie temperatury, ustaw je na około 250-300 st. C. Daj jej około minuty na osiągnięcie temperatury. Pamiętaj, że grot
+na płytce. Następnie odwiń lub wyciągnij odcinek cyny ze szpulki. Włącz lutownicę i odłóż ją na stojak. Jeżeli twoja lutownica
+ma ustawianie temperatury, ustaw ją na około 250-300 st. C. Daj jej około minuty na osiągnięcie temperatury. Pamiętaj, że grot
 lutownicy jest bardzo gorący. Lutownicę należy trzymać tylko i wyłącznie za rękojeść.
 \\
 
 Aby zalutować pin w otworze, najpierw dotknij grotem lutownicy
-miejsca, które będziesz lutować (pola lutowniczego) oraz pinu. Po około sekundzie, dotknij pinu końcówką odcinka cyny.
+miejsca, które będziesz lutować (pola lutowniczego) oraz pinu. Trzeba ogrzać oba elementy przed ich połączeniem. Po około sekundzie, dotknij pinu końcówką odcinka cyny.
 \\
 
-Postaraj się aby listwy kołkowe były prostopadle do płytki. Jeżeli masz odcinek damskiej listwy, możesz za jego pomocą
-umiejscowić piny które lutujesz. Możesz też użyć do tego płytki stykowej. Lutowanie zacznij od czterech pinów na rogach płytki.
+Postaraj się, aby listwy kołkowe były prostopadle do płytki. Jeżeli masz odcinek damskiej listwy, możesz za jego pomocą
+umiejscowić piny, które lutujesz. Możesz też użyć do tego płytki stykowej. Lutowanie zacznij od czterech pinów na rogach płytki.
 \\
 
-Kształt gotowego lutu powinien być stożkowaty. Jeżeli jest obły, oznacza to zbyt dużą ilość cyny. Kuliste luty prawdopodobnie nie związały z
-płytką (pole lutownicze nie było ogrzane). Jeśli lut nie jest błyszczący, oznacza to, że niepoprawnie związał. W takim wypadku spróbuj dodać
-topnika (np. kalafonii).
+Kształt gotowego lutu powinien być stożkowaty. Jeżeli jest obły, oznacza to zbyt dużą ilość użytej cyny. Kuliste luty prawdopodobnie nie związały pinu z płytką (pole lutownicze nie było dobrze ogrzane). Jeśli lut nie jest błyszczący, oznacza to, że niepoprawnie związał. W takim wypadku spróbuj dodać
+topnika (np. kalafonii).\\
 
-Umiejętne lutowanie wymaga trochę praktyki, ale nie jest skomplikowane. Pamiętaj aby lutować w dobrze wentylowanym pomieszczeniu oraz po
-zakończeniu umyć ręce.
+Umiejętne lutowanie wymaga trochę praktyki, ale nie jest skomplikowane. Pamiętaj, aby lutować w dobrze wentylowanym
+pomieszczeniu. Po zakończeniu umyj ręce.
+
+\todo{Część 2? }
 
 \subsection{Instalacja i przygotowanie narzędzi}
 
-Do programowania STM32 potrzebne jest kilka narzędzi
+Do programowania mikrokontrolera STM32 użyjemy następujących narzędzi programistycznych:
 
 \begin{itemize}
-  \item Toolchain arm-none-eabi (\Verb$gcc-arm-none-eabi$) oraz (\Verb$binutils-arm-none-eabi$)
-  \item Implementację libC (\Verb$libstdc++-arm-none-eabi-newlib$)
-  \item Narzędzie do programowania przez UART (\Verb$stm32flash$) oraz program terminalowy do obsługi prortów szeregowych (\Verb$picocom$)
-  \item Bibliotekę \Verb$libopencm3$
+\item Toolchain\footnotemark  dla architektury \emph{arm-none-eabi} (\Verb$gcc-arm-none-eabi$ oraz \Verb$binutils-arm-none-eabi$)
+  \footnotetext{Tooolchain to zbiorowe określenie na narzędzia do przekształcania kodu źródłowego na kod maszynowy. Zawiera m.in. kompilator, linker (konsolidator), narzędzia obsługujące pliki obiektowe oraz kopujące dane między formatami plików wykonywalnych (\texttt{objcopy}) itd.}
+\item Implementację libC (\Verb$libstdc++-arm-none-eabi-newlib$)
+\item Narzędzie do programowania przez UART (\Verb$stm32flash$)
+\item Program terminalowy do obsługi portów~szeregowych (\Verb$picocom$)
+\item Bibliotekę \Verb$libopencm3$
 \end{itemize}
-Wszystkie oprócz ostatniego dostępne są w repozytoriach Debiana (i systemów na nim opartych). Możesz je zainstalować
-za pomocą polecenia
+Wszystkie narzędzia, oprócz ostatniego, dostępne są w repozytoriach Debiana (i systemów na nim opartych). Możesz je zainstalować
+za pomocą polecenia:
 
 \begin{CodeFrame*}[bash]{}
 sudo apt install gcc-arm-none-eabi binutils-arm-none-eabi libstdc++-arm-none-eabi stm32flash picocom
@@ -342,18 +400,18 @@ cd libopencm3
 make
 \end{CodeFrame*}
 
-\subsection{Połączenie mikronotrolera}
-\textit {tutaj warto by powrzucać zdjęcia lub rysunki}
+\subsection{Połączenie mikrokontrolera}
+\todo {zdjęcia lub rysunki}
 
+\todo{wprowadzenie. aby połączyc stm32 z komputerem.....}
 \begin{ProTip}{\normalfont{\strong{Uwaga}}}
   Przed podłączaniem lub dokonywaniem jakichkolwiek zmian w układzie, odłącz go od zasilania. Unikniesz
   w ten sposób ryzyka zwarcia i uszkodzenia elementów.
 \end{ProTip}
 
-Aby zaprogramować mikrokontroler musisz podłączyć go do przejściówki USB-UART.
-% Umieść płytkę ``okrakiem'' nad przerwą w płytce stykowej.
-Za pomocą pasujących kabelków podłącz następujące piny przejściówki (nie podłączaj jeszcze
-przejściówki do komputera) do pinów na mikrokontrolerze:
+Aby zaprogramować mikrokontroler musisz podłączyć go do przejściówki USB-UART (nie podłączaj jeszcze
+przejściówki do komputera).
+Za pomocą pasujących kabelków i płytki stykowej podłącz następujące piny przejściówki do pinów na mikrokontrolerze:
 \begin{itemize}
 \item masę (GND) do (dowolnej) masy miktrokontrolera (GND lub G)
 \item RX do TX mikrokontrolera (pin A9)
@@ -430,9 +488,9 @@ Za pomocą funkcji testu połączeń swojego miernika, sprawdź, czy Twoja płyt
 
 
 \section{Układy scalone}
-Układy scalone pozwalają szybko i sprawnie konstruować skomplikowane układy elektroniczne przy minimum nakłądu i kosztu. Dzięki nim możemy
+Układy scalone pozwalają szybko i sprawnie konstruować skomplikowane układy elektroniczne przy minimum nakładu i kosztu. Dzięki nim możemy
 używać gotowych bloków cyfrowych (np. licznik, sumator, bramka logiczna) oraz analogowych (regulator napięcia, wzmacniacz operacyjny,
-przełączniki anlogowe itp.) zamiast musieć budować je od postaw z elementów elektronicznych. Produkowane są układy o bardzo różnych stopniach
+przełączniki anlogowe itp.) zamiast musieć budować je od postaw z elementów dyskretnych (transyzstory, oporniki itp.). Produkowane są układy o bardzo różnych stopniach
 integracji - od bardzo niskich, takich jak np. bramki logiczne, do bardzo wysokich, jak np. gotowe komputery (tzw. SoC - system on a chip).
 \\
 
@@ -451,7 +509,7 @@ Przy podłączaniu układu scalonego ważne jest aby nie pomylić numerów pinó
 \begin{Zadanie}{}{}
   Znajdź dokumentację (kartę katalogową) do rejestru przesuwnego, który kupiłeś/aś (CD4094 lub 74HC595).
   Odczytaj, jakie jest największe napięcie zasilania tego układu (\textit{supply voltage}, w sekcji
-  \textit{Absolute maximum ratings}).
+  \textit{Absolute maximum ratings}), oraz do których pinów należy podłączać napięcie zasilania (w sekcji \textit{pin configuration}).
 
   \textit{Wskazówka: Najlepiej szukać dokumentacji pochodzącej od producenta.}
 \end{Zadanie}
