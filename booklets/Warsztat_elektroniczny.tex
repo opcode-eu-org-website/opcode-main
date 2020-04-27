@@ -24,7 +24,6 @@
 
 \documentclass{pdfBooklets}
 
-\usepackage[printwatermark]{xwatermark}
 \usepackage{tikz}
 \usetikzlibrary{circuits.ee.IEC}
 \title{Warsztat Elektroniczny}
@@ -32,7 +31,7 @@
 	Projekt ,,Matematyka dla Ciekawych Świata'',\\
 	Krzysztof Lasocki\\\normalsize\ttfamily <krz.lasocki@gmail.com>
 }
-\date  {2020-04-04}
+\date  {2020-04-27}
 
 \makeatletter\hypersetup{
 	pdftitle = {\@title}, pdfauthor = {\@author}
@@ -76,14 +75,10 @@
 
 \maketitle
 
-\newwatermark[allpages,color=red!50,angle=45,scale=3,xpos=0,ypos=0]{Wersja robocza}
-
 Elektronika to dziedzina nauki zajmująca się praktycznym wykorzystaniem prądu elektrycznego w postaci sygnałów do przetwarzania
 informacji. Aby sprawnie eksplorować tę dziedzinę, warto rozpocząć od zapoznania się z podstawowymi pojęciami i narzędziami w
 elektronice. Ten skrypt opisuje elementy niezbędne do pracy w małym warsztacie, który umożliwi Ci eksperymenty elektroniczne.
 Omówimy obsługę multimetru oraz przetwornicy, a także podstawy lutowania i bezpieczeństwa pracy w domowym warsztacie elektronicznym.
-
-\todo{Kolejność: ... lutowanie, płytka stykowa, układy scalone, podłączenie stm32}
 
 \section{Obsługa multimetru}
 
@@ -186,6 +181,12 @@ o tym, że trzeba ustawić zakres w podobny sposób jak przy innych pomiarach. U
 pojemności jest z reguły napisana na obudowie.
 \\
 
+\begin{ProTip}{\normalfont{\strong{Uwaga}}}
+  Kondensatory elektrolityczne oraz tantalowe są elementami \textbf{spolaryzowanymi}. Podłączając je, należey pamiętać o polaryzacji i podłączać je
+  tylko zgodnie z polaryzacją - biegun ujemny do punktu o niższym napięciu, a biegun dodatni do punktu o wyższym napięciu. Na tych kondensatorach jeden
+  z biegunów (najczęściej ujemny) jest zaznaczony na obudowie
+\end{ProTip}
+
 Oprócz opisanych wyżej funkcji, niektóre multimetry mogą mieć także funkcje pomiaru temperatury (poprzez \textbf{termoparę}
 lub \textbf{termistor} podłączane do
 specjalnego złącza na mierniku) oraz pomiar częstotliwości.
@@ -233,7 +234,12 @@ sond jest prawidłowa).
 
 W niektórych multimetrach test diody jest wspólny z testem połączeń. W takim wypadku, w trybie testu multimetr sygnalizuje
 buzzerem sytuację, gdy spadek napięcia jest odpowiednio mały. Oznacza to, że mierzone punkty są ze sobą zwarte
-(lub połączone bardzo małym oporem).
+(lub połączone bardzo małym oporem).\\
+
+\begin{ProTip}{\normalfont{\strong{Wskazówka}}}
+  W zmontowanym układzie można dokonywać tylko pomiarów woltomierzem. Amperomierz, omomierz i pomiar pojemności można używać tylko do pomiarów elementów
+  poza układem.
+\end{ProTip}
 
 
 \section{Przetwornica zasilająca}
@@ -265,7 +271,7 @@ Niezależnie od tego, czy do zasilania przetwornicy używamy baterii, czy zasila
   polaryzację przewodów, które będziemy podłączać do przetwornicy}. 
 \\
 
-W tym celu:
+\noindent W tym celu:
 \begin{itemize}
 	\item \textbf{odłączamy przewody zasilające od przetwornicy}.
 	\item wkładamy wtyk DC do gniazda DC zasilacza.
@@ -338,17 +344,14 @@ W takim wypadku będziesz musiał/musiała użyć lutownicy, aby je przylutować
   \end{itemize}
 \end{ProTip}
 
-\todo{kilka słów o lutownicy. jaki typ, moc, akcesoria, parametry}
+Do lutowania drobnej elektroniki (takiej jak mikrokontrolery i układy scalone) najepsza jest precyzyjna lutownica o małej mocy (do 30W),
+z regualcją temperatury oraz ostrym lub małym płaskim (w kształcie śrubokręta płaskiego, około 2mm szerokości) grotem. Potrzebny jest też do niej
+stojak. Inne przydatne akcesoria to kalafonia (ułatwia lutowanie) lub topnik (elektroniczny), oraz wyciorek do wycierania grotu - może być to specjalna gąbka (zwilżona
+przed użyciem) lub druciak do mycia naczyń.\\
 
-\begin{Ramka}{}\begin{center}
-  {\noindent\includegraphics[width=0.99\textwidth,clip=true]{lutowanie.png}}\\
-  \small
-  \textbf{Lutowanie pinu mikrokontrolera.} Listwy kołkowe zostały umieszczone w płytce stykowej, aby je umiejscowić. \textit{Zaczynając od lewego górnego zdjęcia,
-    zgodnie z ruchem wskazówek zegara:} Umiejscowienie pinu. Ogrzanie pinu i pola lutowniczego na płytce mikrokontrolera.
-  Dotknięcie spoiwem (cyną).
-  Gotowy lut (oraz jego przybliżenie).
-\end{center}\end{Ramka}
-\vspace*{\baselineskip}
+Najwygodniej jest używać spoiwo lutownicze formie drutu o średnicy nie większej niż 0.5 mm, najlepiej 0.25mm. Przy budowie prototypów
+najczęściej używa się cyny ołowiowej Sn40/Pb60 (stop 40\% cyny oraz 60\% ołowiu).
+\\
 
 Jeżeli Twój mikrokontroler nie ma przylutowanych pinów, musisz przylutować je samemu. Przymierz i odetnij
 obcążkami dwa odcinki listwy kołkowej pasujące do otworów na brzegach płytki mikrokontrolera. Włóż piny do otworków
@@ -361,6 +364,17 @@ Aby zalutować pin w otworze, najpierw dotknij grotem lutownicy
 miejsca, które będziesz lutować (pola lutowniczego) oraz pinu. Trzeba ogrzać oba elementy przed ich połączeniem. Po około sekundzie, dotknij pinu końcówką odcinka cyny.
 \\
 
+
+\begin{Ramka}{}\begin{center}
+  {\noindent\includegraphics[width=0.99\textwidth,clip=true]{lutowanie.png}}\\
+  \small
+  \textbf{Lutowanie pinu mikrokontrolera.} Listwy kołkowe zostały umieszczone w płytce stykowej, aby je umiejscowić. \textit{Zaczynając od lewego górnego zdjęcia,
+    zgodnie z ruchem wskazówek zegara:} Umiejscowienie pinu. Ogrzanie pinu i pola lutowniczego na płytce mikrokontrolera.
+  Dotknięcie spoiwem (cyną).
+  Gotowy lut (oraz jego przybliżenie).
+\end{center}\end{Ramka}
+\vspace*{\baselineskip}
+
 Postaraj się, aby listwy kołkowe były prostopadle do płytki. Jeżeli masz odcinek damskiej listwy, możesz za jego pomocą
 umiejscowić piny, które lutujesz. Możesz też użyć do tego płytki stykowej. Lutowanie zacznij od czterech pinów na rogach płytki.
 \\
@@ -370,8 +384,6 @@ topnika (np. kalafonii).\\
 
 Umiejętne lutowanie wymaga trochę praktyki, ale nie jest skomplikowane. Pamiętaj, aby lutować w dobrze wentylowanym
 pomieszczeniu. Po zakończeniu umyj ręce.
-
-\todo{Część 2? }
 
 \subsection{Instalacja i przygotowanie narzędzi}
 
@@ -401,17 +413,12 @@ make
 \end{CodeFrame*}
 
 \subsection{Połączenie mikrokontrolera}
-\todo {zdjęcia lub rysunki}
-
-\todo{wprowadzenie. aby połączyc stm32 z komputerem.....}
-\begin{ProTip}{\normalfont{\strong{Uwaga}}}
-  Przed podłączaniem lub dokonywaniem jakichkolwiek zmian w układzie, odłącz go od zasilania. Unikniesz
-  w ten sposób ryzyka zwarcia i uszkodzenia elementów.
-\end{ProTip}
+Aby móc uruchomić nasz kod na mikrokontrolerze, musimy podłączyć go do komputera w celu wgrywania na niego skompilowanych programów.
+STM32 można programować na wiele sposobów, my będziemy używać do tego interfejsu UART\footnote{Inne z nich to SWD oraz JTAG}.\\
 
 Aby zaprogramować mikrokontroler musisz podłączyć go do przejściówki USB-UART (nie podłączaj jeszcze
 przejściówki do komputera).
-Za pomocą pasujących kabelków i płytki stykowej podłącz następujące piny przejściówki do pinów na mikrokontrolerze:
+Za pomocą pasujących kabelków podłącz następujące piny przejściówki do pinów na mikrokontrolerze:
 \begin{itemize}
 \item masę (GND) do (dowolnej) masy miktrokontrolera (GND lub G)
 \item RX do TX mikrokontrolera (pin A9)
@@ -423,10 +430,10 @@ Za pomocą obcążków lub pęsety przełóż górną (patrząc na mikrokontrole
 pozycję ``1''.
 
 Sprawdź wszystkie połączenia i podłącz przejściówkę do portu USB komputera. Na mikrokontrolerze powinna zaświecić się tylko czerwona dioda
-\textit{PWR}
+\texttt{PWR}
 
 Możesz sprawdzić połączenie z mikrokontrolerem używając \Verb$stm32flash$ do obliczenia sumy kontrolnej pamięci mikrokontrolera.
-Jeżeli polecenie poniżej nie zgłosi błędów, wszystko działa poprawnie.
+Jeżeli polecenie poniżej nie zgłosi błędów, oznacza to, że wszystko działa poprawnie.
 
 \begin{CodeFrame*}[bash]{}
 stm32flash -C /dev/ttyUSB0
@@ -438,48 +445,55 @@ Tak przygotowany mikrokontroler jest gotowy do pracy.
 \section{Płytka stykowa}
 Płytka stykowa pozwala na szybkie prototypowanie układów bez konieczności lutowania. Składa się ona z macierzy dziurek,
 pod którymi są umieszczone blaszki łączące sąsiednie dziurki. Blaszki są umieszczone w taki sposób, aby łączyły wszystkie
-5 dziurek w kolumnie.
+5 dziurek w kolumnie. Dzięki temu zamiast budować prototypy lutując je na uniwersalnych płytkacj drukowanych, wystarczy, że
+umieścimy nasze elementy w otworkach płytki stykowej. 
 \\
 
-Przez środek płytki stykowej przechodzi odstęp bez dziurek. Otworki w tej samej kolumnie, ale po przeciwnych jego
+Przez środek płytki przechodzi wyżłobienie bez dziurek. Otworki w tej samej kolumnie, ale po przeciwnych jego
 stronach nie są ze sobą połączone elektrycznie. Służy ono do umieszczania tam układów scalonych w obudowach DIP.
 Układy wkłada się ``okrakiem'' nad tym odstępem, tak aby każda z nóżek trafiła do dziurki w oddzielnej kolumnie.
-Standardowo, po wyprodukowaniu układu, jego nóżki są rozgięte do zewnątrz. Jeżeli układ nie pasuje, to trzeba je troche dogiąć.
-Najłatwiej jest dogiąć jedną stronę na raz, na przykład o blat stołu. Nie należy doginać nóżek pojedynczo, np. za pomocą obcążków.
-Nie należy też niepotrzebnie rozginać nóżek, ponieważ po kilkunastu zgięciach mogą odpaść.
+Typowo, po wyprodukowaniu w fabryce, nóżki układów scalonych są rozgięte do zewnątrz. Jeżeli układ nie pasuje do płytki,
+to trzeba je troche dogiąć.
+Najłatwiej jest doginać jedną stronę na raz, na przykład o blat stołu. Nie należy doginać nóżek pojedynczo, np. za pomocą obcążków.
+Nie powinno się też nadmiernie ich rozginać, ponieważ po kilkunastu zgięciach mogą odpaść.
 \\
 
 \begin{Ramka}{}\begin{center}
   \noindent\includegraphics[width=0.95\textwidth]{dip_ic.png}\\
-  Tak umieszczamy układy scalone w płytce stykowej. Po lewej stronie widać półokrągle wcięcie na obudowie. Pin 1 jest po lewej na dole.
+  Tak umieszczamy układy scalone w płytce stykowej. Dzięki temu każdy z pinów ma połączenie z oddzielną kolumną otworków na płytce.
 \end{center}\end{Ramka}
 
-Umieszczając inne elementy w płytce stykowej należy pamiętać, jak połączone są otworki - to znaczy, jeżeli chcemy
-połączyć dwa elementy, to ich odpowiednie ``nóżki'' muszą być umieszczone w tej samej kolumnie.
+Umieszczając inne elementy w płytce stykowej należy pamiętać, jak połączone są otworki - to znaczy, że jeżeli chcemy
+połączyć dwa elementy, to ich odpowiednie ``nóżki'' muszą być umieszczone w tej samej kolumnie. Można też połączyć dwie kolumy otworków
+ze sobą za pomocą pasujących kabelków.
 \\
 
-Na brzegach płytki najczęściej znajdują się podłużne listwy, w których znajdują się grupy takich samych otworków jak
-na płytce, pogrupowanych w grupy 2 x 5. Niektóre płytki posiadają też nadrukowane kreski oraz znaki + i -. Te listwy
-służą do doprowadzania zasilania do układu na płytce. Otworki w jednej linii wzdłuż płytki są połączone elektrycznie - tworzą tzw.
-szynę zasilania. Napięcia zasilania (+ oraz -) z przetwornicy należy podłączać zgodnie z ew. nadrukami na płytce. Zmniejsza to ryzyko
-kosztownej pomyłki.
-\\
+Na brzegach płytki najczęściej znajdują się podłużne listwy z takimi samymi otworkami, co reszta płytki, pogrupowanymi w grupy 2x5.
+Niektóre płytki posiadają też nadrukowane kreski oraz znaki + i -. Te listwy służą do doprowadzania
+zasilania do układu na płytce. Otworki w jednej linii wzdłuż płytki są połączone elektrycznie - tworzą tzw.
+\textbf{szynę zasilania}. Z reguły umieszczane są w parach - jedna szyna dla dodatniego napięcia, a druga dla ujemnego (masy).\\
 
-W niektórych płytkach para szyn jest rozdzielona w połowie, i należy o tym pamiętać, ponieważ nie ma na to reguły.
+Jeżeli twoja płytka ma nadrukowane oznaczenia wzdłuż tych szyn, to napięcia zasilania (+ oraz -) z przetwornicy należy podłączać zgodnie z~tymi
+oznaczeniami. Zmniejsza to ryzyko kosztownej pomyłki.\\
+
+W niektórych płytkach szyny zasilania są rozdzielone w połowie. Należy o tym pamiętać, ponieważ nie ma na to reguły.
 Możesz sprawdzić czy Twoja płytka ma rozdzielone szyny za pomocą multimetru (w trybie omomierza lub testu przewodnictwa). Pozwoli to uniknąć
 niespodzianek przy prototypowaniu.
 
 \begin{ProTip}{\normalfont{\strong{Uwaga}}}
-  Przed wprowadzaniem jakichkolwiek zmian na płytce stykowej odłącz zasilanie
+  Przed wprowadzaniem jakichkolwiek zmian na płytce stykowej odłącz zasilanie. Pozwoli to uniknąć przypadkowych zwarć i uszkodzeń elementów.
 \end{ProTip}
 
 \begin{Zadanie}{}{}
-Za pomocą funkcji testu połączeń swojego miernika, sprawdź, czy Twoja płytka stykowa ma rozdzielone szyny zasilania.
+  Za pomocą funkcji testu połączeń swojego miernika, sprawdź, czy Twoja płytka stykowa ma rozdzielone szyny zasilania.
+  \textit{Wskazówka: Użyj odpowiednich kabelków żeby podłączyć sondy miernika do szyn na płytce - jeden koniec kabelka włóż do płytki a drugim
+    dotknij do sondy miernika.}
 \end{Zadanie}
 
 \begin{Zadanie}{}{}
-  Znajdź w swoim zestawie opornik 1k$\Omega$ (możesz użyć multimetru, pamiętaj, że oporniki mają typową tolerancję 5\Verb$%$, więc jest mało prawodopodobne, że znajdziesz opornik który ma dokładnie 1000$\Omega$). Jaki prąd popłynie, gdy podłączysz go do napięcia 9V? Potwierdź swoje obliczenia
-  za pomocą multimetru.
+  Znajdź w swoim zestawie opornik 1k$\Omega$ (możesz użyć do tego multimetru, ale pamiętaj, że oporniki mają typową tolerancję 5\Verb$%$,
+  więc jest mało prawodopodobne, że znajdziesz opornik który ma dokładnie 1000$\Omega$). Jaki prąd popłynie, gdy podłączysz go do napięcia 9V?
+  Potwierdź swoje obliczenia za pomocą pomiaru multimetrem.
 \end{Zadanie}
 
 \begin{Zadanie}{}{}
@@ -488,21 +502,58 @@ Za pomocą funkcji testu połączeń swojego miernika, sprawdź, czy Twoja płyt
 
 
 \section{Układy scalone}
-Układy scalone pozwalają szybko i sprawnie konstruować skomplikowane układy elektroniczne przy minimum nakładu i kosztu. Dzięki nim możemy
+\textbf{Układy scalone} pozwalają szybko i sprawnie konstruować skomplikowane układy elektroniczne przy minimum nakładu i kosztu. Dzięki nim możemy
 używać gotowych bloków cyfrowych (np. licznik, sumator, bramka logiczna) oraz analogowych (regulator napięcia, wzmacniacz operacyjny,
-przełączniki anlogowe itp.) zamiast musieć budować je od postaw z elementów dyskretnych (transyzstory, oporniki itp.). Produkowane są układy o bardzo różnych stopniach
-integracji - od bardzo niskich, takich jak np. bramki logiczne, do bardzo wysokich, jak np. gotowe komputery (tzw. SoC - system on a chip).
+przełączniki anlogowe itp.) zamiast budować je od postaw z \textbf{elementów dyskretnych} (transyzstory, oporniki itp.). Produkowane są
+układy o bardzo różnych stopniach integracji - od bardzo niskich, takich jak np. bramki logiczne, do bardzo wysokich, jak np. gotowe komputery
+(tzw. SoC - system on a chip).
 \\
 
-Na razie skupimy się na prostszych układach - a dokładniej na ich obudowie.
+Na razie skupimy się na prostszych układach, które możesz umieścić w swojej płytce stykowej - układach, które produkowane są w obudowach DIP.\\
 
-Każdy układ w obudowie DIP ma oznaczony pin nr. 1. Z reguły to oznaczenie ma formę wklęsłego półokręgo na jednym z końców układu albo
-okrągłego znaczka przy jednym z pinów na narożniku. W przypadku tego drugiego, pin przy którym znajduje się to oznaczenie to pin nr 1.
-W przypadku oznaczonego końca układu, jeżeli obrócisz układ tak aby oznaczenie było na górze, pin nr 1 to lewy górny. W obu przypadkach kolejne piny
-liczy się idąc przeciwnie do ruchu wskazówek zegara. Przedstawia to poniższy rysunek:
+Układ scalony posiada od kilku do kilkudziesięciu wyprowadzeń które służą do łączenia go z innymi elementami układu elektronicznego.
+Każde z tych wyporwadzeń pełni określoną funkcję (zasilanie, wejścia, wyjścia itp.). W karcie~katalogowej danego układu scalonego wszystkie
+piny są ponumerowane, nazwane a ich funkcje opisane.
 
-\textit{jakis schemat obudowy z ponumerowanymi pinami}
+W Twoich ekseprymentach będziesz miał najczęściej do czynienia z układami w obdudowie typu \textbf{DIP}. Charakteryzuje się ona prostopadłymi,
+szeroko (w porównaniu do innych obudów) rozstawionymi pinami które można łatwo umieścić w płytce stykowej.
 
+\begin{ProTip}{\normalfont{\strong{Wskazówka}}}
+  W elektronice do wyrażania wymiarów stosuje się m.in. jednostkę \textbf{mil}\footnote{zwaną też \textit{thou}, od \textit{thousands of an inch}},
+  równą 1/1000 cala. Rozstaw nóżek w obudowie DIP to 100 mili (= 2.54 mm). Taki sam jest również rozstaw otworków na płytce stykowej.
+\end{ProTip}
+
+\begin{wrapfigure}{r}{0.25\textwidth}
+  \begin{center}
+    \vspace{-10pt}
+    \includegraphics[height=0.25\textwidth,angle=90,origin=c]{img/elektronika/DIP14}
+    \vspace{-40pt}
+    
+    \small{14-pinowa obudowa DIP, widok z~góry}
+    \vspace{-20pt}
+  \end{center}
+\end{wrapfigure}
+
+W Twoich ekseprymentach będziesz miał najczęściej do czynienia z układami w obdudowie typu \textbf{DIP}. Charakteryzuje się ona prostopadłymi,
+szeroko (w porównaniu do innych obudów) rozstawionymi pinami które można łatwo umieścić w płytce stykowej.
+
+W obudowie typu DIP, oznaczenie pinu 1. ma formę wklęsłego wcięcia na jednym z końców układu, lub kropki na narożniku. W przypadku tego drugiego, pin przy którym znajduje się kropka to pin nr 1. W przypadku wcięcia, pin nr 1 to lewy dolny, patrząc na układ obrócony oznaczonym końcem w lewo, napisami na obudowie w Twoją stronę. Kolejne piny liczy się idąc przeciwnie do ruchu wskazówek zegara. Przedstawia to rysunek obok.
+
+\begin{wrapfigure}{r}{0.25\textwidth}
+  \begin{center}
+    \vspace{-10pt}
+    \includegraphics[height=0.25\textwidth,angle=90,origin=c]{img/elektronika/DIP14}
+    \vspace{-40pt}
+    
+    \small{14-pinowa obudowa DIP, widok z~góry}
+    \vspace{-20pt}
+  \end{center}
+\end{wrapfigure}
+
+W Twoich ekseprymentach będziesz miał najczęściej do czynienia z układami w obdudowie typu \textbf{DIP}. Charakteryzuje się ona prostopadłymi,
+szeroko (w porównaniu do innych obudów) rozstawionymi pinami które można łatwo umieścić w płytce stykowej.
+
+W obudowie typu DIP, oznaczenie pinu 1. ma formę wklęsłego wcięcia na jednym z końców układu, lub kropki na narożniku. W przypadku tego drugiego, pin przy którym znajduje się kropka to pin nr 1. W przypadku wcięcia, pin nr 1 to lewy dolny, patrząc na układ obrócony oznaczonym końcem w lewo, napisami na obudowie w Twoją stronę. Kolejne piny liczy się idąc przeciwnie do ruchu wskazówek zegara. Przedstawia to rysunek obok.
 Przy podłączaniu układu scalonego ważne jest aby nie pomylić numerów pinów (nóżek). Każdy z nich ma z góry określoną funkcję.
 
 
@@ -510,10 +561,7 @@ Przy podłączaniu układu scalonego ważne jest aby nie pomylić numerów pinó
   Znajdź dokumentację (kartę katalogową) do rejestru przesuwnego, który kupiłeś/aś (CD4094 lub 74HC595).
   Odczytaj, jakie jest największe napięcie zasilania tego układu (\textit{supply voltage}, w sekcji
   \textit{Absolute maximum ratings}), oraz do których pinów należy podłączać napięcie zasilania (w sekcji \textit{pin configuration}).
-
-  \textit{Wskazówka: Najlepiej szukać dokumentacji pochodzącej od producenta.}
 \end{Zadanie}
-
 
 
 \copyrightFooter{
