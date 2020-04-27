@@ -181,6 +181,12 @@ o tym, że trzeba ustawić zakres w podobny sposób jak przy innych pomiarach. U
 pojemności jest z reguły napisana na obudowie.
 \\
 
+\begin{ProTip}{\normalfont{\strong{Uwaga}}}
+  Kondensatory elektrolityczne oraz tantalowe są elementami \textbf{spolaryzowanymi}. Podłączając je, należey pamiętać o polaryzacji i podłączać je
+  tylko zgodnie z polaryzacją - biegun ujemny do punktu o niższym napięciu, a biegun dodatni do punktu o wyższym napięciu. Na tych kondensatorach jeden
+  z biegunów (najczęściej ujemny) jest zaznaczony na obudowie
+\end{ProTip}
+
 Oprócz opisanych wyżej funkcji, niektóre multimetry mogą mieć także funkcje pomiaru temperatury (poprzez \textbf{termoparę}
 lub \textbf{termistor} podłączane do
 specjalnego złącza na mierniku) oraz pomiar częstotliwości.
@@ -228,9 +234,15 @@ sond jest prawidłowa).
 
 W niektórych multimetrach test diody jest wspólny z testem połączeń. W takim wypadku, w trybie testu multimetr sygnalizuje
 buzzerem sytuację, gdy spadek napięcia jest odpowiednio mały. Oznacza to, że mierzone punkty są ze sobą zwarte
-(lub połączone bardzo małym oporem).
+(lub połączone bardzo małym oporem).\\
+
+\begin{ProTip}{\normalfont{\strong{Wskazówka}}}
+  W zmontowanym układzie można dokonywać tylko pomiarów woltomierzem. Amperomierz, omomierz i pomiar pojemności można używać tylko do pomiarów elementów
+  poza układem.
+\end{ProTip}
 
 
+\clearpage
 \section{Przetwornica zasilająca}
 
 Przetwornica z regulacją napięcia i ograniczenia prądowego będzie pełniła funkcję (stosunkowo taniego i przenośnego) zasilacza laboratoryjnego.
@@ -277,6 +289,7 @@ Teraz możemy przykręcić przewody zasilające do naszej przetwornicy. Należy 
 	\item przewód na którym mieliśmy biegun dodatni podłączamy do IN+
 \end{itemize}
 
+\clearpage
 \begin{wrapfigure}{r}{0.4\textwidth}
   \begin{center}
     \vspace{-40pt}
@@ -349,11 +362,6 @@ ma ustawianie temperatury, ustaw ją na około 250-300 st. C. Daj jej około min
 lutownicy jest bardzo gorący. Lutownicę należy trzymać tylko i wyłącznie za rękojeść.
 \\
 
-Aby zalutować pin w otworze, najpierw dotknij grotem lutownicy
-miejsca, które będziesz lutować (pola lutowniczego) oraz pinu. Trzeba ogrzać oba elementy przed ich połączeniem. Po około sekundzie, dotknij pinu końcówką odcinka cyny.
-\\
-
-
 \begin{Ramka}{}\begin{center}
   {\noindent\includegraphics[width=0.99\textwidth,clip=true]{lutowanie.png}}\\
   \small
@@ -363,6 +371,10 @@ miejsca, które będziesz lutować (pola lutowniczego) oraz pinu. Trzeba ogrzać
   Gotowy lut (oraz jego przybliżenie).
 \end{center}\end{Ramka}
 \vspace*{\baselineskip}
+
+Aby zalutować pin w otworze, najpierw dotknij grotem lutownicy
+miejsca, które będziesz lutować (pola lutowniczego) oraz pinu. Trzeba ogrzać oba elementy przed ich połączeniem. Po około sekundzie, dotknij pinu końcówką odcinka cyny.
+\\
 
 Postaraj się, aby listwy kołkowe były prostopadle do płytki. Jeżeli masz odcinek damskiej listwy, możesz za jego pomocą
 umiejscowić piny, które lutujesz. Możesz też użyć do tego płytki stykowej. Lutowanie zacznij od czterech pinów na rogach płytki.
@@ -504,7 +516,6 @@ Układ scalony posiada od kilku do kilkudziesięciu wyprowadzeń które służą
 Każde z tych wyporwadzeń pełni określoną funkcję (zasilanie, wejścia, wyjścia itp.). W karcie~katalogowej danego układu scalonego wszystkie
 piny są ponumerowane, nazwane a ich funkcje opisane.
 
-
 W Twoich ekseprymentach będziesz miał najczęściej do czynienia z układami w obdudowie typu \textbf{DIP}. Charakteryzuje się ona prostopadłymi,
 szeroko (w porównaniu do innych obudów) rozstawionymi pinami które można łatwo umieścić w płytce stykowej.
 
@@ -512,6 +523,10 @@ szeroko (w porównaniu do innych obudów) rozstawionymi pinami które można ła
   W elektronice do wyrażania wymiarów stosuje się m.in. jednostkę \textbf{mil}\footnote{zwaną też \textit{thou}, od \textit{thousands of an inch}},
   równą 1/1000 cala. Rozstaw nóżek w obudowie DIP to 100 mili (= 2.54 mm). Taki sam jest również rozstaw otworków na płytce stykowej.
 \end{ProTip}
+
+W Twoich ekseprymentach będziesz miał najczęściej do czynienia z układami w obdudowie typu \textbf{DIP}. Charakteryzuje się ona prostopadłymi,
+szeroko (w porównaniu do innych obudów) rozstawionymi pinami które można łatwo umieścić w płytce stykowej.
+
 
 \begin{wrapfigure}{r}{0.25\textwidth}
   \begin{center}
@@ -524,11 +539,13 @@ szeroko (w porównaniu do innych obudów) rozstawionymi pinami które można ła
   \end{center}
 \end{wrapfigure}
 
+
+W obudowie typu DIP, oznaczenie pinu 1. ma formę wklęsłego wcięcia na jednym z końców układu, lub kropki na narożniku. W przypadku tego drugiego, pin przy którym znajduje się kropka to pin nr 1. W przypadku wcięcia, pin nr 1 to lewy dolny, patrząc na układ obrócony oznaczonym końcem w lewo, napisami na obudowie w Twoją stronę. Kolejne piny liczy się idąc przeciwnie do ruchu wskazówek zegara. Przedstawia to rysunek obok.
+
 W Twoich ekseprymentach będziesz miał najczęściej do czynienia z układami w obdudowie typu \textbf{DIP}. Charakteryzuje się ona prostopadłymi,
 szeroko (w porównaniu do innych obudów) rozstawionymi pinami które można łatwo umieścić w płytce stykowej.
 
 W obudowie typu DIP, oznaczenie pinu 1. ma formę wklęsłego wcięcia na jednym z końców układu, lub kropki na narożniku. W przypadku tego drugiego, pin przy którym znajduje się kropka to pin nr 1. W przypadku wcięcia, pin nr 1 to lewy dolny, patrząc na układ obrócony oznaczonym końcem w lewo, napisami na obudowie w Twoją stronę. Kolejne piny liczy się idąc przeciwnie do ruchu wskazówek zegara. Przedstawia to rysunek obok.
-
 Przy podłączaniu układu scalonego ważne jest aby nie pomylić numerów pinów (nóżek). Każdy z nich ma z góry określoną funkcję.
 
 
