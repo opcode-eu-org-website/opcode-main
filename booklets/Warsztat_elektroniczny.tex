@@ -179,12 +179,15 @@ kondensatora odbywa się poprzez umieszczenie go w specjalnym gnieździe na obud
 o tym, że trzeba ustawić zakres w podobny sposób jak przy innych pomiarach. Uwaga - \textbf{nie należy mierzyć pojemności naładowanych
   kondensatorów}. Funkcja pomiaru pojemności przydaje się przy sprawdzaniu kondensatorów ceramicznych lub foliowych o pojemnościach od kilku nF do kilkudziesięciu uF. Na kondensatorach elektrolitycznych lub tantalowych (o większych pojemnościach) wartość
 pojemności jest z reguły napisana na obudowie.
-\\
 
 \begin{ProTip}{\normalfont{\strong{Uwaga}}}
-  Kondensatory elektrolityczne oraz tantalowe są elementami \textbf{spolaryzowanymi}. Podłączając je, należey pamiętać o polaryzacji i podłączać je
+  Kondensatory elektrolityczne oraz tantalowe są elementami \textbf{spolaryzowanymi}. Podłączając je, należy pamiętać o polaryzacji i podłączać je
   tylko zgodnie z polaryzacją - biegun ujemny do punktu o niższym napięciu, a biegun dodatni do punktu o wyższym napięciu. Na tych kondensatorach jeden
-  z biegunów (najczęściej ujemny) jest zaznaczony na obudowie
+  z biegunów (najczęściej ujemny) jest zaznaczony na obudowie.
+  
+  \textbf{Uwaga:} Niewłaściwe podłączenie kondensatora może doprowadzić do jego eksplozji.
+  Dla własnego bezpieczeństwa nie rób tego – jeżeli jesteś ciekawy jak to wygląda obejrzyj filmik w Internecie.
+  Pamiętaj o tym także montując kondensator w swoich konstrukcjach.
 \end{ProTip}
 
 Oprócz opisanych wyżej funkcji, niektóre multimetry mogą mieć także funkcje pomiaru temperatury (poprzez \textbf{termoparę}
@@ -237,11 +240,16 @@ buzzerem sytuację, gdy spadek napięcia jest odpowiednio mały. Oznacza to, że
 (lub połączone bardzo małym oporem).\\
 
 \begin{ProTip}{\normalfont{\strong{Wskazówka}}}
-  W zmontowanym i zasilonym układzie bez wprowadzania zmian można dokonywać tylko pomiarów woltomierzem. Amperomierz można wpiąć między układ a zasilacz.
-  Jeżeli układ nie jest zasilany, to można w nim używać funkcji testu ciągłości oraz omomierza (pamiętając o tym, że pomiary omomierzem będą zaniżone z
-  powodu obecności innych oporów w układzie)
+
+  W zmontowanym i włączonym układzie należy dokonywać tylko pomiarów woltomierzem.
+  Amperomierz włącza się w szeregowo w badany układ zatem jego użycie wymaga modyfikacji układu.
+  
+  Omomierz i pomiar pojemności używa się do pomiarów elementów poza układem,
+  jednak pomiar ciągłości (rzadziej oporności) może być wykonywany na wyłączonym układzie celem ustalenia dlaczego układ nie działa.
 \end{ProTip}
 
+
+\clearpage
 \section{Przetwornica zasilająca}
 
 Przetwornica z regulacją napięcia i ograniczenia prądowego będzie pełniła funkcję (stosunkowo taniego i przenośnego) zasilacza laboratoryjnego.
@@ -288,6 +296,7 @@ Teraz możemy przykręcić przewody zasilające do naszej przetwornicy. Należy 
 	\item przewód na którym mieliśmy biegun dodatni podłączamy do IN+
 \end{itemize}
 
+\clearpage
 \begin{wrapfigure}{r}{0.4\textwidth}
   \begin{center}
     \vspace{-30pt}
@@ -360,11 +369,6 @@ ma ustawianie temperatury, ustaw ją na około 250-300 st. C. Daj jej około min
 lutownicy jest bardzo gorący. Lutownicę należy trzymać tylko i wyłącznie za rękojeść.
 \\
 
-Aby zalutować pin w otworze, najpierw dotknij grotem lutownicy
-miejsca, które będziesz lutować (pola lutowniczego) oraz pinu. Trzeba ogrzać oba elementy przed ich połączeniem. Po około sekundzie, dotknij pinu końcówką odcinka cyny.
-\\
-
-
 \begin{Ramka}{}\begin{center}
   {\noindent\includegraphics[width=0.99\textwidth,clip=true]{lutowanie.png}}\\
   \small
@@ -374,6 +378,10 @@ miejsca, które będziesz lutować (pola lutowniczego) oraz pinu. Trzeba ogrzać
   Gotowy lut (oraz jego przybliżenie).
 \end{center}\end{Ramka}
 \vspace*{\baselineskip}
+
+Aby zalutować pin w otworze, najpierw dotknij grotem lutownicy
+miejsca, które będziesz lutować (pola lutowniczego) oraz pinu. Trzeba ogrzać oba elementy przed ich połączeniem. Po około sekundzie, dotknij pinu końcówką odcinka cyny.
+\\
 
 Postaraj się, aby listwy kołkowe były prostopadle do płytki. Jeżeli masz odcinek damskiej listwy, możesz za jego pomocą
 umiejscowić piny, które lutujesz. Możesz też użyć do tego płytki stykowej. Lutowanie zacznij od czterech pinów na rogach płytki.
