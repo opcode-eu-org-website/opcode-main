@@ -1,5 +1,5 @@
-% Copyright (c) 2017-2019 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
-% Copyright (c) 2017-2019 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
 % 
 % MIT License
 % 
@@ -28,7 +28,7 @@
 	Projekt ,,Matematyka dla Ciekawych Świata'',\\
 	Robert Ryszard Paciorek\\\normalsize\ttfamily <rrp@opcode.eu.org>
 }
-\date  {2019-07-06}
+\date  {2020-05-03}
 
 \makeatletter\hypersetup{
 	pdftitle = {\@title}, pdfauthor = {\@author}
@@ -150,7 +150,7 @@ Sieć może zostać podzielona na mniejsze sieci (z większą wartością prefix
 \subsubsection{Przynależność do sieci}
 Adres sieci zapisuje się typowo z wyzerowanymi bitami stanowiącymi adres hosta (czyli po dokonaniu bitowego \emph{and} z maską danej sieci) oraz podaną informacją o długości prefixu, dla powyższego przykładu będzie to \Verb$2001:db8::/48$. Informacja taka jest wystarczająca do sprawdzenia czy dowolny inny adres IP należy do tej sieci czy nie.
 
-\begin{CodeFrame*}[python][fontsize=\footnotesize]{}
+\label{czy_w_sieci_kod}\begin{CodeFrame*}[python][fontsize=\footnotesize]{}
 from ipaddress import *
 
 a1  = IPv6Address("2001:0db8::17:15")
@@ -279,6 +279,16 @@ Dodatkowo zarówno UDP jak i TCP na każdym z hostów wyróżniają numeryczny i
 	\begin{easylist}[itemize]
 		& pokazać jak działa serwer dns robiąc ręcznie zapytania dig'iem o kolejne poziomy
 	\end{easylist}
+	\begin{Verbatim}
+dig NS .
+dig @g.root-servers.net. NS pl.
+dig @a-dns.pl. NS edu.pl.
+dig @a-dns.pl. NS icm.edu.pl.
+dig @ns1.agh.edu.pl. NS ciekawi.icm.edu.pl.
+# dostaliśmy   CNAME www2.icm.edu.pl.  oraz brak wpisu NS
+dig @ns1.agh.edu.pl. A www2.icm.edu.pl.
+# dostaliśmy 213.135.59.55
+	\end{Verbatim}
 \end{teacherOnly}
 
 W ramach sieci mogą być realizowane różne usługi w oparciu o różne protokoły warstwy aplikacyjnej. Standardowe usługi posiadają zdefiniowane domyślne adresy portów dla swoich protokołów. Wśród usług i protokołów sieciowych należy wymienić przynajmniej:
@@ -302,15 +312,165 @@ W ramach sieci mogą być realizowane różne usługi w oparciu o różne protok
 \end{itemize}
 % END: Polularne usługi
 
+% BEGIN: Diagnostyka sieci
+\section{Diagnostyka sieci}
+
 \begin{teacherOnly}
-	Porozmawiać także o:
-	\begin{easylist}[itemize]
-	& standardy Internetu - dokumenty RFC
-	&& standardy de facto
-	&& poważne i mniej (gołębie, ...)
-	&& dość dobrze się czyta
+Powiedzieć że w skrypcie opis dość dużej liczby poleceń do tego. Omówić tylko najważniejsze:
+\begin{easylist}[itemize]
+	& ping
+	& tracepath / traceroute / mtr
+	& dig / host
+	& netcat / telnet
+	& tcpdump / wireshark
+\end{easylist}
+\end{teacherOnly}
+
+Istnieje wiele poleceń służących do diagnozowania ewentualnych problemów sieciowych lub mogąccyh być w tym przydatnymi.
+Poniżej znajduje się zestawienie najbardziej popularnych / użytecznych narzędzi z podziałem wg zastosowań.
+
+\subsection{Adresy}
+\begin{itemize}
+	\item \Verb#ipcalc# oraz \Verb#sipcalc# –
+		kalkulator IP (pozwalający na obliczanie adresów sieci rozgłoszeniowych, zmianę notacji itd)
+	\item \Verb#whois# –
+		informacje z bazy whois (o domenie lub adresie IP)
+\end{itemize}
+				
+\subsection{Dostępność i trasy do hostów}
+\begin{itemize}
+	\item \Verb#ping [opcje] host# lub \Verb#ping6 [opcje] host# –
+		sprawdzanie dostępności hosta z użyciem protokołu ICMP
+		(obecnie komenda \Verb@ping6@ najczęściej jest równoważna poleceniu ping z opcją \Verb@-6@ wymuszającą używanie jedynie IPv6,
+		na starszych systemach komenda ping może nie obsługiwać adresów IPv6 i wtedy konieczne jest stosowanie do nich polecenia \Verb@ping6@),
+		ważniejsze opcje:\\
+		\Verb@-c n@ wykonaj n zapytań (domyślnie pyta do momentu przerwania przy pomocy np. Ctrl-C, lub sygnału wysłanego z uzyciem komendy \Verb@kill@)\\
+		\Verb@-n@ nie zamieniaj adresu IP hosta który odpowiedział na nazwę domenową
+		
+	\item \Verb#traceroute#, \Verb#traceroute6#, \Verb#tracepath#, \Verb#tracepath6#, \Verb#tcptraceroute# lub \Verb#tcptraceroute6# – 
+		sprawdzanie ścieżki do hosta (wypisanie listy routerów przez które przechodzi pakiet w drodze do wskazanego hosta)\\
+		Istnieją różne warianty tych poleceń (nawet pod tą samą nazwą), różnią się one stosowanymi mechanizmami i domyślnymi opcjami.
+		Generalnie wszystkie uruchamia się na zasadzie \Verb@polecenie [opcje] host@.
+		Warianty z \Verb@6@ na końcu nazwy będą używały jedynie adresów IPv6, natomiast polecenia bez \Verb@6@ na końcu nazwy mogą potrafić ich używać lub nie.
+		Wszystkie popularne warianty pozwalają na podanie opcji \Verb@-n@ wyłączającej zamienianie adresu IP hosta który odpowiedział na jego nazwę domenową.\\
+		Może zdarzyć się że śledzenie urwie się na jakimś hoście (np. z powodu jego konfiguracji lub błędów w jego oprogramowaniu sieciowym),
+		może się zdarzyć że przy użyciu innej komendy z tej grupy (lub zmianie opcji) uda się prześledzić dalszą trasę pakietu.
+	\item \Verb#mtr [opcje] host# –
+		sprawdzanie ścieżki do hosta (czyli podobnie jak traceroute i tracepath) w trybie ciągłym (z ciągłym odświeżaniem)
+		wraz z wypisywaniem informacji o stratach pakietów i opóźnieniach na poszczególnych odcinkach, ważniejsze opcje:\\
+		\Verb@-n@ nie zamieniaj adresu IP hosta który odpowiedział na nazwę domenową
+	
+	\item \Verb#nmap# –
+		skaner sieciowy - sprawdzanie dostępnych hostów w sieci, otwartych portów, itd
+	\item \Verb#arping# –
+		narzędzie do pingowania z wykorzystaniem zapytań ARP zamiast ICMP\\
+		istnieją dwie zasadnicze odmiany: z iputils oraz z synscan; ta druga zawarta w debianowym pakiecie "arping" umożliwia także pingowanie po adresie MAC (ale nie przez RARP, bo on nie do tego służy), aby to jednak działało host docelowy nie może ignorować pingów rozgłoszeniowych, metoda obejścia opisana jest w README arping'a
+	
+	\item \Verb#arp-scan# –
+		wyszukiwanie hostów w oparciu o zapytania ARP (można powiedzieć że jest to równoważne uruchamianiu komendy arping w pętli)
+\end{itemize}
+
+\subsection{DNS}
+\begin{itemize}
+	\item \Verb#dig [opcje] nazwa [typRekordu]# –
+		narzędzia do uzyskania informacji z DNS,
+		pozwala na określenie poprzez \Verb#@adres# serwera który chcemy odpytać oraz na określenie (poprzez drugi argument) typu rekordu który chcemy uzyskać np.:\\
+			\Verb@A@ - rekord typu A czyli mapowanie nazwy na adres IPv4\\
+			\Verb@AAAA@ - rekord typu AAAA czyli mapowanie nazwy na adres IPv4\\
+			\Verb@MX@ - rekord typu MX czyli informacja o serwerach obsługujących pocztę danej domeny\\
+			\Verb@NS@ - rekord typu NS czyli informacja o serwerach obsługujących DNS danej domeny\\
+			\Verb@SRV@ - rekord typu SRV czyli informacje o hoście świadczącym usługę (usługa określana jest w nazwie domeny o którą pytamy)\\
+			\Verb@TXT@ - rekord typu TXT czyli informacje dodatkowe\\
+			\Verb@ANY@ - powoduje odpytanie o wszystkie rekordy\\
+			\Verb@AXFR@ - powoduje wysłanie prośby o transfer całej strefy (działa jezeli dany host ma prawo transferu całej strefy z danego serwera)
+	
+	\item \Verb#host [opcje] nazwa|ip [server]# –
+		narzędzia do zamiany adresów domenowych na IP i odwrotnie oraz wyciągania innych informacji z DNS (np. rekordy MX)
+	\item \Verb#nslookup [opcje] nazwa|ip [server]# –
+		narzędzia do zamiany adresów domenowych na IP i odwrotnie oraz wyciągania innych informacji z DNS (np. rekordy MX)
+	
+	\item \Verb#dnstracer# –
+		śledzenie trasy zapytań DNS
+	\item \Verb#dnswalk# –
+		debuger DNS
+\end{itemize}
+
+\subsection{IPv6}
+\begin{itemize}
+	\item \Verb#ndisc6# –
+		testowanie ICMPv6 Neighbor Discovery
+	\item \Verb#rdisc6# –
+		testowanie ICMPv6 Router Discovery
+	\item \Verb#rltraceroute6# –
+		trasa pakietów do danego hosta IPv6 z użyciem UDP/ICMP
+	\item \Verb#tcpspray6# –
+		pomiar prędkości łącza z użyciem TCP/IP Discard/Echo
+	
+	\item \Verb#na6# / \Verb#ns6# –
+		wysyłanie pakietów Neighbor Advertisement / Solicitation
+	\item \Verb#ra6# / \Verb#rs6# –
+		wysyłanie pakietów Router Advertisement / Solicitation
+	\item \Verb#ni6# / \Verb#rd6# –
+		wysyłanie pakietów ICMPv6 Node Information / Redirect
+	\item \Verb#scan6# –
+		skanowanie sieci IPv6
+\end{itemize}
+
+\subsection{debugowanie łączności sieciowej}
+\begin{itemize}
+	\item \Verb#netcat# lub \Verb#nc# lub \Verb#netcat6# –
+		program pozwalający na wysyłanie pakietów TCP i UDP z definiowaną przez nas zawartością, oraz odbiór pakietów TCP i UDP (słuchanie na wskazanym porcie), umożliwia m.in. testowanie usług sieciowych (takich jak smtp, www, jabber, ...); uwaga: występuje w kilku wersjach różniących się opcjami
+	\item \Verb#telnet# –
+		program umożliwiający zdalny (nieszyfrowany, łącznie z hasłem!) dostęp do powłoki, a także (podobnie jak netcat) m.in. testowanie usług sieciowych
+	
+	\item \Verb#swaks# –
+		narzędzie do testowania SMTP
+	
+	\item \Verb#tcpdump# –
+		przechwytuje komunikację sieciową celem analizy nagłówków lub pełnej zawartości pakietów
+		(wsparcie dla niektórych z protokołów warst wyższych wymaga doinstalowania - np. obsługę DHCP zapewnia dhcpdump)
+	\item \Verb#wireshark# lub \Verb#tshark# –
+		przechwytuje komunikację sieciową celem analizy nagłówków lub pełnej zawartości pakietów, wspiera dekodowanie wielu protokołów warstwy aplikacyjnej, wireshark posiada graficzny interfejs użytkownika, tshark jest wersją konsolową
+\end{itemize}
+
+\subsection{informacje o wykorzystaniu i prędkości sieci}
+\begin{itemize}
+	\item \Verb#netstat# –
+		 informacje o sieci
+	\item \Verb#iptraf# –
+		monitor IP LAN
+	\item \Verb#nload# –
+		graficzne (ncurses) pokazywanie wykorzystania (prędkości) interfejsów sieciowych
+					
+	\item \Verb#ttcp# –
+		testuje prędkość połączenia sieciowego (strona domowa, najnowsza wersja oraz mutacja)
+	\item \Verb#iperf# –
+		pomiar prędkości połączenia sieciowego
+\end{itemize}
+% END: Diagnostyka sieci
+
+\begin{teacherOnly}
+\noindent Porozmawiać także o:
+\begin{easylist}[itemize]
+	& adresach URL
+	& tunelowaniu ruchu – pakiet IP może zawierać inny pakiet IP
+		&& pakiety zagnieżdżane są jeden w drugim ... danymi pakietu UDP lub TCP może być cokolwiek ... może to być też pakiet IP
+		&& \Verb#ssh -L port:hostB:portB  host#\\
+			połączenie do \Verb#localhost:port#  zostanie przekierowane przez SSH do \Verb#hostB:portB#  dostępnego z host (serwera ssh)
+		&& \Verb#ssh -R port:hostB:portB  host#\\
+			połączenie do \Verb#host:port#  zostanie przekierowane przez SSH do \Verb#hostB:portB# dostępnego z localhosta (klienta ssh)
+			(domyślnie \Verb#host# będzie odbierał połączenia na ten port tylko od samego siebie – będzie słuchał tylko na swoim localhost)
+		&& \Verb#ssh -D 8080  host#\\
+			dynamiczny – proxy SOCKS4 / SOCKS5 
+		&&\Verb# ssh -w 1:3  host#\\
+			utworzy na kliencie \Verb#tun1# i serwerze urządzenia \Verb#tun3# i użyje ich do zestawienia tunelu (ruch wysłany na \Verb#tun1# bedzie docierał do \Verb#tun3# i na odwrót tak jakby były fizycznie połączone kablem ... rolę tego kabla pełni ssh)
+		&& VPN - analogicznie do ssh -w tylko bardziej automatyczne zestawianie ... np. nie trzeba się martwić o konflikty numerków tunX ... dba o to serwer VPN ...
 	& czemu służą, jak działają (ogólnie) protokoły routingu dynamicznego
-	\end{easylist}
+	& standardach Internetu - dokumenty RFC
+		&& standardy de facto
+		&& poważne i mniej (gołębie, ...)
+		&& dość dobrze się czyta
+\end{easylist}
 \end{teacherOnly}
 
 
@@ -478,17 +638,75 @@ Często dostępne są także klasyczne polecenia:
 		konfiguracja bondów
 \end{itemize}
 
-\begin{teacherOnly}
-	Wspomnieć krótko o filtracji pakietów - iptables (jakiś przykład), łańcuchy, w oparciu o co można filtować.
-	
-	Można powiedzieć kilka słów o DHCP i auto-konfiguracji IPv6:
-	
+Innym przydatnym poleceniem jest \Verb#tc#, które służy do konfiguracji ustawień kontoli przepływu (np. kolejkowania) na interfejsach sieciowych. 
+
+
+\subsection{Konfiguracja DNS}
+
+Za zamianę nazw domenowych na adresy IP odpowiadają funkcje biblioteki standardowej C. Korzysta ona do tego celu z konfiguracji zawartej w pliku \Verb#/etc/resolv.conf#.
+Powinien on zawierać co najmniej jeden wpis postaci \Verb#nameserver ip_serwera_dns#, określający serwer rozwiązujący nazwy DNS do którego będziemy kierować nasze zapytania.
+Wpisów tych może być kilka co pozwala na określenie serwerów uzywany w przypadku niedostępności podstawowego (obecnie używane są maksymalnie 3).
+
+Dodatkowo plik ten może posiadać wpisy
+	\Verb#domain# określający domenę lokalną (jeżeli nie jest tu określona a hostname zawiera domenę to używana jest ta z hostname; jeżeli nie chcemy używać można określić na \Verb#.#) oraz
+	\Verb#search# określający listę domen do przeszukiwania.
+Określają one domeny, króre będą dodawane jako surfix do domeny o którą się pytamy. Na przykład gdy mamy \Verb#domain abc.def#, a pytamy się o \Verb#xyz# (bez kropki w środku lub na końcu), biblioteka najpierw spróbuje ustalić adres \Verb#xyz.abc.def.# a potem \Verb#xyz.#
+
+Plik ten pozwala ustawić także inne opcje związane z odpytywaniem DNS - szczegóły w \Verb#man 5 resolv.conf#.
+
+Innym plikiem związanym z rozwijaniem nazw jest \Verb#/etc/hosts#, który stanowi bazę mapowań nazw na numery IP.
+Jest on użyteczny dla lokalnie definiowanych nazw i adresów.
+Wpisy w nim zawarte mają priorytet wyższy od informacji z DNS (jeżeli host został znaleziony w tym pliku nie jest wykonywane zapytanie do serwera rozwijającego DNS).
+
+
+\subsection{konfiguracja automatyczna}
+
+W zależności od ustawień sieci do której podłączony jest konfigurowany host możliwe jest także skorzystanie z konfiguracji automatycznej DHCP i/lub autokonfiguracji IPv6.
+
+\subsubsection{DHCP}
+
+DHCP jest protokołem typu klient-serwer, pozwalającym klientowi uzyskać informacje na temat konfiguracji sieci takie jak adres ip, długość prefixu, trasy routingowe (w szczególności adres bramki domyślnej), adresy serwerów DNS zarówno dla IPv4, jak i IPv6.
+
+Do pobrania konfiguracji z serwera DHCP i jej ustawienia służy najczęściej polecenie \Verb#dhclient# (dostępne są inne implementacje klienta dhcp, np: \Verb#udhcpc#, \Verb#dhcpcd#).
+Z ważniejszych opcji należy wspomnieć o:\\
+	\hspace*{1cm} \Verb#-6# – korzystanie z DHCPv6, czyli DHCP dla protokołu IPv6,\\
+	\hspace*{1cm} \Verb#-n# – nie ustawianie / używanie pobranej konfiguracji,\\
+	\hspace*{1cm} \Verb#-d# – nie przechodzenie w tło (włącza też \Verb#-v#),\\
+	\hspace*{1cm} \Verb#-n# – wypisywanie większej informacji o działaniu programu.
+
+Dostępne są też różne narzędzia diagnostyczne związane z DHCP, np: \Verb#dhcping#, \Verb#dhcp-probe#.
+Linux może pełnić także funkcję serwera DHCP, przy pomocy aplikacji takich jak np.: 
+	\textit{isc-dhcp-server}, \textit{udhcpd}, \textit{dnsmasq}, \textit{odhcp6c}, \textit{dhcpy6d}, \textit{wide-dhcpv6}.
+
+\subsubsection{IPv6 autoconf}
+
+Innym sposobem automatycznej konfiguracji interfejsów sieciowych, wprowadzonym w IPv6 jest autokonfiguracja w oparciu o adresy link-local generowane w oparciu o MAC adres karty sieciowej.
 	Polega ona na tym że dla podsieci będących LAN'em przydzielana jest pula z maską /64 co umożliwia tworzenie unikalnych numerów IP w oparciu o (niepowtarzalne) numery sprzętowe MAC.
 	64 bitowy prefiks sieci jest informacją rozgłaszaną przy pomocy ICMPv6 przez routery (mechanizm radvd), a host dokleja do niego część go identyfikującą związaną z adresem link-local.
 	Radvd rozgłasza także informacje routingowe (takie jak adres bramy - dhcpv6 tego nie potrafi), niestety nie da się rozgłaszać w ten sposób innej od standardowej dla LAN długości prefixu.
-\end{teacherOnly}
 
-Oprócz wyżej omówionej konfiguracji interfejsów i tras routingowych, często potrzebna jest konfiguracja jądrowych mechanizmów filtracji pakietów. Służą do tego komendy:
+Linux domyślnie ma włączony ten mechanizm, można go jednak wyłączyć poprzez \Verb#echo 0 > /proc/sys/net/ipv6/conf/${IFACE}/autoconf#, gdzie \Verb#${IFACE}# oznacza interfejs na którym chcemy wyłączyć ten mechanizm.
+
+
+\subsection{Konfiguracja w proc}
+
+Konieczne / przydatne może być dokonywanie pewnych ustawień poprzez jądrowe systemy plików \Verb$/proc$ i \Verb$/sys$.
+Najczęstszym przypadkiem jest włączenie przekazywania pakietów pomiędzy interfejsami poprzez:
+
+\begin{minted}{bash}
+for f in /proc/sys/net/ipv*/conf/*/forwarding; do echo 1 > $f; done
+\end{minted}
+(powyższy jednolinijkowiec włącza forwading pakietów IP dla IPv4 i IPv6 na wszystkich interfejsach)
+
+Innym przykładem jest pokazane wcześniej wyłączenie automatycznej konfiguracji IPv6, przydatne gdy chcemy korzystać tylko z ręcznie przydzielanych adresów.
+
+
+\subsection{Filtracja pakietów}
+
+Oprócz wyżej omówionej konfiguracji interfejsów i tras routingowych, często potrzebna jest konfiguracja jądrowych mechanizmów filtracji pakietów.
+Służy do tego polecenie \Verb#nft#.
+
+Na starszych systemach \Verb#nft# może być niedostępny, wtedy można korzystać z poleceń:
 \begin{itemize}
 	\item \Verb{iptables}, \Verb{ip6tables}
 		konfiguracja filtrów działających na pakietach IP (\Verb{iptables} dla IPv4, \Verb{ip6tables} dla IPv6), filtracja może odbywać się m.in. w oparciu o źródłowe i docelowe adresy IP, numery portów, protokół warstwy transportowej, interfejsy oraz mechanizm śledzenia połączeń; umożliwia także konfigurację translacji adresów (NAT).
@@ -498,21 +716,111 @@ Oprócz wyżej omówionej konfiguracji interfejsów i tras routingowych, często
 		konfiguracja filtrów związanych z protokołem ARP (zamiany adresów IP na adresy sprzętowe)
 \end{itemize}
 
+\subsubsection{nft (nftables)}
 
-Ponadto konieczne może być dokonywanie pewnych ustawień poprzez jądrowe systemy plików \Verb$/proc$ i \Verb$/sys$.
-Najczęstszym przypadkiem jest włączenie przekazywania pakietów pomiędzy interfejsami poprzez:
+Polecenie \Verb#nft list ruleset# pozwala na wylistowanie wszystkich reguł.
 
-\begin{minted}{bash}
-for f in /proc/sys/net/ipv*/conf/*/forwarding; do echo 1 > $f; done
-\end{minted}
-(powyższy jednolinijkowiec włącza forwading pakietów IP dla IPv4 i IPv6 na wszystkich interfejsach)
+\begin{figure}[h!]\begin{center}\begin{adjustbox}{scale=.9}\begin{tikzpicture}[->, >={Stealth[length=8pt,width=6pt]}, node distance=0.6cm, semithick]
+	\tikzstyle{base}=[align=center, minimum height=3.3em, minimum width=9.1em]
+	\tikzstyle{inout}=[base]
+	\tikzstyle{routing}=[draw, dotted, base]
+	\tikzstyle{hook}=[draw, base]
+	
+	% based on: https://wiki.nftables.org/wiki-nftables/index.php/Netfilter_hooks
+	
+	\node[inout]   (NETIN)                                 {pakiet\\przychodzący};
+	\node[hook]    (ingress)     [below = of NETIN]        {netdev → ingress};
+	\node[hook]    (prerouting)  [below = of ingress]      {prerouting};
+	\node[routing] (ROUTING1)    [below = of prerouting]   {wybór trasy\\routingowej};
+	\node[hook]    (input)       [below = of ROUTING1]     {input};
+	\node[inout]   (LOCAL)       [below = of input]        {lokalne przetwarzanie pakietów\\recive() / send() / ...};
+	\node[hook]    (forward)     [right = 2.3cm of LOCAL]  {forward};
+	\node[routing] (ROUTING2)    [below = of LOCAL]        {wybór trasy\\routingowej};
+	\node[hook]    (output)      [below = of ROUTING2]     {output};
+	\node[hook]    (postrouting) [below = of output]       {postrouting};
+	\node[inout]   (NETOUT)      [below = of postrouting]  {pakiet\\wychodzący};
+	
+	% to local
+	\draw (NETIN)   edge (ingress);
+	\draw (ingress) edge (prerouting);
+	\draw (prerouting) edge (ROUTING1);
+	\draw (ROUTING1) edge (input);
+	\draw (input) edge (LOCAL);
+	
+	% from local
+	\draw (LOCAL) edge (ROUTING2);
+	\draw (ROUTING2) edge (output);
+	\draw (output) edge (postrouting);
+	\draw (postrouting) edge (NETOUT);
+	
+	% forward
+	\draw (ROUTING1) -| (forward);
+	\draw (forward)  |- (postrouting);
+	
+	% łańcuch type=route
+	\path (output) edge [out=0, in=0, looseness=2] node[below, align=center,sloped] {akceptacja w\\ łańcuchu\\ \texttt{type=route}} (ROUTING2);
+\end{tikzpicture}\end{adjustbox}\end{center}
+\caption{Trasa pakietu przez filtry nftables. Wskazano punkty zaczepień dla łańcuchów reguł.}
+\end{figure}
+
+\paragraph{Tabele, łańcuchy i reguły}
+\begin{itemize}
+	\item Reguły (\Verb#rule#) grupowane są w łańcuchy (\Verb#chains#) w ramach których przetwarzane są kolejno (do momentu napotkania reguły kończącej przetwarzanie pakietu).
+	\item Łańcuchy grupowane są w tabele (\Verb#table#).
+	\item Każda tabela ma określoną rodzinę obsługiwanych adresów (\Verb#family#), mogą to być:
+	\begin{itemize}
+		\item \Verb#inet#   (osobne lub wspólne reguły dla IPv4 i IPv6),
+			\item \Verb#ip#  (reguły tylko dla IPv4),
+			\item \Verb#ip6# (reguły tylko dla IPv6),
+		\item \Verb#arp#    (reguły dla warstwy L2 przetwarzane przed uruchomieniem procesowania IP),
+		\item \Verb#bridge# (reguły przetwarzane dla pakietów przechodzących przez softwerowy bridge),
+		\item \Verb#netdev# (reguły przetwarzane w momencie wejścia ruchu na urządzenie sieciowe, urządzenie musi być określone dla łańcucha reguł, może być alternatywą dla \Verb#tc#).
+		% https://wiki.nftables.org/wiki-nftables/index.php/Nftables_families
+	\end{itemize}
+	\item Tabel danej rodziny może być wiele, stosowane będą łańcuchu z wszystkich tych tabel (odpowiednio do ich parametrów).
+	\item Tabele dla różnych rodzin mogą mieć taką samą nazwę.
+\end{itemize}
+
+\paragraph{Kierowanie ruchu do reguł}
+\begin{itemize}
+	\item Ruch do łańcucha może być kierowany jawnie przez regułę w innym łańcuchu lub automatycznie w oparciu o parametry danego łańcucha: typ (\Verb#type#), punkt zaczepienia (\Verb#hook#) i priorytet (\Verb#priority#).
+	\item Pasujące łańcuchy (o tym samym punkcie zaczepienia) będą przetwarzane kolejno wg priorytetów do momentu napotkania reguły kończącej przetwarzanie pakietu w którymś z tych łańcuchów (lub przetworzenia wszystkich reguł).
+	\item Podstawowym typem łańcuch jest \Verb#filter#. Dodatkowo mogą być użyte typy:
+	\begin{itemize}
+		\item \Verb#nat# –
+			translacja adresów sieciowych w oparciu o śledzenie połączenie (\Verb#conntrack#),
+			reguły przetwarzają tylko pierwszy pakiet połączenia, pozostałe przetwarza utworzony wpis \Verb#conntrack#,
+			typ może być użyty jedynie w łańcuchach tabel związanych z protokołami IP (inet, ip, ip6) z wyjątkiem łańcucha \Verb#forward#
+		\item \Verb#route# –
+			zaakceptowanie w takim powoduje wyszukanie nowej trasy routingowej,
+			typ może być użyty jedynie w łańcuchach wyjściowych (zaczepionych w \Verb#output#) tabel związanych z protokołami IP (inet, ip, ip6)
+	\end{itemize}
+	\item Dostępne punkty zaczepienia reguł zależą od rodziny:
+	\begin{itemize}
+		\item dla \Verb#inet#, \Verb#ip#, \Verb#ip6# i \Verb#bridge# są to:
+			prerouting
+			input
+			forward
+			output
+			postrouting
+		\item dla \Verb#arp# są to:
+			input
+			output
+		\item dla \Verb#netdev# są to:
+			ingress
+	\end{itemize}
+	\item Priorytet jest określany swobodnie i może być wartością ujemny lub dodatnią.
+		Warto mieć świadomość iż śledzenie pakietów (\Verb#conntrack#) na wejściu ma priorytet -200 (jest robione przed większością innych reguł) a na wyjściu 300 (jest robione po większości innych reguł).
+\end{itemize}
 
 
-\subsection{iptables}
+\subsubsection{iptables}
+
+\teacher{Nie omawiamy na zajęciach. Iptables odchodzi do przeszłości. Może w ogóle usunąć ze skryptu?}
 
 Iptables wykorzystuje kilka tablic reguł (najistotniejszymi są \Verb{filter} i \Verb{nat}). Tablica może zostać określona przy pomocy opcji \Verb{-t}, jeżeli nie użyto tej opcji operacje będą wykonywane na tablicy \Verb{filter}. Zależności pomiędzy poszczególnymi łańcuchami i tablicami przedstawia (uproszczony) diagram przejścia pakietu przez mechanizm iptables:
 
-\begin{center}\begin{adjustbox}{scale=.9}\begin{tikzpicture}[->, >={Stealth[length=8pt,width=6pt]}, node distance=0.6cm, semithick]
+\begin{figure}[h!]\begin{center}\begin{adjustbox}{scale=.9}\begin{tikzpicture}[->, >={Stealth[length=8pt,width=6pt]}, node distance=0.6cm, semithick]
 	\tikzstyle{info1}=[above, align=center]
 	\tikzstyle{info2}=[below=0.8cm, align=center]
 	\tikzstyle{base}=[align=center, minimum height=3.3em, minimum width=8.6em]
@@ -585,6 +893,8 @@ Iptables wykorzystuje kilka tablic reguł (najistotniejszymi są \Verb{filter} i
 	\draw (NAT_POSTROUTING) edge (OUTPUT);
 	
 \end{tikzpicture}\end{adjustbox}\end{center}
+\caption{Trasa pakietu przez filtry iptables. Wskazano punkty zaczepień nazwy łańcuchów.}
+\end{figure}
 
 W każdej z tablic występuje kilka różnych łańcuchów reguł. Każdy łańcuch posiada akcję domyślną, która może zostać ustawiona komendą \Verb{iptables [-t TABLICA] -P ŁAŃCUCH AKCJA}.
 Reguły do wskazanego łańcucha (w wskazanej tablicy) mogą być dodawane/usuwane z użyciem komend:
@@ -631,11 +941,10 @@ iptables -A INPUT -j REJECT
 
 Do wyświetlenia wszystkich reguł można użyć komendy \Verb{iptables-save} / \Verb{ip6tables-save}. Generuje ona skrypt który może zostać wczytany przy pomocy \Verb{iptables-restore} / \Verb{ip6tables-restore}.
 
-\student{\clearpage}
 \section{Programowanie usług sieciowych}
 
 \begin{teacherOnly}
-	Na początek:
+	Na początek (w wariancie zintegrowanym, na samym wykładzie pomijamy do zrobienia na ćwiczeniach):
 	\begin{easylist}[itemize]
 		& zabawa netcat-em (serwer, klient) + tcpdum do podsłuchiwania
 		& kilka słów więcej o:
@@ -643,25 +952,36 @@ Do wyświetlenia wszystkich reguł można użyć komendy \Verb{iptables-save} / 
 			&& SMTP (+ sesja SMTP netcatem, pokazać łatwość fałszowania nagłówków)
 	\end{easylist}
 	
-	Następnie \strong{krótkie} wprowadzenie systemowe (jeżeli wcześniej nie było) – \strong{to jest ważne}:
+	Następnie (jeżeli wcześniej nie było) \strong{krótkie} wprowadzenie systemowe:
 	\begin{easylist}[itemize]
-	& fork
-	& komunikacja międzyprocesowa
-	&& sygnały
-	&&& poopowiadać o kill
-	&&&& czy program może nie umrzeć?
-	&&& wiele różnych sygnałów ...
-	&& pamięć i semafory
-	&&& poopowiadać o problemie if a==1: a=0
-	& subprocess w pythonie
-	& multiprocessing i lock w pythonie
+		& fork
+		& komunikacja międzyprocesowa
+			&& sygnały
+				&&& poopowiadać o kill
+					&&&& czy program może nie umrzeć?
+				&&& wiele różnych sygnałów ...
+			&& pamięć i semafory
+				&&& poopowiadać o problemie if a==1: a=0
+		& subprocess w pythonie
+		& multiprocessing i lock w pythonie
 	\end{easylist}\vspace{4pt}
 	
-	Opowiedzieć o funkcji \verb$getaddrinfo$ – od tego przechodzimy płynnie do wysyłania po UDP.
+	Opowiedzieć o funkcji \Verb#getaddrinfo#:
+	\begin{easylist}[itemize]
+		& \Verb#import socket#\\
+		  \Verb#socket.getaddrinfo("www.opcode.eu.org", "www")#
+		&& widzimy że to lista krotek
+		& \Verb#for x in socket.getaddrinfo("www.opcode.eu.org", "www"):#\\
+		  \Verb#   print(x[4])#
+		& jeżeli podamy numer portu:\\
+		  \Verb#socket.getaddrinfo("www.opcode.eu.org", "80")#
+		&& to dostaniemy różne typy gniazd sieciowych - TCP, UDP i "RAW" ...
+	\end{easylist}
+	Od tego przechodzimy płynnie do wysyłania po UDP.
 \end{teacherOnly}
 
 
-\subsubsection{wysyłanie danych po UDP}
+\subsection{wysyłanie danych po UDP}
 \begin{CodeFrame*}[python]{}
 import socket, sys
 
@@ -676,7 +996,7 @@ sfd = socket.socket(dstAddrInfo[0], socket.SOCK_DGRAM)
 sfd.sendto("Ala ma kota".encode(), dstAddrInfo[4])
 \end{CodeFrame*}
 
-\subsubsection{odbiór danych po UDP}
+\subsection{odbiór danych po UDP}
 \begin{CodeFrame*}[python]{}
 import socket, sys
 
@@ -693,7 +1013,7 @@ while True:
   print("odebrano od", sAddr, ":", data.decode());
 \end{CodeFrame*}
 
-\subsubsection{klient TCP}
+\subsection{klient TCP}
 \begin{CodeFrame*}[python]{}
 import socket, select, sys
 
@@ -739,7 +1059,7 @@ sfd.shutdown(socket.SHUT_RDWR)
 sfd.close()
 \end{CodeFrame*}
 
-\subsubsection{serwer TCP}
+\subsection{serwer TCP}
 \begin{CodeFrame*}[python]{}
 import socket, select, signal, sys, os
 
@@ -880,8 +1200,8 @@ Zapoznaj się z RFC1924 i napisz program konweryjący adresy IPv6 pomiędzy nota
 \rozwiazania
 
 \copyrightFooter{
-	© Matematyka dla Ciekawych Świata, 2017-2018.\\
-	© Robert Ryszard Paciorek <rrp@opcode.eu.org>, 2003-2019.\\
+	© Matematyka dla Ciekawych Świata, 2017-2020.\\
+	© Robert Ryszard Paciorek <rrp@opcode.eu.org>, 2003-2020.\\
 	Wykorzystano grafiki należące do domeny publicznej.\\
 	Kopiowanie, modyfikowanie i redystrybucja dozwolone pod warunkiem zachowania informacji o autorach.
 }
