@@ -85,7 +85,7 @@ Omówimy obsługę multimetru oraz przetwornicy, a także podstawy lutowania i b
 Multimetr (zwany też miernikiem) to podstawowy przyrząd pomiarowy każdego elektronika. Zgodnie z nazwą posiada wiele funkcji pomiarowych.
 Najczęściej są to woltomierz (do pomiaru napięcia stałego \textbf{V$\mathdirectcurrent$} i zmiennego \textbf{V$\sim$}),
 amperomierz (do pomiaru natężenia prądu stałego \textbf{A$\mathdirectcurrent$} i zmiennego \textbf{A$\sim$}, potocznie zwanego prądem)
-oraz omomierz (do pomiaru rezystancji, \textbf{$\Omega$}). Często multrimetr posiada także funkcje:
+oraz omomierz (do pomiaru rezystancji, \textbf{$\Omega$}). Często multimetr posiada także funkcje:
 \begin{itemize}
 \item \textbf{Test połączeń} (\textit{continuity mode}), oznaczany symbolem fali dźwiękowej (lub nuty), służy do sprawdzania połączeń elektrycznych.
   Miernik wydaje dźwięk jeśli między sondami pomiarowymi (przewodami) jest połączenie.
@@ -94,7 +94,7 @@ oraz omomierz (do pomiaru rezystancji, \textbf{$\Omega$}). Często multrimetr po
 \item \textbf{Test tranzystorów} (pomiar h\textsubscript{FE}), służący do pomiaru wzmocnienia tranzystora. Najczęściej posiada oddzielne gniazdo
   na mierniku.
 \item \textbf{Pomiar pojemności}, oznaczany symbolem \esymbol{capacitor} służy do pomiarów pojemności kondensatorów
-\item \textbf{Pomiar temperatury}, ocznaczany symbolem \textbf{$^{\circ}$C} najczęściej za pomocą termopary (dołączana do miernika).
+\item \textbf{Pomiar temperatury}, ocznaczany symbolem \textbf{$^{\circ}$C}, najczęściej za pomocą termopary (dołączana do miernika).
 \end{itemize}
 
 Multimetr zachowuje się tak jak przyrząd pomiarowy, którego funkcjonalność jest aktualnie wybrana. Oznacza to że należy go podłączać
@@ -165,8 +165,8 @@ Może też okazać się, że spadek napięcia na jej złączu jest większy niż
 \footnotetext{Mierniki, które posiadają tylko te trzy funkcje nazywane są po angielsku VOM (Volt-ohm-milliammeter). Najczęściej są to mierniki
   analogowe.}
 
-Funkcja pomiaru współczynnika wzmocnienia tranzystora bipolarnego jest z reguły oznaczana \textbf{hFE} (od symbolu stosowanego do
-oznaczenia tej wartości $\text{h}_{FE}$)\footnote{Czasami oznaczanego też jako $\beta$, beta.}. Pomiar tranzystora za pomocą multimetru polega na umieszczeniu jego nóżek w \textbf{odpowiedni sposób} w gnieździe pomiarowym
+Funkcja pomiaru współczynnika wzmocnienia tranzystora bipolarnego jest z reguły oznaczana \textbf{hFE} (od symbolu $\text{h}_{FE}$ stosowanego do
+oznaczenia tej wartości)\footnote{Czasami oznaczanego też jako $\beta$, beta.}. Pomiar tranzystora za pomocą multimetru polega na umieszczeniu jego nóżek w \textbf{odpowiedni sposób} w gnieździe pomiarowym
 w multimetrze. Jego emiter, baza oraz kolektor (oznaczane \textbf{E}, \textbf{B} i \textbf{C} odpowiednio) muszą trafić w
 otwory w odpowiedniej połowie gniazda (\textbf{PNP} oraz \textbf{NPN} zależnie od typu tranzystora). Trzeba go obrócić tak, żeby emiter trafił do \textbf{E}, baza do \textbf{B} a kolektor do \textbf{C}. Gniadzo jest tak skontstruowane, że
 pasują do niego tranzystory o dowolnej kolejności wyprowadzeń. Kolejność dla Twojego tranzystora jest opisana w jego karcie katalogowej.
@@ -178,16 +178,17 @@ Niektóre mierniki posiadają także funkcje pomiaru pojemności elektrycznej ko
 kondensatora odbywa się poprzez umieszczenie go w specjalnym gnieździe na obudowie miernika albo przez podłączenie sond do wyprowadzeń kondensatora. Należy pamiętać
 o tym, że trzeba ustawić zakres w podobny sposób jak przy innych pomiarach. Uwaga - \textbf{nie należy mierzyć pojemności naładowanych
   kondensatorów}. Funkcja pomiaru pojemności przydaje się przy sprawdzaniu kondensatorów ceramicznych lub foliowych o pojemnościach od kilku nF do kilkudziesięciu uF. Na kondensatorach elektrolitycznych lub tantalowych (o większych pojemnościach) wartość
-pojemności jest z reguły napisana na obudowie.
+pojemności jest z reguły napisana na obudowie. Należy także wybrać kondensator, którego maksymalne dopuszczalne napięcie (też napisane na obudowie)
+jest wyższe niż największe możliwe napięcie mogące na nim wystąpić w układzie.
 
 \begin{ProTip}{\normalfont{\strong{Uwaga}}}
-  Kondensatory elektrolityczne oraz tantalowe są elementami \textbf{spolaryzowanymi}. Podłączając je, należy pamiętać o polaryzacji i podłączać je
+  Kondensatory elektrolityczne oraz tantalowe są elementami \textbf{spolaryzowanymi}. Podłączając je, należy o tym pamiętać i podłączać je
   tylko zgodnie z polaryzacją - biegun ujemny do punktu o niższym napięciu, a biegun dodatni do punktu o wyższym napięciu. Na tych kondensatorach jeden
   z biegunów (najczęściej ujemny) jest zaznaczony na obudowie.
   
   \textbf{Uwaga:} Niewłaściwe podłączenie kondensatora może doprowadzić do jego eksplozji.
   Dla własnego bezpieczeństwa nie rób tego – jeżeli jesteś ciekawy jak to wygląda obejrzyj filmik w Internecie.
-  Pamiętaj o tym także montując kondensator w swoich konstrukcjach.
+  Pamiętaj o tym także montując kondensatory w swoich konstrukcjach.
 \end{ProTip}
 
 Oprócz opisanych wyżej funkcji, niektóre multimetry mogą mieć także funkcje pomiaru temperatury (poprzez \textbf{termoparę}
@@ -196,7 +197,7 @@ specjalnego złącza na mierniku) oraz pomiar częstotliwości.
 
 \subsection{Dokonywanie pomiarów}
 
-Zależnie od wielkości fizycznej, którą chcemy zmierzyć, czerwony (dodatni) przewód miernika musi być podłączony do odpowiadającego
+Zależnie od wielkości fizycznej, którą chcemy zmierzyć, po stroni emiernika, czerwony (dodatni) przewód musi być podłączony do odpowiadającego
 mu gniazda. Czarny przewód (ujemny, masa) należy zawsze podłączyć do gniazda \textbf{COM}. Miernik ustawiamy na pomiar danej
 wielkości.
 \\
@@ -208,7 +209,7 @@ wyświetlając ``\textbf{1}'' (po lewej stronie ekranu), lub ``\textbf{OL}'' (\e
 
 Przy pomiarze \textbf{napięcia} w danym punkcie układu, najczęściej masę miernika (czarną sondę)
 podłączamy do masy układu. Drugą sondę (czerwoną) podłączamy do mierzonego punktu. Jeśli chcemy zmierzyć napięcie na jakimś elemencie (np. oporniku),
-masą miernika dotykamy do punktu, w którym oczekujemy niższego napięcia, a czerwoną do punktu, w którym oczekujemy
+masą miernika dotykamy do punktu, w którym oczekujemy niższego napięcia, a czerwoną sondą do punktu, w którym oczekujemy
 wyższego napięcia. Jeżeli podłączymy sondy odwrotnie, po prostu dostaniemy wynik z przeciwnym znakiem. Woltomierz należy podłączać równolegle.
 \\
 
@@ -241,10 +242,10 @@ buzzerem sytuację, gdy spadek napięcia jest odpowiednio mały. Oznacza to, że
 
 \begin{ProTip}{\normalfont{\strong{Wskazówka}}}
   W zmontowanym i zasilonym układzie należy dokonywać tylko pomiarów woltomierzem.
-  Amperomierz włącza się w szeregowo w badany układ zatem jego użycie wymaga modyfikacji układu, chyba że przewiduje on możliwość takiego pomiaru.
+  Amperomierz włącza się w szeregowo w badany układ, zatem jego użycie wymaga modyfikacji układu, chyba że układ przewiduje możliwość takiego pomiaru.
   
   Omomierz i pomiar pojemności używa się do pomiarów elementów poza układem,
-  jednak pomiar ciągłości (rzadziej oporności) może być wykonywany na wyłączonym układzie celem ustalenia dlaczego układ nie działa.
+  jednak pomiar ciągłości (rzadziej oporności) może być wykonywany na wyłączonym układzie celem ustalenia dlaczego ten nie działa.
   Należy wtedy pamiętać o tym, że pomiary omomierzem będą zaniżone z  powodu obecności innych oporów w układzie.
 \end{ProTip}
 
@@ -330,7 +331,7 @@ Następnie:
 	\item przytknij na krótko (około 1 – 2 sekund) sondy do zacisków wyjściowych i zaobserwuj wskazanie multimetru.
 \end{itemize}
 Jeżeli wskazanie było duże (około ampera lub kilku) obrócić potencjometr odpowiedzialny za regulację prądu w przeciwnym kierunku i ponów procedurę pomiaru.
-Jeżeli było ono poniżej 0.2A przestaw multimetr na zakres 200mA, przełóż sondy do odpowiednich gniazd i ponownie dokonaj pomiar.
+Jeżeli było ono poniżej 0.2A przestaw multimetr na zakres 200mA, przełóż sondy do odpowiednich gniazd i ponownie wykonaj pomiar.
 
 Nastaw ograniczenie prądowe na około 40mA.
 
@@ -358,11 +359,11 @@ z regualcją temperatury oraz ostrym lub małym płaskim (w kształcie śrubokr�
 stojak. Inne przydatne akcesoria to kalafonia (ułatwia lutowanie) lub topnik (elektroniczny), oraz wyciorek do wycierania grotu - może być to specjalna gąbka (zwilżona
 przed użyciem) lub druciak do mycia naczyń.\\
 
-Najwygodniej jest używać spoiwo lutownicze formie drutu o średnicy nie większej niż 0.5 mm, najlepiej 0.25mm. Przy budowie prototypów
+Najwygodniej jest używać spoiwo lutownicze w formie drutu o średnicy nie większej niż 0.5 mm, najlepiej 0.25mm. Przy budowie prototypów
 najczęściej używa się cyny ołowiowej Sn40/Pb60 (stop 40\% cyny oraz 60\% ołowiu).
 \\
 
-Jeżeli Twój mikrokontroler nie ma przylutowanych pinów, musisz przylutować je samemu. Przymierz i odetnij
+Jeżeli Twój mikrokontroler nie ma przylutowanych pinów, musisz przylutować je sam/sama. Przymierz i odetnij
 obcążkami dwa odcinki listwy kołkowej pasujące do otworów na brzegach płytki mikrokontrolera. Włóż piny do otworków
 na płytce. Następnie odwiń lub wyciągnij odcinek cyny ze szpulki. Włącz lutownicę i odłóż ją na stojak. Jeżeli twoja lutownica
 ma ustawianie temperatury, ustaw ją na około 250-300 st. C. Daj jej około minuty na osiągnięcie temperatury. Pamiętaj, że grot
@@ -387,7 +388,7 @@ Postaraj się, aby listwy kołkowe były prostopadle do płytki. Jeżeli masz od
 umiejscowić piny, które lutujesz. Możesz też użyć do tego płytki stykowej. Lutowanie zacznij od czterech pinów na rogach płytki.
 \\
 
-Kształt gotowego lutu powinien być stożkowaty. Jeżeli jest obły, oznacza to zbyt dużą ilość użytej cyny. Kuliste luty prawdopodobnie nie związały pinu z płytką (pole lutownicze nie było dobrze ogrzane). Jeśli lut nie jest błyszczący, oznacza to, że niepoprawnie związał. W takim wypadku spróbuj dodać
+Kształt gotowego lutu powinien być stożkowaty. Jeżeli jest obły, oznacza to zbyt dużą ilość użytej cyny. Kuliste luty prawdopodobnie nie związały pinu z płytką (pole lutownicze nie było dobrze ogrzane). Jeśli lut nie jest błyszczący, oznacza to, że niepoprawnie związał (tzw. \textit{zimny lut}). W takim wypadku spróbuj dodać
 topnika (np. kalafonii).\\
 
 Umiejętne lutowanie wymaga trochę praktyki, ale nie jest skomplikowane. Pamiętaj, aby lutować w dobrze wentylowanym
