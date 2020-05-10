@@ -17,7 +17,7 @@
 		<a href="LiveUSB.pdf"><img src="lib/pdfFile.svg" alt="Pobierz jako PDF" title="Pobierz jako PDF"/></a>
 	</p>
 </div>
-<p id="updateInfo">(aktualizacja: 2020-04-09)</p>
+<p id="updateInfo">(aktualizacja: 2020-05-10)</p>
 
 <section>
 <p>Live USB możemy bardzo prosto utworzyć instalując system z użyciem debootastrapa i uzupełniając go w chroocie o jądro, gruba i potrzebne nam narzędzia.</p>
@@ -37,8 +37,8 @@
 <h2>Obraz w pliku</h2>
 <p>Utworzenie obrazu dysku w pliku, a następnie przekopiowanie go przy pomocy dd na nośnik, jest opcjonalne, ale niekiedy może znacząco przyspieszyć proces instalacji.</p>
 <pre class="bash">
-dd if=/dev/zero of=usb.img bs=1M count=1913
-losetup --partscan --find --show usb.img
+dd if=/dev/zero of=usb.img bs=1M count=3699
+DEV=`losetup --partscan --find --show usb.img`
 </pre>
 </section>
 
@@ -65,6 +65,8 @@ parted $DEV "set 2 boot on";
 # tutaj robimy jedną dużą partycję o nazwie rootfs
 parted $DEV "mkpart rootfs 200MB 100%";
 
+# update kernel table – in most case we don't need this
+# kpartx -u $DEV
 
 # przy pomocy gdisk utworzenie hybrid MBR
 gdisk $DEV
@@ -100,7 +102,7 @@ mount ${DEVp}3 ${MNT}
 
 # ustawiamy adres mirrora i instalowaną gałąź Debiana
 # (chyba że był wcześniej były ustawione)
-MIRROR=${MIRROR:="ftp://ftp.icm.edu.pl/pub/Linux/debian/"}
+MIRROR=${MIRROR:="http://ftp.icm.edu.pl/pub/Linux/debian/"}
 SUITE="stable"
 
 # instalujemy system debootstrapem
@@ -135,6 +137,9 @@ chroot $MNT
 echo 'LANG="C.UTF-8"' &gt; /etc/default/locale;
 echo 'set -a; . /etc/default/locale; set +a' &gt; /etc/profile.d/locale.sh
 
+# ustalamy UUID rootfs obrazu
+export `blkid -o export ${DEVp}3 | grep ^UUID=`
+
 # w /etc/fstab ustawiamy rootfs na read-only, a /tmp na tmpfs
 # /var/run i /var/lock są współcześnie linkami do /run na tmpfs
 cat &lt;&lt; EOF &gt; /etc/fstab
@@ -147,7 +152,7 @@ EOF
 rm -fr /var/tmp;   ln -s /run/tmp   /var/tmp
 rm -fr /var/log;   ln -s /run/log   /var/log
 
-cat &gt; etc/tmpfiles.d/on_tmpfs.conf &lt;&lt;EOF
+cat &gt; /etc/tmpfiles.d/on_tmpfs.conf &lt;&lt;EOF
 d  /run/tmp   1777 root root -
 L+ /var/tmp   -    -    -    -  /run/tmp
 d  /run/log   0755 root root -
@@ -163,7 +168,8 @@ ln -s /proc/mounts /etc/mtab
 <h2>Chroot - dodajemy ramfs'y</h2>
 <pre class="bash">
 mount /tmp
-mount -t tmpfs tmpfs /run
+# /run jest montowany wcześniej jako rbind, ale może nie zawierać log i tmp
+# mount -t tmpfs tmpfs /run
 mkdir -p /run/{lock,log,tmp}
 </pre>
 </section>
@@ -199,10 +205,11 @@ apt-get install aptitude
 <h2>Instalacja przydatnych narzędzi i programów</h2>
 <pre class="bash">
 SYSBASE="aptitude bsdmainutils cron less rsync vim xxd
-	procps psmisc lsof htop iotop
-	file screen tmux sudo bash-completion
+	procps psmisc lsof htop iotop strace
+	schroot busybox file screen tmux sudo bash-completion
 	konwert gpg gpgv gpgsm bzip2 xz-utils p7zip-full
-	python3 whiptail gawk bc man-db manpages"
+	python3 python3-pip whiptail gawk bc man-db manpages
+	pass pwgen  console-setup gpm"
 
 HWTOOLS="sysstat lm-sensors hddtemp
 	pciutils usbutils lsscsi dmidecode
@@ -210,16 +217,16 @@ HWTOOLS="sysstat lm-sensors hddtemp
 	picocom jpnevulator
 	ipmitool pcmciautils"
 FSTOOLS="lvm2 mdadm dmsetup multipath-tools cryptsetup-bin
-	parted gdisk
+	parted fdisk gdisk kpartx testdisk
 	e2fsprogs xfsprogs btrfs-progs dosfstools
 	nfs-kernel-server"
 
-NETBASE="iproute2 iptables iputils-ping isc-dhcp-client
+NETBASE="iproute2 nftables iputils-ping isc-dhcp-client
 	net-tools iputils-tracepath dnsutils mtr-tiny
-	ethtool vlan bridge-utils arptables ebtables
-	netcat-openbsd socat telnet
+	ethtool vlan bridge-utils iptables arptables ebtables
+	netcat-openbsd ncat socat telnet
 	wget curl httrack ntpdate debootstrap
-	openssh-client openssh-server sshfs"
+	openssh-client openssh-server sshfs sshguard"
 NETDIAG="inetutils-traceroute traceroute paris-traceroute tcptraceroute
 	tcpdump nmap
 	sipcalc ipv6calc
@@ -228,9 +235,12 @@ NETDIAG="inetutils-traceroute traceroute paris-traceroute tcptraceroute
 	dnstop dnstracer dnswalk"
 NETWIFI=" wireless-tools wpasupplicant hostapd rfkill"
 
-X11TOOL="xorg openbox iceweasel xpdf"
+DEVUTILS="git subversion patch"
 
-aptitude install $SYSBASE $HWTOOLS $FSTOOLS $NETBASE $NETDIAG $NETWIFI $X11TOOL
+X11TOOL="xorg openbox firefox-esr ca-certificates xpdf xterm wireshark"
+
+aptitude install $SYSBASE $HWTOOLS $FSTOOLS $NETBASE $NETDIAG $NETWIFI $DEVUTILS $X11TOOL
+aptitude purge   vim-tiny mawk nano tasksel tasksel-data debconf-i18n gdbm-l10n
 aptitude clean
 </pre>
 </section>
@@ -244,7 +254,8 @@ aptitude update
 
 # instalacja pakietów gruba, jądra oraz narzędzi efi
 aptitude install grub2 grub-efi-amd64-bin efivar efibootmgr \
-                 linux-image-amd64 firmware-linux
+                 linux-image-amd64 firmware-linux \
+                 firmware-realtek ntfs-3g
 aptitude clean
 
 # plik konfiguracyjny GRUBa
@@ -357,6 +368,36 @@ grub-install --boot-directory=/boot/ --target=i386-pc $DEV
 echo "allow-hotplug eth0" &gt; /etc/network/interfaces.d/eth0 
 echo "iface eth0 inet dhcp" &gt;&gt; /etc/network/interfaces.d/eth0
 
+# w /etc/rc.local podnosimy wszystkie interfejsy
+cat &lt;&lt; EOF &gt; /etc/rc.local
+#!/bin/bash
+
+for i in \`ip l | awk '/^[0-9]/ {print \$2}' | tr -d :\`; do
+	ifconfig \$i up
+	ip link set dev \$i
+done
+EOF
+
+cat &lt;&lt; EOF &gt; /etc/systemd/system/rc-local.service
+[Unit]
+Description=/etc/rc.local
+ConditionPathExists=/etc/rc.local
+
+[Service]
+Type=forking
+ExecStart=/etc/rc.local start
+TimeoutSec=0
+StandardOutput=tty
+RemainAfterExit=yes
+SysVStartPriority=99
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+chmod +x /etc/rc.local
+systemctl enable rc-local
+
 # ssh pozwala na logowanie na root'a i nie jest automatycznie uruchamine
 sed -e 's|^[# ]*PermitRootLogin.*$|PermitRootLogin yes|' -i /etc/ssh/sshd_config
 systemctl  disable  ssh.service
@@ -441,6 +482,15 @@ umount -R $MNT/run
 umount $MNT
 losetup -d $DEV
 </pre>
+</section>
+
+<section>
+<h2>Nagranie obrazu na USB</h2>
+<p>Jeżeli obraz tworzony był w pliku należy skopiować go na nośnik USB np. przy użyciu komendy <code>dd</code>:</p>
+<pre class="bash">
+dd status=progress oflag=sync bs=1M if=usb.img of=ŚCIEŻKA_DO_URZĄDZENIA_USB
+</pre>
+gdzie <code>ŚCIEŻKA_DO_URZĄDZENIA_USB</code> jest ścieżką do urządzania (nie partycji) związanego z nośnikiem USB (np. <code>/dev/sdf</code>).
 </section>
 
 <section>
