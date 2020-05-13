@@ -28,7 +28,7 @@
 	Projekt ,,Matematyka dla Ciekawych Świata'',\\
 	Robert Ryszard Paciorek\\\normalsize\ttfamily <rrp@opcode.eu.org>
 }
-\date  {2020-04-08}
+\date  {2020-05-13}
 
 \makeatletter\hypersetup{
 	pdftitle = {\@title}, pdfauthor = {\@author}
@@ -297,6 +297,10 @@ Zauważ również, że jeżeli komanda \texttt{ls} w wyniku rozwinięcia znaków
 		tworzy link twardy do wskazanego pliku (lub plików) w wskazanej lokalizacji, w przypadku wskazania wielu plików źródłowych cel powinien być katalogiem, do ważniejszych opcji należy zaliczyć:\\
 			\texttt{-s} tworzy dowiązania symboliczne zamiast twardych\\
 			\texttt{-r} używa ścieżki względnej zamiast bezwzględnej przy tworzeniu dowiązań symbolicznych
+			\vspace{5pt}\\\hspace*{1cm}\includegraphics[width=0.75\textwidth]{link_twardy_i_symboliczny}\\
+			Link twardy jest innym uchwytem do tych samych danych i może być używany także po skasowaniu oryginalnego pliku. Liczbę dowiązań do danego pliku pokazuje m.in. komenda \Verb{ls} z opcją \Verb{-l}.
+			Nie można utworzyć linków twardych do katalogów, ani do plików na innym zasobie dyskowym (innym systemie plików).\\
+			Link symboliczny wskazuje na konkretną ścieżkę (względną lub bezwzględną – co może mieć znaczenie przy przenoszeniu takiego linku) do dowolnego (nawet nie istniejącego – wtedy mówimy o zerwanym linku) pliku lub katalogu.
 		
 	\item \Verb{mv [opcje] źródło1 [źródło2 [...]] cel}
 		przenosi wskazane pliki / katalogi do wskazanej lokalizacji, w przypadku przenoszenia wielu plików cel powinien być katalogiem, do ważniejszych opcji należy zaliczyć:\\
@@ -588,6 +592,7 @@ Przedstaw rozwiązanie z użyciem i bez użycia komendy \texttt{cd}.
 \end{Zadanie}
 % END: zadania - unix napisy 02
 
+\student{\clearpage}
 % BEGIN: Użytkownicy, uprawnienia i procesy
 \section{Użytkownicy, uprawnienia i procesy}
 

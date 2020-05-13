@@ -33,6 +33,11 @@ upload:
 # addionals files
 #
 
+$(MAINDIR)/output-www/Podstawowe_polecenia_Unix.pdf: $(MAINDIR)/output-tmp/link_twardy_i_symboliczny.pdf
+
+$(MAINDIR)/output-tmp/%.pdf: $(MAINDIR)/booklets/extra-tex-files/%.svg
+	inkscape $^ --export-pdf=$@
+
 $(TEXBUILDDIR)/pdfArticle.cls $(TEXBUILDDIR)/labels4easylist.sty $(TEXBUILDDIR)/vtable.sty $(TEXBUILDDIR)/ehhline.sty:
 	mkdir -p $(TEXBUILDDIR)
 	wget -O "$@" "https://bitbucket.org/OpCode-eu-org/latex-libs/raw/HEAD/pkgs/$(@F)"

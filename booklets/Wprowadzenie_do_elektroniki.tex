@@ -28,7 +28,7 @@
 	Projekt ,,Matematyka dla Ciekawych Świata'',\\
 	Robert Ryszard Paciorek\\\normalsize\ttfamily <rrp@opcode.eu.org>
 }
-\date  {2020-04-11}
+\date  {2020-05-13}
 
 \makeatletter\hypersetup{
 	pdftitle = {\@title}, pdfauthor = {\@author}
@@ -414,7 +414,7 @@ Zauważ podobieństwo w sterowaniu do trnzystorów NPN i PNP (N-MOSFET przewodzi
 
 \begin{wrapfigure}{r}{0.2\textwidth}
   \begin{center}
-    \vspace{-27pt}
+    \vspace{-33pt}
     \includegraphics[width=0.17\textwidth]{img/elektronika/mostek_H_switche}
     \vspace{-27pt}
   \end{center}
@@ -437,6 +437,16 @@ Omawiając poszczególne typy tranzystorów skupialiśmy się na ich pracy w rol
 Jednak tranzystor będąc elementem o regulowanym przewodzeniu może zostać wykorzystany także do wzmacniania sygnałów, czyli wytworzenia na swoim wyjściu sygnału proporcjonalnego do sygnału wejściowego tyle że wzmocnionego.
 Wzmacnianiu może ulegać sygnał napięciowy lub prądowy (najprostszym przypadkiem jest wzmocnienie prądu bazy jako prądu kolektora $I_C = \beta I_B$ w tranzystorze bipolarnym).
 Więcej o różnych układach pracy tranzystora w roli wzmacniacza można przeczytać na \url{http://vip.opcode.eu.org/#Wzmacniacz_sygnału}.
+
+\vspace{5pt}
+
+\begin{wrapfigure}{r}{0.24\textwidth}
+  \begin{center}
+    \vspace{-25pt}
+    \includegraphics[width=0.21\textwidth]{img/elektronika/wzmacniacz_operacyjny-nieodwracający}
+    \vspace{-47pt}
+  \end{center}
+\end{wrapfigure}
 
 Często do wzmacniania sygnału zamiast pojedynczego tranzystora wykorzystujemy układy scalone (złożone z wielu tranzystorów) nazywane wzmacniaczami operacyjnymi.
 Cechują się one bardzo dużym wzmocnieniem różnicy napięcia pomiędzy swoimi wejściami, pożądane wzmocnienie uzyskuje się dobierając zewnętrzne elementy pętli ujemnego sprzężenia zwrotnego
@@ -732,6 +742,19 @@ Z kolejnymi sygnałami zegarowymi na wyjście szeregowe wystawiany jest stan kol
 
 \subsubsection{liczniki}
 Z kolejnymi sygnałami zegarowymi zwiększana jest o jeden wartość rejestru. Prostszy w budowie licznik asynchroniczny ma większe (i w dodatku rosnące wraz z bitowością licznika) ograniczenia dotyczące szybkości zliczania od licznika synchronicznego, ze względu na opóźnienie z jakim dochodzi zliczany sygnał (CLK) do kolejnych stopni licznika.
+
+\begin{Zadanie}{}{}
+Podłącz do kolejnych wyjść układu rejestru przesuwnego z buforem wyjściowym (np. CD4094 lub 74HC595) 4 diody LED (pamiętaj o rezystorach).
+Zapisz do rejestru i ustaw na wyjściach taką wartość aby świeciły się dwie pierwsze i ostatnia dioda, użyj w tym celu ręcznego manipulowania sygnałami:
+\begin{itemize}
+\item wejścia szeregowego (SERIAL IN), służącego do wprowadzania danych
+\item zegara danych (CLOCK, CLK), determinującego chwilę odczytu kolejnego bitu z wejścia szeregowego
+\item zegara wyjść (STROBE), determinującego chwilę przepisania danych z rejestru przesuwnego do rejestru wyjściowego
+\end{itemize}
+
+\textit{Wskazówka: zapoznaj się z dokumentacją posiadanego układu, ustal nazewnictwo używane do określania poszczególnych sygnałów (może się różnić nawet w zależności od producenta układu) oraz numery nóżek układu z nimi związane (mogą się różnić w zależności od modelu / wariantu obudowy).}
+\end{Zadanie}
+
 % END: Elektronika - Przerzutniki i rejestry
 
 

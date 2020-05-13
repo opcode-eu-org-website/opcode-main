@@ -17,7 +17,7 @@
 		<a href="LiveUSB.pdf"><img src="lib/pdfFile.svg" alt="Pobierz jako PDF" title="Pobierz jako PDF"/></a>
 	</p>
 </div>
-<p id="updateInfo">(aktualizacja: 2020-05-10)</p>
+<p id="updateInfo">(aktualizacja: 2020-05-13)</p>
 
 <section>
 <p>Live USB możemy bardzo prosto utworzyć instalując system z użyciem debootastrapa i uzupełniając go w chroocie o jądro, gruba i potrzebne nam narzędzia.</p>
@@ -136,6 +136,7 @@ chroot $MNT
 # używamy UTF-8
 echo 'LANG="C.UTF-8"' &gt; /etc/default/locale;
 echo 'set -a; . /etc/default/locale; set +a' &gt; /etc/profile.d/locale.sh
+echo 'perl -e exit 2&gt;&amp;1 | grep "Setting locale failed" 2&gt;&amp;1 &gt; /dev/null &amp;&amp; export LC_ALL=C.UTF-8' &gt;&gt; /etc/profile.d/locale.sh
 
 # ustalamy UUID rootfs obrazu
 export `blkid -o export ${DEVp}3 | grep ^UUID=`
@@ -158,6 +159,9 @@ L+ /var/tmp   -    -    -    -  /run/tmp
 d  /run/log   0755 root root -
 L+ /var/log   -    -    -    -  /run/log
 EOF
+
+# konfigurujemy zapis journala na ramfs
+sed -e 's@^.*Storage=.*@Storage=volatile@' -i /etc/systemd/journald.conf
 
 # linkujemy /proc/mounts do /etc/mtab
 ln -s /proc/mounts /etc/mtab
@@ -450,9 +454,27 @@ umount \$MNT
 EOF
 chmod +x /root/umountChroot.sh
 
-cat &lt;&lt; EOF &gt; /root/.bash_history
-mount -o remount,rw /
+cat &lt;&lt; EOF &gt; /root/runSSH.sh
+#!/bin/bash
+
+if [ \$# -ne 1 ]; then echo "USAGE $0 client_ip"; exit; fi
+
+nft add table inet filter; nft flush table inet filter;
+nft add chain inet filter INPUT '{ type filter hook input priority 0; }';
+if echo "\$1" | grep : >/dev/null; then
+	nft add rule  inet filter INPUT ip6 saddr "\$1" accept
+else
+	nft add rule  inet filter INPUT ip saddr "\$1" accept
+fi
+nft add rule  inet filter INPUT tcp dport 22 reject
+
 systemctl start ssh.service
+EOF
+chmod +x /root/runSSH.sh
+
+cat &lt;&lt; EOF &gt; /root/.bash_history
+HISTFILE=/dev/null; mount -o remount,rw /
+/root/runSSH.sh 192.168.13.0/24
 /root/prepareChroot.sh /dev/sdb1 /mnt/1
 chroot /mnt/1
 /root/umountChroot.sh /mnt/1
