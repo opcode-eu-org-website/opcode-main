@@ -504,6 +504,94 @@ a następnie uruchom \Verb$picocom$ aby zobaczyć co dzieje się na porcie szere
 \end{CodeFrame*}
 
 \section{Przetwornik analogowo-cyfrowy}
+Przetwornik analogowo-cyfrowy w STM32 należy do jednych z bardziej zaawansowanych. W tym ćwiczeniu pokażemy prosty przykład
+użycia przetwornika ADC do odczytu napięcia z jednego z pinów mikrokontrolera.
+
+Zbuduj układ zgodnie z poniższym schematem:
+\textit{Schemat tutaj, potencjometr podłączony międzi GND i 3v3, szczotka do pinu A0}
+
+Program będzie wysyłał wynik konwersji na UART. Będziemy budować na podstawie kodu w poprzedniego ćwiczenia.
+
+Najpierw musimy zainicjalizować peryferium ADC. Skopiuj poniższy kod do pliku \Verb$main.c$:
+\begin{CodeFrame*}[c]{}
+void adc_setup(){
+  //Ustawienie A0 w tryb wejścia analogowego
+  gpio_set_mode(GPIOA,
+		GPIO_MODE_INPUT, GPIO_CNF_INPUT_ANALOG, GPIO0);
+  //Wyłączenie ADC
+  adc_power_off(ADC1);
+  //Konfiguracja dla trybu pojedynczych pomiarów
+  adc_disable_scan_mode(ADC1);
+  adc_set_single_conversion_mode(ADC1);
+  adc_disable_external_trigger_regular(ADC1);
+  adc_set_right_aligned(ADC1);
+  adc_set_sample_time_on_all_channels(ADC1,
+				      ADC_SMPR_SMP_28DOT5CYC);
+  //Uruchomienie ADC i chwila przerwy na start
+  adc_power_on(ADC1);
+  for (int i = 0; i < 150000; i++) __asm__("nop");
+  
+  //Rekalibracja ADC
+  adc_reset_calibration(ADC1);
+  adc_calibrate(ADC1);
+  }
+\end{CodeFrame*}
+
+Powyższy fragment kodu ustawia pin A0 w tryb wejścia analogowego i konfiguruje ADC w sposób pozwalający na przeprowadzanie pojedynczych konwersji. Następnie włącza ADC, czeka pewien okres czasu aż ADC się ustabilizujei wykonuje procedurę kalibracji.
+
+Teraz możemy zdefiniować funkcję, która zwróci nam wynik pojedynczej konwersji.
+Ten fragment kodu też należy skopiować do \Verb$main.c$:
+\begin{CodeFrame*}[c]{}
+uint16_t adc_read(){
+  //Ustawiamy numery kanałów na których ma być przeprowadzona konwersja
+  uint8_t channels[16];
+  channels[0] = 0;
+  adc_set_regular_sequence(ADC1, 1, channels);
+  //Uruchomienie konwersji
+  adc_start_conversion_direct(ADC1);
+  //Oczekiwanie na koniec konwersji
+  while(!adc_eoc(ADC1));
+  //Zwrócenie wartości
+  return adc_read_regular(ADC1);
+}
+\end{CodeFrame*}
+
+Peryferium ADC w mikrokontrolerach STM32 pobiera listę kanałów na których ma się odbyć konwersja. W naszym przypadku chcemy pobrać
+wartość tylko z jedengo kanału. Pin A0 to kanał zerowy, więc umieszczemy zero w pierwszym elemencie tablicy którą przekażemy
+funkcji ustawiąjącej kolejność konwersji. Do tej funkcji przekazujemy również ilość kanałów dla których przeprowadzana będzie
+konwersja - w tym przypadku 1.
+
+Następnie uruchamiamy konwersję i oczekujemy na jej zakończenie (\Verb$adc_eoc()$ zwraca fałsz dopóki trwa konwersja).
+
+Póżniej zwracamy wynik konwersji (wynik funkcji \Verb$adc_read_regular(ADC1)$.//
+
+Mając już gotowe funkcje obsługujące ADC pozostaje nam tylko włączyć jego zegar i użyć w jakiś sposób wyniku naszej konwersji:
+
+\begin{CodeFrame*}[c]{}
+int main(){
+  rcc_periph_clock_enable(RCC_GPIOC);
+  rcc_periph_clock_enable(RCC_ADC1);
+  
+  gpio_set_mode(GPIOC, GPIO_MODE_OUTPUT_2_MHZ,
+		GPIO_CNF_OUTPUT_PUSHPULL, GPIO13);
+  usart_setup();
+  adc_setup();
+  while(1){
+    for (int i = 0; i < 150000; i++) __asm__("nop");
+    gpio_toggle(GPIOC, GPIO13);
+    printf("ADC: %d\n", adc_read());
+    
+  }
+}
+\end{CodeFrame*}
+
+W \Verb$main$ pojawiło się wywołanie \Verb$rcc_periph_clock_enable$ uruchamiające zegar dla ADC, wywołanie naszej funkcji
+konfigurującej ADC oraz wypisanie wyniku konwersji w pętli za pomocą \Verb$printf()$.
+
+Po uruchomieniu programu powinien zacąć migać zielony LED, a po uruchomieniu \Verb$picocom$ powinniśmy widzieć wyniki konwersji
+przesyłane przez UART. Obracająć potencjometr zmieniamy napięcie na pinie A0, co zmienia wynik konwersji ADC.
+
+
 \section{Komunikacja $I^2C$}
 
 \section{Assembler}
@@ -546,7 +634,7 @@ W jaki sposób zmienić częstotliwość migania LEDa w pierwszym programie? Zmi
 
 \begin{ZadanieDomowe} [2pkt]
   % Tutaj chodzi o użycie printf-a, putchar-a lub uart_send_blocking
-  Napisz program, który za pomocą zaimplementowanej w ćwiczeniu \textit{XXX} funkcji wejścia/wyjścia wypisze na UART
+  Napisz program, który za pomocą zaimplementowanej w ćwiczeniu UART funkcji wejścia/wyjścia wypisze na UART
   ``trójkąt z gwiazdek'' jak poniżej
   
   \begin{CodeFrame*}[text]{}
@@ -562,6 +650,10 @@ W jaki sposób zmienić częstotliwość migania LEDa w pierwszym programie? Zmi
 \end{ZadanieDomowe}
 
 \begin{ZadanieDomowe} [3pkt]
+  Wiedząc, że wartość 4096 odpowiada napięciu 3.3V, a 0 napięciu 0V, zmień przykładowy program ADC tak, aby zamiast surowej
+  wartości wypisywał wartość napięcia.\\
+  \textit{Wskazówka: Aby uprościć obliczenia (uniknąć działań na liczbach zmiennoprzecinkowych), Twój program może podawać wartość
+    w mV.}
   
 \end{ZadanieDomowe}
 
