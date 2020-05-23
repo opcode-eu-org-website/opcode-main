@@ -28,7 +28,7 @@
 	Projekt ,,Matematyka dla Ciekawych Świata'',\\
 	Robert Ryszard Paciorek\\\normalsize\ttfamily <rrp@opcode.eu.org>
 }
-\date  {2020-05-13}
+\date  {2020-05-23}
 
 \makeatletter\hypersetup{
 	pdftitle = {\@title}, pdfauthor = {\@author}
@@ -43,22 +43,19 @@
 % BEGIN: unix intro
 \section{Praca w terminalu}
 
+\section{Praca w terminalu}
+
+Komputer potrafi jedynie wykonywać jakiś wcześniej zaprogramowany ciąg instrukcji.
+Każde wydane przez użytkownika polecenie wiąże się z uruchomieniem takiego ciągu instrukcji (programu komputerowego lub jakieś funkcji w ramach niego).
+
 Podstawowym sposobem wydawania poleceń w systemach typu Unix jest wpisywanie ich w terminalu.
 Terminal może pracować w trybie tekstowym lub może być uruchomiony (jako tzw. emulator terminala) w trybie graficznym.
 
-\subsection{Komendy}
-
-Komendy składają się z nazwy polecenia oraz opcji i argumentów.
-Nazwą polecenia może być nazwa funkcji wbudowanej, nazwa programu (znajdującego się w ścieżce wyszukiwania programów) lub pełna ścieżka do programu.
-Po nazwie polecenia mogą występować opcje i/lub argumenty. Są one oddzielane od nazwy polecenia i od siebie przy pomocy spacji\footnote{
-	zasadniczo dowolnego ciągu białych znaków: spacji, tabulatorów, ,,escapowanych'' nowych linii.
-}.
-Nie ma silnego rozróżnienia opcji od argumentów, typowo stosowaną konwencją jest rozpoczynanie opcji od pojedynczego myślnika (opcje krótkie - jednoliterowe) lub dwóch myślników (opcje długie).
-	W przypadku stosowania tej konwencji po pojedynczym myślniku może występować kilka bezargumentowych opcji jednoliterowych.
-	Typowo argumenty opcji oddzielane są od nich spacją (w przypadku opcji krótkich) lub znakiem równości (w przypadku opcji długich).
-Jeżeli któryś z składników komendy (np. argument) zawiera spacje należy je zabezpieczyć przy pomocy odwrotnego ukośnika lub ujęcia zawierającego je napisu w apostrofy lub cudzysłowia.
-
 \subsection{Powłoka}
+
+Wprowadzane polecenia interpretowane są przez działający w terminalu program nazywany powłoką (interpreterem poleceń).
+W terminalu mogą być uruchamiane kolejne (takie same lub różne) interpretery poleceń.
+Różne interpretery korzystają z różnych składni oraz często różnią się znakiem zachęty (czyli wypisanym tekstem poprzedzającym wprowadzane polecenia).
 
 \subsubsection{bash}
 Bash jest chyba najpopularniejszą powłoką (interpreterem poleceń).
@@ -68,6 +65,18 @@ Umożliwia edycję linii poleceń, dopełnianie komend, ścieżek, itp przy pomo
 \subsubsection{screen i tmux}
 \texttt{screen} i \texttt{tmux} są tzw. multiplexerami terminala - pozwala na uzyskanie wielu okien konsoli (także np. wyświetlanych jedno obok drugiego) na pojedynczym terminalu.
 Ponadto pozwalają na odłączanie i podłączanie sesji, co pozwala na łatwe pozostawienie działającego programu po wylogowaniu i powrót do niego później.
+
+\subsection{Komendy}
+
+Unixowe komendy (czyli polecenia rozumiane przez bash lub inny interpreter zgodny z sh) składają się z nazwy polecenia oraz opcji i argumentów.
+Nazwą polecenia może być nazwa funkcji wbudowanej, nazwa programu (znajdującego się w ścieżce wyszukiwania programów) lub pełna ścieżka do programu.
+Po nazwie polecenia mogą występować opcje i/lub argumenty. Są one oddzielane od nazwy polecenia i od siebie przy pomocy spacji\footnote{
+	zasadniczo dowolnego ciągu białych znaków: spacji, tabulatorów, ,,escapowanych'' nowych linii.
+}.
+Nie ma silnego rozróżnienia opcji od argumentów, typowo stosowaną konwencją jest rozpoczynanie opcji od pojedynczego myślnika (opcje krótkie - jednoliterowe) lub dwóch myślników (opcje długie).
+	W przypadku stosowania tej konwencji po pojedynczym myślniku może występować kilka bezargumentowych opcji jednoliterowych.
+	Typowo argumenty opcji oddzielane są od nich spacją (w przypadku opcji krótkich) lub znakiem równości (w przypadku opcji długich).
+Jeżeli któryś z składników komendy (np. argument) zawiera spacje należy je zabezpieczyć przy pomocy odwrotnego ukośnika lub ujęcia zawierającego je napisu w apostrofy lub cudzysłowia.
 
 \subsection{Uzyskiwanie pomocy}
 
@@ -297,10 +306,12 @@ Zauważ również, że jeżeli komanda \texttt{ls} w wyniku rozwinięcia znaków
 		tworzy link twardy do wskazanego pliku (lub plików) w wskazanej lokalizacji, w przypadku wskazania wielu plików źródłowych cel powinien być katalogiem, do ważniejszych opcji należy zaliczyć:\\
 			\texttt{-s} tworzy dowiązania symboliczne zamiast twardych\\
 			\texttt{-r} używa ścieżki względnej zamiast bezwzględnej przy tworzeniu dowiązań symbolicznych
-			\vspace{5pt}\\\hspace*{1cm}\includegraphics[width=0.75\textwidth]{link_twardy_i_symboliczny}\\
-			Link twardy jest innym uchwytem do tych samych danych i może być używany także po skasowaniu oryginalnego pliku. Liczbę dowiązań do danego pliku pokazuje m.in. komenda \Verb{ls} z opcją \Verb{-l}.
-			Nie można utworzyć linków twardych do katalogów, ani do plików na innym zasobie dyskowym (innym systemie plików).\\
-			Link symboliczny wskazuje na konkretną ścieżkę (względną lub bezwzględną – co może mieć znaczenie przy przenoszeniu takiego linku) do dowolnego (nawet nie istniejącego – wtedy mówimy o zerwanym linku) pliku lub katalogu.
+				\\
+				Link twardy jest innym uchwytem do tych samych danych i może być używany także po skasowaniu oryginalnego pliku. Liczbę dowiązań do danego pliku pokazuje m.in. komenda \Verb{ls} z opcją \Verb{-l}.
+				Nie można utworzyć linków twardych do katalogów, ani do plików na innym zasobie dyskowym (innym systemie plików).
+				\\
+				Link symboliczny wskazuje na konkretną ścieżkę (względną lub bezwzględną – co może mieć znaczenie przy przenoszeniu takiego linku) do dowolnego (nawet nie istniejącego – wtedy mówimy o zerwanym linku) pliku lub katalogu.
+				\vspace{5pt}\\\hspace*{1cm}\includegraphics[width=0.75\textwidth]{link_twardy_i_symboliczny}
 		
 	\item \Verb{mv [opcje] źródło1 [źródło2 [...]] cel}
 		przenosi wskazane pliki / katalogi do wskazanej lokalizacji, w przypadku przenoszenia wielu plików cel powinien być katalogiem, do ważniejszych opcji należy zaliczyć:\\
@@ -592,7 +603,7 @@ Przedstaw rozwiązanie z użyciem i bez użycia komendy \texttt{cd}.
 \end{Zadanie}
 % END: zadania - unix napisy 02
 
-\student{\clearpage}
+
 % BEGIN: Użytkownicy, uprawnienia i procesy
 \section{Użytkownicy, uprawnienia i procesy}
 
