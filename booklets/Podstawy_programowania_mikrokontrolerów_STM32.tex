@@ -498,9 +498,82 @@ Upewnij się, że wszystkie 3 pliki są zapisane a następnie skompiluj i wgraj 
 
 a następnie uruchom \Verb$picocom$ aby zobaczyć co dzieje się na porcie szeregowym:
 
-
 \begin{CodeFrame*}[bash]{}
   picocom /dev/ttyUSB0
+\end{CodeFrame*}
+
+\subsection{Odbieranie danych poprzez UART}
+
+W ostatnim ćwiczeniu nauczyliśmy się wysyłać dane poprzez interfejs UART. Uruchomiliśmy także wygodny\footnote{
+	Ta wygoda ma jednak swoją cenę.
+	Jeżeli zauważyliście że ostatni program wgrywał się dłużej niż poprzednie to jest to efektem zwiększenia jego rozmiaru (a zatem i zapotrzebowania na pamięć flash) na skutek dodania funkcji \Verb$printf$.
+	Nasz mikrokontroler posiada jej na tyle dużo iż nie jest to dla nas istotnym problemem, ale warto pamiętać iż użycie \Verb$printf$ na słabszych mikrokontrolerach może być praktycznie nie do zrealizowania.
+}
+sposób wypisywania informacji na port szeregowy poprzez standardową funkcję \Verb$printf$.
+
+UART możemy wykorzystać także do odbierania danych. W tym ćwiczeniu uruchomimy odbiornik UART, a jako że jego działanie oprzemy na przerwaniach (a nie aktywnym czekaniu na dane w wyznaczonym punkcie programu) to zapoznamy się także z podstawą obsługi przerwań.
+
+\begin{ProTip}{Przerwania}
+  Przerwanie jest to (sprzętowy lub programowy) sygnał dla procesora, powodujący zmianę przepływu sterowania, polegającą na przerwaniu aktualnie wykonywanego kodu programu i rozpoczęcie wykonywania procedury obsługi przerwania.
+  Zazwyczaj odbywa się to z użyciem wektora przerwań, czyli tablicy używanej do mapowania numeru przerwania na adres pod którym umieszczona jest procedura obsługi danego przerwania.
+  
+  Na wcześniejszych zajęciach wspomnieliśmy już o przerwaniu zegarowym, które jest używane przez system operacyjny m.in. do okresowego przerywania działania programów celem ustalenia który z czekających procesów powinien rozpocząć swoje (dalsze) wykonywanie.
+  Mechanizm ten (z użyciem przerwania generowanego programowo) jest wykorzystywany także do wywoływania funkcji systemowych z poziomu kodu użytkownika.
+\end{ProTip}
+
+Nie będziemy modyfikować plików \Verb$uart.h$ i \Verb$uart.c$ (będą one nam dostarczały jednokierunkowy UART używany przez \Verb$printf$ w tym i w kolejnych ćwiczeniach). Wszystkie zmiany wprowadzimy bezpośrednio w \Verb$main.c$.
+
+Pierwszą rzeczą konieczną do wykonania jest ustawienie adresu wektora przerwań na początkowy adres pamięci flash,
+	gdyż nasz program wgrywany i uruchamiany jest właśnie z wbudowanej pamięci flash,
+	a kompilator wektor przerwań umieszcza na początku kodu\footnote{
+		W tablicy tej, na dobrze zdefiniowanej pozycji (bajty 4-7, odpowiadające wyjątkowi \textit{reset}), umieszczany jest także adres początku kodu związanego z naszym programem.
+		To do tego adresu wykonywany jest skok gdy zrestartujemy nasz mikrokontroler z ustawioną zworkami BOOT opcją uruchamiania z pamięci flash
+			lub wydamy wbudowanemu bootloaderowi polecenie uruchomienia od początku pamięci flash (opcja \Verb$-g 0x0$).
+	}:
+	
+\begin{CodeFrame*}[c]{}
+  SCB_VTOR = FLASH_BASE;
+\end{CodeFrame*}
+
+Następnie możemy i powinniśmy włączyć obsługę (odbieranie) przerwań związanych z USART1:
+
+\begin{CodeFrame*}[c]{}
+  nvic_enable_irq(NVIC_USART1_IRQ);
+\end{CodeFrame*}
+oraz aktywować generowanie przez układ interfejsu USART przerwań związanych z odebraniem bajtu:
+
+\begin{CodeFrame*}[c]{}
+  usart_enable_rx_interrupt(USART1);
+\end{CodeFrame*}
+
+W kolejnych krokach konfigurujemy UART tak jak w poprzednim ćwiczeniu, konfigurujemy pin A10 (UART1 RX) jako input oraz przełączamy tryb pracy naszego portu szeregowego na nadawanie i odbiór:
+
+\begin{CodeFrame*}[c]{}
+  usart_setup();
+  gpio_set_mode(GPIOA, GPIO_MODE_INPUT, GPIO_CNF_INPUT_FLOAT, GPIO10);
+  usart_set_mode(USART1, USART_MODE_TX_RX);
+\end{CodeFrame*}
+
+Po powitalnym odliczaniu funkcje \Verb$main$ kończymy nieskończoną, pustą (wykonującą \Verb$noop$) pętlą \Verb$while$:
+
+\begin{CodeFrame*}[c]{}
+  while(1)
+      _asm__("nop");
+\end{CodeFrame*}
+
+Musimy dodać jeszcze jedną funkcję która będzie związana z obsługą przerwania od portu szeregowego.
+Używana biblioteka wymaga aby funkcja ta nazywała się \Verb#usart1_isr#.
+W ramach niej odczytujemy z bufora wejściowego odebrany bajt (przy użyciu funkcji \Verb$usart_recv()$) i w zależności od jego parzystości włączamy lub wyłączamy LED podłączony do pinu C13:
+\begin{CodeFrame*}[c]{}
+  void usart1_isr(void) {
+    if ( USART_SR(USART1) & USART_SR_RXNE ) { // przerwanie było z powodu odebranego bajtu
+      uint8_t data = usart_recv(USART1);
+      if (data%2)
+        gpio_set(GPIOC, GPIO13);
+      else
+        gpio_clear(GPIOC, GPIO13);
+    }
+  }
 \end{CodeFrame*}
 
 \section{Przetwornik analogowo-cyfrowy}
