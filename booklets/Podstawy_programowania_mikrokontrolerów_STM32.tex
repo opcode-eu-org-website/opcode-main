@@ -24,6 +24,7 @@
 
 \documentclass{pdfBooklets}
 \usepackage[printwatermark]{xwatermark}
+\usepackage[hyperref]{}
 \title{Programowanie mikrokontrolerów STM32}
 \author{%
 	Projekt ,,Matematyka dla Ciekawych Świata'',\\
@@ -55,22 +56,24 @@
 
 Skrypt opisuje podstawy programowania mikrokontrolerów STM32. Podczas kursu będziemy używać
 popularnej, dostępnej i prostej płytki ``Blue Pill''. Programy będą pisane w języku
-C z pomocą biblioteki \Verb$libopencm3$. Każde z ćwiczeń to oddzielny program, więc kod powinien znajdować się
-w oddzielnym katalogu. Za każdym razem gdy tworzysz nowy katalog na kod, skopiuj do niego plik Makefile aby łatwo
-go skompilować i wgrać na mikrokontroler.
+C z pomocą biblioteki \Verb$libopencm3$. Każde z ćwiczeń to oddzielny program, więc jego kod znajduje się w oddzielnym katalogu.
 
+Kod przykładów znajduje się w \hyperref[repo]{repozytorium}. Można je sklonować do podkatalogu za pomocą
+\begin{CodeFrame*}[bash]{}
+  git clone https://bitbucket.org/OpCode-eu-org/stm32-examples.git
+\end{CodeFrame*}
 
 
 \section{Pierwszy program}
 \todo{zintegrować z repo przykładów kodu}\\
-Odpowiednikiem programu ``Hello, world!'' w elektronice jest program migający diodą LED. Zapisz poniższy kod źródłowy w pliku z
-rozszerzeniem \Verb$.c$
+Odpowiednikiem programu ``Hello, world!'' w elektronice jest program migający diodą LED.
 
 \inputminted[frame=single,firstline=6]{c}{stm32-examples/00_blink/main.c}
 
 Skompiluj i wgraj program za pomocą
 
 \begin{CodeFrame*}[bash]{}
+cd 00_blink
 make
 make install
 \end{CodeFrame*}
@@ -123,7 +126,6 @@ Po rozpoczęciu programu konfigurujemy peryferia. W tym programie używamy portu
   jest praktycznie znikomy, więc to, czy sygnał zegara nieużywanego peryferium jest zatrzymany lub nie, znacznie wpływa na pobór prądu}
 
 Następnie konfigurujemy pin C13 jako wyjście \textit{push-pull}. Domyślnie wszytkie piny GPIO są skonfigurowane jako wejścia.
-\todo{może coś więcej?}
 
 
 \begin{CodeFrame*}[c]{}
@@ -141,7 +143,7 @@ w porcie C na przeciwny, co powoduje zapalenie lub zgaszenie LEDa.
 \footnotetext{W brew pozorom ta funkcja nie zabierze 150 tys. cykli procesora, tylko znacznie więcej. Zwiększenie wartości zmiennej,
   porównanie i skok warunkowy zajmują czas. Nie jest to precyzyjna metoda odmierzania czasu.
   
-  Użycie wstawki asemblerowej - bo to oznacza \Verb$__asm__()$ z instrukcją \Verb$nop$ zapobiega optymalizacji takiej pętli przez kompilator.
+  Użycie wstawki asemblerowej - bo to oznacza \Verb$__asm__()$ z instrukcją \Verb$nop$ - zapobiega optymalizacji takiej pętli przez kompilator.
   Wstawek tego typu mozna też używać w celu umieszczenia w kodzie C lub C++ dowolnych innych instrukcji asemblerowych.}
 
 \begin{Zadanie}{}{}
@@ -152,12 +154,14 @@ w porcie C na przeciwny, co powoduje zapalenie lub zgaszenie LEDa.
 
 \section{Obsługa wejść}
 W tym ćwiczeniu pokażę, jak odczytywać stany logiczne pinów GPIO procesora oraz jak na ich podstawie podejmować
-decyzje. Skopiuj poniższy kod, zapisz w pliku z rozszerzeniem \Verb$.c$, skompiluj podobnie jak w poprzednim przykładzie.
+decyzje. Skompiluj ten kod podobnie jak w poprzednim przykładzie (weź pod uwagę, że znajduje się on w innym katalogu).
 \\
 
-Na płytce stykowej zbuduj układ wg. poniższego schematu:
-
-\todo{schemat tbd}
+Na płytce stykowej zbuduj układ wg. poniższego schematu:\\
+\begin{minipage}[b]{0.7\textwidth}
+\includegraphics[width=\textwidth]{img/elektronika/stm32_01_di}
+\end{minipage}
+\\
 
 \inputminted[frame=single,firstline=11]{c}{stm32-examples/01_di/main.c}
 
@@ -259,7 +263,7 @@ jej zawartość, sterując diodą LED odpowiednio do stanu na A0.
 \section{UART}
 UART to jeden z popularniejszych protokołów przesyłania danych. Jest podstawą wielu innych protokołów, i obecny praktycznie wszędzie
 W tym ćwiczeniu dowiesz się jak zaprogramować peryferium UARTu w swoim mikrokontrolerze. Pokażemy też w jaki sposób ``połączyć'' znane Ci funkcje
-wejścia/wyjścia w taki sposób aby odbywało się ono przez UART. Na początek skopiuj poniższy kod do pliku z rozszerzeniem \Verb$.c$:
+wejścia/wyjścia w taki sposób aby odbywało się ono przez UART.
 
 \inputminted[frame=single,firstline=6]{c}{stm32-examples/02_uart/main.c}
 
@@ -470,19 +474,20 @@ W ramach niej odczytujemy z bufora wejściowego odebrany bajt (przy użyciu funk
 Przetwornik analogowo-cyfrowy w STM32 należy do jednych z bardziej zaawansowanych. W tym ćwiczeniu pokażemy prosty przykład
 użycia przetwornika ADC do odczytu napięcia z jednego z pinów mikrokontrolera.
 
-Zbuduj układ zgodnie z poniższym schematem:
-\todo{Schemat tutaj, potencjometr podłączony międzi GND i 3v3, szczotka do pinu A0}
+Zbuduj układ zgodnie z poniższym schematem:\\
+\begin{minipage}[b]{0.7\textwidth}
+\includegraphics[width=\textwidth]{img/elektronika/stm32_03_adc}
+\end{minipage}
+\\
+Program będzie wysyłał wynik konwersji na UART. Do wysyłania komunikatów na uart użyjemy kodu z poprzedniego ćwiczenia.
 
-Program będzie wysyłał wynik konwersji na UART. Będziemy budować na podstawie kodu w poprzedniego ćwiczenia.
-
-Najpierw musimy zainicjalizować peryferium ADC. Skopiuj poniższy kod do pliku \Verb$main.c$:
+Najpierw musimy zainicjalizować peryferium ADC. Odbywa się to w poniższy sposób:
 
 \inputminted[frame=single,firstline=13,lastline=35]{c}{stm32-examples/03_adc/main.c} % funkcja adc_setup()
 
 Powyższy fragment kodu ustawia pin A0 w tryb wejścia analogowego i konfiguruje ADC w sposób pozwalający na przeprowadzanie pojedynczych konwersji. Następnie włącza ADC, czeka pewien okres czasu aż ADC się ustabilizuje wykonuje procedurę kalibracji.
 
 Teraz możemy zdefiniować funkcję, która zwróci nam wynik pojedynczej konwersji.
-Ten fragment kodu też należy skopiować do \Verb$main.c$:
 
 \inputminted[frame=single,firstline=36,lastline=48]{c}{stm32-examples/03_adc/main.c} % funkcja adc_read()
 
@@ -510,14 +515,20 @@ przesyłane przez UART. Obracająć potencjometr zmieniamy napięcie na pinie A0
 $I^2C$ jest popularnym protokołem szeregowym wykorzystywanym do komunikacji między cyfrowymi układami scalonymi. Jego odmiana, SMBus, jest m. in.
 stosowana do komunikacji z inteligentnymi bateriami. W tym ćwiczeniu zademonstrujemy implementację mastera oraz slave'a $I^2C$ na STM32.\\
 
-W modelu STM32 używanym przez nas są dwa peryferia $I^2C$. Połączymy je ze sobą i oprogramujemy jedno jako master, a drugie jako slave.\\
+W modelu STM32 używanym przez nas są dwa peryferia $I^2C$. Połączymy je ze sobą i oprogramujemy jedno jako master, a drugie jako slave. Nasz układ wygląda tak\\
+
+\begin{minipage}[b]{0.7\textwidth}
+\includegraphics[width=\textwidth]{img/elektronika/stm32_04_i2c}
+\end{minipage}
+
+Rezystory podciągające powinne mieć wartość kilku k$\Omega$.\\
 Zacznijmy od ich wstępnej konfiguracji. Zacznijmy od zdefiniowania adresu programowego slave'a - zdefiniujemy makro
 
 \begin{CodeFrame*}[c]{}
 #define SLAVE_ADDR 0x0F
 \end{CodeFrame*}
 
-Następnie należy skonfigurować oba peryferia. Dodaj poniższą funkcję do kodu swojego programu:
+Następnie należy skonfigurować oba peryferia. Funkcja inicjalizująca może zostać zaimplementowana w taki sposób:
 
 \begin{CodeFrame*}[c]{}
 void i2c_setup(){
@@ -562,18 +573,18 @@ powinny odbywać się przy wyłączonychy peryferiach). Pierwszy interfejs (I2C1
 zaś drugi (I2C2) - slave'm.\\
 
 W przypadku mastera ustawiamy tylko prędkość magistrali za pomocą funkcji
-\Verb$i2c_set_speed(I2C1, i2c_speed_sm_100k, 8);$, która jako argumenty pobiera peryferium (I2C1), prędkość (jako wartość typu wyliczeniowego enum),
+\Verb$i2c_set_speed(I2C1, i2c_speed_sm_100k, 8)$, która jako argumenty pobiera peryferium (I2C1), prędkość (jako wartość typu wyliczeniowego enum),
 oraz prędkość zegara taktującego peryferium w MHz (domyślnie jest to \textit{HSI Clock}, wewnętrzny oscylator - w naszym przypadku 8MHz).\\
 
-Dla I2C2 konfiguracja wymaga także ustawienia adresu (funkcja \Verb$i2c_set_own_7bit_slave_address(I2C2, SLAVE_ADDR);$), włączenia przerwania
-\Verb$nvic_enable_irq(NVIC_I2C2_EV_IRQ);$ i skonfigurowania go (\Verb$i2c_enable_interrupt(I2C2, I2C_CR2_ITEVTEN );$, generowanie przerwania dla wszystkich wydarzeń na szynie danych) oraz włączenia odpowiedzi na własny adres (odsyłanie \textit{ACK}, funkcja \Verb$i2c_enable_ack(I2C2);$,
+Dla I2C2 konfiguracja wymaga także ustawienia adresu (funkcja \Verb$i2c_set_own_7bit_slave_address(I2C2, SLAVE_ADDR)$), włączenia przerwania
+\Verb$nvic_enable_irq(NVIC_I2C2_EV_IRQ)$ i skonfigurowania go (\Verb$i2c_enable_interrupt(I2C2, I2C_CR2_ITEVTEN )$, generowanie przerwania dla wszystkich wydarzeń na szynie danych) oraz włączenia odpowiedzi na własny adres (odsyłanie \textit{ACK}, funkcja \Verb$i2c_enable_ack(I2C2)$,
 wywoływana po włączeniu peryferium).
 
 Oprócz wymienionych kroków należy też skonfigurować piny GPIO na których (domyślnie) znajdują się sygnały $I^2C$, w trybie
 \Verb$GPIO_CNF_OUTPUT_ALTFN_OPENDRAIN$ (\textit{open-drain}, alternatywna funkcja).
 
 Ponieważ nasz procesor jest jednowątkowy, obsługa slave'a będzie odbywać się całkowicie w funkcji obsługi przerwania. W związku z tym musimy ją
-zdefiniować
+zdefiniować. Nasza biblioteka oraz skrypty linkera oczekują, że będzie nazywać się \Verb$i2c2_ev_isr$.
 
 \begin{CodeFrame*}[c]{}
 void i2c2_ev_isr(void){
@@ -622,7 +633,7 @@ W przypadku interfejsu $I^2C$ trzeba odczytać i/lub zapisać pewne rejestry po 
 
 Jeśli poprzednia instrukcja warunkowa się nie wykonała, procedura sprawdza, czy w przypadku żądania odczytu przez mastera, rejestr danych (DR) nie jest pusty (ustawiony bit \Verb$I2C_SR1_RxNE$
 w SR1, \textit{Rx Not Empty}). Jeśli tak jest, to znaczy że odebrano bajt z szyny danych (od mastera). Należy wtedy wczytać ten bajt z DR oraz dokonać zapisu do rejestru
-CR2. Wykonuje to linijka \Verb$I2C_CR1(I2C2) = I2C_CR1(I2C2);$. Mimo braku jej sensu z punktu widzenia programu, należy pamiętać, że makra rejestrów
+CR2. Wykonuje to linijka \Verb$I2C_CR1(I2C2) = I2C_CR1(I2C2)$. Mimo braku jej sensu z punktu widzenia programu, należy pamiętać, że makra rejestrów
 definiują je jako \texttt{volatile}, więc nie zostanie ona usunięta w procesie optymalizacji kodu, a kompilator wygeneruje kod zapisujący wartość
 do CR2.\footnote{tutaj podobnie, interfejs czeka na tę operację i trzyma linię SCL w stanie niskim aż do jej wystąpienia, brak tej linijki spowoduje
   zawieszenie szyny}
@@ -659,17 +670,24 @@ void i2c_send_write(uint32_t peryf, uint8_t dane){
 }
 \end{CodeFrame*}
 
-Transmisja danych rozpoczyna START wysłany za pomocą funkcji \Verb$i2c_send_start(peryf);$. Następnie oczekujemy na zakończenie wysyłania START
-wykonując pustą pętle dopóki bit \Verb$I2C_SR1_SB$ (\textit{Start Bit}) w SR1 oraz bity \Verb$I2C_SR1_MSL$ (\textit{Master/slave}) i
-\Verb$I2C_SR1_BUSY$ (oznaczający, że na szynie odbywa się komunikacja) w SR2 nie zostaną ustawione na 1. Ponieważ funkcja \Verb$i2c_send_start(peryf);$
-ustawia tylko bity rejestrach, zakończy się ona wcześniej niż na szynie pojawi się jej oczekiwany efekt. Z tego powodu należy poczekać, aż dane
-działanie rzeczywiście się zakończy. Następnie nadajemy adres z flagą R/W ustawiona na zapis, za pomocą funkcji
-\Verb$i2c_send_7bit_address(peryf, SLAVE_ADDR, I2C_WRITE);$. Po tej operacji należy poczekać aż bit \Verb$I2C_SR1_ADDR$ w SR1 zostanie ustawiony, a
-następnie wykonać odczyt SR2 (linijka \Verb$(void) I2C_SR2(peryf);$ odczytuje tę wartość a następnie ją porzuca). Potem wysyłamy bajt za pomocą
-funkcji \Verb$i2c_send_data(peryf, dane);$ i oczekujemy na ustawienie bitu \Verb$I2C_SR1_BTF$ (\textit{Byte Transfer Finished} w SR1.
-Operację zapisu kończymy wysyłając STOP za pomocą \Verb$i2c_send_stop(peryf);$ (tutaj wyjątkowo nie trzeba czekać na ustawienie żadnych flag).\\
+Transmisja danych rozpoczyna START, którego wysłanie powoduje funkcja \Verb$i2c_send_start(peryf)$. Następnie oczekujemy na zakończenie wysyłania
+START wykonując pustą pętle dopóki bit \Verb$I2C_SR1_SB$ (\textit{Start Bit}) w SR1 oraz bity \Verb$I2C_SR1_MSL$ (\textit{Master/slave}) i
+\Verb$I2C_SR1_BUSY$ (oznaczający, że na szynie odbywa się komunikacja) w SR2 nie zostaną ustawione na 1. Ponieważ funkcja \Verb$i2c_send_start(peryf)$
+(oraz inne funkcje związane z kontrolą I2C) ustawia tylko bity rejestrach, zakończy się ona wcześniej niż na szynie pojawi się jej oczekiwany
+efekt. Z tego powodu zawsze należy poczekać, aż żądane działanie rzeczywiście się zakończy.\\
 
-Podobnie wykonujemy operację odczytu bajtu ze slave'a:
+Po wysłaniu warunku START, wysyłamy adres z flagą R/W ustawioną na zapis, za pomocą funkcji
+\Verb$i2c_send_7bit_address(peryf, SLAVE_ADDR, I2C_WRITE)$. Po tej operacji należy poczekać aż bit \Verb$I2C_SR1_ADDR$ w SR1 zostanie ustawiony, a
+następnie wykonać odczyt SR2\footnotemark (linijka \Verb$(void) I2C_SR2(peryf)$ odczytuje tę wartość a następnie ją porzuca. Jest to obowiązkowe).
+Potem wysyłamy bajt za pomocą funkcji \Verb$i2c_send_data(peryf, dane)$ i oczekujemy na ustawienie bitu \Verb$I2C_SR1_BTF$ (\textit{Byte Transfer
+  Finished} w SR1. Operację zapisu kończymy wysyłając STOP za pomocą \Verb$i2c_send_stop(peryf)$ (tutaj wyjątkowo nie trzeba czekać na ustawienie żadnych flag).\\
+
+\footnotetext{Dokładna kolejność działań na rejestrach dla peryferium $I^2C$ jest opisana w rozdziałach 26.3.2 (oprogramowanie slave'a) i 26.3.3
+  (oprogrwamowanie mastera) w \hyperref[refman]{\textit{Reference manual}}}
+  
+
+
+Podobnie możemy stworzyć funkcję odczytu bajtu ze slave'a:
 
 \begin{CodeFrame*}[c]{}
 uint8_t i2c_send_read(uint32_t peryf){
@@ -698,10 +716,11 @@ uint8_t i2c_send_read(uint32_t peryf){
 \end{CodeFrame*}
 
 Z taka różnicą, że adres wysyłamy z flagą odczytu (\Verb$I2C_READ$), a po wysłaniu adresu czekamy na zapełnienie się rejestru danych bajtem od
-slave'a (ustawienie bitu \Verb$I2C_SR1_RxNE$ w SR1). Funkcja \Verb$i2c_get_data(peryf);$ odczytuje rejestr DR. Operację kończymy wysyłając STOP. \\
+slave'a (ustawienie bitu \Verb$I2C_SR1_RxNE$ w SR1). Funkcja \Verb$i2c_get_data(peryf)$ odczytuje rejestr DR. Operację kończymy wysyłając STOP. \\
 
-Mając zdefiniowane funkcje: konfigurującą interfejsy, wysyłającą, odbierającą dane, oraz realizującą logikę slave'a (funkcja obsługi przerwania I2C2),
-możemy ich użyć do napisania programu testowego. Skorzystamy też z poprzednich funkcji do komunikacji po UART:
+Mając zdefiniowane funkcje - konfigurującą interfejsy, wysyłającą i odbierającą dane, oraz realizującą logikę slave'a (funkcja obsługi przerwania
+I2C2) - możemy ich użyć do napisania programu testowego. Skorzystamy też z poprzednich funkcji do komunikacji po UART aby wyświetlić wyniki nazego
+programu:
 
 \begin{CodeFrame*}[c]{}
   uint8_t k = 0;
@@ -731,6 +750,7 @@ Należy pamiętać, że wyjścia I2C są typu otwarty kolektor i potrzebują rez
 
   % Link za długi
   %https://www.st.com/resource/en/reference_manual/cd00171190-stm32f101xx-stm32f102xx-stm32f103xx-stm32f105xx-and-stm32f107xx-advanced-arm-based-32-bit-mcus-stmicroelectronics.pdf
+  \label{refman}
 \item Tzw. \emph{reference manual} dla STM32F103 (\url{http://ln.opcode.eu.org/stm_rm0008}) - obszerny dokument opisujący w jaki sposób programować
   mikrokontroler. Zawiera szczegółowe opisy działania peryferiów, listę rejestrów i pól bitowych wraz ich funkcjami oraz
   adresami \footnotemark. Najważniejszy dokument przy programowaniu mikrokontrolera
@@ -748,7 +768,8 @@ Należy pamiętać, że wyjścia I2C są typu otwarty kolektor i potrzebują rez
 \item \emph{Przykładowy kod napisany z użyciem \Verb$libopencm3$} (\url{https://github.com/libopencm3/libopencm3-examples}) 
   
 \item \emph{Vademecum informatyki praktycznej} (\url{http://vip.opcode.eu.org/}) - zbiór materiałów na temat elektroniki i programowania.
-
+  
+\item \emph{Hacker's Delight} - Henry S. Warren, Jr. - książka opisująca dużą ilość algorytmów realizowalnych za pomocą operacji bitowych.
 \end{itemize}
 
 \section{Zadania}
@@ -784,10 +805,16 @@ Należy pamiętać, że wyjścia I2C są typu otwarty kolektor i potrzebują rez
   \end{enumerate}
   \textit{Wskazówka: Możesz wygenerować maskę z ustawionym bitem n za przesuwając jedynkę o n miejsc w lewo: \Verb$(1<<n)$}
 \end{Zadanie}
+
 \begin{Zadanie}{}{zmiana_i2c}
   Zmień funkcję realizującą logikę slave'a w przykładowym kodzie I2C tak, aby zamiast mnożyć otrzymaną liczbę przez 2, dodawał do niej jakąś
   (dowolną) stałą.
 \end{Zadanie}
+
+\begin{Zadanie}{}{zmiana_i2c}
+  
+\end{Zadanie}
+
 
 \section{Zadania domowe}
 
