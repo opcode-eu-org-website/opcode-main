@@ -23,54 +23,46 @@
 % SOFTWARE.
 
 \documentclass{pdfBooklets}
-\usepackage[printwatermark]{xwatermark}
-\usepackage[hyperref]{}
+
 \title{Programowanie mikrokontrolerów STM32}
 \author{%
 	Projekt ,,Matematyka dla Ciekawych Świata'',\\
 	Krzysztof Lasocki\\\normalsize\ttfamily <krz.lasocki@gmail.com>
 }
-\date  {2020-04-04}
+\date  {2020-05-26}
 
 \makeatletter\hypersetup{
 	pdftitle = {\@title}, pdfauthor = {\@author}
 }\makeatother
 
-
-\newtcolorbox{Ramka}[1][]{
-	colback=white,
-	colbacktitle=white,
-	coltitle=black,
-	colframe=white!50!black,
-	fontupper=\small,
-	enhanced,
-	before skip=13pt plus 2pt,
-	#1
-}
-
 \begin{document}
 
 \maketitle
 
-\newwatermark[allpages,color=red!50,angle=45,scale=3,xpos=0,ypos=0]{Wersja robocza}
-
 Skrypt opisuje podstawy programowania mikrokontrolerów STM32. Podczas kursu będziemy używać
 popularnej, dostępnej i prostej płytki ``Blue Pill''. Programy będą pisane w języku
-C z pomocą biblioteki \Verb$libopencm3$. Każde z ćwiczeń to oddzielny program, więc jego kod znajduje się w oddzielnym katalogu.
+C z pomocą biblioteki \Verb$libopencm3$ (\url{https://github.com/libopencm3/libopencm3}).
+Każde z ćwiczeń to oddzielny program, więc jego kod znajduje się w oddzielnym katalogu.
 
-Kod przykładów znajduje się w \hyperref[repo]{repozytorium}. Można je sklonować do podkatalogu za pomocą
+Kod przykładów znajduje się w \hyperref[repo]{repozytorium}. Można je sklonować do podkatalogu za pomocą:
+
 \begin{CodeFrame*}[bash]{}
   git clone https://bitbucket.org/OpCode-eu-org/stm32-examples.git
 \end{CodeFrame*}
 
+Repozytorium zawiera link symboliczny \Verb$libopencm3$ wskazujący na \Verb$../libopencm3-master$.
+Pliki wspomagające kompilację przykładów zakładają że w tym miejscu znajdą katalog z (skompilowaną wcześniej) biblioteką \Verb$libopencm3$.
+Jeżeli bibliotekę tę masz w innej lokalizacji zastąp ten link wskazującym na poprawną lokalizację katalogu z skompilowaną biblioteką.
+
 
 \section{Pierwszy program}
-\todo{zintegrować z repo przykładów kodu}\\
 Odpowiednikiem programu ``Hello, world!'' w elektronice jest program migający diodą LED.
+Przykładowy kod takiego programu znajdziesz w pliku \Verb$main.c$ znajdującym się w podkatalogu \Verb$00_blink$ repozytorium z przykładami.
+Plik ten ma następującą postać:
 
 \inputminted[frame=single,firstline=6]{c}{stm32-examples/00_blink/main.c}
 
-Skompiluj i wgraj program za pomocą
+Skompiluj i wgraj program za pomocą:
 
 \begin{CodeFrame*}[bash]{}
 cd 00_blink
@@ -154,16 +146,14 @@ w porcie C na przeciwny, co powoduje zapalenie lub zgaszenie LEDa.
 
 \section{Obsługa wejść}
 W tym ćwiczeniu pokażę, jak odczytywać stany logiczne pinów GPIO procesora oraz jak na ich podstawie podejmować
-decyzje. Skompiluj ten kod podobnie jak w poprzednim przykładzie (weź pod uwagę, że znajduje się on w innym katalogu).
-\\
-
-Na płytce stykowej zbuduj układ wg. poniższego schematu:\\
-\begin{minipage}[b]{0.7\textwidth}
-\includegraphics[width=\textwidth]{img/elektronika/stm32_01_di}
-\end{minipage}
-\\
+decyzje. Skompiluj ten kod podobnie jak w poprzednim przykładzie (weź pod uwagę, że znajduje się on w innym katalogu: \Verb$01_di$).
+Plik \Verb$main.c$ wygląda następująco:
 
 \inputminted[frame=single,firstline=11]{c}{stm32-examples/01_di/main.c}
+
+Na płytce stykowej zbuduj układ wg. poniższego schematu:
+
+\begin{center}\includegraphics[width=0.8\textwidth]{img/elektronika/stm32_01_di}\end{center}
 
 Po naciśnięciu przycisku na płytce stykowej, powinna zapalić się zielona dioda led. Omówmy teraz powyższy program krok po kroku.
 
@@ -263,7 +253,7 @@ jej zawartość, sterując diodą LED odpowiednio do stanu na A0.
 \section{UART}
 UART to jeden z popularniejszych protokołów przesyłania danych. Jest podstawą wielu innych protokołów, i obecny praktycznie wszędzie
 W tym ćwiczeniu dowiesz się jak zaprogramować peryferium UARTu w swoim mikrokontrolerze. Pokażemy też w jaki sposób ``połączyć'' znane Ci funkcje
-wejścia/wyjścia w taki sposób aby odbywało się ono przez UART.
+wejścia/wyjścia w taki sposób aby odbywało się ono przez UART. Pliki źródłowe znajdują się w katalogu \Verb$02_uart$, pierwszy z nich (\Verb$main.c$) ma postać:
 
 \inputminted[frame=single,firstline=6]{c}{stm32-examples/02_uart/main.c}
 
@@ -410,7 +400,7 @@ UART możemy wykorzystać także do odbierania danych. W tym ćwiczeniu uruchomi
   Mechanizm ten (z użyciem przerwania generowanego programowo) jest wykorzystywany także do wywoływania funkcji systemowych z poziomu kodu użytkownika.
 \end{ProTip}
 
-Nie będziemy modyfikować plików \Verb$uart.h$ i \Verb$uart.c$ (będą one nam dostarczały jednokierunkowy UART używany przez \Verb$printf$ w tym i w kolejnych ćwiczeniach). Wszystkie zmiany wprowadzimy bezpośrednio w \Verb$main.c$:
+Kod źródłowy dla tego ćwiczenia znajduje się w katalogu \Verb$02b_uart2$. Pliki \Verb$uart.h$ i \Verb$uart.c$ mają postać dokładnie taką samą jak poprzednio i nie będziemy modyfikować modyfikować (będą one nam dostarczały jednokierunkowy UART używany przez \Verb$printf$ w tym i w kolejnych ćwiczeniach). Zmianom uległ natomiast \Verb$main.c$ i wygląda następująco:
 
 \inputminted[frame=single,firstline=6]{c}{stm32-examples/02b_uart2/main.c}
 
@@ -474,18 +464,18 @@ W ramach niej odczytujemy z bufora wejściowego odebrany bajt (przy użyciu funk
 Przetwornik analogowo-cyfrowy w STM32 należy do jednych z bardziej zaawansowanych. W tym ćwiczeniu pokażemy prosty przykład
 użycia przetwornika ADC do odczytu napięcia z jednego z pinów mikrokontrolera.
 
-Zbuduj układ zgodnie z poniższym schematem:\\
-\begin{minipage}[b]{0.7\textwidth}
-\includegraphics[width=\textwidth]{img/elektronika/stm32_03_adc}
-\end{minipage}
-\\
+Zbuduj układ zgodnie z poniższym schematem:
+
+\begin{center}\includegraphics[width=0.8\textwidth]{img/elektronika/stm32_03_adc}\end{center}
+
 Program będzie wysyłał wynik konwersji na UART. Do wysyłania komunikatów na uart użyjemy kodu z poprzedniego ćwiczenia.
+Kod źródłowy znajduje się w katalogu \Verb$03_adc$ i wszystkie elementy związane z obsługą ADC umieszczone zostały w pliku \Verb$main.c$.
 
-Najpierw musimy zainicjalizować peryferium ADC. Odbywa się to w poniższy sposób:
+Najpierw musimy zainicjalizować peryferium ADC. W tym celu stworzyliśmy funkcję \Verb$adc_setup()$:
 
-\inputminted[frame=single,firstline=13,lastline=35]{c}{stm32-examples/03_adc/main.c} % funkcja adc_setup()
+\inputminted[frame=single,firstline=13,lastline=35]{c}{stm32-examples/03_adc/main.c} % funkcja 
 
-Powyższy fragment kodu ustawia pin A0 w tryb wejścia analogowego i konfiguruje ADC w sposób pozwalający na przeprowadzanie pojedynczych konwersji. Następnie włącza ADC, czeka pewien okres czasu aż ADC się ustabilizuje wykonuje procedurę kalibracji.
+Powyższy fragment kodu ustawia pin A0 w tryb wejścia analogowego i konfiguruje ADC w sposób pozwalający na przeprowadzanie pojedynczych konwersji. Następnie włącza ADC, czeka pewien okres czasu aż ADC się ustabilizuje wykonuje procedurę kalibracji.\\
 
 Teraz możemy zdefiniować funkcję, która zwróci nam wynik pojedynczej konwersji.
 
@@ -497,8 +487,7 @@ funkcji ustawiąjącej kolejność konwersji. Do tej funkcji przekazujemy równi
 konwersja - w tym przypadku 1.
 
 Następnie uruchamiamy konwersję i oczekujemy na jej zakończenie (\Verb$adc_eoc()$ zwraca fałsz dopóki trwa konwersja).
-
-Później zwracamy wynik konwersji (wynik funkcji \Verb$adc_read_regular(ADC1)$.//
+Na końcu naszej funkcji zwracamy wynik konwersji (wynik funkcji \Verb$adc_read_regular(ADC1)$.
 
 Mając już gotowe funkcje obsługujące ADC pozostaje nam tylko włączyć jego zegar i użyć w jakiś sposób wyniku naszej konwersji:
 
@@ -515,14 +504,22 @@ przesyłane przez UART. Obracająć potencjometr zmieniamy napięcie na pinie A0
 $I^2C$ jest popularnym protokołem szeregowym wykorzystywanym do komunikacji między cyfrowymi układami scalonymi. Jego odmiana, SMBus, jest m. in.
 stosowana do komunikacji z inteligentnymi bateriami. W tym ćwiczeniu zademonstrujemy implementację mastera oraz slave'a $I^2C$ na STM32.\\
 
-W modelu STM32 używanym przez nas są dwa peryferia $I^2C$. Połączymy je ze sobą i oprogramujemy jedno jako master, a drugie jako slave. Nasz układ wygląda tak\\
+W modelu STM32 używanym przez nas są dwa peryferia $I^2C$. Połączymy je ze sobą i oprogramujemy jedno jako master, a drugie jako slave.
+Dzięki temu nasz mikrokontroler będzie mógł „rozmawiać” sam ze sobą\footnote{
+	Oczywiście w realnych zastosowaniach nie stosuje się takiego połączenia, jednak jest to dobry przykład do pokazania obsługi $I^2C$
+	zarówno od strony mastera jak i slave'a, bez konieczności używania jakichkolwiek innych układów.
+} poprzez magistralę $I^2C$.
+Nasz układ wygląda tak:
 
-\begin{minipage}[b]{0.7\textwidth}
-\includegraphics[width=\textwidth]{img/elektronika/stm32_04_i2c}
-\end{minipage}
+\begin{center}\includegraphics[width=0.8\textwidth]{img/elektronika/stm32_04_i2c}\end{center}
 
-Rezystory podciągające powinne mieć wartość kilku k$\Omega$.\\
-Zacznijmy od ich wstępnej konfiguracji. Zacznijmy od zdefiniowania adresu programowego slave'a - zdefiniujemy makro
+Rezystory podciągające powinny mieć wartość kilku k$\Omega$.
+
+Kod do tego ćwiczenia znajduje się w katalogu \Verb$04_i2c$.
+Pliki \Verb$uart.*$ nie uległy zmianie od kiedy zaczęliśmy ich używać i dostarczają obsługę wypisywania informacji na port szeregowy.
+Całość obsługi $I^2C$ znajduje się w pliku \Verb$main.c$ - przyjrzyjmy mu się bliżej.
+
+Zaczynamy od zdefiniowania adresu naszego slave'a - zdefiniujemy makro:
 
 \begin{CodeFrame*}[c]{}
 #define SLAVE_ADDR 0x0F
@@ -568,8 +565,8 @@ void i2c_setup(){
 }
 \end{CodeFrame*}
 
-Powyższa funkcja konfiguruje oba interfejsy. Konfigurację zaczynamy włączenia taktowania, resetu oraz wyłączenia peryferiów (kofiguracje wstępne
-powinny odbywać się przy wyłączonychy peryferiach). Pierwszy interfejs (I2C1) będzie masterem,
+Powyższa funkcja konfiguruje oba interfejsy. Konfigurację zaczynamy włączenia taktowania, resetu oraz wyłączenia peryferiów (konfiguracje wstępne
+powinny odbywać się przy wyłączonych peryferiach). Pierwszy interfejs (I2C1) będzie masterem,
 zaś drugi (I2C2) - slave'm.\\
 
 W przypadku mastera ustawiamy tylko prędkość magistrali za pomocą funkcji
@@ -719,7 +716,7 @@ Z taka różnicą, że adres wysyłamy z flagą odczytu (\Verb$I2C_READ$), a po 
 slave'a (ustawienie bitu \Verb$I2C_SR1_RxNE$ w SR1). Funkcja \Verb$i2c_get_data(peryf)$ odczytuje rejestr DR. Operację kończymy wysyłając STOP. \\
 
 Mając zdefiniowane funkcje - konfigurującą interfejsy, wysyłającą i odbierającą dane, oraz realizującą logikę slave'a (funkcja obsługi przerwania
-I2C2) - możemy ich użyć do napisania programu testowego. Skorzystamy też z poprzednich funkcji do komunikacji po UART aby wyświetlić wyniki nazego
+I2C2) - możemy ich użyć do napisania programu testowego. Skorzystamy też z poprzednich funkcji do komunikacji po UART aby wyświetlić wyniki naszego
 programu:
 
 \begin{CodeFrame*}[c]{}
@@ -759,13 +756,13 @@ Należy pamiętać, że wyjścia I2C są typu otwarty kolektor i potrzebują rez
     programowania mikrokontrolera są w \textit{Programming manual} (programowanie samego SCB - bloku głównego procesora) oraz
     \textit{Reference manual} (programowanie poszczególnych peryferiów)}
 
-\item \emph{Karta katalogowa STM32F103}\\ (\url{https://www.st.com/resource/en/datasheet/stm32f103c8.pdf}) opisująca pinout i
+\item \emph{Karta katalogowa STM32F103} (\url{https://www.st.com/resource/en/datasheet/stm32f103c8.pdf}) opisująca pinout i
   parametry mikrokontrolera.
 
-\item \emph{Dokumentacja \Verb$libopencm3$}\\ (\url{http://libopencm3.org/docs/latest/html/}) opisująca funkcje i makra dostępne
+\item \emph{Dokumentacja \Verb$libopencm3$} (\url{http://libopencm3.org/docs/latest/html/}) opisująca funkcje i makra dostępne
   w bibliotece.
   
-\item \emph{Przykładowy kod napisany z użyciem \Verb$libopencm3$} (\url{https://github.com/libopencm3/libopencm3-examples}) 
+\item \emph{Przykładowy kod napisany z użyciem \Verb$libopencm3$}\\ (\url{https://github.com/libopencm3/libopencm3-examples}) 
   
 \item \emph{Vademecum informatyki praktycznej} (\url{http://vip.opcode.eu.org/}) - zbiór materiałów na temat elektroniki i programowania.
   
@@ -806,23 +803,11 @@ Należy pamiętać, że wyjścia I2C są typu otwarty kolektor i potrzebują rez
   \textit{Wskazówka: Możesz wygenerować maskę z ustawionym bitem n za przesuwając jedynkę o n miejsc w lewo: \Verb$(1<<n)$}
 \end{Zadanie}
 
-\begin{Zadanie}{}{zmiana_i2c}
-  Zmień funkcję realizującą logikę slave'a w przykładowym kodzie I2C tak, aby zamiast mnożyć otrzymaną liczbę przez 2, dodawał do niej jakąś
-  (dowolną) stałą.
-\end{Zadanie}
-
-\begin{Zadanie}{}{zmiana_i2c}
-  
-\end{Zadanie}
-
-
-\section{Zadania domowe}
-
-\begin{Zadanie}{ --- 1 pkt}
+\begin{Zadanie}{}
 W jaki sposób zmienić częstotliwość migania LEDa w pierwszym programie? Zmień ten program tak aby LED migał (około) dwa razy szybciej.
 \end{Zadanie}
 
-\begin{Zadanie}{ --- 2 pkt}
+\begin{Zadanie}{}
 % Tutaj chodzi o użycie printf-a, putchar-a lub uart_send_blocking
 Napisz program, który za pomocą zaimplementowanej w ćwiczeniu UART funkcji wejścia/wyjścia wypisze na UART
 ``trójkąt z gwiazdek'' jak poniżej
@@ -839,10 +824,15 @@ Napisz program, który za pomocą zaimplementowanej w ćwiczeniu UART funkcji we
 \end{CodeFrame*}
 \end{Zadanie}
 
-\begin{Zadanie}{ --- 1 pkt}
+\begin{Zadanie}{}
 Wiedząc, że wartość 4096 odpowiada napięciu 3.3V, a 0 napięciu 0V, zmień przykładowy program ADC tak, aby zamiast surowej
 wartości wypisywał wartość napięcia.\\
 \textit{Wskazówka: Aby uprościć obliczenia (uniknąć działań na liczbach zmiennoprzecinkowych), Twój program może podawać wartość w mV.}
+\end{Zadanie}
+
+\begin{Zadanie}{}{zmiana_i2c}
+  Zmień funkcję realizującą logikę slave'a w przykładowym kodzie I2C tak, aby zamiast mnożyć otrzymaną liczbę przez 2, dodawał do niej jakąś
+  (dowolną) stałą.
 \end{Zadanie}
 
 \copyrightFooter{

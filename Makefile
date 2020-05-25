@@ -51,11 +51,11 @@ $(TEXBUILDDIR)/pdfArticle.cls $(TEXBUILDDIR)/labels4easylist.sty $(TEXBUILDDIR)/
 check-submodules: $(MAINDIR)/OpCode-core/lib/base.css $(MAINDIR)/TextUtils/Makefile $(MAINDIR)/OpCode-vip/vademecum/images-src4web
 
 $(MAINDIR)/OpCode-core/% $(MAINDIR)/TextUtils/% $(MAINDIR)/OpCode-vip/%:
-	git submodule update --init
 	$(MAKE) update-submodules
 	chmod 111 `git submodule | awk '{print $$2}'`
 
 update-submodules:
+	git submodule update --init
 	git submodule foreach git pull origin master
 	git submodule foreach git checkout -f .
 
