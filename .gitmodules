@@ -7,3 +7,6 @@
 [submodule "OpCode-vip"]
 	path = OpCode-vip
 	url = https://bitbucket.org/OpCode-eu-org/OpCode-vip.git
+[submodule "booklets/extra-tex-files/stm32-examples"]
+	path = booklets/extra-tex-files/stm32-examples
+	url = https://bitbucket.org/OpCode-eu-org/stm32-examples
