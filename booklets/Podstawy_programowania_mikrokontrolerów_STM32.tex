@@ -1,6 +1,6 @@
 % Copyright (c) 2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
 % Copyright (c) 2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
-% Copyright (c) 2017-2020 Krzysztof Lasocki <krz.lasocki@gmail.com>
+% Copyright (c) 2020 Krzysztof Lasocki <krz.lasocki@gmail.com>
 % 
 % MIT License
 % 
@@ -82,7 +82,7 @@ Jeżeli \Verb$stm32flash$ zgłosił błędy zrestartuj mikrokontroler przyciskie
   Jeśli chcesz, aby mikrokontroler automatycznie uruchamiał program po podłączeniu zasilania, możesz ustawić obie zworki na ``0''. Nie zapomnij
   jednak ustawić ich z powrotem do trybu bootloadera, jeśli chcesz ponownie wgrać program.\\
   
-  Możesz użyć polecenia \Verb$make run$ aby uruchomić program znadujący sie w pamięci mikrokontrolera po jego zrestartowaniu (bez potrzeby ponownego wgrywania lub zmieniania ustawień zworek).
+  Możesz użyć polecenia \Verb$make run$ aby uruchomić program znajdujący się w pamięci mikrokontrolera po jego zrestartowaniu (bez potrzeby ponownego wgrywania lub zmieniania ustawień zworek).
 \end{ProTip}
 
 Przyjrzyjmy się powyższemu plikowi linia po linii, aby zrozumieć, dlaczego nasz program działa.
@@ -400,7 +400,7 @@ UART możemy wykorzystać także do odbierania danych. W tym ćwiczeniu uruchomi
   Mechanizm ten (z użyciem przerwania generowanego programowo) jest wykorzystywany także do wywoływania funkcji systemowych z poziomu kodu użytkownika.
 \end{ProTip}
 
-Kod źródłowy dla tego ćwiczenia znajduje się w katalogu \Verb$02b_uart2$. Pliki \Verb$uart.h$ i \Verb$uart.c$ mają postać dokładnie taką samą jak poprzednio i nie będziemy modyfikować modyfikować (będą one nam dostarczały jednokierunkowy UART używany przez \Verb$printf$ w tym i w kolejnych ćwiczeniach). Zmianom uległ natomiast \Verb$main.c$ i wygląda następująco:
+Kod źródłowy dla tego ćwiczenia znajduje się w katalogu \Verb$02b_uart2$. Pliki \Verb$uart.h$ i \Verb$uart.c$ mają postać dokładnie taką samą jak poprzednio i nie będziemy ich modyfikować (będą one nam dostarczały jednokierunkowy UART używany przez \Verb$printf$ w tym i w kolejnych ćwiczeniach). Zmianom uległ natomiast \Verb$main.c$ i wygląda następująco:
 
 \inputminted[frame=single,firstline=6]{c}{stm32-examples/02b_uart2/main.c}
 
@@ -803,11 +803,11 @@ Należy pamiętać, że wyjścia I2C są typu otwarty kolektor i potrzebują rez
   \textit{Wskazówka: Możesz wygenerować maskę z ustawionym bitem n za przesuwając jedynkę o n miejsc w lewo: \Verb$(1<<n)$}
 \end{Zadanie}
 
-\begin{Zadanie}{}
+\begin{Zadanie}{}{}
 W jaki sposób zmienić częstotliwość migania LEDa w pierwszym programie? Zmień ten program tak aby LED migał (około) dwa razy szybciej.
 \end{Zadanie}
 
-\begin{Zadanie}{}
+\begin{Zadanie}{}{}
 % Tutaj chodzi o użycie printf-a, putchar-a lub uart_send_blocking
 Napisz program, który za pomocą zaimplementowanej w ćwiczeniu UART funkcji wejścia/wyjścia wypisze na UART
 ``trójkąt z gwiazdek'' jak poniżej
@@ -824,7 +824,7 @@ Napisz program, który za pomocą zaimplementowanej w ćwiczeniu UART funkcji we
 \end{CodeFrame*}
 \end{Zadanie}
 
-\begin{Zadanie}{}
+\begin{Zadanie}{}{}
 Wiedząc, że wartość 4096 odpowiada napięciu 3.3V, a 0 napięciu 0V, zmień przykładowy program ADC tak, aby zamiast surowej
 wartości wypisywał wartość napięcia.\\
 \textit{Wskazówka: Aby uprościć obliczenia (uniknąć działań na liczbach zmiennoprzecinkowych), Twój program może podawać wartość w mV.}
@@ -838,7 +838,7 @@ wartości wypisywał wartość napięcia.\\
 \copyrightFooter{
 	© Matematyka dla Ciekawych Świata, 2020.\\
 	© Robert Ryszard Paciorek <rrp@opcode.eu.org>, 2020.\\
-	© Krzysztof Lasocki <krz.lasocki@gmail.com>, 2017-2020.\\
+	© Krzysztof Lasocki <krz.lasocki@gmail.com>, 2020.\\
 	Kopiowanie, modyfikowanie i redystrybucja dozwolone pod warunkiem zachowania informacji o autorach.
 }
 
