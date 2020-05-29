@@ -893,7 +893,7 @@ System taki składa się z procesora odpowiedzialnego za interpretację i wykony
 
 Procesor pracuje w cyklach rozkazowych, w ramach których przetwarza pojedynczą instrukcję. Cykl taki może trwać od 1 do kilku lub więcej cykli zegarowych i typowo składa się z następujących kroków:
 \begin{enumerate}
-	\item pobranie instrukcji z pamięci - realizowane jest poprzez wystawienie na szynę adresową zawartości \emph{licznika programu} (zawierające adres instrukcji do wykonania) oraz wygenerowanie cyklu odczytu z pamięci, po wykonaniu odczytu danych następuje ich zapamiętanie w \emph{rejestrze instrukcji} oraz zwiększenie wartości \emph{licznika programu} o jeden;<br/>
+	\item pobranie instrukcji z pamięci - realizowane jest poprzez wystawienie na szynę adresową zawartości \emph{licznika programu} (zawierające adres instrukcji do wykonania) oraz wygenerowanie cyklu odczytu z pamięci, po wykonaniu odczytu danych następuje ich zapamiętanie w \emph{rejestrze instrukcji} oraz zwiększenie wartości \emph{licznika programu} o jeden;\\
 		(zawartość rejestru \emph{licznika programu} po resecie procesora określa skąd pobierana będzie pierwsza instrukcja, pod takim adresem zazwyczaj umieszczana jest jakaś pamięć typu ROM lub flash)
 	\item dekodowanie instrukcji - układ dekodera (np. oparty o PLA) dokonuje zdekodowania instrukcji znajdującej się w \emph{rejestrze instrukcji} i konfiguracji procesora w zależności od jej kodu i (opcjonalnie) jej argumentów; może to być np.:
 	\begin{itemize}
