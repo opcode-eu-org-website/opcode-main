@@ -28,7 +28,7 @@
 	Projekt ,,Matematyka dla Ciekawych Świata'',\\
 	Robert Ryszard Paciorek\\\normalsize\ttfamily <rrp@opcode.eu.org>
 }
-\date  {2020-05-03}
+\date  {2020-06-04}
 
 \makeatletter\hypersetup{
 	pdftitle = {\@title}, pdfauthor = {\@author}
@@ -606,15 +606,17 @@ Konfigurację interfejsów sieciowych w systemie Linux umożliwia polecenie \Ver
 		\end{itemize}
 	\item konfiguracja BRIDGE (programowego switcha)
 		\begin{itemize}
-			\item \Verb{ip link add INTERFACE type bridge} – dodanie interfejsu bridgowego o nazwie INTERFACE
-			\item \Verb{ip link set SLAVE master INTERFACE}  – włączenie interfejsu SLAVE w skład bridgowego INTERFACE
-			\item \Verb{ip link set SLAVE nomaster} - wyłaczenie interfejsu SLAVE z bridgowego
+			\item \Verb{ip link add INTERFACE type bridge} – dodanie interfejsu bridge'owego o nazwie INTERFACE
+			\item \Verb{ip link set SLAVE master INTERFACE}  – włączenie interfejsu SLAVE w skład bridge'owego INTERFACE
+			\item \Verb{ip link set SLAVE nomaster} – wyłaczenie interfejsu SLAVE z bridge'a
+			\item \Verb{ip link show master INTERFACE} – wyświetlanie portów składowych bridge'a o nazwie INTERFACE
 		\end{itemize}
 	\item konfiguracja BONDów (interfejsów agregujących inne w grupę celem zwiększenia prędkości lub niezawodności)
 		\begin{itemize}
 			\item \Verb{ip link add INTERFACE type bond} – dodanie interfejsu bondingowego o nazwie INTERFACE
 			\item \Verb{ip link set SLAVE master INTERFACE}  – włączenie interfejsu SLAVE w skład bondingu INTERFACE
 			\item \Verb{ip link set SLAVE nomaster} - wyłaczenie interfejsu SLAVE z bondingu
+			\item \Verb{ip link show master INTERFACE} – wyświetlanie portów składowych interfejsu bondingowego o nazwie INTERFACE
 		\end{itemize}
 	\item konfiguracja routingu
 		\begin{itemize}
@@ -672,7 +674,7 @@ Z ważniejszych opcji należy wspomnieć o:\\
 	\hspace*{1cm} \Verb#-6# – korzystanie z DHCPv6, czyli DHCP dla protokołu IPv6,\\
 	\hspace*{1cm} \Verb#-n# – nie ustawianie / używanie pobranej konfiguracji,\\
 	\hspace*{1cm} \Verb#-d# – nie przechodzenie w tło (włącza też \Verb#-v#),\\
-	\hspace*{1cm} \Verb#-n# – wypisywanie większej informacji o działaniu programu.
+	\hspace*{1cm} \Verb#-v# – wypisywanie większej informacji o działaniu programu.
 
 Dostępne są też różne narzędzia diagnostyczne związane z DHCP, np: \Verb#dhcping#, \Verb#dhcp-probe#.
 Linux może pełnić także funkcję serwera DHCP, przy pomocy aplikacji takich jak np.: 

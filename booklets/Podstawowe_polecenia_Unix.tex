@@ -28,7 +28,7 @@
 	Projekt ,,Matematyka dla Ciekawych Świata'',\\
 	Robert Ryszard Paciorek\\\normalsize\ttfamily <rrp@opcode.eu.org>
 }
-\date  {2020-05-23}
+\date  {2020-06-05}
 
 \makeatletter\hypersetup{
 	pdftitle = {\@title}, pdfauthor = {\@author}
@@ -613,7 +613,9 @@ Przedstaw rozwiązanie z użyciem i bez użycia komendy \texttt{cd}.
 Podstawowe unixowe uprawnienia do plików składają się z trzech członów: uprawnienia dla właściciela (u), grupy (g) i pozostałych użytkowników (o).
 W każdym z członów mogą być przyznane uprawnienia do czytania (r), pisania (w) i wykonywania (x); w odniesieniu do plików jest to intuicyjne (uprawnienie do wykonywania jest potrzebne do uruchomienia programów), natomiast w stosunku do katalogów wygląda to następująco: uprawnienia do czytania pozwalają na listowanie zawartości, do wykonania pozwalają na dostęp, do zawartości katalogu (wejścia do niego) do pisania na tworzenie nowych obiektów wewnątrz niego i zmienianie nazw istniejących.
 
-Rozszerzeniem podstawowych uprawnień opisanych powyżej jest mechanizm Filesystem Access Control List (ACL, fACL).
+Rozszerzeniem podstawowych uprawnień opisanych powyżej jest mechanizm Filesystem Access Control List (ACL, fACL).\\
+Jest on opcjonalnym mechanizmem który (na wspierających go systemach plików) pozwala na definiowanie indywidualnych uprawnień do pliku dla poszczególnych użytkowników i grup – plik ma nadal swojego właściciela, grupę i wszystkich pozostałych, ale przed prawami dla "others" wchodzą prawa użytkowników i grup definiowanych w ACL. Wypadkowe prawa obliczane są jako suma wynikła z praw użytkownika i grup do których należy.\\
+ACL pozwala ponadto definiować uprawnienia domyślne dla nowo powstałych plików w katalogu (są one opcją katalogu).
 
 Wszystkie poniższe komendy przyjmują opcję \texttt{-R} powodującą rekursywne wykonywanie zmian na drzewku katalogów/plików rozpoczynającym się w podanej ścieżce.
 \begin{itemize}
@@ -625,11 +627,17 @@ Wszystkie poniższe komendy przyjmują opcję \texttt{-R} powodującą rekursywn
 		zmiana prawa dostępu do pliku(ów)
 	
 	\item \Verb{getfacl [opcje] [ścieżka]}
-		dczyt uprawnień związanych z listami kontroli dostępu fACL
+		odczyt uprawnień związanych z listami kontroli dostępu fACL
 	\item \Verb{setfacl [opcje] [ścieżka]}
 		ustawianie uprawnień związanych z listami kontroli dostępu fACL
-	\item \Verb{chattr}
-		zmienia atrybuty plików związanych z systemem plików (np. zabrania jakiejkolwiek modyfikacji pliku)
+\end{itemize}
+
+\noindent{\Symbola 🤔} Dodatkowo należy wspomnieć też o poleceniach takich jak:
+\begin{itemize}
+	\item \Verb{lsattr} / \Verb{chattr}
+		wyświetla / modyfikuje atrybuty plików związanych z systemem plików (np. zabrania jakiejkolwiek modyfikacji pliku)
+	\item \Verb{getcap} / \Verb{setcap}
+		wyświetla / modyfikuje atrybuty plików związanych z właściwościami jądra (zasadniczo zwiększonymi uprawnieniami programów je posiadających, ale bardziej ograniczonymi niż wykonanie na prawach root przez SUID)
 \end{itemize}
 
 \subsection{Użytkownicy}

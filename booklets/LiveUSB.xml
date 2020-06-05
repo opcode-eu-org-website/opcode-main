@@ -17,12 +17,13 @@
 		<a href="LiveUSB.pdf"><img src="lib/pdfFile.svg" alt="Pobierz jako PDF" title="Pobierz jako PDF"/></a>
 	</p>
 </div>
-<p id="updateInfo">(aktualizacja: 2020-05-13)</p>
+<p id="updateInfo">(aktualizacja: 2020-06-05)</p>
 
 <section>
 <p>Live USB możemy bardzo prosto utworzyć instalując system z użyciem debootastrapa i uzupełniając go w chroocie o jądro, gruba i potrzebne nam narzędzia.</p>
 <p>Artykuł ten prezentuje krok po kroku proces budowy własnego live usb. Zaprezentowane w nim zostały polecenia i konfiguracje m.in. związane z następującymi zagadnieniami:
 	<ul>
+		<li>praca z obrazami urządzeń blokowych w plikach z użyciem losetup i innych narzędzi</li>
 		<li>gpt; efi / uefi; grub;</li>
 		<li>montowanie obrazu dysku z pliku (mount disk image from file);</li>
 		<li>chroot; montowanie i odmontowywanie specjalnych systemów plików dla chroot; odmontowywanie systemów montowanych z opcją rbind (rbind umount);</li>
@@ -40,6 +41,13 @@
 dd if=/dev/zero of=usb.img bs=1M count=3699
 DEV=`losetup --partscan --find --show usb.img`
 </pre>
+
+<p>Powyższe wywołanie <code>losetup</code> może być używane także do tworzenia urządzeń związanych z już istniejącym plikiem obrazu (a nie tylko nowo utworzonego pliku przez dd) – w takiej sytuacji od razu pojawią się też urządzenia związane z istniejącymi w obrazie partycjami.</p>
+
+<p>Polecenie <code>losetup</code> może być też zastąpione odpowiednimi wywołaniami polecenia <code>kpartx</code>, np:</p>
+<pre class="bash">kpartx -va $IMAGE; DEV=`kpartx -l $IMAGE | awk '/^loop[0-9]/ { print $5; exit; }'`</pre>
+
+<p>Możliwe jest aby obraz zawierał też wolumeny LVM w takim wypadku po zmapowaniu obrazu z użyciem  <code>losetup</code> konieczne może być wywołanie <code>lvscan</code> aby wyświetlić dostępne wolumeny <code>lvchange -ay WOLUMEN</code> aby dokonać ich aktywacji a przed usunięciem mapowania przez <code>losetup -d</code> ich dezaktywacja przy pomocy <code>lvchange -an WOLUMEN</code>.</p>
 </section>
 
 <section>
@@ -246,6 +254,9 @@ X11TOOL="xorg openbox firefox-esr ca-certificates xpdf xterm wireshark"
 aptitude install $SYSBASE $HWTOOLS $FSTOOLS $NETBASE $NETDIAG $NETWIFI $DEVUTILS $X11TOOL
 aptitude purge   vim-tiny mawk nano tasksel tasksel-data debconf-i18n gdbm-l10n
 aptitude clean
+
+systemctl disable vnstat.service
+systemctl disable hostapd.service
 </pre>
 </section>
 
@@ -371,6 +382,7 @@ grub-install --boot-directory=/boot/ --target=i386-pc $DEV
 # automatyczne podnoszenie sieci
 echo "allow-hotplug eth0" &gt; /etc/network/interfaces.d/eth0 
 echo "iface eth0 inet dhcp" &gt;&gt; /etc/network/interfaces.d/eth0
+echo "nameserver 8.8.8.8" &gt; /etc/resolv.conf
 
 # w /etc/rc.local podnosimy wszystkie interfejsy
 cat &lt;&lt; EOF &gt; /etc/rc.local
@@ -439,7 +451,7 @@ EOF
 chmod +x /root/prepareChroot.sh
 
 cat &lt;&lt; EOF &gt; /root/umountChroot.sh
-if [ \$# -ne 2 ]; then
+if [ \$# -ne 1 ]; then
         echo USAGE: \$0 mountpoint
         exit
 fi
@@ -457,7 +469,7 @@ chmod +x /root/umountChroot.sh
 cat &lt;&lt; EOF &gt; /root/runSSH.sh
 #!/bin/bash
 
-if [ \$# -ne 1 ]; then echo "USAGE $0 client_ip"; exit; fi
+if [ \$# -ne 1 ]; then echo "USAGE \$0 client_ip"; exit; fi
 
 nft add table inet filter; nft flush table inet filter;
 nft add chain inet filter INPUT '{ type filter hook input priority 0; }';
