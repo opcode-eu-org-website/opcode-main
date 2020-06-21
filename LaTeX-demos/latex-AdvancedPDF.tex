@@ -125,4 +125,212 @@ Następna strona została włączona poleceniem:
 
 \putExampleTeX
 
+
+\section{Zewnętrzne narzędzia do manipulowania plikami PDF}
+
+\subsection{pdfjam}
+
+Skrypt \textit{pdfjam} (dystrybuowany w ramach \textit{texlive-extra-utils}) pozwala na wykorzystanie możliwości pakietu \textit{pdfpages} do operowania plikami PDF z poziomu linii poleceń bez konieczności tworzenia dokumentów \textit{.tex}.
+
+\subsubsection{łączenie i dzielenie plików}
+
+\begin{minted}{bash}
+pdfjam --outfile OUT.pdf -- IN1.pdf 1,3 IN2.pdf
+\end{minted}
+Połączy strony 1 i 3 z \Verb$IN1.pdf$ oraz wszystkie strony z \Verb$IN2.pdf$ w \Verb$OUT.pdf$.
+Cały dokument będzie miał jednakowy rozmiar i orientację stron (ustawiane opcjami \Verb$--paper$ / \Verb$--papersize$ i \Verb$--landscape$ / \Verb$--no-landscape$).
+Dodanie opcji \Verb$--fitpaper 'true' --rotateoversize 'true'$ spowoduje obrócenie o 90stopni stron, które dzięki temu będą mogły być mniej pomniejszone.
+
+\begin{minted}{bash}
+pdfjam --outfile OUT.pdf -- IN.pdf 2
+\end{minted}
+Zapiszę drugą stronę z \Verb$IN.pdf$ jako \Verb$OUT.pdf$.
+
+\subsubsection{obracanie i odbijanie}
+
+\begin{minted}{bash}
+pdfjam --outfile OUT.pdf --angle '90' --fitpaper 'true' -- IN.pdf
+\end{minted}
+Utworzy plik \Verb$OUT.pdf$ złożony z obróconych o 90 stopni (w stronę przeciwną do ruchu wskazówek zegara) stron pliku \Verb$IN.pdf$. Można podać dowolną wartość obrotu.
+
+\begin{minted}{bash}
+pdfjam --outfile OUT.pdf --reflect true --fitpaper 'true' -- IN.pdf
+\end{minted}
+Utworzy plik \Verb$OUT.pdf$ złożony z odbitych lustrzane lewo-prawo stron pliku \Verb$IN.pdf$.
+
+Operacje mogą być składnae, np. celem uzyskania dokumentu odbitego góra-dół:
+\begin{minted}{bash}
+pdfjam --outfile /dev/stdout --angle '90' --fitpaper 'true' -- IN.pdf |
+	pdfjam --outfile /dev/stdout --fitpaper 'true' --reflect true |
+	pdfjam --outfile OUT.pdf --angle '270' --fitpaper 'true'
+\end{minted}
+
+\subsubsection{kilka stron na jednej}
+
+\begin{minted}{bash}
+pdfjam --outfile OUT.pdf --nup 2x1 --landscape IN.pdf
+\end{minted}
+Utworzy plik \Verb$OUT.pdf$ gdzie każda strona będzie składała się z dwóch umieszczonych obok siebie stron pliku \Verb$IN.pdf$.
+
+\begin{minted}{bash}
+pdfjam --outfile OUT.pdf --nup 2x2 --frame true --delta "0.2cm 0.1cm" -- IN.pdf
+\end{minted}
+Utworzy plik \Verb$OUT.pdf$ gdzie każda strona będzie składała się z czterech stron pliku \Verb$IN.pdf$.
+Strony będą odsunięte o 0.2cm w poziomie i 0.1cm w pionie (opcja \Verb$--delta$) i otoczone ramką (opcja \Verb$--frame$).
+
+Domyślnie stosowany jest układ wierszowy (strona 1 i 2 w pierwszym wierszu, poniżej strona 3 i 4), można to zmienić dodając opcję \Verb$--column true$:
+\begin{minted}{bash}
+pdfjam --outfile OUT.pdf --nup 2x2 --column true -- IN.pdf
+\end{minted}
+
+Więcej możliwości dają także takie jak opcje: \Verb$--preamble$ (wstawia swój argument do preambuły), \Verb$--pagecommand$ (wstawia swój argument na każdej generowanej stronie).
+Dostępne są też inne opcje pakietu \pkgLink{pdfpages}, takie jak np. \Verb$columnstrict$, czy też  \Verb$booklet$ i \Verb$signature$ pozwalające na tworzenie układu książeczkowego:
+
+\begin{minted}{bash}
+pdfjam --outfile OUT.pdf --booklet 'true' --signature '4' --landscape -- IN.pdf
+\end{minted}
+
+Przy pomocy \Verb$--preamble$ i pakietu \pkgLink{everyshi} można na przykład obrócić każdą parzystą / nieparzystą stronę pliku wynikowego:
+\begin{minted}{bash}
+pdfjam --outfile OUT.pdf --preamble '\usepackage{everyshi}\makeatletter \EveryShipout{\ifodd\c@page\pdfpageattr{/Rotate 180}\fi} \makeatother' -- IN.pdf
+\end{minted}
+
+
+\subsection{poppler-utils}
+
+Zbiór narzędzi związany z obsługą PDFów dostarcza też pakiet \textit{poppler-utils}. Są to m.in.:
+
+\begin{itemize}
+	\item \Verb$pdfinfo$ – informacje na temat dokumentu PDF
+	\item \Verb$pdfimages$, \Verb$pdfdetach$, \Verb$pdftotext$ – eksport obrazków, załączników i tekstu z plików PDF
+	\item \Verb$pdfseparate$ – podział pliku PDF na strony
+	\item \Verb$pdfunite$ – łączenie plików PDF
+	\item \Verb$pdftops$, \Verb$pdftocairo$, \Verb$pdftoppm$, \Verb$pdftohtml$ – konwersja na PostScript, obrazki, HTML
+\end{itemize}
+
+
+\subsection{pdftk}
+
+\subsubsection{łączenie i dzielenie plików}
+
+\begin{minted}{bash}
+pdftk A=IN1.pdf B=IN2.pdf cat A1 A3 B output OUT.pdf
+\end{minted}
+Połączy strony 1 i 3 z \Verb$IN1.pdf$ oraz wszystkie strony z \Verb$IN2.pdf$ w \Verb$OUT.pdf$.
+Strony zachowają swój rozmiar i orientację.
+
+\begin{minted}{bash}
+pdftk IN.pdf cat 2 output OUT.pdf
+\end{minted}
+Zapiszę drugą stronę z \Verb$IN.pdf$ jako \Verb$OUT.pdf$.
+
+Przy użyciu opcji \Verb$shuffle$ (zamiast \Verb$cat$) możliwe jest mieszanie stron z kilku zakresów, np.:
+\begin{minted}{bash}
+pdftk A=IN.pdf shuffle A1-8 A16-9 output out.pdf
+\end{minted}
+
+\subsubsection{obracanie i odbijanie}
+
+\begin{minted}{bash}
+pdftk IN.pdf cat 1-endeast output OUT.pdf
+\end{minted}
+Utworzy plik \Verb$OUT.pdf$ złożony z obróconych o 90 stopni (w stronę zgodną z ruchem wskazówek zegara) stron pliku \Verb$IN.pdf$. Można dla różnych stron stosować różne obroty, np.:
+\begin{minted}{bash}
+pdftk IN.pdf cat 1-2east 2-3south 4-5 6-endwest output OUT.pdf
+\end{minted}
+
+\subsubsection{zabezpieczanie hasłem}
+
+\begin{minted}{bash}
+pdftk IN.pdf output OUT.pdf encrypt_128bit user_pw TAJNE-HASLO
+\end{minted}
+Wygeneruje plik \Verb$OUT.pdf$, którego odczyt będzie wymagał podania hasła \Verb$TAJNE-HASLO$.
+
+\begin{minted}{bash}
+pdftk IN.pdf TAJNE-HASLO foopass output OUT.pdf
+\end{minted}
+W oparciu o plik \Verb$IN.pdf$ zabezpieczony hasłem \Verb$TAJNE-HASLO$ wygeneruje plik \Verb$OUT.pdf$, który nie będzie zabezpieczony hasłem.
+
+Możliwe jest też zabezpieczanie wybranych operacji na pliku PDF (drukowania, kopiowania tekstu, itd) – przykłady w \Verb$man pdftk$.
+
+\subsubsection{stemplowanie}
+
+Pdftk pozwala też na stemplowanie dokumentu PDF jakimś obrazkiem / innym dokumentem PDF. Poniższy skrypt:
+\begin{itemize}
+	\item oblicza sumę kontrolną md5 pliku PDF
+	\item generuje (przy pomocy \Verb$gs$) plik z informacją na temat tej sumy
+	\item tworzy (przy pomocy \Verb$pdftk$) nowy plik poprzez nadrukowanie tej informacji na oryginalnym pliku
+\end{itemize}
+Zastosowaniem tego skryptu jest umożliwienie łatwego umieszczenia informacji identyfikującej źródło (wraz z wersją) na wydrukowanym pliku.
+
+\begin{minted}{bash}
+#!/bin/bash
+
+# script to add md5 sum and other info to pdf for printing
+
+if [ $# -lt 1 ]; then
+	echo USAGE $0 inputfile.pdf [up]
+	exit
+fi
+
+INPUT="$1"
+UP=false; [ "$2" = "up" ] && UP=true
+
+MD5=`md5sum "${INPUT}" | cut -f1 -d' '`
+INFO=`pdfinfo "${INPUT}" | grep '^Page size:'`
+INFO_X=`echo $INFO | awk '{print $3 * 10}' | cut -f1 -d.`
+INFO_Y=`echo $INFO | awk '{print $5 * 10}' | cut -f1 -d.`
+OFFSET_X="32"
+if $UP; then
+  OFFSET_Y=$[ $INFO_Y/10 - 64 ]
+else
+  OFFSET_Y="32"
+fi
+
+STAMPFILE=`mktemp`
+gs -o ${STAMPFILE} -sDEVICE=pdfwrite -g${INFO_X}x${INFO_Y} \
+  -c "/Helvetica-Bold findfont 8 scalefont setfont" \
+  -c "0 .8 .8 0 setcmykcolor" -c "${OFFSET_X} ${OFFSET_Y} moveto" \
+  -c "(MD5: ${MD5}  FILE: ${INPUT}) show" -c "showpage"
+
+pdftk "${INPUT}" stamp ${STAMPFILE} output "${INPUT%.pdf}__MD5__.pdf"
+
+\rm ${STAMPFILE}
+\end{minted}
+
+Możliwe jest też dodawanie tego typu nadruków w warstwie tła (opcje \Verb$background$).
+
+\subsubsection{inne}
+
+Więcej zastosowań opisanych jest w \Verb$man pdftk$.
+
+
+\subsection{edycja PDFów, SVG}
+
+\begin{itemize}
+	\item \Verb$inkscape$ – edycja plików PDF, konwersja na SVG, ...
+	\item \Verb$pdf2svg$ – konwersja na SVG
+\end{itemize}
+
+Inkscape jest nie tylko bardzo skutecznym edytorem plików PDF ale pozwala także m.in. na wsadową konwersję PDF do SVG poprzez:
+\begin{minted}{bash}
+inkscape --without-gui --file=IN.pdf --export-plain-svg="OUT.svg"
+\end{minted}
+Taka konwersja (w odróżnieniu od \Verb$pdf2svg$) pozwala na zachowanie tekstu z pliku PDF jako tekstu w SVG.
+
+\subsection{PS → EPS → PDF}
+
+Bezpośrednia konwerska pliku PS (PostScript) na PDF powoduje zachowanie rozmiaru strony, marginesów, itp.
+Nie jest to pożądane jeżeli chcemy wykorzystać uzyskany plik PDF do umieszczenia jako obrazek wektorowy przy pomocy \Verb$\includegraphics$.
+Należy wtedy przed konwersją na PDF przekonwertować plik PS najpierw na EPS a dopiero potem na PDF.
+
+\begin{itemize}
+	\item \Verb$ps2pdf$ (pakiet \textit{ghostscript}) – konwersja PS na PDF
+	\item \Verb$ps2eps$, \Verb$ps2epsi$ (pakiet \textit{ghostscript}) – konwersja PS na EPS
+	\item \Verb$epstopdf$ (pakiet \textit{texlive-font-utils}) – konwersja EPS na PDF
+	\item \Verb$pdf2ps$ (pakiet \textit{ghostscript}) – konwersja PDF na PS
+\end{itemize}
+
+Pakiet \textit{ghostscript} dostarcza też polecenia do operowania na postscriptowych plikach PS i EPS, takie jak m.in. \Verb$eps2eps$, \Verb$ps2ps$.
+
 \end{document}
