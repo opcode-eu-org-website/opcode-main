@@ -1,0 +1,125 @@
+% Copyright (c) 2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% Copyright (c) 2020 Krzysztof Lasocki <krz.lasocki@gmail.com>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+%\section{Assembler}
+%\textit{Co to \Verb$__asm__$ i kiedy się go używa. Pułapki oszukiwania kompilatora}
+
+
+\section{Lektury uzupełniające}
+\begin{itemize}
+
+  % Link za długi
+  %https://www.st.com/resource/en/reference_manual/cd00171190-stm32f101xx-stm32f102xx-stm32f103xx-stm32f105xx-and-stm32f107xx-advanced-arm-based-32-bit-mcus-stmicroelectronics.pdf
+  \label{refman}
+\item Tzw. \emph{reference manual} dla STM32F103 (\url{http://ln.opcode.eu.org/stm_rm0008}) - obszerny dokument opisujący w jaki sposób programować
+  mikrokontroler. Zawiera szczegółowe opisy działania peryferiów, listę rejestrów i pól bitowych wraz ich funkcjami oraz
+  adresami \footnotemark. Najważniejszy dokument przy programowaniu mikrokontrolera
+  
+  \footnotetext{W STM32 opis adresów rejestrów jest rozłożony pomiędzy \textit{reference manual} i kartę katalogową. Informacje dotyczące
+    programowania mikrokontrolera są w \textit{Programming manual} (programowanie samego SCB - bloku głównego procesora) oraz
+    \textit{Reference manual} (programowanie poszczególnych peryferiów)}
+
+\item \emph{Karta katalogowa STM32F103} (\url{https://www.st.com/resource/en/datasheet/stm32f103c8.pdf}) opisująca pinout i
+  parametry mikrokontrolera.
+
+\item \emph{Dokumentacja \Verb$libopencm3$} (\url{http://libopencm3.org/docs/latest/html/}) opisująca funkcje i makra dostępne
+  w bibliotece.
+  
+\item \emph{Przykładowy kod napisany z użyciem \Verb$libopencm3$}\\ (\url{https://github.com/libopencm3/libopencm3-examples}) 
+  
+\item \emph{Vademecum informatyki praktycznej} (\url{http://vip.opcode.eu.org/}) - zbiór materiałów na temat elektroniki i programowania.
+  
+\item \emph{Hacker's Delight} - Henry S. Warren, Jr. - książka opisująca dużą ilość algorytmów realizowalnych za pomocą operacji bitowych.
+\end{itemize}
+
+\section{Zadania}
+
+\begin{Zadanie}{}{opeartory}
+  W programowaniu mikrokontrolerów często zachodzi potrzeba ustawienia pojedynczego bitu rejestru na 0 lub 1, albo zmiany jego wartości.
+  Sprawdź (np. rozpisując ich działanie), które wyrażenie w rejestrze \Verb$rejestr$, na podstawie maski \Verb$maska$:
+  \begin{itemize}
+  \item Ustawia te bity na 1,
+  \item Ustawia te bity na 0,
+  \item Odwraca wartości tych bitów.
+  \end{itemize}
+
+  \begin{CodeFrame*}[c]{}
+    /* Wyrażenie 1 */
+    rejestr |= maska;
+
+    /* Wyrażenie 2 */
+    rejestr ^= maska;
+
+    /* Wyrażenie 3 */
+    rejestr &= ~maska;
+    \end{CodeFrame*}
+\end{Zadanie}
+
+\begin{Zadanie}{}{ustawienie_bitow}
+  Napisz wyrażenia, które, nie znając poprzedniej wartości 8-bitowego rejestru \Verb$XYZZY$, wykona operacje:
+  \begin{enumerate}
+  \item Ustawi jego drugi najmłodszy bit jako 1
+  \item Ustawi jego piąty najmłodszy bit jako 0
+  \item Odwróci jego najstarszy bit
+  \item Wyzeruje jego dolną połowę
+  \end{enumerate}
+  \textit{Wskazówka: Możesz wygenerować maskę z ustawionym bitem n za przesuwając jedynkę o n miejsc w lewo: \Verb$(1<<n)$}
+\end{Zadanie}
+
+\begin{Zadanie}{}{}
+W jaki sposób zmienić częstotliwość migania LEDa w pierwszym programie? Zmień ten program tak aby LED migał (około) dwa razy szybciej.
+\end{Zadanie}
+
+\begin{Zadanie}{}{}
+% Tutaj chodzi o użycie printf-a, putchar-a lub uart_send_blocking
+Napisz program, który za pomocą zaimplementowanej w ćwiczeniu UART funkcji wejścia/wyjścia wypisze na UART
+``trójkąt z gwiazdek'' jak poniżej
+
+\begin{CodeFrame*}[text]{}
+*
+**
+***
+****
+*****
+******
+*******
+********
+\end{CodeFrame*}
+\end{Zadanie}
+
+\begin{Zadanie}{}{adc_volty}
+Wiedząc, że wartość 4096 odpowiada napięciu 3.3V, a 0 napięciu 0V, zmień przykładowy program ADC tak, aby zamiast surowej
+wartości wypisywał wartość napięcia.\\
+\textit{Wskazówka: Aby uprościć obliczenia (uniknąć działań na liczbach zmiennoprzecinkowych), Twój program może podawać wartość w mV.}
+\end{Zadanie}
+
+\begin{Zadanie}{}{}
+Zmodyfikuj rozwiązanie zadania \ref{adc_volty} tak aby wypisywało wynik w V, bez stosowania arytmetyki zmiennoprzecinkowej.\\
+\textit{Wskazówka: Wypisz osobno część całkowitą i część ułamkową}
+\end{Zadanie}
+
+\begin{Zadanie}{}{zmiana_i2c}
+  Zmień funkcję realizującą logikę slave'a w przykładowym kodzie I2C tak, aby zamiast mnożyć otrzymaną liczbę przez 2, dodawał do niej jakąś
+  (dowolną) stałą.
+\end{Zadanie}

@@ -1,0 +1,231 @@
+% Copyright (c) 2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% Copyright (c) 2020 Krzysztof Lasocki <krz.lasocki@gmail.com>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\section{UART}
+UART to jeden z popularniejszych protokołów przesyłania danych. Jest podstawą wielu innych protokołów, i obecny praktycznie wszędzie
+W tym ćwiczeniu dowiesz się jak zaprogramować peryferium UARTu w swoim mikrokontrolerze. Pokażemy też w jaki sposób ``połączyć'' znane Ci funkcje
+wejścia/wyjścia w taki sposób aby odbywało się ono przez UART. Pliki źródłowe znajdują się w katalogu \Verb$20_uart$, pierwszy z nich (\Verb$main.c$) ma postać:
+
+\inputminted[frame=single,firstline=6]{c}{stm32-examples/20_uart/main.c}
+
+Na pierwszy rzut oka ten program wydaje się być bardzo podobny do ćwiczenia pierwszego. Pojawiły się jednak dwa nowe pliki nagłówkowe
+oraz dwa wywołania nowych funkcji. Pierwszy plik nagłówkowy to znany Ci \Verb$stdio.h$, który definiuje funkcje wejścia/wyjścia. Drugi, \Verb$uart.h$
+znajduje się w cudzysłowiach, co oznacza że jest to plik lokalny. Poniżej jest jego zawartość:
+
+\inputminted[frame=single]{c}{stm32-examples/20_uart/uart.h}
+
+W pliku zadeklarowane są dwie funkcje, \Verb$_write$ oraz \Verb$usart_setup$. Przyjrzyjmy się plikowi \Verb$uart.c$ zawierającemu definicje tych funkcji:
+
+\inputminted[frame=single]{c}{stm32-examples/20_uart/uart.c}
+
+Funkcja \Verb$usart_setup$ konfiguruje peryferium USART.
+%
+Najpierw należy ustawić pin A9 w trybie \Verb$GPIO_CNF_OUTPUT_ALTFN_PUSHPULL$, czyli włączyć go jako
+pin wyjściowy w trybie jego drugiej funkcji (\emph{ALTFN - Alternative Function}). W STM32 większość z pinów pełni dwie funkcje - domyślną z nich jest
+GPIO, a drugą odpowiednia funkcja peryferium. W celu użycia drugiej funkcji danego pinu, musimy go w taki sposób skonfigurować. W tym przypadku
+TX znajduje się na pinie A9 (do którego podłączasz programator - ponieważ programowanie STM32 odbywa się przez UART\footnote{Można również przez
+SWD lub JTAG, ale do tego potrzebne są inne programatory. Twoja przejściówka USB-UART pełni tutaj także drugą rolę jako programator}):
+
+\begin{CodeFrame*}[c]{}
+  gpio_set_mode(GPIOA, GPIO_MODE_OUTPUT_50_MHZ,
+                GPIO_CNF_OUTPUT_ALTFN_PUSHPULL, GPIO_USART1_TX);
+\end{CodeFrame*}
+
+Następnie konfigurowany jest sam UART. Tutaj ustawiamy typowe wartości - prędkość 9600 baud\footnotemark, 8 bitów danych, 1 bit stopu.
+Ustawiamy USART w trybie nadawania (odbieranie jest wyłączone). Ustawiamy brak bitu parzystości i brak kontroli przepływu:
+
+\begin{CodeFrame*}[c]{}
+  /* Setup UART parameters. */
+  usart_set_baudrate(USART1, 9600);
+  usart_set_databits(USART1, 8);
+  usart_set_stopbits(USART1, USART_STOPBITS_1);
+  usart_set_mode(USART1, USART_MODE_TX);
+  usart_set_parity(USART1, USART_PARITY_NONE);
+  usart_set_flow_control(USART1, USART_FLOWCONTROL_NONE);
+\end{CodeFrame*}
+
+\footnotetext{\emph{baud} (czyt. bod) to określenie jednostki symbol/sek. Prędkość transmisji w tej jednostce nazywa się \emph{baudrate}. W naszym
+  przypadku symbolem jest stan niski/wysoki (bit). Z reguły baudrate nie jest równy przepustowości łącza, ponieważ wlicza się do niego też symbole
+  które nie przenoszą danych(w przypadku UARTa są to bity startu,
+  stopu i ew. parzystości).}
+  
+Na końcu procedury uruchamiamy USART:
+
+\begin{CodeFrame*}[c]{}
+  usart_enable(USART1);
+\end{CodeFrame*}
+
+Przejdźmy teraz do funkcji \Verb$_write$. Ta funkcja to nasz STM-owy odpowiednik funkcji \Verb$write$ z jądra linuksa. Służy ona do wypisania ciągu
+bajtów o podanej długości na podany deskryptor pliku.
+
+W naszym przypadku ignoruje ona wszystkie deskryptory powyżej 2 (w normalnym środowisku do tych deskryptorów podłączone były by otwarte pliki w systemie
+plików. Jeśli chcielibyśmy dodać w naszym programie obsługę plików, np. przez kartę SD albo jakiś wirtualny system plików, w tym miejscu
+należało by wprowadzić pierwszą zmianę):
+
+\begin{CodeFrame*}[c]{}
+  if (fd > 2) {
+    return -1;
+  }
+\end{CodeFrame*}
+
+Następnie przy pomocy pętli while, która wykona się \Verb$len$ razy lub aż dojdzie do znaku zerowego w napisie\footnote{Prawdziwy \Verb$write$ nie
+  sprawdza tego drugiego warunku, ale ta wersja będzie służyć tylko do wypisywania napisów na UART}, wywołujemy funkcję \Verb$usart_send_blocking$
+z parametrem USART1 i kolejnymi znakami z wypisywanego napisu. W ten sposób napis podany jako parametr będzie wypisany znak po znaku.
+
+\begin{CodeFrame*}[c]{}
+  while (*ptr && (i < len)) {
+    usart_send_blocking(USART1, *ptr);
+    if (*ptr == '\n') {
+      usart_send_blocking(USART1, '\r');
+    }
+    i++; 
+    ptr++;
+  }
+\end{CodeFrame*}
+
+Warunek porównujący znak ze znakiem nowej linii i wstawiający znak powrotu karetki jest potrzeby aby po znaku nowej linii kursor w terminalu powrócił
+na początek linii.
+
+Na końcu zwraca ilość wypisanych znaków (tak jak prawdziwa funkcja \Verb$write$):
+
+\begin{CodeFrame*}[c]{}
+  return i;
+\end{CodeFrame*}
+
+Ta funkcja jest potrzebna (mimo tego, że nigdzie jej bezpośrednio nie wywołujemy) do tego aby funkcje z \Verb$stdio.h$ mogły komunikować się ze światem.
+Jak widać jest to ograniczona wersja prawdziwej funkcji write, która dostarcza ``sztuczną'' obsługę plików \Verb$stdin$, \Verb$stdout$, i \Verb$stderr$
+w naszym środowisku. 
+
+To właśnie tą funkcję będą wywoływać \Verb$printf$, \Verb$puts$ w ramach ostatecznego wypisania danych na wyjście.
+\\
+
+Wracając do pliku \Verb$main.c$:
+
+\begin{CodeFrame*}[c]{}
+  while(1){
+    for (int i = 0; i < 150000; i++) __asm__("nop");
+    gpio_toggle(GPIOC, GPIO13);
+    printf("Hello, World!\n");
+  }
+\end{CodeFrame*}
+
+Ta pętla oprócz znanego już migania diodą wypisuje ``Hello, World!'' na standardowe wyjście (teraz podłączone do UARTa) za każdą iteracją.
+
+
+Upewnij się, że wszystkie 3 pliki są zapisane a następnie skompiluj i wgraj ten program za pomocą:
+
+\begin{CodeFrame*}[bash]{}
+  make
+  make install
+\end{CodeFrame*}
+
+a następnie uruchom \Verb$picocom$ aby zobaczyć co dzieje się na porcie szeregowym:
+
+\begin{CodeFrame*}[bash]{}
+  picocom /dev/ttyUSB0
+\end{CodeFrame*}
+
+\begin{ProTip}{Porada}
+  Możesz automatycznie uruchamiać picocom po udanym wgraniu programu łącząc te dwa polecenia w następujący sposób:
+  \begin{minted}[frame=none]{bash}
+  make install && picocom /dev/ttyUSB0
+  \end{minted}
+\end{ProTip}
+
+\subsection{Odbieranie danych poprzez UART}
+
+W ostatnim ćwiczeniu nauczyliśmy się wysyłać dane poprzez interfejs UART. Uruchomiliśmy także wygodny\footnote{
+	Ta wygoda ma jednak swoją cenę.
+	Jeżeli zauważyliście że ostatni program wgrywał się dłużej niż poprzednie to jest to efektem zwiększenia jego rozmiaru (a zatem i zapotrzebowania na pamięć flash) na skutek dodania funkcji \Verb$printf$.
+	Nasz mikrokontroler posiada jej na tyle dużo iż nie jest to dla nas istotnym problemem, ale warto pamiętać iż użycie \Verb$printf$ na słabszych mikrokontrolerach może być praktycznie nie do zrealizowania.
+}
+sposób wypisywania informacji na port szeregowy poprzez standardową funkcję \Verb$printf$.
+
+UART możemy wykorzystać także do odbierania danych. W tym ćwiczeniu uruchomimy odbiornik UART, a jako że jego działanie oprzemy na przerwaniach (a nie aktywnym czekaniu na dane w wyznaczonym punkcie programu) to zapoznamy się także z podstawą obsługi przerwań.
+
+\begin{ProTip}{Przerwania}
+  Przerwanie jest to (sprzętowy lub programowy) sygnał dla procesora, powodujący zmianę przepływu sterowania, polegającą na przerwaniu aktualnie wykonywanego kodu programu i rozpoczęcie wykonywania procedury obsługi przerwania.
+  Zazwyczaj odbywa się to z użyciem wektora przerwań, czyli tablicy używanej do mapowania numeru przerwania na adres pod którym umieszczona jest procedura obsługi danego przerwania.
+  
+  Na wcześniejszych zajęciach wspomnieliśmy już o przerwaniu zegarowym, które jest używane przez system operacyjny m.in. do okresowego przerywania działania programów celem ustalenia który z czekających procesów powinien rozpocząć swoje (dalsze) wykonywanie.
+  Mechanizm ten (z użyciem przerwania generowanego programowo) jest wykorzystywany także do wywoływania funkcji systemowych z poziomu kodu użytkownika.
+\end{ProTip}
+
+Kod źródłowy dla tego ćwiczenia znajduje się w katalogu \Verb$21_uart_receiver$. Pliki \Verb$uart.h$ i \Verb$uart.c$ mają postać dokładnie taką samą jak poprzednio i nie będziemy ich modyfikować (będą one nam dostarczały jednokierunkowy UART używany przez \Verb$printf$ w tym i w kolejnych ćwiczeniach). Zmianom uległ natomiast \Verb$main.c$ i wygląda następująco:
+
+\inputminted[frame=single,firstline=6]{c}{stm32-examples/21_uart_receiver/main.c}
+
+Pierwszą rzeczą konieczną do wykonania jest ustawienie adresu wektora przerwań na początkowy adres pamięci flash,
+	gdyż nasz program wgrywany i uruchamiany jest właśnie z wbudowanej pamięci flash,
+	a kompilator wektor przerwań umieszcza na początku kodu\footnote{
+		W tablicy tej, na dobrze zdefiniowanej pozycji (bajty 4-7, odpowiadające wyjątkowi \textit{reset}), umieszczany jest także adres początku kodu związanego z naszym programem.
+		To do tego adresu wykonywany jest skok gdy zrestartujemy nasz mikrokontroler z ustawioną zworkami BOOT opcją uruchamiania z pamięci flash
+			lub wydamy wbudowanemu bootloaderowi polecenie uruchomienia od początku pamięci flash (opcja \Verb$-g 0x0$).
+	}:
+	
+\begin{CodeFrame*}[c]{}
+  SCB_VTOR = FLASH_BASE;
+\end{CodeFrame*}
+
+Następnie możemy i powinniśmy włączyć obsługę (odbieranie) przerwań związanych z USART1:
+
+\begin{CodeFrame*}[c]{}
+  nvic_enable_irq(NVIC_USART1_IRQ);
+\end{CodeFrame*}
+oraz aktywować generowanie przez układ interfejsu USART przerwań związanych z odebraniem bajtu:
+
+\begin{CodeFrame*}[c]{}
+  usart_enable_rx_interrupt(USART1);
+\end{CodeFrame*}
+
+W kolejnych krokach konfigurujemy UART tak jak w poprzednim ćwiczeniu, konfigurujemy pin A10 (UART1 RX) jako input oraz przełączamy tryb pracy naszego portu szeregowego na nadawanie i odbiór:
+
+\begin{CodeFrame*}[c]{}
+  usart_setup();
+  gpio_set_mode(GPIOA, GPIO_MODE_INPUT, GPIO_CNF_INPUT_FLOAT, GPIO10);
+  usart_set_mode(USART1, USART_MODE_TX_RX);
+\end{CodeFrame*}
+
+Po powitalnym odliczaniu funkcje \Verb$main$ kończymy nieskończoną, pustą (wykonującą \Verb$nop$) pętlą \Verb$while$:
+
+\begin{CodeFrame*}[c]{}
+  while(1)
+      _asm__("nop");
+\end{CodeFrame*}
+
+Musimy dodać jeszcze jedną funkcję która będzie związana z obsługą przerwania od portu szeregowego.
+Używana biblioteka wymaga aby funkcja ta nazywała się \Verb#usart1_isr#.
+W ramach niej odczytujemy z bufora wejściowego odebrany bajt (przy użyciu funkcji \Verb$usart_recv()$) i w zależności od jego parzystości włączamy lub wyłączamy LED podłączony do pinu C13:
+
+\begin{CodeFrame*}[c]{}
+  void usart1_isr(void) {
+    if ( USART_SR(USART1) & USART_SR_RXNE ) {
+      uint8_t data = usart_recv(USART1);
+      if (data%2)
+        gpio_set(GPIOC, GPIO13);
+      else
+        gpio_clear(GPIOC, GPIO13);
+    }
+  }
+\end{CodeFrame*}

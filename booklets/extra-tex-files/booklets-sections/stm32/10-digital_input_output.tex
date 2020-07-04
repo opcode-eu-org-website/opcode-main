@@ -1,0 +1,218 @@
+% Copyright (c) 2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% Copyright (c) 2020 Krzysztof Lasocki <krz.lasocki@gmail.com>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+
+\section{Pierwszy program}
+Odpowiednikiem programu ``Hello, world!'' w elektronice jest program migający diodą LED.
+Przykładowy kod takiego programu znajdziesz w pliku \Verb$main.c$ znajdującym się w podkatalogu \Verb$10_blink$ repozytorium z przykładami.
+Plik ten ma następującą postać:
+
+\inputminted[frame=single,firstline=6]{c}{stm32-examples/10_blink/main.c}
+
+Skompiluj i wgraj program za pomocą:
+
+\begin{CodeFrame*}[bash]{}
+cd 10_blink
+make
+make install
+\end{CodeFrame*}
+
+Jeśli \Verb$stm32flash$ wyszedł bez błędów, Twój program powinien się uruchomić. Zielona dioda na płytce powinna zacząć migać.
+
+Jeżeli \Verb$stm32flash$ zgłosił błędy zrestartuj mikrokontroler przyciskiem reset i ponów polecenie \Verb$make install$.
+
+\begin{ProTip}{\normalfont{\strong{Uwaga}}}
+  Płytka BluePill której używamy posiada zworki kontrolujące tryb uruchomienia mikrokontrolera (piny \Verb$BOOT0$ i \Verb$BOOT1$).
+  Zworka, którą przestawiłeś/aś (\Verb$BOOT0$) na ``1'' podczas przygotowywania mikronotrolera do pracy powoduje uruchomienie w
+  trybie bootloadera. Po zaprogramowaniu, \Verb$stm32flash$ wydaje bootlaoderowi polecenie uruchomienia programu.\\
+  
+  Jeśli chcesz, aby mikrokontroler automatycznie uruchamiał program po podłączeniu zasilania, możesz ustawić obie zworki na ``0''. Nie zapomnij
+  jednak ustawić ich z powrotem do trybu bootloadera, jeśli chcesz ponownie wgrać program.\\
+  
+  Możesz użyć polecenia \Verb$make run$ aby uruchomić program znajdujący się w pamięci mikrokontrolera po jego zrestartowaniu (bez potrzeby ponownego wgrywania lub zmieniania ustawień zworek).
+\end{ProTip}
+
+Przyjrzyjmy się powyższemu plikowi linia po linii, aby zrozumieć, dlaczego nasz program działa.
+
+\begin{CodeFrame*}[c]{}
+#include <libopencm3/stm32/rcc.h>
+#include <libopencm3/stm32/gpio.h>
+
+\end{CodeFrame*}
+
+Dołączamy dwa pliki nagłówkowe z biblioteki \Verb$libopencm3$ aby móc używać jej funkcji. Możliwe jest pisanie kodu w ``czystym'' C
+(lub nawet w asemblerze), ale kod w ten sposób napisany będzie mniej czytelny i mniej przenośny.
+\footnote{Oraz niewiele szybszy.}
+
+\begin{CodeFrame*}[c]{}
+int main() { 
+\end{CodeFrame*}
+
+Jak każdy program w C, funkcją początkową jest \verb$main$. W tym przypadku nie bierze ona żadnych argumentów. Mimo \Verb$int$ w
+definicji, nie zwraca ona żadnej wartości. W elektronice, \Verb$main$ z reguły nigdy nie kończy pracy (powrót z niej najczęściej
+kończy się skokiem do wektora resetu i zresetowaniem mikronontrolera)
+
+\begin{CodeFrame*}[c]{}
+  rcc_periph_clock_enable(RCC_GPIOC);
+  gpio_set_mode(GPIOC, GPIO_MODE_OUTPUT_2_MHZ, GPIO_CNF_OUTPUT_PUSHPULL, GPIO13);
+\end{CodeFrame*}
+
+Po rozpoczęciu programu konfigurujemy peryferia. W tym programie używamy portu C aby migać diodą, która jest podłączona do pinu C13
+(13. bit portu C). Przed rozpoczęciem jakichkolwiek działań z tym peryferium musimy uruchomić jego zegar\footnotemark (wywołaniem makra
+\Verb$rcc_periph_clock_enable$ z odpowiednim parametrem)
+\footnotetext{Taka dowolność we włączaniu lub wyłączaniu sygnału zegara do peryferiów pozwala projektantom oszczędzać energię.
+  Jest to bardzo ważne np. przy układach zasilanych bateriami. W układach CMOS, kiedy nie następują zmiany stanów, pobór energii
+  jest praktycznie znikomy, więc to, czy sygnał zegara nieużywanego peryferium jest zatrzymany lub nie, znacznie wpływa na pobór prądu}
+
+Następnie konfigurujemy pin C13 jako wyjście \textit{push-pull}. Domyślnie wszytkie piny GPIO są skonfigurowane jako wejścia.
+
+
+\begin{CodeFrame*}[c]{}
+  while(1){
+    // Poczekaj chwilkę
+    for (int i = 0; i < 150000; i++) __asm__("nop");
+    // Przełącz stan pinu 13 w porcie C
+    gpio_toggle(GPIOC, GPIO13); 
+  }
+\end{CodeFrame*}
+
+Jak mówiłem wcześniej, procedura main z reguły nie wychodzi. Zamiast tego kończy się nieskończoną pętlą. W pętli, procesor najpierw
+wykonuje \texttt{nop}, czyli tzw. pustą instrukcję 150000 razy\footnotemark. Następnie funkcja \Verb$gpio_toggle$ zmienia stan pinu 13
+w porcie C na przeciwny, co powoduje zapalenie lub zgaszenie LEDa.
+\footnotetext{W brew pozorom ta funkcja nie zabierze 150 tys. cykli procesora, tylko znacznie więcej. Zwiększenie wartości zmiennej,
+  porównanie i skok warunkowy zajmują czas. Nie jest to precyzyjna metoda odmierzania czasu.
+  
+  Użycie wstawki asemblerowej - bo to oznacza \Verb$__asm__()$ z instrukcją \Verb$nop$ - zapobiega optymalizacji takiej pętli przez kompilator.
+  Wstawek tego typu mozna też używać w celu umieszczenia w kodzie C lub C++ dowolnych innych instrukcji asemblerowych.}
+
+\begin{Zadanie}{}{}
+  Zmień ten program tak, aby dioda LED migała około dwa razy wolniej.
+\end{Zadanie}
+
+
+
+\section{Obsługa wejść}
+W tym ćwiczeniu pokażę, jak odczytywać stany logiczne pinów GPIO procesora oraz jak na ich podstawie podejmować
+decyzje. Skompiluj ten kod podobnie jak w poprzednim przykładzie (weź pod uwagę, że znajduje się on w innym katalogu: \Verb$11_di$).
+Plik \Verb$main.c$ wygląda następująco:
+
+\inputminted[frame=single,firstline=11]{c}{stm32-examples/11_di/main.c}
+
+Na płytce stykowej zbuduj układ wg. poniższego schematu:
+
+\begin{center}\includegraphics[width=0.8\textwidth]{img/stm32/10_di}\end{center}
+
+Po naciśnięciu przycisku na płytce stykowej, powinna zapalić się zielona dioda led. Omówmy teraz powyższy program krok po kroku.
+
+Podobnie jak w poprzednim ćwiczeniu, musimy włączyć używane peryferia włączając ich sygnał zegara. Tym razem używamy
+dwóch portów GPIO - portu C (do którego jest podłączona dioda) oraz portu A (do którego podłączony jest przycisk).
+Z tego powodu trzeba uruchomić je oba (kolejność nie ma znaczenia):
+
+\begin{CodeFrame*}[c]{}
+  rcc_periph_clock_enable(RCC_GPIOA);
+  rcc_periph_clock_enable(RCC_GPIOC);
+\end{CodeFrame*}
+
+Podobnie jak pin C13, pin A0 też należy skofigurować\footnotemark. Ustawiamy go jako wejście, bez podciągania
+(wymuszania jakiegoś stanu, gdy nic nie jest podłączone - mówimy wtedy, że wejście jest pływające):
+
+\begin{CodeFrame*}[c]{}
+  gpio_set_mode(GPIOC, GPIO_MODE_OUTPUT_2_MHZ, GPIO_CNF_OUTPUT_PUSHPULL, GPIO13);
+  gpio_set_mode(GPIOA, GPIO_MODE_INPUT, GPIO_CNF_INPUT_FLOAT, GPIO0);
+\end{CodeFrame*}
+
+\footnotetext{Wejście pływające (\textit{Input, Input floating}) jest domyślną kofiguracją wejścia. To wywołanie
+  funkcji nic nie zmienia, ale umieściliśmy je tutaj w ramach przykładu.
+  Jeżeli chcielibyśmy ustawić wewnętrzne podciąganie to zamiast \Verb$GPIO_CNF_INPUT_FLOAT$ należałoby podać \Verb$GPIO_CNF_INPUT_PULL_UPDOWN$
+  i ustawić pin w stanie wysokim lub niskim (w zależności czy chcemy podciągać do stanu wysokiego czy do masy) przy pomocy \Verb$gpio_set$ lub \Verb$gpio_clear$.
+}
+
+Same w sobie, wejścia pływające nie mają niczego, co mogło by wymusić na nich stabilny stan logiczny. Zjawiska indukcji
+elektromagnetycznej (spowodowane m.in. stałym, 50Hz szumem od sieci elektrycznej) indukują na nich losowe napięcia
+(w pewnym małym zakresie, lecz wystarczająco dużym, aby powodować nieustalone stany logiczne). Z tego powodu
+nieużywane wejścia z reguły podłącza się do znanego potencjału (GND lub napięcia zasilania układu) aby zapobiegać
+stanom nieustalonym. W mikrokontrolerach można też włączyć wbudowane rezystory podciągające.
+%
+Pływającego wejścia można użyć jako źródła liczb losowych\footnote{Jest to jedna z prostszych wersji takiego
+  generatora, wcale nie pozbawiona innych wad}
+
+Podobnie jak w poprzednim przykładzie, po zakończeniu inicjalizacji mikrokontrolera (ustawienia GPIO), program
+wchodzi w nieskończoną pętlę. Za każdą iteracją wczytujemy do niej stan portu A do 16 bitowej zmiennej
+(w przypadku STM32 port ma 16 bitów szerokości, więc użycie 16-bitowej liczby jest najsensowniejsze):
+
+\begin{CodeFrame*}[c]{}
+  int16_t stan_a;
+
+  while(1){
+    stan_a = gpio_port_read(GPIOA);
+\end{CodeFrame*}
+
+W instrukcji warunkowej program sprawdza, czy najmłodszy bit zmiennej jest równy 1. \texttt{0x01} to tzw. maska bitowa.
+Zauważ, że wynik operacji \texttt{\Verb$stan_a & 0x01$} jest 1 jeden gdy najmłodszy bit jest równy 1. Tego typu
+konstrukcje są powszechnie spotykane w programach mikrokontrolerowych.\footnote{
+	Jeśli chcielibyśmy sprawdzić inny bit (np. bit na 5 miejscu), użylibyśmy maski, która składa się z samych zer oprócz piątego bitu.
+	Można ją wyrazić jako \Verb$0x01 << 5$ (jedynka przesunięta o 5 miejsc w lewo). Kompilator zamieni to wyrażenie na stałą.
+}
+Jeśli warunek wynosi jeden, wykonuje się funkcja \Verb$gpio_set$, która gasi diodę. W przeciwnym wypadku, funkcja
+\Verb$gpio_clear$ przełącza pin C13 w stan niski, powodując zapalenie diody.
+
+\begin{CodeFrame*}[c]{}
+    if(stan_a & 0x01){
+      gpio_set(GPIOC, GPIO13);
+    }else{
+      gpio_clear(GPIOC, GPIO13);
+    }
+\end{CodeFrame*}
+
+Następnie wymuszamy opóźnienie (zbyt szybko działający program mógłby mieć problem z drganiem styków):
+
+\begin{CodeFrame*}[c]{}
+    for (int i = 0; i < 150000; i++) __asm__("nop");
+\end{CodeFrame*}
+
+W ten sposób doszliśmy do końca programu. Pętla jest nieskończona, więc mikroprocesor będzie cyklicznie wykonywał
+jej zawartość, sterując diodą LED odpowiednio do stanu na A0.
+
+
+\begin{Zadanie}{}{}
+  Jaką maską bitową można sprawdzić czy bit nr. 1 jest w stanie wysokim? A jaką można sprawdzić to samo, ale
+  dla wszystkich bitów parzystych (na pozycjach 0, 2, 4 ... 14\footnote{16 bitowa liczba ma bity ``ponumerowane'' od 0 do 15})?
+\end{Zadanie}
+
+\begin{Zadanie}{}{}
+  Zastanów się jakie zmiany należy wykonać w tym programie, aby zamiast dodawać zewnętrzny rezystor podciągający użyć wbudowanego podciągania wejść.
+  Sprawdź swoje przypuszczenia odpowiednio modyfikując układ i program.
+\end{Zadanie}
+
+\begin{Zadanie}{}{}
+  Zastanów się jakie zmiany należy wykonać w tym programie, aby reagował on na przycisk podłączony do pinu A1.
+  Sprawdź swoje przypuszczenia odpowiednio modyfikując układ i program.
+\end{Zadanie}
+
+\begin{Zadanie}{}{}
+  Zmodyfikuj ten program tak, aby dioda zapalała się tylko, gdy stan logiczny wejścia się zmienia.\\
+  \textit{Wskazówka: co zawiera zmienna \texttt{\Verb$stan_a$} tuż przed załadowaniem jej nowym stanem? Pamiętaj
+  o stanach nieustalonych.}
+\end{Zadanie}
+

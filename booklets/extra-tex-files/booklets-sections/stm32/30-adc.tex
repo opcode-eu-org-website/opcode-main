@@ -1,0 +1,62 @@
+% Copyright (c) 2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% Copyright (c) 2020 Krzysztof Lasocki <krz.lasocki@gmail.com>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\section{Przetwornik analogowo-cyfrowy}
+Przetwornik analogowo-cyfrowy w STM32 należy do jednych z bardziej zaawansowanych. W tym ćwiczeniu pokażemy prosty przykład
+użycia przetwornika ADC do odczytu napięcia z jednego z pinów mikrokontrolera.
+
+Zbuduj układ zgodnie z poniższym schematem:
+
+\begin{center}\includegraphics[width=0.8\textwidth]{img/stm32/30_adc}\end{center}
+
+Program będzie wysyłał wynik konwersji na UART. Do wysyłania komunikatów na uart użyjemy kodu z poprzedniego ćwiczenia.
+Kod źródłowy znajduje się w katalogu \Verb$30_adc$ i wszystkie elementy związane z obsługą ADC umieszczone zostały w pliku \Verb$main.c$.
+
+Najpierw musimy zainicjalizować peryferium ADC. W tym celu stworzyliśmy funkcję \Verb$adc_setup()$:
+
+\inputminted[frame=single,firstline=13,lastline=35]{c}{stm32-examples/30_adc/main.c} % funkcja 
+
+Powyższy fragment kodu ustawia pin A0 w tryb wejścia analogowego i konfiguruje ADC w sposób pozwalający na przeprowadzanie pojedynczych konwersji. Następnie włącza ADC, czeka pewien okres czasu aż ADC się ustabilizuje wykonuje procedurę kalibracji.\\
+
+Teraz możemy zdefiniować funkcję, która zwróci nam wynik pojedynczej konwersji.
+
+\inputminted[frame=single,firstline=36,lastline=48]{c}{stm32-examples/30_adc/main.c} % funkcja adc_read()
+
+Peryferium ADC w mikrokontrolerach STM32 pobiera listę kanałów na których ma się odbyć konwersja. W naszym przypadku chcemy pobrać
+wartość tylko z jedengo kanału. Pin A0 to kanał zerowy, więc umieszczemy zero w pierwszym elemencie tablicy którą przekażemy
+funkcji ustawiąjącej kolejność konwersji. Do tej funkcji przekazujemy również ilość kanałów dla których przeprowadzana będzie
+konwersja - w tym przypadku 1.
+
+Następnie uruchamiamy konwersję i oczekujemy na jej zakończenie (\Verb$adc_eoc()$ zwraca fałsz dopóki trwa konwersja).
+Na końcu naszej funkcji zwracamy wynik konwersji (wynik funkcji \Verb$adc_read_regular(ADC1)$.
+
+Mając już gotowe funkcje obsługujące ADC pozostaje nam tylko włączyć jego zegar i użyć w jakiś sposób wyniku naszej konwersji:
+
+\inputminted[frame=single,firstline=49]{c}{stm32-examples/30_adc/main.c} % funkcja main()
+
+W \Verb$main$ pojawiło się wywołanie \Verb$rcc_periph_clock_enable$ uruchamiające zegar dla ADC, wywołanie naszej funkcji
+konfigurującej ADC oraz wypisanie wyniku konwersji w pętli za pomocą \Verb$printf()$.
+
+Po uruchomieniu programu powinien zacąć migać zielony LED, a po uruchomieniu \Verb$picocom$ powinniśmy widzieć wyniki konwersji
+przesyłane przez UART. Obracająć potencjometr zmieniamy napięcie na pinie A0, co zmienia wynik konwersji ADC.

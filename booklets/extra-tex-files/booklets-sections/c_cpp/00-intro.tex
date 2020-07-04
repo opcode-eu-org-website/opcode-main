@@ -1,0 +1,28 @@
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+C / C++ są najpopularniejszymi językami kompilowanymi do kodu maszynowego (a jeżeli traktować je łącznie to najpopularniejszymi językami w ogóle), pozwalają na stosowanie niskopoziomowych mechanizmów (łącznie z wstawkami asemblerowymi), są użyteczne do bezpośredniego programowania sprzętu (bez warstwy systemu operacyjnego) czy też tworzenia systemów operacyjnych.
+
+Język C jest językiem kompilowalnym to znaczy (po zmodyfikowaniu źródeł) przed uruchomieniem programu konieczne jest dokonanie tłumaczenia kodu źródłowego na kod maszynowy przy pomocy odpowiedniego programu (np. clang lub gcc). Kompilacja przebiega kilku etapowo. W pierwszej kolejności wywoływany jest preprocesor, który jest odpowiedzialny za włączanie plików określonych poprzez \cpp{#include} (jest to literalne włączenie zawartości wskazanego pliku w danym miejscu, obsługę rozwijania stałych makr preprocesora (definiowanych z użyciem \cpp{#define}) oraz kompilację warunkową z wykorzystaniem poleceń takich jak \cpp{#ifdef} czy \cpp{#if}. Kompilatory pozwalają na uzyskanie nie tylko wynikowego pliku binarnego, ale także plików po przetworzeniu przez preprocesor czy też po konwersji na assembler.
+
+Część poniższego kodu zakłada że używany jest C w wersji co najmniej 99, zatem do jego kompilacji powinno być użyte np. polecenie \Verb#gcc -std=c99 plik.c# (lub \Verb#clang -std=c99 plik.c#), które utworzy plik wykonywalny \Verb#a.out# (można go uruchomić poprzez \Verb#./a.out#).

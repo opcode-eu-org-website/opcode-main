@@ -144,7 +144,7 @@ chroot $MNT
 # używamy UTF-8
 echo 'LANG="C.UTF-8"' &gt; /etc/default/locale;
 echo 'set -a; . /etc/default/locale; set +a' &gt; /etc/profile.d/locale.sh
-echo 'perl -e exit 2&gt;&amp;1 | grep "Setting locale failed" 2&gt;&amp;1 &gt; /dev/null &amp;&amp; export LC_ALL=C.UTF-8' &gt;&gt; /etc/profile.d/locale.sh
+echo 'perl -e exit 2&gt;&amp;1 | grep "Setting locale failed" &gt;/dev/null 2&gt;&amp;1 &amp;&amp; export LC_ALL=C.UTF-8' &gt;&gt; /etc/profile.d/locale.sh
 
 # ustalamy UUID rootfs obrazu
 export `blkid -o export ${DEVp}3 | grep ^UUID=`

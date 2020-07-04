@@ -1,0 +1,208 @@
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2003-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\section{Zmienna i jej adres}
+
+Wszelkie dane na których operuje program komputerowy przechowywane są w jakimś rodzaju pamięci - najczęściej jest to pamięć operacyjna. W pewnych sytuacjach niektóre dane mogą być przechowywane np. tylko w rejestrach procesora lub rejestrach urządzeń wejścia-wyjścia.
+
+W programowaniu na poziomie wyższym od kodu maszynowego i asemblera używa się pojęcia zmiennej i (niemal zawsze) pozostawia kompilatorowi/interpretatorowi decyzję o tym gdzie ona jest przechowywana. Oczywistym wyjątkiem są grupy zmiennych, czy też bufory alokowane w sposób jawny w pamięci. Ze względu na ograniczoną liczbę rejestrów procesora większość zmiennych (w szczególności tych dłużej istniejących i większych) będzie znajdowała się w pamięci i będą przenoszone do rejestrów celem wykonania jakiś operacji na nich po czym wynik będzie przenoszony do pamięci.
+
+Z każdą zmienną przechowywaną w pamięci związany jest \emph{adres pamięci} pod którym się ona znajduje. Niektóre z języków programowania pozwalają na odwoływanie się do niego poprzez wskaźnik na zmienną lub referencję do zmiennej (odwołania do adresu zmiennej mogą wymusić umieszczenie jej w pamięci nawet gdyby normalnie znajdowała się tylko w rejestrze procesora).
+
+Wszystkie dane są zapisywane w postaci liczb lub ciągów liczb. Typ zmiennej (jawny lub nie) informuje o tym jakiej długości jest dana liczba i jak należy ją interpretować (jak należy interpretować ciąg liczb). 
+
+\subsection{Zasięg zmiennej}
+Zasięg zmiennych (widoczność i istnienie) jest limitowany do bloku (wydzielanego nawiasami klamrowymi) w którym zostały zadeklarowane, zmienne z bloków wewnętrznych mogą przesłaniać zmienne zadeklarowane wcześniej.
+
+Wywołanie funkcji powoduje rozpoczęcie nowego kontekstu w którym zmienne z bloku wywołującego funkcję nie są widoczne (ale nadal istnieją). Argumenty do funkcji przekazywane są przez kopiowanie, więc funkcja nie ma możliwości modyfikacji zmiennych z bloku ją wywołującego nawet do niej przekazanych (wyjątkiem jest przekazanie przez referencję lub wskaźnik).
+
+W przypadku manualnej alokacji pamięci (z użyciem malloc) limitowana jest widoczność i istnienie otrzymanego wskaźnika, ale nie zaalokowanego bloku pamięci. Zatem ograniczona jest widoczność takich zmiennych ale nie czas ich istnienia, dlatego też przed utratą wskaźnika na nie należy je usunąć (zwolnić zaalokowaną pamięć). 
+
+\subsection{Wskaźniki}
+Wskaźnik jest zmienną, która przechowuje adres pamięci, pod którym znajdują się jakieś dane (inna zmienna). Jako że wskaźnik jest zmienną która też jest umieszczona gdzieś w pamięci można utworzyć wskaźnik do wskaźnika itd. Na wskaźnikach można wykonywać operacje arytmetyczne (najczęściej jest to dodawanie offsetu). Na wskaźniku można wykonać operację wyłuskania czyli odwołania się do wartości zmiennej pod adresem na który wskazuje, a nie do zmiennej wskaźnikowej (zawierającej adres).
+
+Wskaźniki pozwalają na operowanie dużymi zbiorami danych (duże struktury, napisy, etc) bez konieczności ich kopiowania przy przekazywaniu do funkcji, umieszczaniu w różnych strukturach danych, sortowaniu, itd (kopiowaniu ulega jedynie wskaźnik czyli adres) oraz na współdzielenie tych samych danych pomiędzy różnymi obiektami.
+
+Wskaźnik może wskazywać na niewłaściwy adres w pamięci (np. na skutek zwolnienia tego fragmentu lub błędu w operacjach matematycznych na wskaźnikach - wyjściu poza dozwolony zakres), typowo wskaźnikowi który nic nie wskazuje przypisuje się wartość \cpp{NULL} (zero). Wyłuskania wskaźników o wartości \cpp{NULL} lub wskazujących niewłaściwy obszar pamięci prowadzą do błędów programu, często do zakończenia programu z powodu naruszenia ochrony pamięci ("Segmentation fault"). 
+
+\begin{CodeFrame*}[c]{}
+#include <stdio.h>
+
+int main() {
+    int zm = 13;
+    int *wsk = NULL; // zmienna wskaźnikowa (na typ int)
+    
+    // przypisanie do zmiennej wskaźnikowej adresu zmiennej zm
+    // pobranie adresu zmiennej przy pomocy operatora &
+    wsk = &zm;
+    printf("%p %p\n", &zm, wsk);
+    
+    // odwołanie do zmiennej wskazywanej przez wskaźnik (wyłuskanie wartości)
+    // przy pomocy operatora *
+    printf("%d %d\n", zm, *wsk);
+    *wsk = 17;
+    printf("%d %d\n", zm, *wsk);
+}
+\end{CodeFrame*}
+
+\subsection{Wskaźniki a tablice}
+
+Zmienna tablicowa w C to w istocie wskaźnik na pierwszy element tablicy.
+Dostęp do elementów tablicy odbywa się w oparciu o obliczanie ich adresu na podstawie zależności: AdresElementu = AdresPoczatkuTablicy + IndexElementu * RozmiarElementu.
+
+\begin{CodeFrame*}[c]{}
+#include <stdio.h>
+
+int main() {
+  int t[4] = {1, 8, 3, 2};
+  int *tt = t; // zauważ brak operatora pobrania adresu
+  
+  printf("%d %d\n", t[2], tt[2]);
+  printf("%d %d\n", *(t + 2), *(tt + 2));
+}
+\end{CodeFrame*}
+
+Zauważ że operator \cpp{t[x]} działa tak samo dla tablicy jak i dla wskaźnika i jest w istocie ładniejszym zapisem operacji \cpp{*(t+x)} na samym wskaźniku.
+
+\subsection{Wskaźniki a funkcje}
+Argumenty do funkcji przekazywane są przez kopiowanie, w związku z tym modyfikacja zmiennej będącej argumentem funkcji wewnątrz tej funkcji nie będzie widzoczna poza nią:
+\begin{CodeFrame*}[c]{}
+void ff(int a) {
+    a = 15;
+}
+int main() {
+    x = 10;
+    ff(x);
+    printf("%d\n", x); // wypisze 10
+}
+\end{CodeFrame*}
+
+Jeżeli chcemy mieć możliwość modyfikacji zmiennej przekazywanej przez argument możemy przekazać zmienną do funkcji przez wskaźnik:
+\begin{CodeFrame*}[c]{}
+void ff(int* a) {
+    *a = 15;
+}
+int main() {
+    x = 10;
+    ff(&x);
+    printf("%d\n", x); // wypisze 15
+}
+\end{CodeFrame*}
+
+Z rozwiązania takiego korzystamy też gdy chcemy uniknąć kopiowania dużych struktur, w tym przypadku dobrym zwyczajem jest dodanie const, aby funkcja nie mogła modyfikować tego na co wskazuje ten wskaźnik:
+
+\begin{CodeFrame*}[c]{}
+struct Struktura {
+  int a, b;
+};
+void ff(const struct Struktura *s) {
+    s->a = 15; // błąd kompilacji w tym miejscu, z powodu const w linii wyżej
+    /* zauważ że do elementów struktur możemy się odwoływać
+       obiekt.pole lub (&obiekt)->pole (czyli wskazik_na_obiekt->pole) */
+}
+int main() {
+    struct Struktura s;
+    ff (&s);
+}
+\end{CodeFrame*}
+
+
+\subsection{Arytmetyka wskaźnikowa}
+
+Jak już zauważyliśmy na wskaźnikach można wykonywać (niektóre) operacje arytmetyczne. Ich działanie jest zależne od typu wskaźnika, tj. zwiększenie wskaźnika o 1 zwiększa adres na który on wskazuje o tyle bajtów ile zajmuje zmienna której typu jest wskaźnik.
+
+\begin{CodeFrame*}[c]{}
+#include <stdio.h>
+
+int main() {
+    char a;    int    b;
+    char *wsk_a = &a;
+    int    *wsk_b = &b;
+    
+    printf("char: %p %p\n", wsk_a, wsk_a+1);
+    printf("int:    %p %p\n", wsk_b, wsk_b+1);
+}
+\end{CodeFrame*}
+
+\subsection{Kolejność bajtów}
+
+Wskaźniki i rzutowanie typów pozwala patrzeć na dane w postaci poszczególnych bajtów.
+
+\begin{teacherOnly}
+Poniższy przykład pokazywać w 3 krokach - każdy kolejny printf(), prosząc słuchaczy aby zastanowili się jaki będzie wynik danego printf().
+\end{teacherOnly}
+
+\begin{CodeFrame*}[c]{}
+#include <inttypes.h>
+#include <stdio.h>
+int main() {
+    // dane jako tablica liczb 16 bitowych
+    uint16_t aa[4] = {0x1234, 0x5678, 0x9abc, 0xdeff};
+    
+    // wypisujemy ją
+    printf("A0: %x %x %x %x\n", aa[0], aa[1], aa[2], aa[3]);
+    // chyba nikogo nie zaskoczy wynik powyższego printf:
+    //   A0: 1234 5678 9abc deff
+    
+    // wypisujemy dwie pierwsze liczby rozłożone na części 8 bitowe
+    // (poszczególne bajty)
+    printf(
+        "A1: %x %x %x %x\n",
+        (aa[0] >> 8) & 0xff, aa[0] & 0xff,
+        (aa[0] >> 8) & 0xff, aa[0] & 0xff
+    );
+    // efekt też jest oczywisty:  A1: 12 34 12 34
+    
+    // każemy na te same dane patrzeć jako na liczby 8 bitowe
+    // (poszczególne bajty)
+    uint8_t* bb = (uint8_t*) aa;
+    
+    printf("B0: %x %x %x %x\n", bb[0], bb[1], bb[2], bb[3]);
+    // czego się teraz spodziewamy?
+    //  - wypisze nam tylko połowę oryginalnej tablicy
+    //  - ale dokładny wynik zależy od architektury na której uruchamiamy
+    //    program (big endian vs little endian)
+}
+\end{CodeFrame*}
+
+Fakt, że różne komputery ten sam ciąg zero-jedynkowy mogą interpretować jako różne liczby (w zależności od architektury ,,big endian'' vs ,,little endian''), powoduje że przy wymianie danych między systemami konieczne jest ustalenie sposobu tej interpretacji (np. protokoły sieciowe takie jak IP używają ,,big endian'') lub zawarcie tej informacji w wymienianych danych (kodowania Unicode UTF-16 i UTF-32 zawierają na początku danych znacznik BOM).
+
+\begin{teacherOnly}
+\begin{minipage}[t]{0.38\textwidth}
+wynik na \emph{little endian} (np. x86):
+\begin{Verbatim}
+A0: 1234 5678 9abc deff
+A1: 12 34 12 34
+B0: 34 12 78 56
+\end{Verbatim}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.58\textwidth}
+wynik na \emph{big endian} (np. sparc) – zapis analogiczny do "ludzkiego" zapisu liczb:
+\begin{Verbatim}
+A0: 1234 5678 9abc deff
+A1: 12 34 12 34
+B0: 12 34 56 78
+\end{Verbatim}
+\end{minipage}
+\end{teacherOnly}

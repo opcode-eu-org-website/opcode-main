@@ -1,0 +1,312 @@
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\section{C++}
+
+Język C powstał z rozszerzenia języka B w 1972 roku, natomiast C++ jest zapoczątkowanym w 1979 roku rozszerzeniem języka C.
+Pierwszy oficjalny standard C pochodzi z 1989 roku (\textit{ANSI X3.159-1989} / \textit{ISO/IEC 9899:1990})\footnote{Przy opracowywaniu tego standardu od języka C oddzieliła się część opisująca zagadnienia specyficzne dla środowisk unixowych w postaci standardu POSIX (\textit{Portable Operating System Interface}) opisywanego w serii standardów IEEE Std 1003, publikowanych od 1988 roku.}, a C++ z 1998 roku (\textit{ISO/IEC 14882-1998}).
+Języki te od czasu swojego powstania, a następnie ustandaryzowania rozwijają się niezależnie.
+Obecnie, w 2020 roku są to dwa niezależne języki (C++17 z 2017 roku i C18 z 2018 roku), jednak cały czas bardzo bliskie sobie – jednym z założeń C++ jest zachowanie maksymalnej kompatybilności z C\footnote{
+	Większość różnic jest do tego stopnia pomijalna (zwłaszcza biorąc pod uwagę pewną liberalność kompilatorów), że typowy program C, można skompilować jako kod C++ i będzie on poprawnie działającym programem.
+	Często nawet jest w 100\% formalnie poprawnym kodem C++ (ale niekoniecznie w stylu tego języka).
+}.
+C++ to nie tylko „C z klasami”, język ten oferuje wiele usprawnień w stosunku co do C (często adaptowanych do C w kolejnych wersjach).
+
+Część poniższego kodu zakłada że używany jest C++ w wersji co najmniej 11, zatem do jego kompilacji powinno być użyte np. polecenie \Verb#g++ -std=c++11 plik.cpp# (lub \Verb#clang++ -std=c++11 plik.cpp#), które utworzy plik wykonywalny \Verb#a.out# (można go uruchomić poprzez \Verb#./a.out#).
+
+\subsection{programowanie obiektowe}
+
+\begin{CodeFrame*}[cpp]{}
+#include <iostream>
+#include <stdint.h>
+
+struct NazwaStruktury {
+    // pola składowe
+    int a;
+    std::string d;
+    
+    // zmienna statyczna, wspólna dla wszystkich obiektów tej klasy
+    static int x;
+    
+    // stała
+    static const int y = 7;
+    
+    // pola binarne (jedno i trzy bitowe)
+    uint8_t mA :1;
+    uint8_t mB :3;
+    
+    // metody składowe
+    void wypisz() {
+        std::cout << " a=" << a << " d=" << d << "\n";
+    }
+    
+    // deklaracja metody, definicja musi być podana gdzieś indziej
+    int getSum(int b) ;
+    
+    /// metody statyczna
+    static void info() {
+        std::cout << "INFO\n";
+    }
+    
+    // konstruktor i destruktor
+    NazwaStruktury(int aa = 0) {
+        std::cout << "konstruktor\n";
+        a = aa;
+        d = "abc ...";
+    }
+    ~NazwaStruktury() {
+        // potrzebny gdy klasa tworzy jakieś
+        // obiekty które nalezy usuwać, itp
+        std::cout << "destruktor\n";
+    }
+};
+
+// definicja zmiennej statycznej z nadaniem jej wartości
+// jest to niezbędne aby była ona widoczna ...
+int NazwaStruktury::x = 13;
+
+// wcześniej zdeklarowane metody możemy definiować także poza deklaracją klasy
+int NazwaStruktury::getSum(int b) {
+    return a + b;
+}
+
+int main() {
+    // korzystanie ze struktur
+    NazwaStruktury s;
+    s.a = 45;
+    s.wypisz();
+
+    // korzystanie z metod statycznych
+    NazwaStruktury::info();
+    // a także poprzez obiekt danej klasy
+    s.info();
+}
+\end{CodeFrame*}
+
+\subsection{tablice zmiennej długości}
+
+Język C od wersji C99 pozwala na korzystanie z tablic zmiennej długości (\textit{VLA}), czyli tablic których rozmiar nie jest stałą czasu kompilowania a zmienną - np.:
+
+\begin{CodeFrame*}[c]{}
+void xxx(int n) {
+    float vals[n];
+    v[0] = 21;
+    ...
+}
+\end{CodeFrame*}
+
+C++ posiada typ std:vector pozwalający na definiowanie tablic, których rozmiar można łatwo (z punktu widzenia programisty, niekoniecznie maszyny wykonującej ten kod) zmieniać nawet po utworzeniu tablicy:
+\begin{CodeFrame*}[cpp]{}
+void xxx(int n) {
+    std::vector<float> vals(n);
+    v[0] = 21;
+    ...
+}
+\end{CodeFrame*}
+
+Natomiast z C++ tablic zmiennej długości w stylu C99 C++ oficjalnie pozwala korzystać dopiero od wersji C++14 (wcześniej zgodnie ze standardem wyrażenie określające długość tablicy musiało być wyrażeniem stałym \textit{constant-expression}, przy czym niektóre z kompilatorów dopuszczały VLA w C++).
+
+\subsection{listy}
+
+Biblioteka standardowa C++ (a dokładniej jej fragment określany mianem STL) dostarcza także obsługę list:
+
+\begin{CodeFrame*}[cpp]{}
+#include <iostream>
+#include <list>
+
+int main() {
+    std::list<int> l;
+    
+    // dodanie elementu na końcu
+    l.push_back(17);
+    l.push_back(13);
+    l.push_back(3);
+    l.push_back(27);
+    l.push_back(21);
+    // dodanie elementu na początku
+    l.push_front(8);
+    
+    // wypisanie liczby elementów
+    std::cout << "size=" << l.size()<< "\n";
+    
+    // wypisanie pierwszego i ostatniego elementu
+    std::cout << "first=" << l.front() << " last=" << l.back() << "\n";
+    
+    // usuniecie ostatniego elementu
+    l.pop_back();
+    
+    // posortowanie listy
+    l.sort();
+    
+    // odwrócenie kolejności elementów
+    l.reverse();
+    
+    // usuniecie pierwszego elementu
+    l.pop_front();
+    
+    for (std::list<int>::iterator i = l.begin(); i != l.end(); ++i) {
+        // wypisanie wszystkich elementów
+        std::cout << *i << "\n";
+        // możliwe jest także:
+        //  - usuwanie elementu wskazanego przez iterator
+        //  - wstawianie elementu przed wskazanym przez iterator
+    }
+}
+\end{CodeFrame*}
+
+W przypadku C++ listy implementowane są jako listy a nie tablice wskaźników, więc operacje wstawiania na początku i w środku są szybkie, ale operacja uzyskania n-tego elementu jest powolna.
+
+\subsection{mapy}
+
+Biblioteka standardowa C++ oferuje także kontener umożliwiający przechowywanie danych w postaci par klucz-wartość, gdzie wartość identyfikowana jest unikalnym kluczem (podobnie jak w pythonowych słownikach):
+
+\begin{CodeFrame*}[cpp]{}
+#include <iostream>
+#include <map>
+
+int main() {
+    std::map<std::string, int> m;
+    
+    m["a"] = 6;
+    m["cd"] = 9;
+    std::cout << m["a"] << " " << m["ab"] << "\n";
+    
+    // wyszukanie elementu po kluczu
+    std::map<std::string, int>::iterator iter = m.find("cd");
+    // sprawdzenie czy istnieje
+    if (iter != m.end()) {
+        // wypisanie pary - klucz wartość
+        std::cout << iter->first << " => " << iter->second << "\n";
+        // usunięcie elementu
+        m.erase(iter);
+    }
+    
+    m["a"] = 45;
+    
+    // wypisanie całej mapy
+    for (iter = m.begin(); iter != m.end(); ++iter)
+        std::cout << iter->first << " => " << iter->second << "\n";
+    // jak widać mapa jest wewnętrznie posortowana
+}
+\end{CodeFrame*}
+
+Mapa \cpp{std::map} nie zachowuje kolejności wkładania elementów, natomiast jest zawsze posortowana.
+C++ oferuje też inne rodzaje map (np. nie posortowaną \cpp{std::unordered_map}, czy też nie wymagającą unikalności klucza \cpp{std::multimap}).
+
+
+\subsection{Więcej c-plus-plusa ...}
+
+\subsubsection{referencje}
+
+Referencje są zasadniczo wskaźnikami, których używamy jak zwykłych zmiennych (bez stosowania operatora \cpp{*} w celu operowania na wartości wskaźnika).
+W odróżnieniu od wskaźników nie możemy bezpośrednio operować na adresie referencji (np. spowodować aby wskazywała na inną zmienną).
+Kontynuując przykład z modyfikacją zmiennej przekazanej jako argument funkcji, z użyciem referencji kod ten może wyglądać następująco:
+
+\begin{CodeFrame*}[c]{}
+void ff(int& a) { // zwróć uwagę na & oznaczający że będzie to referencja
+    a = 15;
+}
+int main() {
+    x = 10;
+    ff(x);
+    printf("%d\n", x); // wypisze 15
+}
+\end{CodeFrame*}
+
+\subsubsection{iteratory}
+
+W powyższych przykładach użycia list i map w C++ warto zwrócić uwagę na użycie iteratorów pozwalających na pobieranie kolejnych wartości z tych kontenerów:
+
+\begin{CodeFrame*}[cpp]{}
+void wypiszListe(std::list<int> l) {
+    for (std::list<int>::iterator i = l.begin(); i != l.end(); ++i) {
+        std::cout << *i << "\n";
+    }
+}
+\end{CodeFrame*}
+
+Iterator zwracają niektóre z metod obiektów reprezentujących te kontenery, np. \cpp{.begin()} zwraca iterator na pierwszy element.
+Zwiększanie iteratora odbywa się z użyciem operatrów \cpp{++}.
+Wyjście poza zakres (zwiększenie iteratora wskazującego na ostatni element kolekcji) nie powoduje rzucenia wyjątku, za to iterator przyjmuje specjalną wartość oznaczającą koniec.
+Iterator o tej wartości zwracany jest przez metodę \cpp{.end()} (lub \cpp{.rend()} przy iterowaniu w przeciwną stronę).
+
+\subsubsection{typ auto}
+
+Współczesny C++ oferuje także specjalny typ \cpp{auto} zwalniający programistę z konieczności jawnego definiowania typu zmiennej do której przypisywana jest od razu jakaś wartość z określonym typem. Możemy napisać np. \cpp{auto x = 5;}, ale nie możemy napisać \cpp{auto x; x = 5;}. Typ ten jest użyteczny np. do obsługi iteratorów, pozwalając powyższą pętle zapisać bez \cpp{std::list<int>::iterator} jako:
+
+\begin{CodeFrame*}[cpp]{}
+void wypiszListe(std::list<int> l) {
+    for (auto i = l.begin(); i != l.end(); ++i) {
+        std::cout << *i << "\n";
+    }
+}
+\end{CodeFrame*}
+
+\subsubsection{pętla for(each)}
+
+C++ udostępnia także inną składnię pętli \cpp{for} pozwalającą na iterowanie po wszystkich elementach kolekcji takich jak listy, mapy, itp. Będącą odpowiednikiem pętli \Verb#foreach# znanej z niektórych języków programowania, czy też pythonowskiej pętli \python{for}:
+
+\begin{CodeFrame*}[cpp]{}
+void wypiszListe(std::list<int> l) {
+    for (auto i : l) {
+        std::cout << i << "\n";
+    }
+}
+\end{CodeFrame*}
+
+Zamiast \cpp{auto i} możemy napisać \cpp{auto& i} aby otrzymać dostęp przez referencję (wtedy wykonanie przypisania wartości do i, np \cpp{i = 0}, spowoduje modyfikację elementu listy).
+
+Warto zauważyć także, że w odróżnieniu od wcześniejszej pętli nie operujemy tutaj na iteratorach, a na wartościach / referencjach do wartości z kontenera.
+
+\subsubsection{szablony}
+
+C++ pozwala też definiować szablony funkcji oraz klas, dzięki którym kompilator będzie mógł wytworzyć funkcje/klasy dla potrzebnych typów w oparciu o ten szablon (zdefiniowany dla ogólnego typu).
+Na przykład powyższa funkcja wypisująca listy zdefiniowana jest tylko dla list zawierających liczby całkowite.
+Jednak takie funkcje dla dowolnych typów obsługiwanych przez cout-owy operator \cpp{<<} (np. liczb zmiennoprzecinkowych, napisów, ...) będą wyglądały tak samo.
+Dzięki mechanizmowi szablonów możemy napisać:
+
+\begin{CodeFrame*}[cpp]{}
+template <typename T> void wypiszListe(std::list<T>& l) {
+    for (auto i : l) {
+        std::cout << i << "\n";
+    }
+}
+\end{CodeFrame*}
+
+I następnie używać jej dla różnych typów list:
+
+\begin{CodeFrame*}[cpp]{}
+int main() {
+    std::list<int> x={1, 3, 7, 2, 3};
+    wypiszListe(x);
+    
+    std::list<float> z={2.7, 5.0, 3.1, 3.9};
+    wypiszListe(z);
+}
+\end{CodeFrame*}
+
+\subsubsection{jeszcze więcej ...}
+
+Jest to tylko wzmianka o różnych ciekawych aspektach współczesnego C++. Język ten pozwala na dużo więcej (np. przeciążanie operatorów dla naszych typów danych - możemy np. sumować obiekty naszych klas przy pomocy \cpp{+}), również biblioteka standardowa oferuje więcej interesujących typów (np. zbiory \cpp{std:set}), a używanie szablonów nie sprowadza się jedynie do przedstawionego prostego przypadku szablonu funkcji.
+
+Tematyką C i C++ możnaby wypełnić cały tej długości kurs, a nie jedynie jeden blok zajęć. W naszym kursie ograniczyliśmy się jedynie do omówienia podstawowych zagadnień i krótkiego przeglądu bardziej zaawansowanych możliwości. Zachęcam do nawet pobieżnego zapoznania się np. z „C++ reference” dostępnym pod adresem: \url{https://en.cppreference.com/w/cpp} i korzystania z tej dokumentacji przy tworzeniu kodu C++.

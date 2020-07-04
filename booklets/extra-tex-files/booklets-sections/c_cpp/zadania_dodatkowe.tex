@@ -1,0 +1,70 @@
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\section{Zadania dodatkowe}
+
+\begin{Zadanie}{}{wypisz_mape}
+Napisz funkcję \Verb#wypiszMape# (szablon funkcji) która wypisuje mapę dowolnych typów. Na przykład dla wywołania:
+\begin{CodeFrame*}[cpp]{}
+std::map<std::string, float> a = { {"xy", 1.3}, {"qw", 16.3} };
+std::map<int, std::string> b = { {1, "a"}, {2, "b"} };
+wypiszMape(a);
+wypiszMape(b);
+\end{CodeFrame*}
+\vspace{-8pt}Program powinien wypisać:
+\vspace{-8pt}\begin{Verbatim}
+qw → 16.3
+xy → 1.3
+1 → a
+2 → b
+\end{Verbatim}
+\end{Zadanie}
+
+\begin{Zadanie}{}{parsuj_klucz_wartosc_cpp}
+Napisz funkcję która konwertuje listę napisów postaci \Verb#klucz=wartosc# na mapę.
+Funkcja musi dodawać kolejne napisy do mapy w taki sposób że część przed znakiem równości stanowi klucz, a część po znaku równości stanowi wartość.
+Funkcja powinna modyfikować mapę otrzymaną (przez wskaźnik lub referencję) jako swój argument. Na przykład dla wywołania:
+\begin{CodeFrame*}[cpp]{}
+std::list<std::string> l = {"aa=13", "b=Ala=kot", "f=xyz"};
+std::map<std::string,std::string> m;
+parsuj(l, m);
+for (auto& i : m)  std::cout << i.first << " → " << i.second << "\n";
+\end{CodeFrame*}
+\vspace{-8pt}Program powinien wypisać:
+\vspace{-8pt}\begin{Verbatim}
+aa → 13
+b → Ala=kot
+f → xyz
+\end{Verbatim}
+\end{Zadanie}
+
+\begin{Zadanie}{}{podnapis_utf}
+Zmodyfikuj rozwiązanie zadanie \ref{podnapis} tak aby poprawnie obsługiwało znaki kodowane jako UTF8.
+\\ \textit{
+	Wskazówka 1: Zobacz opis kodowania UTF-8 na \url{https://en.wikipedia.org/wiki/UTF-8},
+	zauważ że w bajtach stanowiących kontynuację znaku pierwsze dwa bity mają wartość 10,
+	natomiast pierwszy bajt znaku nigdy nie ma takiej wartości najstarszych bitów.}
+\\ \textit{
+	Wskazówka 2: Zauważ, że aby odnaleźć pierwszy znak do wypisania, musisz przejść po napisie od samego początku.}
+\end{Zadanie}
+

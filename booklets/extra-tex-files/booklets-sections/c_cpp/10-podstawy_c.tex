@@ -1,0 +1,274 @@
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2003-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\section{Zmienne i podstawowe operacje}
+
+Język C wymaga określania typu zmiennej w momencie jej definiowania.
+
+\begin{CodeFrame*}[c]{}
+// liczba całkowita ze znakiem
+int     liczbaA = -34;
+// liczba rzeczywista (pojedynczej precyzji)
+float   liczbaB = 673.1;
+// 8 bitowa liczba całkowita bez znaku, wymaga pliku nagłówkowego inttypes.h
+uint8_t liczbaC = 0xf3;
+
+// zmienna napisowa "C NULL-end string"
+char* napisA = "q we";
+\end{CodeFrame*}
+
+Dodawanie, mnożenie, odejmowanie zapisuje się i działają one tak jak w normalnej matematyce, dzielenie zapisuje się przy pomocy ukośnika i zależnie od typów na których operuje jest ono dzieleniem całkowitym lub zmiennoprzecinkowym.
+
+\begin{CodeFrame*}[c]{}
+double a = 12.7, b = 3, c, d, e;
+int x = 5, y = 6, z;
+
+// dodawanie, mnożenie, odejmowanie zapisuje się
+// i działają one tak jak w normalnej matematyce:
+e = (a + b) * 4 - y;
+
+// dzielenie zależy od typów argumentów
+d = a / b; // będzie dzieleniem zmiennoprzecinkowym bo a i b są typu float
+c = x / y; // będzie dzieleniem całkowitym bo z i y są zmiennymi typu int
+b = (int)a / (int)b; // będzie dzieleniem całkowitym
+a = (double)x / (double)y; // będzie dzieleniem zmiennoprzecinkowym
+
+// reszta z dzielenia (tylko dla argumentów całkowitych)
+z = x % y;
+
+// wypisanie wyników
+printf("%d %f %f %f %f %f\n", z, e, d, c, b, a);
+
+// operacje logiczne:
+// ((a większe równe od 0) AND (b mniejsze od 2)) OR (z równe 5)
+z = (a>=0 && b<2) || z == 5;
+// negacja logiczna z
+x = !z;
+
+printf("%d %d\n", z, x);
+
+// operacje binarne:
+// bitowy OR 0x0f z 0x11 i przesunięcie wyniku o 1 w lewo
+x = (0x0f | 0x11) << 1;
+// bitowy XOR 0x0f z 0x11
+y = (0x0f ^ 0x11);
+// negacja bitowa wyniku bitowego AND 0xfff i 0x0f0
+z = ~(0xfff & 0x0f0);
+
+printf("%x %x %x\n", x, y, z);
+\end{CodeFrame*}
+
+\begin{ProTip}{printf() i puts()}
+Funkcja \cpp{printf()} wypisuje napis określony przez pierwszy argument, podstawiają pod elementy typu \Verb#%x# wartości kolejnych argumentów (np. zmiennych) odpowiednio je interpretując, np.:
+\begin{itemize}
+	\item \Verb#%x# - liczba dziesiętna,
+	\item \Verb#%x# - liczba szesnastkowa,
+	\item \Verb#%f# - liczba zmiennoprzecinkowa,
+	\item \Verb#%s# - napis,
+	\item \Verb#%c# - pojedynczy znak.
+\end{itemize}
+Funkcja ta nie dodaje do wypisywanego napisu znaku nowej linii, więc jeżeli chcemy przejść do nowej linii to musi on być umieszczony w nim w sposób jawny jako \Verb#\n# (niekiedy jako \Verb#\r\n# - protokoły sieciowe, Windows, ...).
+Szczegółowy opis \cpp{printf()} oraz więcej napisów formatujących można znaleźć w \Verb#man 3 printf#.
+
+\vspace{8pt}
+Do wypisywania samego napisu (bez możliwości podstawienia zmiennych, itd.) posłużyć może funkcja \cpp{puts()}, która wypisuje podany napis dodając znak nowej linii.
+\end{ProTip}
+
+
+\section{Przepływ sterowania w programie - skoki, warunki, pętle, funkcje}
+
+Licznik programu (program counter, instruction pointer lub instruction address register) jest rejestrem procesora który określa adres następnej (w niektórych architekturach aktualnej) instrukcji która ma zostać przetworzona procesor.
+
+Skoki bezwarunkowe, instrukcje warunkowe, pętle, wywołania funkcji są realizowane poprzez modyfikację licznika programu. W przypadku wywołań funkcji dodatkowo wykonywane są operacje związane z obsługą stosu (zachowywaniem stanu rejestrów, umieszczaniem argumentów na stosie, ...). Instrukcja goto (realizująca skok bezwarunkowy) jest pełnoprawną instrukcją skoku, jedyną wadą jej stosowania jest to że przy niewłaściwym / zbyt częstym wykorzystywaniu (zamiast wywołań funkcji, warunków i pętli) kod programu staje się mniej czytelny.
+
+W większości przypadków pętle realizowane są na poziomie kodu maszynowego jako zestaw instrukcji (np. inkrementacji zmiennej, sprawdzania warunku, skoku), jednak w niektórych rozwiązaniach pętle (np. typu "powtórz n razy") mogą być realizowane sprzętowo przy pomocy pojedynczej instrukcji.
+
+\subsection{Punkt startu}
+
+Jako że program komputerowy jest sekwencją wykonywanych instrukcji musi rozpoczynać się od określonego miejsca.
+W przypadku kodu C/C++ punktem startu jest funkcja \cpp{main()}. Zakończenie tej funkcji oznacza zakończenie programu, a wartość przez nią zwracana odpowiedzialna jest za tzw. kod powrotu przekazany procesowi wywołującemu program. 
+
+\subsection{Podstawowe konstrukcje}
+
+Język C oferuje kilka pętli – \cpp{for}, \cpp{while}, \cpp{do - while} oraz instrukcję warunkową \cpp{if} i instrukcję wyboru \cpp{switch}.
+Możliwe jest też korzystanie z operatora warunkowego:
+
+\begin{CodeFrame*}[c]{}
+warunek ? wartosc_gdy_prawda : wartosc_gdy_falsz.
+\end{CodeFrame*}
+Gdzie zarówno \Verb#wartosc_gdy_prawda#, jak i  \Verb#wartosc_gdy_falsz#, mogą być wartością jak też wyrażeniem obliczającym jakąś wartość (wyrażeniem matematycznym, wywołaniem funkcji, itd.).
+
+\begin{CodeFrame*}[c]{}
+#include <stdio.h> // włączenie pliku nagłówkowego
+
+int main() {
+    int i, j, k;
+    
+    // instrukcja waunkowa if - else
+    if (i<j) {
+        puts("i<j");
+    } else if (j<k) {
+        puts("i>=j AND j<k");
+    } else {
+        puts("i>=j AND j>=k");
+    }
+    
+    // podstawowe operatory logiczne
+    if (i<j || j<k)
+        puts("i<j OR j<k");
+    // innymi operatorami logicznymi są && (AND), ! (NOT)
+    
+    // pętla for
+    for (i=2; i<=9; ++i) {
+        if (i==3)
+            continue; // pominięcie tego kroku pętli
+        if (i==7)
+            break; // wyjście z pętli
+        printf(" a: %d\n", i);
+    }
+    
+    // pętla while
+    while (i>0) {
+        printf(" b: %d\n", --i);
+    }
+    
+    // pętla do - while
+    do {
+        printf(" c: %d\n", ++i);
+    } while (i<2);
+    
+    // instrukcja wyboru switch
+    switch(i) {
+        case 1:
+            puts("i==1");
+            break;
+        default:
+            puts("i!=1");
+            break;
+    }
+}
+\end{CodeFrame*}
+
+\subsection{Własne funkcje}
+
+\begin{CodeFrame*}[c]{}
+#include <stdio.h>
+
+// funkcja bezargumentowa niezwracająca wartości
+void f1() {
+    puts("ABC");
+}
+
+// funkcja dwuargumentowa zwracająca wartość
+int f2(int a, int b) {
+    puts("F2");
+    return a*2.5 + b;
+}
+
+int main() {
+    f1();
+    int a = f2(3, 6);
+    // zwracaną wartość można wykorzystać (jak wyżej) lub zignorować
+    printf("%d\n", a);
+}
+\end{CodeFrame*}
+
+\section{Złożone typy danych}
+
+\subsection{Struktury}
+Struktura jest złożonym typem danych służącym do grupowania powiązanych ze sobą logicznie zmiennych. Zmienne wchodzące w skład struktury (pola) identyfikowane są nazwami i mogą być różnych typów. Struktura zajmuje ciągły obszar pamięci, w którym umieszczane są wartości kolejnych pól. 
+
+\begin{CodeFrame*}[c]{}
+#include <stdio.h>
+
+struct Struktura {
+    int a, b;
+    double c;
+};
+
+int main() {
+    struct Struktura s;
+    s.a = 13;
+    s.c = 17.3;
+    printf("%f\n", s.a + s.c);
+}
+\end{CodeFrame*}
+
+\subsection{Tablice}
+Tablica jest strukturą danych w której elementy (takiego samego typu) są ułożone w porządku liniowym i są dostępne za pomocą indeksów (kluczy). Typowo tablica indeksowana jest liczbami całkowitymi nie ujemnymi oraz zajmuje ciągły obszar pamięci.
+
+\begin{CodeFrame*}[c]{}
+#include <stdio.h>
+
+int main() {
+    int t[4] = {1, 8, 3, 2};
+    printf("%d -> \n", t[2]);
+    t[2] = 55;
+    printf("    %d \n", t[2]);
+}
+\end{CodeFrame*}
+
+\subsection{Napisy}
+Napisy w C są w istocie tablicami elementów typu \cpp{char}. Pojedynczy znak reprezentowany jest poprzez jeden element tablicy (dla znaków kodowanych jednobajtowo) lub grupę takich elementów (dla znaków kodowanych wielobajtowo, np. polskich znaczków w UTF8). Koniec napisu oznaczany jest przez element o wartości zero (\cpp{NULL}).
+
+W C pojedynczy znak napisu (czyli np. \cpp{char x = napis[i]} albo \cpp{char x = 'A';}) nie jest napisem – jest liczbą (zauważ różnicę między pojedynczymi a podwójnymi cudzysłowami). Możemy go wypisać z użyciem \cpp{printf()} jako wartość numeryczną poprzez \Verb#%d# lub jako znak poprzez \Verb#%c#: \cpp{printf("%d <=> %c", 'A', 'A');}.
+
+\section{Funkcja main}
+
+Jak już zauważyliśmy funkcja \cpp{main()} zwraca wartość całkowitą. Jest to kod powrotu programu, który służy do informowania procesu wywołującego nasz program o tym czy zakończył się on sukcesem czy porażką. W przypadku sukcesu powinien zwrócić 0, a niezerowa wartość oznacza niepowodzenie (można użyć różnych wartości do sygnalizowania różnego rodzaju niepowodzeń - np. polecenie grep inaczej sygnalizuje nie znalezienie podanego wzorca, a inaczej brak pliku który miało przeszukać).
+
+Funkcja \cpp{main()} może przyjmować także argumenty, dzięki którym program może odebrać parametry przekazane w linii poleceń.
+Drugi argument zazwyczaj nazywany \textit{argv} jest tablicą napisów \cpp{char *},
+	której elementy stanowią kolejne słowa (ciągi znaków oddzielane niezabezpieczonymi spacjami) składające się na linię polecenia w wyniku którego został uruchomiony program (czyli nazwa polecenia, opcje i argumenty)
+
+Pierwszy argument jest liczbą całkowita typu \cpp{int} i określa ilość elementów tablicy przekazanej jako drugi argument.
+
+\begin{CodeFrame*}[c]{}
+#include <stdio.h>
+
+int main(int argc, char* argv[]) {
+	for (int i=0; i=argc; ++i)
+		printf("element %d to: %s\n", i, argv[i]);
+	
+	return argc - 2; // kod powrotu uzależniamy od ilości argumentów
+}
+\end{CodeFrame*}
+
+Przykład działania (linie zaczynające się od \Verb#$# są wprowadzonymi komendami, pozostałe linie to output uruchomionych poleceń):
+\begin{Verbatim}
+$ ./a.out a b; echo "Kod powrotu $?"
+element 0 to: ./a.out
+element 1 to: a
+element 2 to: b
+Kod powrotu 1
+$ ./a.out a; echo "Kod powrotu $?"
+element 0 to: ./a.out
+element 1 to: a
+Kod powrotu 0
+\end{Verbatim}
+
+Zauważ że tablica otrzymana jako drugi argumnent zawsze ma co najmniej jeden element - nazwę uruchomionego polecenia.
+
+\begin{ProTip}{Porada}
+Argumenty linii poleceń są na ogół dużo lepszą metodą odbierania danych od użytkownika niż zadawanie pytań i oczekiwanie na wprowadzenie danych z klawiatury na standardowe wejście – umożliwiają łatwe wykorzystanie naszych programów w bardziej złożonych poleceniach, czy skryptach. Zastanów się jakby wyglądało programowanie w bashu gdyby komendy takie jak ls, grep, find, itd oczekiwały na wprowadzenie swoich opcji i argumentów na standardowym wejściu.
+\end{ProTip}
