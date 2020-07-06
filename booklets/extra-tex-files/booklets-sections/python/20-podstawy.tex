@@ -1,0 +1,385 @@
+% Copyright (c) 2016-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2016-2017 Łukasz Mazurek
+% Copyright (c) 2018-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\section{Podstawowe elementy składniowe}
+
+\begin{teacherOnly}
+\noindent Dla osób zaznajomionych z C/C++:
+\begin{itemize}
+\item kolejne instrukcje (zamiast średnika) kończy znak nowej linii
+\item bloki rozpoczyna dwukropek, a wyznacza je wcięcie o danej ilości znaków (nie mieszamy tabulatorów z spacjami)
+\item nie ma konstrukcji i++, czy też ++i, jest za to i += 1
+\item średnik na końcu instrukcji (linii) nie jest błędem składniowym (jest ignorowany)
+\item warunek if'a w nawiasach nie jest błędem składniowym (ale po nawiasach musi być dwukropek)
+\item nie ma pętli for w stylu C (,,trójinstrukcyjnej''), w Pythonie pętla for zawsze iteruje po elementach jakiejś listy
+\end{itemize}
+\end{teacherOnly}
+
+
+%  BEGIN: Funkcje
+\subsection{Definiowanie własnych funkcji}
+
+Bardzo często będziemy chcieli móc wielokrotnie wykorzystać raz napisany fragment kodu.
+W tym celu będziemy tworzyć własne \emph{funkcje}. Definicja funkcji ma następującą postać:
+
+\begin{CodeFrame*}[python]{}
+def nazwa_funkcji(argumenty):
+  pierwsze_polecenie
+  drugie_polecenie
+  ...
+\end{CodeFrame*}
+
+\noindent
+Zwróć uwagę na kilka rzeczy:
+\begin{itemize}
+	\item Na końcu pierwszej linijki jest dwukropek.
+	\item Druga linijka musi być \emph{wcięta}, tzn. rozpoczynać się od spacji, kilku spacji lub znaku tabulacji.
+	\item Jeżeli w ramach funkcji chcemy wykonać kilka instrukcji muszą one mieć taki sam poziom wcięcia.
+	\item ,,Wnętrze'' funkcji kończymy wracając do takiego samego poziomu wcięcia na jakim ją rozpoczęliśmy
+	      (takiego wcięcia jakie miała linijka z słowem kluczowym \python{def}).
+\end{itemize}\vspace{-4pt}
+Jest to typowy sposób wyznaczania bloku kodu w Pythonie i będziemy go jeszcze spotykać w innych konstrukcjach (które poznamy już niedługo), dlatego szczególnie wart jest zapamiętania.
+
+Gdy umieszczamy inną konstrukcję korzystającą z bloku kodu we wnętrzu jakiegoś innego bloku (np. funkcji), blok tej instrukcji musi być ,,bardziej'' wcięty od bloku w którym jest zawarty,
+powrót do poziomu wcięcia zewnętrznego bloku oznacza zakończenie bloku tej instrukcji i kontynuowanie zewnętrznego bloku.
+
+\begin{ProTip}{Porada}
+Na funkcję można patrzeć jak na nazwany kawałek kodu, który możemy wywołać z innego miejsca ze odmiennymi wartościami zmiennych stanowiących jej argumenty.
+\end{ProTip}
+
+Polecenie wywołania funkcji ma postać \python{nazwa_funkcji(argumenty)} i możemy napisać je w tym samym pliku, poniżej definicji tej funkcji.
+Typowo ilość i kolejność argumentów w definicji, jak i w wywołaniu powinny być takie same.
+Jeżeli nasza funkcja nie potrzebuje przyjmować argumentów nawiasy okrągłe w jej definicji i wywołaniu pozostawiamy puste.
+Jeżeli potrzebujemy więcej argumentów rozdzielamy je w obu przypadkach przecinkami (tak jak miało to miejsce w korzystaniu z funkcji \python{print}).
+
+\paragraph{Przykład}
+Napiszmy funkcję, która wypisuje swój argument podniesiony do kwadratu i wywołajmy ją:
+
+\begin{CodeFrame}[python]{.5\textwidth}
+def kwadrat(x):
+  print(x * x)
+
+kwadrat(7)
+kwadrat(2 + 3)
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+49
+25
+\end{CodeFrame}
+
+\noindent
+Zwróć uwagę, iż wywołania funkcji w powyższym przykładzie nie są wcięte --- są poza blokiem funkcji.
+
+\begin{ProTip}{Polecenia wieloliniowe w konsoli interaktywnej 🤔}
+Możliwe jest wprowadzanie poleceń wieloliniowych w konsoli interaktywnej.
+W takim wypadku po wprowadzeniu pierwszej linii (rozpoczynającej blok, np. \python{def})
+nastąpi zmiana znaku zachęty na \Verb{...}, co oznacza tryb wprowadzania bloku poleceń.
+Następnie wprowadzamy kolejne instrukcje wykonywane w ramach tego bloku (np. funkcji) pamiętająć o wcięciach.
+Wprowadzanie bloku kończymy pustą linią, po czym znak zachęty powróci do standardowego \Verb{>>>}.
+\end{ProTip}
+
+\subsubsection{Wartość zwracana z funkcji}
+
+Często chcemy aby funkcja zamiast wypisać wynik swojego działania na ekran zwróciła go w taki sposób aby można było go zapisać do jakiejś zmiennej,
+możliwe to jest poprzez zastosowanie instrukcji \python{return}. Przerywa ona działanie funkcji w miejscu w którym została wykonała,
+powoduje powrót do miejsca gdzie wywołana została funkcja i zwraca podaną do niej wartość:
+
+\begin{CodeFrame}[python]{.5\textwidth}
+def kwadrat(x):
+  return x * x
+
+a = kwadrat(7)
+print( a - 2, kwadrat(4) )
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+47 16
+\end{CodeFrame}
+%  END: Funkcje
+
+\vspace{-13pt}
+
+%  BEGIN: Funkcje2
+\subsubsection{Argumenty domyślne i nazwane {\Symbola 🤔}}
+
+Możliwe jest podanie wartości domyślnych dla wybranych argumentów funkcji. Utworzy to z nich argumenty opcjonalne, które nie muszą być podawane przy wywołaniu funkcji.
+Argumenty z wartościami domyślnymi muszą występować w definicji funkcji po argumentach bez takich wartości.
+Przy wywołaniu funkcji można odwoływać się do jej argumentów z podaniem ich nazw, pozwala to na podawanie argumentów w innej kolejności niż podana w definicji funkcji,
+co jest przydatne zwłaszcza przy funkcjach z wieloma argumentami opcjonalnymi.
+
+\begin{CodeFrame}[python]{.65\textwidth}
+def potega(a = 2, b = 2):
+    return a ** b
+
+print( potega(), potega(4), potega(4, 3) )
+print( potega(b = 3), potega(b = 1, a = 4) )
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+4 16 64
+8 4
+\end{CodeFrame}
+
+\subsubsection{Zasięg zmiennej {\Symbola 🤔}}
+
+W Pythonie wewnątrz funkcji widoczne są zmienne zdefiniowane poza nią, jednak aby móc modyfikować taką zmienną wewnątrz
+funkcji należy ją tam zadeklarować jako globalną przy pomocy słowa kluczowego \python{global}:
+
+\begin{CodeFrame}[python]{.5\textwidth}
+def test():
+  global b
+  a, b = 5, 13
+  print(a, b, c)
+
+a, b, c = 1, 3, 7
+test()
+print(a, b, c)
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+5 13 7
+1 13 7
+\end{CodeFrame}
+
+\noindent
+Analizując działanie powyższego kodu zwrócić uwagę na:
+\begin{itemize}
+\item zasłonięcie globalnego \Verb{a} poprzez lokalne a wewnątrz funkcji (nie można zmodyfikować globalnej zmiennej \Verb{a} w funkcji),
+\item możliwość dostępu do globalnych zmiennych w funkcji dopóki ich nie zasłonimy zmienną lokalną (tak używamy zmiennej \Verb{c})
+\item możliwość zmodyfikowania zmiennej globalnej gdy jest zadeklarowana w funkcji jako \python{global}
+\end{itemize}
+%  END: Funkcje2
+
+%  BEGIN: Pętla for
+\subsection{Pętla \python{for}}
+Załóżmy, że chcemy obliczyć kwadraty wszystkich liczb od 1 do 4.
+Zgodnie z dotychczasową wiedzą, w tym celu musimy wykonać 4 działania:
+
+\begin{CodeFrame}[python]{.5\textwidth}
+print(1 * 1)
+print(2 * 2)
+print(3 * 3)
+print(4 * 4)
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+1
+4
+9
+16
+\end{CodeFrame}
+
+Widzimy jednak, że te działania są bardzo podobne i chciałoby się je wykonać ,,za jednym zamachem''.
+Do wykonywania wielokrotnie tego samego (lub podobnego) kodu służą pętle.
+Najprostszym rodzajem pętli jest pętla \python{for}, która dla danej \emph{listy} i operacji do wykonania
+wykonuje tę operację po kolei na każdym elemencie listy.
+
+Do wykonania powyższego zadania służy pętla \python{for} w następującej postaci:
+
+\begin{CodeFrame}[python]{.5\textwidth}
+for x in [1, 2, 3, 4]:
+    print(x * x)
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+1
+4
+9
+16
+\end{CodeFrame}
+
+\noindent Spróbuj przepisać tę pętlę i uruchomić program.
+Zauważ że wnętrze pętli jest wyznaczone w sposób analogiczny do wnętrza funkcji:
+\begin{itemize}
+	\item Rozpoczyna się od dwukropka kończącego pierwszą linię.
+	\item Kolejne linijki są \emph{wcięte}, tzn. rozpoczynać się od spacji, kilku spacji lub znaku tabulacji.
+	\item Jeżeli w ramach pętli chcielibyśmy wykonać kilka instrukcji muszą one mieć taki sam poziom wcięcia.
+	\item ,,Wnętrze'' pętli kończymy wracając do takiego samego poziomu wcięcia na jakim ją rozpoczęliśmy
+	      (takiego wcięcia jakie miała linijka z słowem kluczowym \python{for}).
+	\item Pętle możemy zagnieżdżać jedna w drugiej --- blok wewnętrznej pętli musi być ,,bardziej'' wcięty.
+	Powrót do poziomu wcięcia zewnętrznej pętli oznacza zakończenie pętli wewnętrznej i kontynuowanie zewnętrznej.
+\end{itemize}
+%  END: Pętla for
+
+%  BEGIN: Lista kolejnych liczb naturalnych
+\subsection{Lista kolejnych liczb naturalnych}
+Często potrzebujemy, aby pętla przeszła po liście kilku kolejnych liczb naturalnych.
+W tym celu możemy oczywiście podać wprost kolejne elementy listy (tak jak w powyższym przykładzie),
+jednak istnieje wygodniejsze rozwiązanie, mianowicie polecenie \python{range()}:
+
+\begin{CodeFrame}[python]{0.5\textwidth}
+for x in range(7):
+    print(x, end = ', ')
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+0, 1, 2, 3, 4, 5, 6, 
+\end{CodeFrame}
+
+\begin{CodeFrame}[python]{0.5\textwidth}
+for x in range(5, 10):
+    print(x, end = ', ')
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+5, 6, 7, 8, 9, 
+\end{CodeFrame}
+
+\begin{CodeFrame}[python]{0.5\textwidth}
+for x in range(10, 20, 3):
+    print(x, end = ', ')
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+10, 13, 16, 19, 
+\end{CodeFrame}
+
+\noindent Na powyższych przykładach widzimy, że polecenie \python{range()} występuje w trzech wersjach:
+\begin{itemize}
+	\item \python{range(kon)} generuje listę kolejnych liczb od 0 (\strong{włącznie}) do \Verb{kon} (\strong{wyłącznie}).
+	\item \python{range(pocz, kon)} generuje listę kolejnych liczb od \Verb{pocz} (\strong{włącznie}) do 
+		\Verb{kon} (\strong{wyłącznie}).
+	\item \python{range(pocz, kon, krok)} generuje listę liczb od \Verb{pocz} (\strong{włącznie}) 
+		do \Verb{kon} (\strong{wyłącznie}), przeskakując w każdym kroku o \Verb{krok}.
+\end{itemize}
+
+\begin{ProTip}{\normalfont{\strong{Do zapamiętania}}}
+\normalsize Wszystkie przedziały w Pythonie są domknięte z lewej strony i otwarte z prawej strony,
+tzn. zawierają swój lewy koniec i nie zawierają swojego prawego końca.
+\end{ProTip}
+%  END: Lista kolejnych liczb naturalnych
+
+%  BEGIN: Typ logiczny
+\subsection{Typ logiczny}
+
+Jak już się przekonaliśmy można używać Pythona jako kalkulatora. Możemy go także użyć do obliczania wartości wyrażeń logicznych. Służy do tego wbudowany dwuwartościowy typ logiczny z wartościami:
+\begin{itemize}
+\item \python{True} oznaczającą logiczną jedynkę / prawdę
+\item \python{False} oznaczającą logiczne zero / fałsz
+\end{itemize}
+Operacje na tym typie wykonujemy z użyciem słów kluczowych: \python{and}, \python{or}, \python{not} oznaczających odpowiednio:
+iloczyn logiczny (aby był prawdą oba warunki muszą być spełnione), sumę logiczną (aby wynik był prawdą co najmniej jednej z warunków musi być spełniony) oraz negację logiczną.
+Podobnie jak w zwykłych operacjach arytmetycznych możemy grupować ich fragmenty (celem wymuszenia kolejności działań) przy pomocy nawiasów okrągłych.
+
+Wartościom tego typu mogą odpowiadać wybrane wartości innych typów (np. liczba całkowita 0 odpowiada \python{False}, a pozostałe liczby całkowite \python{True}).
+Wartościami tego typu są też wyniki różnego rodzaju porównań, takich jak: \python{<} (mniejsze), \python{>} (większe), \python{<=} (mniejsze równe),
+\python{>=} (większe równe), \python{==} (równe), \python{!=} (nierówne).
+%  END: Typ logiczny
+
+%  BEGIN: Instrukcja warunkowa if
+\subsection{Instrukcja warunkowa \python{if}}
+
+Często chcemy, aby program zachowywał się w różny sposób w zależności od tego, czy jakiś warunek jest spełniony, czy nie.
+W Pythonie (jak w większości języków programowania) służy do tego instrukcja warunkowa \python{if}.
+
+Przypuśćmy, że chcemy napisać funkcję, która dla podanej wartości sprawdzi czy odpowiada ona logicznej prawdzie czy fałszowi i wypisuje odpowiedni komunikat.
+Zatem kod będzie wyglądał następująco:
+
+\begin{CodeFrame}[python]{0.50\textwidth}
+def sprawdz(x):
+    if x:
+        print(x, '-- prawda')
+    else:
+        print(x, '-- nie prawda')
+sprawdz(1)
+sprawdz(0)
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+1 -- prawda
+0 -- nie prawda
+\end{CodeFrame}
+
+\noindent Zwróć uwagę na następujące rzeczy:
+\begin{itemize}
+	\item \python{if} to po polsku ,,jeśli'', \python{else} to po polsku ,,w przeciwnym przypadku''.
+	\item Linijki rozpoczynające się od \python{if} i \python{else} (podobnie jak linijki rozpoczynające się np. od \python{def}) kończą się dwukropkiem.
+	\item ,,Wnętrze'' \python{if}-a i \python{else}-a (linijki 3 i 5) jest wcięte (bardziej niż samo wnętrze definicji funkcji \Verb{sprawdz}).
+	\item Linijka 3 zostanie wykonana, jeśli spełniony będzie warunek z linijki 2, czyli jeśli wartość zmiennej x będzie odpowiadała prawdzie.
+	\item Linijka 5 zostanie wykonana, jeśli warunek z linijki 2 nie będzie spełniony.
+\end{itemize}
+W powyższym przykładzie użyliśmy konstrukcji \python{if}/\python{else} do rozróżnienia pomiędzy dwoma przypadkami.
+Używając komendy \python{elif} (skrót od \python{else if}) możemy stworzyć bardziej skomplikowany kod do rozróżnienia pomiędzy kilkoma różnymi przypadkami:
+
+\begin{CodeFrame}[python]{0.6\textwidth}
+for x in range(0, 5):
+    if x < 1 or x == 4:
+        print('mniejsze od 1 lub równe 4')
+    elif x in [0,2,3]:
+        print('0 2 lub 3')
+    else:
+        print('nic ciekawego')
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+mniejsze od 1 lub równe 4
+nic ciekawego
+0 2 lub 3
+0 2 lub 3
+mniejsze od 1 lub równe 4
+\end{CodeFrame}
+
+Ten kod składa się z trzech bloków, które są wykonywane w zależności od spełnienia poszczególnych warunków:
+\python{if}, \python{elif}, \python{else}.
+Mamy dużą dowolność w konstruowaniu tego typu fragmentów kodu: 
+bloków \python{elif} może być dowolnie wiele, blok \python{else} może występować jako ostatni blok,
+ale może też go nie być w ogóle.
+
+W powyższym przykładzie widzimy również, że w roli warunków sprawdzanych w ramach \python{if}a mogą występować bardziej złożone wyrażenia.
+Możemy tutaj użyć dowolnego wyrażenia którego wynik odpowiada wartości logicznej \python{True}/\python{False},
+najczęściej spotkamy się z wyrażeniami złożonymi z poznanych już operatorów porównań (\python{<}, \python{>}, \python{<=},
+\python{>=}, \python{==}, \python{!=}) i operacji logicznych (\python{and}, \python{or}, \python{not}).
+
+Zwróć uwagę na warunek postaci ,,\python{A in B}''.
+Taki warunek sprawdza, czy wartość reprezentowana przez \Verb{A} jest elementem \Verb{B}, a jego wynik oczywiście także jest wartością logiczną.
+W naszym przykładzie sprawdzaliśmy, czy wartość zmiennej \Verb{x} występuje w podanej liście liczb, czyli czy jest 1, 2 lub 3.
+
+Zauważ, że dla x wynoszącego 0 spełnione są dwa warunki (pierwszy i środkowy), w takim wypadku decydująca jest kolejność warunków i w konstrukcji
+\python{if}/\python{elif} wykonany zostanie jedynie kod związany z pierwszym pasującym warunkiem.
+%  END: Instrukcja warunkowa if
+
+%  BEGIN: Pętla while
+\subsection{Pętla \python{while}}
+
+Do tej pory korzystaliśmy z pętli \python{for}, która pozwala na iterowanie po liście elementów. Innym istotnym rodzajem pętli
+jest pętla \python{while}, która powoduje wykonywanie zawartego w niej kodu dopóki podany warunek jest spełniony.
+\teacher{Zwrócić uwagę na możliwość / ryzyko zapętlenia.}
+
+\begin{CodeFrame}[python]{0.50\textwidth}
+a, b = 0, 1
+while a <= 20:
+    print(a, end=" ")
+    a, b = b, a + b
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+0 1 1 2 3 5 8 13
+\end{CodeFrame}
+
+Zwróć uwagę, że wewnątrz pętli \python{while} (tak samo jak innych konstrukcji używających wciętego bloku - takich jak \python{for}, czy \python{if})
+może znajdować się więcej niż jedno polecenie. Trzeba tylko pamiętać, aby wszystkie były poprzedzone takim samym wcięciem.
+
+Pętla \python{while} jest też naturalnym wyborem gdy w Pythonie chcemy przechodzić przez jakiś zakres liczb z krokiem nie całkowitym
+	(wcześniej poznana instrukcja \python{range}, stosowana do iterowania po zakresie liczbowym w pętli \python{for}, wymaga aby krok był całkowity).
+%  END: Pętla while
+
+%  BEGIN: Wielokrotne przypisanie
+\subsection{Wielokrotne przypisanie}
+
+Zwróć uwagę w powyższym kodzie także na operację wielokrotnego przypisania postaci \python{a, b = x, y}.
+Dokonuje ona przypisania wartości x do a i y do b, przy czym wartości x i y obliczane są przed zmodyfikowaniem a i b.
+Pozwala to m.in. na zamianę wartości pomiędzy a i b bez stosowania zmiennej tymczasowej poprzez zapis: \python{a, b = b, a}.
+Podobnie możemy zapisywać przypisania większej ilości wartości do większej ilości zmiennych np: \python{a, b, c = 1, 5, 9}.
+Z notacji tej będziemy też często korzystać w dalszej części skryptu przy inicjalizacji zmiennych.
+\teacher{Należy poświęcić chwilę uwagi tej notacji.}
+%  END: Wielokrotne przypisanie

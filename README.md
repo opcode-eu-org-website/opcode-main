@@ -31,10 +31,7 @@
 	SOFTWARE.
 
 
-
 ## Install dependencies
-
-
 
 To build pdf booklets and xhtml files from this repo you must install dependencies:
 
@@ -48,7 +45,7 @@ After this you can build all document by run `make all` or single document by ru
 
 ### Package dependencies
 
-To compile the tex toolkit, several packages are necesary (on Debian Buster)
+To compile the tex toolkit, several packages are necessary (on Debian Buster)
 
     texlive-latex-base
     texlive-latex-extra
@@ -59,4 +56,3 @@ To compile the tex toolkit, several packages are necesary (on Debian Buster)
     psutils
     texlive-font-utils
     fonts-symbola
-

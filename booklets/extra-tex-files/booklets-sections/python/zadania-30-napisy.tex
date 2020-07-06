@@ -1,0 +1,101 @@
+% Copyright (c) 2016-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2016-2017 Łukasz Mazurek
+% Copyright (c) 2018-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\IfStrEq{\dbEntryID}{}{
+	\subsection{napisy}
+	
+	\insertZadanie{\currfilepath}{funkcja_wspak}{}
+	\teacher{\insertRozwiazanie{\currfilepath}{funkcja_wspak}{}}
+	\insertZadanie{\currfilepath}{funkcja_wyiksuj}{}
+	\insertZadanie{\currfilepath}{dekodowanie_utf8_w_base64}{}
+	
+	\subsection{wyrażenia regularne}
+	
+	\insertZadanie{\currfilepath}{regex_czy_slowo}{}
+	\insertZadanie{\currfilepath}{regex_czy_liczba}{}
+}
+
+
+%
+% napisy
+%
+
+\dbEntryBegin{funkcja_wspak}\if1\dbEntryCheckResults
+Napisz funkcję, która dla danej listy słów wypisze każde słowo z listy wspak. Np. dla listy \python{['Ala', 'ma', 'kota']} funkcja powinna wypisać:
+\begin{Verbatim}
+alA
+am
+atok
+\end{Verbatim}
+\fi
+
+\dbEntryBegin{funkcja_wspak-rozwiazanie}\if1\dbEntryCheckResults
+\begin{minted}[frame=single]{python}
+def wskap(lista):
+  for slowo in lista:
+    # w pythonie zamiast poniższej pętli można prościej ...
+    # ale warto poznać (także) takie rozwiązanie
+    for i in range(len(slowo)):
+      print(slowo[-1 - i], end = '')
+    print()
+\end{minted}
+%
+Prostszym rozwiązaniem (nie wymagającym jawnego pisania pętli w pętli) jest:
+\begin{minted}[frame=single]{python}
+def wskap(lista):
+  for slowo in lista:
+    print(slowo[::-1])
+\end{minted}
+\fi
+
+\dbEntryBegin{funkcja_wyiksuj}\if1\dbEntryCheckResults
+Napisz funkcję \python{wyiksuj(napis)}, która zwróci dany \Verb{napis}, zastępując każdą małą literę przez \Verb{x} i
+każdą wielką literę przez \Verb{X}, natomiast resztę znaków pozostawi bez zmian.
+Np. dla napisu \Verb{'Python 3.6.1 (default, Dec 2015, 13:05:11)'} funkcja powinna zwrócić napis: \Verb{Xxxxxx 3.6.1 (xxxxxxx, Xxx 2015, 13:05:11)}
+
+\begin{teacherOnly}
+\noindent Wskazówka:\\
+Dla każdego znaku użyj konstrukcji \python{if}/\python{elif}/\python{else}, aby rozróżnić pomiędzy trzema przypadkami:
+małe litery, wielkie litery, pozostałe znaki.
+\end{teacherOnly}
+\fi
+
+\dbEntryBegin{dekodowanie_utf8_w_base64}\if1\dbEntryCheckResults
+Napisz program dekodujący napis kodowany w UTF8 zakodowany przy pomocy base64 mający postać:
+\python{b'UHl0aG9uIGplc3QgZmFqbnkg8J+Yjg==\n'}.\\
+Wskazówka: dane wejściowe funkcji \python{decode()} muszą być typu "bytes", można to uzyskać poprzedzając napis prefiksem \Verb{b}, tak jak powyżej.
+\fi
+
+
+%
+% wyrażenia regularne
+%
+
+\dbEntryBegin{regex_czy_liczba}\if1\dbEntryCheckResults
+Napisz funkcję która sprawdzi z użyciem wyrażeń regularnych czy dany napis jest liczbą (tzn. jest złożony z cyfr i kropki, a na początku może wystąpić + albo -).
+\fi
+
+\dbEntryBegin{regex_czy_slowo}\if1\dbEntryCheckResults
+Napisz funkcję która sprawdzi z użyciem wyrażeń regularnych czy dany napis jest słowem (tzn. nie zawiera spacji).
+\fi

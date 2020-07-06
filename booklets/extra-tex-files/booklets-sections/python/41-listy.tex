@@ -1,0 +1,96 @@
+% Copyright (c) 2016-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2016-2017 Łukasz Mazurek
+% Copyright (c) 2018-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+%  BEGIN: Listy 01
+\subsection{Listy}
+
+Do tej pory listy traktowaliśmy głównie jako zbiór elementów po którym iterujemy. Zastosowanie list jest jednak znacznie szersze.
+Lista stanowi pewnego rodzaju kontener do przechowywania innych zmiennych, w którym elementy zorganizowane są na zasadzie określenia ich (względnej) kolejności.
+Lista może zawierać elementy różnych typów.
+
+Na listach możemy wykonywać m.in. operacje modyfikowania, czy też usuwania jej elementów:
+
+\begin{CodeFrame}[python]{0.50\textwidth}
+l = ["i", "C", 0, "M"]
+l[0] = "I"
+del l[2]
+print(l)
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+['I', 'C', 'M']
+\end{CodeFrame}
+
+\noindent W powyższym przykładzie widzimy:
+\begin{itemize}
+\item Modyfikację pierwszego elementu listy (\python{l[0] = "I"}), z użyciem odwołania poprzez numer elementu.
+      Elementy list numerujemy od zera. Ujemne wartości oznaczają numerowanie od końca listy, czyli -1 jest ostatnim elementem listy, -2 przedostatnim, itd.
+\item Usunięcie trzeciego elementu listy (\python{del l[2]}). Powoduje to zmianę numeracji kolejnych elementów.
+\end{itemize}
+%  END: Listy 01
+
+%  BEGIN: Listy 02
+Jednak jeżeli chcemy modyfikować elementy listy iterując po niej, to konieczne jest iterowanie po indeksach (a nie jak dotychczas po wartościach):
+
+\begin{CodeFrame}[python]{0.50\textwidth}
+for i in range(len(l)):
+    print(l[i])
+    l[i] = "q"
+print(l)
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+I
+C
+M
+['q', 'q', 'q']
+\end{CodeFrame}
+
+Dzieje się tak gdyż przypisanie do zmiennej \Verb{x} jakiejś wartości w ramach konstrukcji \python{for x in lista:}
+modyfikuje tylko zmienną \Verb{x}, a nie element listy który został do niej pobrany.
+%  END: Listy 02
+
+%  BEGIN: Listy 03
+\subsubsection{Wybór podlisty}
+
+Możemy także tworzyć ,,podlisty'' przy pomocy operatora zakresów w identyczny sposób jak to zostało opisane przy napisach,
+np. \python{ll[1::2]} zwróci listę złożoną z co drugiego elementu listy \Verb{ll} zaczynając od elementu o indeksie 1.
+%  END: Listy 03
+
+%  BEGIN: Lista jako modyfikowalny napis
+\subsubsection{Lista jako modyfikowalny napis}
+
+Listy mogą też służyć jako narzędzie do modyfikowania napisów.
+W tym celu można skorzystać np. z listy złożonej z liter oryginalnego napisu:
+
+\begin{CodeFrame}[python]{0.50\textwidth}
+s = "abcdefgh"
+l = list(s)
+l[2] = "X"
+del(l[5])
+s = "".join(l)
+print(s)
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+abXdegh
+\end{CodeFrame}
+%  END: Lista jako modyfikowalny napis

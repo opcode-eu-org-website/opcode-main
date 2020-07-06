@@ -1,0 +1,98 @@
+% Copyright (c) 2018-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2018-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+%  BEGIN: Klasy i struktury
+\subsection{Klasy i struktury {\Symbola 🤔}}
+
+Inną metodą grupowania zmiennych i funkcji jest definiowanie własnych klas:
+\begin{CodeFrame*}[python]{}
+class NazwaKlasy:
+  # pola składowe
+  a, d = 0, "ala ma kota"
+  # metody składowe
+  def wypisz(self):
+    print(self.a + self.b)
+  # metody statyczna
+  def info():
+    print("INFO")
+  # konstruktor (z jednym argumentem)
+  def __init__(self, x = 1):
+    # i kolejny sposób na utworzenie pola składowego klasy
+    self.b = 13 * x
+\end{CodeFrame*}
+Warto zauważyć jawny argument metod składowych klasy w postaci obiektu tej klasy. \teacher{(w C++ także występuje ale nie jest jawnie deklarowany, ani nie trzeba się nim jawnie posługiwać)}
+Możliwe jest także dziedziczenie po jednej lub kilku klasach bazowych, w tym celu definicje klasy rozpoczynamy:
+\begin{CodeFrame*}[python]{}
+class NazwaKlasy(Bazowa1, Bazowa2):
+\end{CodeFrame*}
+
+Tworzenie obiektu klasy i używanie go:
+
+\begin{CodeFrame}[python]{0.55\textwidth}
+k = NazwaKlasy()
+k.a = 67
+k.wypisz()
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+80
+\end{CodeFrame}
+
+Obiekty można rozszerzać o nowe składowe i funkcje:
+
+\begin{CodeFrame}[python]{0.55\textwidth}
+k.c = k.a + 10
+print(k.c)
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+77
+\end{CodeFrame}
+
+W ten sposób można też tworzyć całe struktury:\\
+\begin{CodeFrame}[python]{0.55\textwidth}
+class Pusta():
+  pass
+x = Pusta()
+x.a = 3
+x.b = 4
+\end{CodeFrame}
+\begin{minipage}[t]{0.4\textwidth}
+\vspace{6pt}Od strony implementacyjnej są one trzymane w słowniku związanym z danym obiektem o nazwie \python{__dict__}.\\
+Spróbuj wypisać zawartość \python{x.__dict__} oraz \python{k.__dict__}.
+\end{minipage}
+
+Do metod klasy możemy odwoływać się także z podaniem nazwy klasy a nie obiektu, w takim wypadku jeżeli nie są to metody statyczne należy przekazać jako argument obiekt danej klasy
+lub go udający\footnote{
+Wystarczy żeby taki obiekt miał metody i składowe używane przez dana metodę, nie musi to być obiekt tej klasy.
+}:
+
+\begin{CodeFrame}[python]{0.55\textwidth}
+NazwaKlasy.info()
+NazwaKlasy.wypisz(k)
+NazwaKlasy.wypisz(x)
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+INFO
+80
+7
+\end{CodeFrame}
+%  END: Klasy i struktury

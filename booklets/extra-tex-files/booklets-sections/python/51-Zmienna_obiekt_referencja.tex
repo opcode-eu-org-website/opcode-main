@@ -1,0 +1,142 @@
+% Copyright (c) 2018-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2018-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+%  BEGIN: Zmienna, obiekt i referencja
+\subsection{Zmienna, obiekt i referencja {\Symbola 🤔}}
+
+W Pythonie każda zmienna jest nazwą wskazującą na jakiś obiekt w pamięci. Podobnie każdy element listy czy słownika wskazuje na jakiś obiekt\footnote{
+Zasadniczo wszystkie definiowane przez nas zmienne czy funkcje są elementem słownika związanego z danym kontekstem.
+Do słowników tych można uzyskać dostęp poprzez funkcje \python{globals()} (słownik zawierający elementy zdeklarowane w kontekście globalnym) i
+\python{locals()} (słownik zawierający elementy zadeklarowane w kontekście lokalnym).
+}.
+Na jeden obiekt może wskazywać wiele zmiennych i/lub elementów innych obiektów (takich jak listy czy słowniki).
+Jeżeli zmienna nie ma na co wskazywać (np. został do niej przypisany wynik funkcji, która nie zwraca wartości) wskazuje na obiekt \python{None} (typu \python{NoneType}).
+Zatem na wszystkie zmienne pythonowe możemy patrzeć jak na referencje do obiektów istniejących gdzieś w pamięci.
+
+Do uzyskania identyfikatora obiektu związanego z daną nazwą, lub elementem innego obiektu służy funkcja \python{id} (w przypadku standardowej implementacji Pythona jest to po prostu adres w pamięci).
+
+\begin{teacherOnly}
+Warto trochę rozwinąć ten temat, np. bazgrząc po tablicy zmienne wskazujące na obiekty i zmieniając/zrywając połączania między zmienną a obiektem.
+
+Warto także pokazać działanie wspomnianych funkcji \python{globals()} i \python{locals()} (zwróć uwagę na różnicę między a i b oraz c i d):
+\begin{CodeFrame*}[python]{}
+a, b = 0, 0
+
+def f1():
+    def f2(x):
+       a = 2
+       print("f2", a, c)
+       print(" locals  = ", locals())
+       print(" globals = ", globals())
+    
+    a = 1
+    c, d = 3, 4
+    print("f1", a)
+    print(" locals  = ", locals())
+    print(" globals = ", globals())
+    f2(7)
+
+f1()
+\end{CodeFrame*}
+\end{teacherOnly}
+
+\subsubsection{Usuwanie i czas życia zmiennych {\Symbola 🤔}}
+
+Instrukcja \python{del}, której używaliśmy już do usuwania elementów z listy lub słownika może być wykorzystana także do usuwania innych zmiennych.
+Należy jednak pamiętać iż w Pythonie usunięcie zmiennej nie wiąże się z natychmiastowym zwolnieniem zajmowanej przez nią pamięci z kilku powodów:
+\begin{itemize}
+\item na pojedynczy obiekt może wskazywać kilka zmiennych
+\item to Python decyduje o tym kiedy zwalniać / ponownie użyć pamięć pozostałą po obiektach na które nie wskazuje już żadna nazwa
+\end{itemize}
+
+\subsubsection{Kopiowanie obiektów {\Symbola 🤔}}
+
+Python w momencie przypisania wartości jednej zmiennej do innej nie tworzy kopii obiektu na który wskazuje zmienna, zamiast tego przypisuje referencję do istniejącego obiektu.
+Jest to szczególnie zauważalne w obiektach, które mogą być wewnętrznie modyfikowalne (takich jak listy czy słowniki)\footnote{
+Zauważ że jedyną możliwością modyfikacji liczby czy napisu jest przypisanie wartości wyrażenia do zmiennej,
+a dla list czy słowników możemy je modyfikować bez operacji przypisania całej listy czy słownika do nowej czy tej samej zmiennej.
+\teacher{
+	Jest to podział na typy "immutable" i "mutable" - te pierwsze nie są wewnętrznie modyfikowalne
+	(każda modyfikacja odbywa się przez przypisanie, w wyniku którego pod zmienną może zostać podpięty nowy obiekt).
+}}:
+
+\begin{CodeFrame}[python]{0.55\textwidth}
+a = [1, 2, 3]
+b = a
+print(a, b, "\n", hex(id(a)), hex(id(b)))
+a[1] = 0
+print(a, b, "\n", hex(id(a)), hex(id(b)))
+del a
+print(b,    "\n", hex(id(b)))
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+[1, 2, 3] [1, 2, 3]
+ 0x7f50d76b2bc8 0x7f50d76b2bc8
+[1, 0, 3] [1, 0, 3]
+ 0x7f50d76b2bc8 0x7f50d76b2bc8
+[1, 0, 3]
+ 0x7f50d76b2bc8
+\end{CodeFrame}
+
+Jak widać \Verb{a} i \Verb{b} posiadają taki sam identyfikator obiektu zwracany przez funkcję \python{id},
+modyfikacja \python{a[1]} wpłynęła na zawartość \Verb{b}, natomiast usunięcie \Verb{a} nie ma wpływu na \Verb{b}
+(usunęliśmy tylko jedną z dwóch referencji na wspólny obiekt).
+Jeżeli chcemy uzyskać kopię listy lub słownika musimy skorzystać z metody \python{copy()} odpowiedniego obiektu:
+
+\begin{CodeFrame}[python]{0.55\textwidth}
+a = [1, 2, 3]
+b = a.copy()
+b[1] = "X"
+print(a, b, "\n", hex(id(a)), hex(id(b)))
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+[1, 2, 3] [1, 'X', 3]
+ 0x7f50d76b2bc8 0x7f50d57a7088
+\end{CodeFrame}
+
+Zauważ że tak utworzone \Verb{b} ma inny identyfikator obiektu niż \Verb{a}.
+Należy mieć także na uwadze że nawet argumenty funkcji przekazywane są jako referencje na obiekty a nie kopie obiektów,
+natomiast dopiero operacja przypisania nowej wartości do zmiennej związanej z argumentem powoduje że zaczyna ona wskazywać
+na nowo utworzony (w wyniku wyrażenia po prawej stronie znaku równości) obiekt.
+
+\begin{teacherOnly}
+Można także zwrócić uwagę na poniższy kod pokazujący różnicę w obsłudze referencji do obiektów i samych obiektów "immutable" i "mutable":
+\begin{CodeFrame*}[python]{}
+a, b = 5, 5
+print(id(a), id(b))
+b = 3
+print(id(a), id(b))
+
+a, b = [1, 2, 3], [1, 2, 3]
+print(id(a), id(b))
+b[2] = 5
+print(id(a), id(b))
+b = [1, 2, 3]
+print(id(a), id(b))
+\end{CodeFrame*}
+\end{teacherOnly}
+
+\subsubsection{Dla jeszcze bardziej dociekliwych {\Symbola 🤔}}
+
+Osobom jeszcze bardziej dociekliwym w temacie wnętrzności Pythona możemy polecić lekturę artykułu omawiającego te zagadnienia \url{http://www.rwdev.eu/articles/objectthinking} oraz samodzielne eksperymenty.
+%  END: Zmienna, obiekt i referencja

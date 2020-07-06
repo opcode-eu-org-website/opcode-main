@@ -1,0 +1,257 @@
+% Copyright (c) 2016-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2016-2017 Łukasz Mazurek
+% Copyright (c) 2018-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\IfStrEq{\dbEntryID}{}{
+	\insertZadanie{\currfilepath}{dwucyfrowe_podzielne}{}
+	\insertZadanie{\currfilepath}{niepodzielne}{}
+	\insertZadanie{\currfilepath}{funkcja_xor}{}
+	\insertZadanie{\currfilepath}{funkcja_rownowazne}{}
+	\insertZadanie{\currfilepath}{funkcja_implikacja}{}
+	\insertZadanie{\currfilepath}{zadanie_suma2}{}
+	\insertZadanie{\currfilepath}{zadanie_suma3}{}
+	\insertZadanie{\currfilepath}{funkcja_bezwzgledne}{}
+	
+	\insertZadanie{\currfilepath}{funkcja_skroty}{}
+	\insertZadanie{\currfilepath}{funkcja_malePodwojnie}{}
+	\insertZadanie{\currfilepath}{regex_czy_palindrom}{}
+	\insertZadanie{\currfilepath}{regex_czy_konczy}{}
+	\insertZadanie{\currfilepath}{funkcja_toStr}{}
+	
+	\insertZadanie{\currfilepath}{zadanie_trojkat_dwie_petle}{}
+	\insertZadanie{\currfilepath}{zadanie_trojkat_while}{}
+	\insertZadanie{\currfilepath}{zadanie_trojkat_jedna_petla}{}
+	%\insertZadanie{\currfilepath}{zadanie_trojkat}{}
+	\insertZadanie{\currfilepath}{zadanie_trojkat_rekurencja}{}
+	
+	\insertZadanie{\currfilepath}{obiektowo_sortuj}{}
+	\insertZadanie{\currfilepath}{parsuj_klucz_wartosc}{}
+	\insertZadanie{\currfilepath}{zadanie_fork2}{}
+}
+
+% specjalne
+
+\dbEntryBegin{slownik_zamiast_ifelse}\if1\dbEntryCheckResults
+Zastanów się czy konstrukcję if/elif w funkcji \python{dzialanie()} z rozdziału \ref{Funkcje_jako_argumenty} można by zastąpić słownikiem, jak to ewentualnie zrobić i jakie mogłoby mieć to zalety bądź wady?
+\fi
+
+\dbEntryBegin{slownik_zamiast_ifelse-rozwiazanie}\if1\dbEntryCheckResults
+Możemy zdefiniować słownik, w którym kluczem jest nazwa działania a wartością funkcja je realizująca.
+Zaleta takiego podejścia jest łatwe rozszerzania takiego kodu o nowe działania (poprzez wstawienie kolejnej pary do słownika, co może dziać się w trakcie pracy programu).
+\fi
+
+% PwES domowe (?):
+
+\dbEntryBegin{zadanie_suma2}\if1\dbEntryCheckResults
+Napisz funkcję, przyjmującą dwa argumenty $a$ i $b$, która obliczy i zwróci sumę liczb całkowitych większych od a i mniejszych od b.
+\fi
+
+\dbEntryBegin{zadanie_suma3}\if1\dbEntryCheckResults
+Rozwiąż zadanie \ref{zadanie_suma2} używając pętli \python{while}
+\fi
+
+\dbEntryBegin{funkcja_bezwzgledne}\if1\dbEntryCheckResults
+Napisz funkcję \python{bezwzgledne(lista)}, która dla danej listy liczb wypiszę listę wartości bezwzględnych
+tych liczb, tj. liczby ujemne zamieni na przeciwne, a liczby nieujemne pozostawi bez zmian.
+Poszczególne liczby powinny być oddzielone pojedynczymi spacjami.
+Przykładowe użycie funkcji powinno wyglądać następująco:
+\begin{Verbatim}
+ > bezwzgledne([5, -10, 15, 0])
+5 10 15 0
+\end{Verbatim}
+\fi
+
+\dbEntryBegin{zadanie_trojkat}\if1\dbEntryCheckResults
+Napisz program, który używając pętli, wypisze na ekranie \textit{trójkąt z iksów}, taki jak poniżej:
+\begin{Verbatim}
+X
+XX
+XXX
+XXXX
+XXXXX
+XXXXXX
+XXXXXXX
+\end{Verbatim}
+\fi
+
+\dbEntryBegin{funkcja_toStr}\if1\dbEntryCheckResults
+Napisz funkcję \python{toStr(liczba, podstawa)}, która konwertuje podaną liczbę do reprezentacji napisowej w systemie o podanej podstawie.\\
+Wskazówka: do testowania poprawności działania możesz użyć funkcji \python{int(napis, podstawa)}, możemy przyjąć że podstawa jest mniejsza od 37 tak aby starczyło liter alfabetu łacińskiego.
+\fi
+
+\dbEntryBegin{obiektowo_sortuj}\if1\dbEntryCheckResults
+Korzystając z metod klasy \Verb{list} i/lub funkcji \python{sorted()} napisz funkcję która sortuje podaną listę w kolejności malejącej.
+Funkcja nie może zmodyfikować oryginalnej listy.
+\fi
+
+\dbEntryBegin{obiektowo_sortuj2}\if1\dbEntryCheckResults
+Rozwiąż zadanie \ref{obiektowo_sortuj} w alternatywny sposób (czyli jeżeli użyłeś \python{sorted()} \Verb{list}, a jeżeli użyłeś metod użyj \python{sorted()}).
+\fi
+
+\dbEntryBegin{parsuj_klucz_wartosc}\if1\dbEntryCheckResults
+Napisz funkcję która konwertuje listę napisów postaci \Verb#klucz=wartosc# na słownik.
+Funkcja musi dokonywać podziału napisów z listy w oparciu o pierwsze wystąpienie znaku równości przy pomocy metody \python{find()} typu przechowującego napisy (\Verb{str}).
+Funkcja musi dodawać kolejne napisy do słownika w taki sposób że część przed znakiem równości stanowi klucz, a część po znaku równości stanowi wartość.\\
+Np. dla listy postaci: \python{["aa=13", "b=Ala=kot", "f=xyz"]} funkcja powinna zwrócić słownik:
+\begin{Verbatim}
+{'b': 'Ala=kot', 'aa': '13', 'f': 'xyz'}
+\end{Verbatim}
+\fi
+
+\dbEntryBegin{zadanie_trojkat_rekurencja}\if1\dbEntryCheckResults
+Napisz program, który wypisze na ekranie \textit{trójkąt z iksów}, taki jak poniżej:
+\begin{Verbatim}
+X
+XX
+XXX
+XXXX
+XXXXX
+XXXXXX
+XXXXXXX
+\end{Verbatim}
+Stosując zamiast co najmniej jednej pętli rekurencję.
+\emph{Wskazówka: Funkcja rekurencyjna to funkcja, która wywołuje samą siebie (typowo ze zmodyfikowanymi argumentami), dopóki zachodzi jakiś ustalony warunek (typowo zależny od argumentów).}
+\fi
+
+\dbEntryBegin{zadanie_fork2}\if1\dbEntryCheckResults
+Napisz program który utworzy 1 potomka, \ul[black]{potomek} powinien wypisać PID rodzica i swój. % następnie zabić rodzica, poczekać 5 sekund, wypisać "Koniec" i zakończyć swoje działanie.
+\fi
+
+% dodatkowe:
+
+\dbEntryBegin{dwucyfrowe_podzielne}\if1\dbEntryCheckResults
+Napisz pętlę, która wypisze wszystkie dwucyfrowe liczby podzielne przez 7.
+Kolejne liczby powinny być wypisane w jednym wierszu i porozdzielane pojedynczymi spacjami.
+\fi
+
+\dbEntryBegin{niepodzielne}\if1\dbEntryCheckResults
+Napisz funkcję który wypisze liczby od 0 do 20 z pominięciem liczb podzielnych przez wartość określoną w jej argumencie.
+\fi
+
+\dbEntryBegin{funkcja_xor}\if1\dbEntryCheckResults
+Napisz funkcję, przyjmującą dwa argumenty $a$ i $b$, która będzie realizować funkcję xor (zwróci wartość $a$ XOR $b$).
+\\\emph{Wskazówka: dla ułatwienia można przyjąć że argumenty są zawsze typu logiczne True/False.}
+\fi
+
+\dbEntryBegin{funkcja_rownowazne}\if1\dbEntryCheckResults
+Napisz funkcję, przyjmującą dwa argumenty $a$ i $b$, która sprawdzi warunek równoważności $a \Leftrightarrow b$ (sprawdzi czy $a$ wtedy i tylko wtedy gdy $b$).
+\\\emph{Wskazówka: dla ułatwienia można przyjąć że argumenty są zawsze typu logiczne True/False.}
+\fi
+
+\dbEntryBegin{funkcja_implikacja}\if1\dbEntryCheckResults
+Napisz funkcję, przyjmującą dwa argumenty $a$ i $b$, która sprawdzi warunek implikacji $a \Rightarrow b$ (sprawdzi czy z a wynika b).
+\\\emph{Wskazówka: dla ułatwienia można przyjąć że argumenty są zawsze typu logiczne True/False.}
+\fi
+
+\dbEntryBegin{funkcja_skroty}\if1\dbEntryCheckResults
+Napisz funkcję, która dla danej listy słów wypisze w kolejnych wierszach ich skróty w postaci
+\Verb{<pierwsza litera>-<ostatnia litera> (<dlugosc slowa>)}.\\
+Np. dla listy \python{['Interdyscyplinarne', 'Centrum', 'Modelowania']} powinna wypisać:
+\begin{Verbatim}
+I-e (18)
+C-m (7)
+M-a (11)
+\end{Verbatim}
+Wskazówka: wynik funkcji \python{len()} mierzącej długość napisu jest liczbą.
+Do rozwiązania tego zadania może Ci się przydać konwersja tej liczby na napis (aby dało się ją skleić z innymi napisami), z użyciem funkcji \python{str()}
+\fi
+
+\dbEntryBegin{funkcja_malePodwojnie}\if1\dbEntryCheckResults
+Napisz funkcję, która dla danej listy słów wypisze każde słowo z listy powtarzając 
+każdą małą literę dwukrotnie.
+Np. dla \python{['Ala', 'ma', 'kota', 'i PSA']} funkcja powinna wypisać:
+\begin{Verbatim}
+Allaa
+mmaa
+kkoottaa
+ii PSA
+\end{Verbatim}
+\fi
+
+\dbEntryBegin{regex_czy_palindrom}\if1\dbEntryCheckResults
+Jak wiemy język złożony ze słów postaci \Verb{aa..aabb..bbaa..bb} (gdzie ilość liter a przed ciągiem liter b jest równa ilości liter a po tym ciągu) nie jest regularny.
+Jednak programistyczne wyrażenia regularne są rozszerzone w stosunku co do tych spotykanych w matematyce i umożliwiają opis takiego języka.
+Napisz funkcję, korzystającą z dopasowywania wyrażeń regularnych, która będzie sprawdzała czy podane słowo należy do tego języka.
+\fi
+
+\dbEntryBegin{regex_czy_konczy}\if1\dbEntryCheckResults
+Napisz funkcję która sprawdzi z użyciem wyrażeń regularnych czy dany napis kończy się \Verb{xyz}.
+\fi
+
+% trójkąt seria:
+
+\dbEntryBegin{zadanie_trojkat_dwie_petle}\if1\dbEntryCheckResults
+Używając dwóch pętli \python{for}, jedna wewnątrz drugiej, napisz program, który wypisze na ekranie
+\textit{trójkąt z iksów}, taki jak poniżej:
+\begin{Verbatim}
+X
+XX
+XXX
+XXXX
+XXXXX
+XXXXXX
+XXXXXXX
+\end{Verbatim}
+\fi
+
+\dbEntryBegin{zadanie_trojkat_while}\if1\dbEntryCheckResults
+Zmodyfikuj rozwiązanie zadania \ref{zadanie_trojkat_dwie_petle} tak aby zamiast co najmniej jednej pętli \python{for} użyć pętli \python{while}.
+\fi
+
+\dbEntryBegin{zadanie_trojkat_jedna_petla}\if1\dbEntryCheckResults
+Zmodyfikuj rozwiązanie zadania \ref{zadanie_trojkat_dwie_petle} tak aby korzystało tylko z jednej pętli.
+\fi
+
+% bardziej dodatkowe:
+
+\dbEntryBegin{funkcja_suma}\if1\dbEntryCheckResults
+Napisz funkcję, która przyjmuje dwa argumenty i wypisuje ich sumę. Użyj jej do obliczenia (wypisania na konsolę) wartości kilku różnych sum.
+\fi
+
+\dbEntryBegin{pole_kola}\if1\dbEntryCheckResults
+Napisz funkcję, która oblicza i zwraca pole koła o podanym promieniu. Użyj jej do obliczenia powierzchni koła o promieniu 13.
+
+\teacher{W razie potrzeby można wymyślić całą gamę zadań analogicznych do tego, np. obliczanie pola powierzchni trapezu, kuli, objętości stożka, kuli, etc.}
+\fi
+
+\dbEntryBegin{wypisywanie_reszta_z_dzielenia}\if1\dbEntryCheckResults
+\teacher{Zadanie stworzone jako propozycja zadania domowego dla grup początkujących, które nie zrealizowały dalszej części skryptu}
+
+Napisz funkcję która przyjmuje dwa argumenty, wypisuje je w jednej linii rozdzielając dwukropkiem.
+W kolejnej linii powinna wypisać wartość reszty z dzielenia pierwszego argumentu przez drugi.
+\fi
+
+\dbEntryBegin{funkcja_kwadratowa}\if1\dbEntryCheckResults
+\teacher{Zadanie stworzone jako propozycja zadania domowego dla grup początkujących, które nie zrealizowały dalszej części skryptu}
+
+Napisz funkcję obliczającą i zwracającą kwadrat podanej liczby. Użyj jej w funkcji która ma obliczyć
+i zwrócić wartość funkcji kwadratowej $ax^2 + bx + c$ w zadanym punkcie x, dla zadanych parametrów a, b i c.
+
+\begin{teacherOnly}
+Można dodać także wymóg wdotyczący wypisywania rozwiązania -- np:\\
+Funkcja powinna wypisać rozwiązanie w postaci:\\
+	\Verb{Ax^2 + Bx + C dla x = X wynosi XX}\\
+gdzie A, B, C i X zastąpione są wartościami argumentów przekazanych do funkcji, a XX obliczoną wartością np:\\
+	\Verb{2x^2 + 7x + -2 dla x = 3 wynosi 37}
+\end{teacherOnly}
+\fi

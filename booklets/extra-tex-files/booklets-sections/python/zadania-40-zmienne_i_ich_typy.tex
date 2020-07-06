@@ -1,0 +1,65 @@
+% Copyright (c) 2016-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2016-2017 Łukasz Mazurek
+% Copyright (c) 2018-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\IfStrEq{\dbEntryID}{}{
+	\insertZadanie{\currfilepath}{obiektowo_string}{}
+	\insertZadanie{\currfilepath}{licz_powtorzenia}{}
+	\insertZadanie{\currfilepath}{funkcja_jako_argument}{}
+}
+
+
+\dbEntryBegin{obiektowo_string}\if1\dbEntryCheckResults
+Zapoznaj się z dokumentacją klasy odpowiedzialnej za napisy (\Verb{str}),
+zwróć szczególną uwagę na metody \Verb{split}, \Verb{find}, \Verb{replace}.
+Korzystając z metod klasy \Verb{str} napisz funkcję \Verb{parse} która dla napisu będącego jej argumentem
+	wykona zamianę wszystkich ciągów "XY" na spację oraz
+	dokona rozbicia napisu złożonego z pól rozdzielanych dwukropkiem na listę napisów odpowiadających poszczególnym polom.
+Funkcja powinna działać w następujący sposób:
+\begin{Verbatim}
+ > l = parse("Ala:maXYkota:i inne:zwierzeta")
+ > print(l)
+['Ala', 'ma kota', 'i inne', 'zwierzeta']
+\end{Verbatim}
+\fi
+
+\dbEntryBegin{licz_powtorzenia}\if1\dbEntryCheckResults
+Napisz funkcję \Verb{zlicz} która dla podanej listy policzy powtórzenia jej elementów. Przykład użycia:
+\begin{Verbatim}
+ > zlicz(["AX", "B", "AX"])
+AX wystepuje 2 razy
+B wystepuje 1 razy
+\end{Verbatim}
+Wskazówka: Użyj słownika, w którym element będzie stanowił klucz, a krotność jego wystąpień wartość.
+Możesz użyć metody \python{get()} do pobierania wartości z słownika, jeżeli w nim jest lub wartości domyślnej w przeciwnym wypadku - szczegóły zobacz w dokumentacji
+\fi
+
+\dbEntryBegin{funkcja_jako_argument}\if1\dbEntryCheckResults
+Napisz funkcję która przyjmuje dwa argumenty: listę oraz funkcję. Funkcja ma za zadanie wykonać przekazaną do niej funkcję na każdym elemencie listy. Przykład użycia:
+\begin{Verbatim}
+>>> wykonaj([1,2,3], print)
+1
+2
+3
+\end{Verbatim}
+\fi

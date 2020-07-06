@@ -1,0 +1,143 @@
+% Copyright (c) 2016-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2016-2017 Łukasz Mazurek
+% Copyright (c) 2018-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+%  BEGIN: Słowniki
+\subsection{Słowniki}
+
+Kolejnym użytecznym typem zmiennych w Pythonie są słowniki (zwane niekiedy \emph{mapami} lub \emph{tablicami asocjacyjnymi}). Podobnie jak listy służą do do przechowywania innych zmiennych.
+W odróżnieniu jednak od list w słownikach przechowywane są pary klucz - wartość, gdzie unikalny klucz służy do identyfikowania wartości.
+\teacher{
+Zwrócić uwagę na analogię z normalnymi słownikami klucz - słowo które wyszukujemy, wartość - jego opis
+}
+
+\begin{CodeFrame}[python]{0.60\textwidth}
+slownik = { "bd" : "xx", 5: True, "a" : 11 }
+for klucz in slownik:
+    print (klucz, "=>", slownik[klucz])
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+a => 11
+bd => xx
+5 => True
+\end{CodeFrame}
+
+Zauważ że zarówno klucz, jak i wartość mogą być dowolnego typu oraz że słownik nie zachowuje kolejności dodawania elementów.
+
+Możliwe jest także sprawdzanie istnienia jakiegoś elementu w słowniku, usuwanie, dodawanie i zmienianie elementów słowniku, itd
+(zwróć także uwagę na inną metodę wypisywania słownika - poprzednio iterowaliśmy po kluczach, teraz po liście par klucz-wartość):
+
+\begin{CodeFrame}[python]{0.60\textwidth}
+if "bd" in slownik:
+    print ("jest element o kluczu 'bd'")
+    del slownik['bd']
+slownik[15] = True
+slownik["a"] = "yy"
+for k,v in m.items():
+    print (k, "=>", v)
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+jest element o kluczu 'bd'
+a => yy
+15 => True
+\end{CodeFrame}
+%  END: Słowniki
+
+%  BEGIN: Sortowanie słownika
+\subsubsection{Sortowanie słownika}
+
+Jak już wspomnieliśmy słownik nie zachowuje porządku elementów. Jeżeli chcemy uzyskać posortowaną listę kluczy,
+wartości lub par klucz-wartość z słownika możemy skorzystać z funkcji \python{sorted()}.
+W przypadku par wywołanie będzie wyglądać następująco:
+
+\begin{CodeFrame}[python]{0.50\textwidth}
+mapa = {'5': 3, 'bd': 20, 'a': 101}
+lista = sorted( mapa.items() )
+print(lista)
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+[('5', 3), ('a', 101), ('bd', 20)]
+\end{CodeFrame}
+
+Zwróć uwagę, iż użyliśmy tej samej metody \python{items()}, z której korzystaliśmy do iterowania po parach klucz-wartość
+(dla listy samych kluczy lub wartości należy użyć w tym miejscu innej metody klasy \Verb{dict}).
+Zapewne zauważyłeś że sortowanie zostało przeprowadzone w oparciu o klucze, co jednak jeżeli chcielibyśmy posortować taką listę w oparciu o wartości?
+W takim przypadku możemy skorzystać z opcjonalnego argumentu funkcji \python{sorted()} o nazwie \Verb{key},
+który przyjmuje funkcję mającą za zadanie na podstawie otrzymanego elementu listy (w tym wypadku pary klucz - wartość) zwrócić klucz sortowania:
+
+\begin{CodeFrame}[python]{0.50\textwidth}
+mapa = {'5': 3, 'bd': 20, 'a': 101}
+def k(x):
+    return x[1]
+lista = sorted( mapa.items(), key=k )
+print(lista)
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+[('5', 3), ('bd', 20), ('a', 101)]
+\end{CodeFrame}
+%  END: Sortowanie słownika
+
+%  BEGIN: Funkcje jako argumenty
+\subsection{Funkcje jako argumenty funkcji {\Symbola 🤔}}\label{Funkcje_jako_argumenty}
+
+W powyższym przykładzie jednym za argumentów funkcji \python{sorted()} jest inna funkcja.
+Zauważ, że funkcja może być takim samym argumentem innej funkcji jak dowolna inna zmienna,
+może być też wynikiem zwracanym przez funkcję oraz może być przechowywana w zmiennej.
+
+\begin{CodeFrame}[python]{0.50\textwidth}
+def dzialanie(operacja):
+    if operacja == "dodaj":
+        def f(a, b):
+            return a+b
+        return f
+    elif operacja == "mnóż":
+        def f(a, b):
+            return a*b
+        return f
+def dwa(funkcja, argument):
+    return funkcja(2, argument)
+
+d = dzialanie("dodaj")
+a = dwa(d, 11)
+b = dzialanie("mnóż")(3,4)
+print(a, b, d(3,4))
+\end{CodeFrame}
+\begin{minipage}[t]{0.46\textwidth}
+\begin{Verbatim}[frame=single]
+13 12 7
+\end{Verbatim}
+
+\vspace{6pt}\noindent Zauważ że:
+\begin{itemize}[leftmargin=7mm]
+\item wynikiem funkcji \python{dzialanie()} jest funkcja wykonująca wskazane działanie,
+\item funkcja \python{dwa()} jako argumenty przyjmuje funkcję realizującą działanie dwuargumentowe i jeden argument przekazywany do niej,
+\item zmienna d wskazuje na funkcję zwróconą przez funkcję \python{dzialanie()} i może być używana jako funkcja.
+\end{itemize}
+\end{minipage}
+
+\begin{teacherOnly}
+Zapytać czy konstrukcję if/elif w funkcji \python{dzialanie()} można by zastąpić słownikiem, jak to ewentualnie zrobić i jakie mogłoby mieć to zalety bądź wady?
+
+\dbEntryInsert{booklets-sections/python/zadania-dodatkowe.tex}{slownik_zamiast_ifelse-rozwiazanie}
+\end{teacherOnly}
+%  END: Funkcje jako argumenty

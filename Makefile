@@ -6,11 +6,12 @@ SVGICONURL  := https://bytebucket.org/OpCode-eu-org/svgiconset/raw/HEAD/other/
 export PATH := $(shell realpath $(MAINDIR)/TextUtils/convert):$(PATH)
 
 
-.PHONY: all installDependencies init upload
-all: | init
-	$(MAKE) buildAll
-	[ "$(abspath $(MAINDIR))" = "$(PWD)" ] && (cd booklets &&    $(MAKE) -f ../Makefile buildAll) || true
-	[ "$(abspath $(MAINDIR))" = "$(PWD)" ] && (cd LaTeX-demos && $(MAKE) -f ../Makefile buildAll) || true
+.PHONY: help init installDependencies all upload serve
+help:
+	@ cd $(MAINDIR) && awk '/^#/ {x=0} x==1 {print $0} /^## Install/ {x=1}' README.md
+
+init: | checkout-submodules $(TEXBUILDDIR)/pdfArticle.cls $(TEXBUILDDIR)/labels4easylist.sty $(TEXBUILDDIR)/vtable.sty $(TEXBUILDDIR)/ehhline.sty
+	@ echo "init done"
 
 installDependencies:
 	cd $(MAINDIR)/TextUtils && make installDependencies
@@ -21,15 +22,17 @@ installDependencies:
 		return 3; \
 	fi
 
-init: | check-submodules $(TEXBUILDDIR)/pdfArticle.cls $(TEXBUILDDIR)/labels4easylist.sty $(TEXBUILDDIR)/vtable.sty $(TEXBUILDDIR)/ehhline.sty
-	@ echo "init done"
+all:
+	$(MAKE) buildAll
+	[ "$(abspath $(MAINDIR))" = "$(PWD)" ] && (cd booklets &&    $(MAKE) -f ../Makefile buildAll) || true
+	[ "$(abspath $(MAINDIR))" = "$(PWD)" ] && (cd LaTeX-demos && $(MAKE) -f ../Makefile buildAll) || true
+
+serve:
+	cd $(OUTDIR) && python3 -m http.server
 
 upload:
 	ln -sf `realpath newIndex.xhtml` $(OUTDIR)/index.xhtml
 	cd $(OUTDIR) && rsync -rLc --delete -v -e "ssh" --exclude="~rrp" ./ www.opcode.eu.org:/srv/WebPages/main/
-
-serve:
-	cd $(OUTDIR) && python3 -m http.server
 
 #
 # addionals files
@@ -48,18 +51,17 @@ $(TEXBUILDDIR)/pdfArticle.cls $(TEXBUILDDIR)/labels4easylist.sty $(TEXBUILDDIR)/
 # submodules
 #
 
-.PHONY: check-submodules update-submodules
+.PHONY: checkout-submodules update-submodules protect-submodules
 
-check-submodules: $(MAINDIR)/OpCode-core/lib/base.css $(MAINDIR)/TextUtils/Makefile $(MAINDIR)/OpCode-vip/vademecum/images-src4web
-
-$(MAINDIR)/OpCode-core/% $(MAINDIR)/TextUtils/% $(MAINDIR)/OpCode-vip/%:
-	$(MAKE) update-submodules
-	chmod 111 `git submodule | awk '{print $$2}'`
-
-update-submodules:
+checkout-submodules:
 	git submodule update --init
-	git submodule foreach git pull origin master
-	git submodule foreach git checkout -f .
+
+update-submodules: | checkout-submodules
+	git submodule foreach 'git pull origin master; git checkout -f .'
+
+protect-submodules:
+	chmod 111 `git submodule | awk '{print $$2}'`
+	git submodule | awk '{print $$2}' | while read sm; do git config --local "submodule.$$sm.ignore" all; done
 
 #
 # include core makefile from TextUtils

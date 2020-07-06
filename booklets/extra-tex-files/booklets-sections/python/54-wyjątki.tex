@@ -1,0 +1,54 @@
+% Copyright (c) 2018-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2018-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+%  BEGIN: Obsługa błędów
+\subsection{Obsługa błędów}
+Wcześniej spotkaliśmy się już z komunikatem błędu. Błędy mogą wynikać z błędów składniowych w programie ale również nie przewidzianych zdarzeń w trakcie jego pracy.
+Warto mieć na uwadze iż wszystkie błędy w Pythonie mają postać wyjątków które mogą zostać obsłużone blokiem \python{try}/\python{except}.
+
+\begin{CodeFrame*}[python]{}
+try:
+  a = 5 / 0
+except ZeroDivisionError:
+  print("dzielenie przez zero")
+except:
+  print("inny błąd")
+\end{CodeFrame*}
+
+Przy obsłudze błędów może przydać się instrukcja pusta \python{pass}, która w tym przypadku pozwala na zignorowanie obsługi danego błędu.
+
+\begin{CodeFrame*}[python]{}
+try:
+  slownik["a"] += 1
+except:
+  pass
+\end{CodeFrame*}
+
+Powyższy kod zwiększy wartość związaną z kluczem \python{"a"} w słowniku \python{slownik}, jednak gdy napotka błąd (np. słownik nie zawiera klucza \python{"a"}) zignoruje go.
+
+Możemy także generować wyjątki z naszego kodu, służy do tego instrukcja \python{raise}, której należy przekazać obiektem dziedziczącym po \python{BaseException} np:
+
+\begin{CodeFrame*}[python]{}
+raise BaseException("jakiś błąd")
+\end{CodeFrame*}
+%  END: Obsługa błędów

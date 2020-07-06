@@ -1,0 +1,207 @@
+% Copyright (c) 2016-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2016-2017 Łukasz Mazurek
+% Copyright (c) 2018-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+%  BEGIN: Wprowadzenie
+\subsection{Praca z konsolą interaktywną}
+
+Pierwszym sposobem pracy z Pythonem jest praca w interaktywnej konsoli.
+Uzyskujemy ją po uruchomieniu polecenia \Verb{python3}.
+W konsoli tej początkowo wypisane są pewne informacje (m.in. używana wersja Pythona)
+oraz znak zachęty (w Pythonie najczęściej~\Verb@>>>@)\footnote{
+	Zauważ że jest on inny niż znak zachęty bash'a (zazwyczaj~\Verb@$@ poprzedzony dodatkowymi informacjami) –
+	pozwala to na identyfikację interpretera poleceń w którym aktualnie pracujemy i wydawanie w odpowiedniej składni
+	(bash nie rozumie poleceń w składni pythona, python nie rozumie poleceń w składni basha).
+}.
+Interpreter oczekuje, iż po tym znaku wpiszemy polecenie i naciśniemy Enter.
+Wynik polecenia zostanie wypisany w kolejnym wierszu.
+
+\teacher{\textbf{Zwrócić uwagę na rozróżnianie konsoli pythonowej i bashowej - inny znak zachęty}}
+
+Najprostszym sposobem użycia konsoli Pythona jest użycie jej jako kalkulatora --- wpisujemy działanie
+do obliczenia, naciskamy Enter i w kolejnym wierszu otrzymujemy wynik działania.
+Przykład użycia konsoli Pythona jako kalkulatora znajduje się poniżej:
+\begin{Verbatim}[frame=single]
+>>> 2 + 2 * 2
+6
+>>> (2+2) * 2
+8
+>>> 2 ** 7
+128
+>>> 47 / 10
+4.7
+>>> 47 // 10
+4
+>>> 47 % 10
+7
+\end{Verbatim}
+W powyższym przykładzie:
+\begin{itemize}
+\item Znak \Verb{**} oznacza podnoszenie do potęgi.
+\item Znak \Verb{/} oznacza dzielenie.
+\item Znak \Verb{//} oznacza dzielenie całkowite.
+\item Znak \Verb{%} oznacza branie reszty z dzielenia.
+\item Nawiasy okrągłe służą grupowaniu wyrażeń i wymuszaniu innej niż standardowa kolejności działań.
+\item Spacje nie mają znaczenia (używamy ich jedynie dla zwiększenia czytelności).
+\end{itemize}
+
+\begin{ProTip}{Porada}
+W konsoli interaktywnej przy pomocy strzałek góra/dół można przeglądać historię wydanych poleceń.
+Polecenia te można także wykonać ponownie (naciskając enter), a przedtem także zmodyfikować
+(poruszając się strzałkami prawo lewo).
+
+Konsola ta posiada także mechanizm dopełniania wpisywanych poleceń przy pomocy tabulatora
+(pojedyncze naciśnięcie dopełnia, gdy tylko jedna propozycja, podwójne wyświetla propozycje dopełnień).
+\end{ProTip}
+
+\subsubsection{Zmienne}
+
+Podobnie jak w kalkulatorze możemy korzystać z \emph{pamięci}, w Pythonie możemy zapisywać wartości
+w \emph{zmiennych}:
+\begin{Verbatim}[frame=single]
+>>> x = 3
+>>> y = 4
+>>> x
+3
+>>> x**2 + y**2
+25
+\end{Verbatim}
+W pierwszych dwóch linijkach następuje \emph{przypisanie} wartości 3 do zmiennej~\Verb{x} oraz 
+wartości 4 do zmiennej~\Verb{y}.
+Od tej pory możemy korzystać z tych zmiennych, np. do obliczenia wartości wyrażenia $(x^2 + y^2)$.
+\teacher{\textbf{\\Pokazać, co się dzieje, jak odwołamy się do nieistniejącej zmiennej.\\Powiedzieć kilka słów na temat (czytania) komunikatów o błędach!}}
+
+\subsubsection{Moduły i zaawansowany kalkulator {\Symbola 🤔}}
+Python pozwala na wykonywanie bardziej zaawansowanych obliczeń.
+Możliwe jest m.in. obliczenia wartości wyrażeń logicznych, konwertowanie systemów liczbowych, obliczanie wartości funkcji trygonometrycznych.
+Duża część funkcji matematycznych w Pythonie zawarta jest w module ,,math'', który wymaga zaimportowania. Można to zrobić na przykład w sposób następujący:
+\begin{Verbatim}[frame=single]
+>>> import math
+>>> math.sin(math.pi/2)
+1.0
+\end{Verbatim}
+Zauważ, że odwołanie do elementów tak zaimportowanego modułu wymaga podania jego nazwy, następnie kropki i nazwy używanej funkcji z tego modułu.
+
+\subsection{Pisanie i uruchamianie kodu programu}
+
+Do tej pory korzystaliśmy z Pythona używając interaktywnej konsoli. 
+Jest to całkiem wygodne narzędzie, jeśli wykonujemy tylko jednolinijkowe polecenia,
+jednak pisanie dłuższych fragmentów kodu w tej konsoli staje się już bardzo niewygodne.
+Drugą metodą korzystania z Pythona jest pisanie kodu programu (skryptu) w pliku tekstowym
+i uruchamianie tego kodu w konsoli.
+
+\begin{ProTip}{Moduły {\Symbola 🤔}}
+Nazwa pliku powinna być inna niż nazwy importowanych modułów, czyli jeżeli w kodzie mamy \Verb#import abc# to nasz plik nie powinien nazywać się \Verb#abc.py#,
+w przeciwnym razie zamiast wskazanego modułu Python będzie próbował zaimportować nasz plik.
+\end{ProTip}
+
+Utwórz plik \Verb{mojProgram.py}\footnote{
+	Pliki z skryptami Pythona tradycyjnie mają rozszerzenie \Verb{.py}.
+	Nie jest ono jednak wymagane --- interpreter Pythona wykona kod z pliku o dowolnym rozszerzeniu a także z pliku bez rozszerzenia.
+} z następującą zawartością:\noParBreak
+\begin{CodeFrame*}[python]{}
+x = 3
+y = 4
+print(x**2 + y**2)
+\end{CodeFrame*}
+
+W celu wykonania kodu zapisanego w pliku uruchom interpreter Pythona z jednym argumentem,
+będącym nazwą tego pliku: \Verb{python3 mojProgram.py}.
+
+\begin{ProTip}{Porada}
+Zachowuj pliki z programami pisanymi w trakcie zajęć, używając nazw które pozwolą Ci łatwo zidentyfikować dany program.
+Mogą one być pomocne w rozwiązywaniu kolejnych zadań oraz prac domowych.
+\end{ProTip}
+
+\subsubsection{funkcja \python{print}}
+Zwróć uwagę, iż do wypisania wyniku działania na ekran została użyta funkcja \python{print}.
+Nie korzystaliśmy z niej wcześniej, ponieważ bazowaliśmy na domyślnym zachowaniu interpretera przy
+pracy interaktywnej powodującym wypisywanie na konsolę wyniku nie zapisywanego do zmiennej.
+Jednak kiedy tworzymy program powinniśmy w jawny sposób określać co chcemy aby zostało wypisane na
+konsolę właśnie np. za pomocą funkcji \python{print}.
+
+Funkcja \python{print} wypisuje przekazane do niej (rozdzielane przecinkami) argumenty rozdzielając je spacjami.
+Przechodzi ona domyślnie do następnej linii po każdym wywołaniu. Na przykład:
+
+\begin{CodeFrame}[python]{.5\textwidth}
+print("raz dwa", "trzy ...")
+print(4, 5)
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+raz dwa trzy ...
+4 5
+\end{CodeFrame}
+
+\vspace{-14pt}
+
+\begin{ProTip}{Informacja}
+Ilekroć w niniejszych materiałach pojawią się dwie ramki, jedna obok drugiej, w lewej ramce znajdował
+się będzie kod programu, a w prawej efekt jego działania wyświetlony w konsoli:
+\end{ProTip}
+
+Zachowanie funkcji \python{print} można zmienić, dodając do jej wywołania, na końcu listy argumentów argument postaci \python{end = X} i/lub \python{sep = Y},
+gdzie \Verb{X} to otoczony apostrofami ciąg znaków, który chcemy wypisywać zamiast przejścia do nowej linii,
+a \Verb{Y} to otoczony apostrofami ciąg znaków, który chcemy wypisywać zamiast spacji rozdzielającej wypisania kolejnych argumentów.
+Na przykład:
+
+\begin{CodeFrame}[python]{.5\textwidth}
+x = 3
+y = 4
+print(x, '+ ', end='')
+print(y, x + y, sep=' = ')
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+3 + 4 = 7
+\end{CodeFrame}
+
+\vspace{-14pt}
+
+\begin{ProTip}{Napisy}
+Ciąg znaków ujęty w apostrofy lub cudzysłowy (w Pythonie nie ma znaczenia, której wersji użyjemy, ważne jest tylko aby znak rozpoczynający i kończący był taki sam) nazywamy napisem.
+Możemy ich używać nie tylko w ramach funkcji print, ale też np. przypisywać do zmiennych. Więcej o napisach dowiemy się później.
+\end{ProTip}
+
+\vspace{-6pt}
+
+\subsubsection{Komentarze}
+Często chcemy móc umieścić w kodzie programu dodatkową informację, która ułatwi nam jego czytanie i zrozumienie w przyszłości.
+Służą do tego tak zwane komentarze, które są ignorowane przez interpreter (bądź kompilator) danego języka.
+W Pythonie podstawowym typem komentarza, jest komentarz jednoliniowy, rozpoczynający się od znaku \Verb{#} a kończący z końcem linii.
+\teacher{%
+W przypadku zdziwienia dlaczego akurat \texttt{\#} jest używany do komentarzy można wspomnieć że jest to bardzo często stosowane i związane
+z standardem linii służącą do określenia programu używanego do zinterpretowania pliku ze skryptem postaci np. \texttt{\#!/bin/bash}
+}%
+
+\subsubsection{inne sposoby uruchamiania kodu z pliku {\Symbola 🤔}}
+
+Jeżeli do wywołania interpretera Pythona dodamy opcję \Verb{-i} (np. \Verb{python3 -i mojProgram.py})
+po wykonaniu kodu z podanego pliku uruchomi on konsolę interaktywną w której będą dostępne elementy (m.in. zmienne) zdefiniowane w podanym pliku.
+
+Możliwe jest także włączenie kodu z pliku do aktualnie uruchomionego interpretera (np. konsoli interaktywnej), w taki sposób jakbyśmy go wpisali
+(czyli z wykonaniem wszystkich instrukcji i późniejszą możliwością dostępu do zdefiniowanych tam elementów).
+Aby wczytać w ten sposób kod z pliku  \Verb{mojProgram.py} należy wykonać: \python{exec(open('mojProgram.py').read())}
+
+\subsubsection{ipython {\Symbola 🤔}}
+
+\Verb{ipython3} jest wygodniejszym w pracy interaktywnej interpreterem Pythona w wersji 3. Pozwala on m.in. na lepsze przewijanie i edytowanie poleceń wieloliniowych w historii.
+%  END: Wprowadzenie

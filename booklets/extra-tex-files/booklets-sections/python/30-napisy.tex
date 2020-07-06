@@ -1,0 +1,335 @@
+% Copyright (c) 2016-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2016-2017 Łukasz Mazurek
+% Copyright (c) 2018-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+%  BEGIN: Napisy - wprowadzenie
+\section{Napisy}
+Do tej pory używaliśmy zmiennych do przechowywania liczb i operowania na nich. Zmienne mogą również jako wartości przyjmować litery, słowa, a nawet całe zdania:
+
+\begin{CodeFrame}[python]{.5\textwidth}
+x = 'A'
+a, b, c = 'Ala', "ma", " kota i psa"
+d = """ ... a co ma ...
+ "kotek"?"""
+print(x, a[2])
+print(c[1], c[-1], c[-3])
+print(a + b)
+print(3 * a)
+print(a + " " + b + c + d)
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+A a
+o a p
+Alama
+AlaAlaAla
+Ala ma kota i psa ... a co ma ...
+ "kotek"?
+\end{CodeFrame}
+
+\pagebreak[2]\noindent
+Zwróć uwagę na następujące rzeczy:
+\begin{itemize}
+\item Napisy muszą być otoczone pojedynczymi apostrofami lub podwójnym cudzysłowami (nie ma znaczenia,
+	którą wersję wybierzemy), w przypadku napisów wieloliniowych używamy trzykrotnie apostrofu lub cudzysłowowa na początku i końcu napisu.\\
+	Nie przypisane do żadnej zmiennej napisy wieloliniowe mogą być stosowane jako komentarze wieloliniowe.
+\item Przy użyciu liczby w nawiasie kwadratowym możemy poznać poszczególne litery napisu (\strong{\emph{numeracja rozpoczyna się od 0}}).
+\item Ujemny indeks oznacza odliczanie liter od końca napisu: ostatnia litera napisu \python{c} to \python{c[-1]},
+	przedostatnia to \python{c[-2]}, itd.
+\item Przy użyciu znaku dodawania możemy sklejać (\emph{konkatenować}) napisy.
+\item Przy użyciu znaku gwiazdki możemy mnożyć napisy (czyli sklejać same ze sobą).
+\end{itemize}
+Innymi przydatnymi operacjami na napisach jest sprawdzanie długości napisu poleceniem \python{len()}
+oraz wycinanie podnapisu przy użyciu dwukropka:
+
+\begin{CodeFrame}[python]{.7\textwidth}
+tekst = 'Python'
+dlugosc = len(tekst)
+print(dlugosc, tekst[2:5], tekst[3:], tekst[:3])
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+6 tho hon Pyt
+\end{CodeFrame}
+
+\pagebreak[2]\noindent
+W powyższym przykładzie:
+\begin{itemize}
+\item komenda \python{tekst[2:5]} zwraca podnapis od znaku nr 2 (\strong{włącznie}) do znaku nr 5 
+(\strong{wyłącznie}),
+\item komenda \python{tekst[3:]} zwraca podnapis od znaku nr 3 (\strong{włącznie}) do końca, 
+\item komenda \python{tekst[:3]} zwraca podnapis od początku do znaku nr 3 
+(\strong{wyłącznie}).
+\end{itemize}
+
+Podobnie jak w \python{range()} możemy podać trzeci argument określający przedział czyli krok.
+Pozwala to na wybieranie co n-tego znaku z napisu, zarówno zaczynając od początku jak i końca:
+
+\begin{CodeFrame}[python]{.7\textwidth}
+tekst = '123456789'
+print(tekst[::2], tekst[1::2])
+print(tekst[::-1], tekst[::-3])
+print(tekst[::-1][::3], tekst[::3][::-1])
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+13579 2468
+987654321 963
+963 741
+\end{CodeFrame}
+
+\pagebreak[2]\noindent
+W powyższym przykładzie:
+\begin{itemize}
+\item komenda \python{tekst[::2]} zwraca co drugi znak,
+\item komenda \python{tekst[1::2]} zwraca co drugi znak od znaku nr 1,
+\item komenda \python{tekst[::-1]} zwraca napis od tyłu,
+\item komenda \python{tekst[::-3]} zwraca co 3 znak z napisu od tyłu (warto zauważyć że nie zawsze jest to równoważne wypisaniu napisu złożonego z co 3 znaku od tyłu).
+\end{itemize}
+
+\subsection{Napis jako lista}
+
+Wszystkie listy, których do tej pory używaliśmy w pętli \python{for} były listami liczb.
+Okazuje się, że w Pythonie napisy mogą być traktowane jako lista, a dokładniej listą liter. 
+Oznacza to, że po napisie można przejść przy użyciu pętli \python{for}, tak samo jak przechodziliśmy po liście liczb:
+
+\begin{CodeFrame}[python]{0.50\textwidth}
+for l in 'Abc':
+    print('litera', end = ' ')
+    print(l)
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+litera A
+litera b
+litera c
+\end{CodeFrame}
+
+\subsubsection{Modyfikowalność napisów}
+
+Python pozwala odwoływać się do poszczególnych znaków w napisie jak do elementów listy, jednak nie pozwala na ich modyfikowanie:
+
+\begin{CodeFrame}[python]{0.25\textwidth}
+s = "abcdefgh"
+s[2] = "X"
+print(s)
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+Traceback (most recent call last):
+  File "python", line 2, in <module>
+TypeError: 'str' object does not support item assignment
+\end{CodeFrame}
+
+Zwróć uwagę na komunikat błędu, który został wyświetlony, podaje on informacji o tym co wywołało błąd (opis błędu) i w  której linii programu on wystąpił.
+\strong{Czytanie ze zrozumieniem komunikatów o błędach ułatwia naprawianie niedziałającego programu.}
+
+\teacher{
+	\ \\ \strong{Warto pokazać kilka innych komunikatów o błędach i poprosić uczestników o ich wyjaśnienie.}\\\ 
+}
+
+Jeżeli zachodzi potrzeba modyfikowania napisu konkretnych znaków w napisie możemy użyć poznanej wcześniej metody uzyskiwania podnapisów:
+
+\begin{CodeFrame}[python]{0.50\textwidth}
+s = "abcdefgh"
+s = s[:2] + "X" + s[3:5] + s[6:]
+print(s)
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+abXdegh
+\end{CodeFrame}
+
+Powyższy przykład w miejsce znaku nr 2 wstawia napis "X" oraz usuwa znak nr 5 z napisu.
+Przy konieczności modyfikacji znak po znaku możemy użyć iteracji po napisie i budować nowy napis znak po znaku:
+
+\begin{CodeFrame}[python]{0.50\textwidth}
+s, ns = "abcdefgh", ""
+for z in s:
+    if z in "cf":
+        ns = ns + "X"
+    else:
+        ns = ns + z
+print(ns)
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+abXdeXgh
+\end{CodeFrame}
+%  END: Napisy - wprowadzenie
+
+%  BEGIN: Konwersje liczba -- napis
+\subsection{Konwersje liczba -- napis}
+
+Z punktu widzenia komputera liczba czy też element napisu, którym jest litera są pewną wartością numeryczną.
+Natomiast my do zapisu liczb używamy różnych systemów (np. dziesiętnego, czy też szesnastkowego).
+Domyślnie liczby wprowadzane do programu interpretowane są jako zapisane w systemie dziesiętnym,
+podobnie liczby uzyskiwane poprzez konwersję napisu przy pomocy funkcji \python{int()}.
+Możliwe jest jednak wprowadzanie liczb zapisanych w innych systemach liczbowych lub konwersja z napisu zawierającego liczbę ---
+drugi, opcjonalny argument \python{int()} pozwala określić podstawę systemu z którego konwertujemy, zero oznacza automatyczne wykrycie w oparciu o prefix:
+
+\begin{CodeFrame}[python]{0.7\textwidth}
+# szesnastkowo
+h1, h2, h3 = 0x1F, int("0x1F", 0), int("1F", 16)
+# oktalnie
+o1, o2, o3 = 0o17, int("0o17", 0), int("17", 8)
+# binarnie
+b1, b2, b3 = 0b101, int("0b101", 0), int("101", 2)
+
+print("",h1,o1,b1, "\n",h2,o2,b2, "\n",h3,o3,b3)
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+ 31 15 5
+ 31 15 5
+ 31 15 5
+\end{CodeFrame}
+\teacher{
+Zwrócić uwagę że w każdym wariancie konwersji dostajemy ten sam wynik. Jako ciekawostkę można zapytać się o konwertowanie z innych systemów liczbowych.
+}
+
+Możliwe jest także konwertowanie wartości liczbowej na napis w określonym systemie liczbowym:
+
+\begin{CodeFrame*}[python]{}
+a, b = 3, 13
+c = (a + b) * b
+s = "(" + bin(a) + " + " + oct(b) + ") * " + hex(b) + " = " + str(c)
+print( s )
+\end{CodeFrame*} 
+% (0b11 + 0o15) * 0xd = 208
+%  END: Konwersje liczba -- napis
+
+%  BEGIN: Kodowania znaków
+\subsection{Kodowania znaków}
+
+Python używa Unicode dla obsługi napisów, jednak przed przekazaniem napisu do świata zewnętrznego konieczne może być zastosowanie konwersji do określonej postaci bytowej (zastosowanie odpowiedniego kodowania).
+Służy do tego metoda \python{encode()} np.:
+
+\begin{CodeFrame*}[python]{}
+a = "aąbcć ... ←↓→"
+inUTF7 = a.encode('utf7')
+inUTF8 =  a.encode() # lub a.encode('utf8')
+print("'" + a + "' w UTF7 to: " + str(inUTF7) + ", w UTF8: " + str(inUTF8))
+\end{CodeFrame*}
+
+Zmienne typu 'bytes' oprócz przekazania na zewnątrz (np. zapisu do pliku lub wysłania przez sieć) mogą zostać także m.in. zdekodowane do napisu z użyciem metody \python{decode()} lub poddane dalszej konwersji np. kodowaniu base64:
+
+\begin{CodeFrame*}[python]{}
+print("zdekodowany UTF7: " + inUTF7.decode('utf7'))
+
+import codecs
+b64 = codecs.encode(inUTF8, 'base64')
+print("napis w UTF8 po zakodowaniu base64 to: " + str(b64))
+\end{CodeFrame*}
+
+W powyższym przykładzie należy zwrócić uwagę na instrukcję \python{import}, która służy do załączania bibliotek pythonowych do naszego programu.
+W tym wypadku załączamy fragment standardowej biblioteki Pythona o nazwie \python{codecs}.
+
+Base64 jest jednym z kodowań pozwalających na zapis danych binarnych w postaci ograniczonego zbioru znaków drukowalnych,
+co pozwala m.in. na osadzanie danych binarnych (np. obrazki) w plikach tekstowych (np. dokumenty html, pliki źródłowe programów).
+%  END: Kodowania znaków
+
+%  BEGIN: Konwersja znak - numer unicode
+\subsubsection{Konwersja pomiędzy znakiem a jego numerem}
+
+Możliwe jest także konwertowanie pomiędzy liczbowym numerem znaku Unicode, a napisem go reprezentującym i w drugą stronę --- służą do tego odpowiednio funkcje \python{chr()} i \python{ord()}.
+W ramach napisów można też użyć \python{\uNNNN}, gdzie \Verb{NNNN} jest (czterocyfrowym) numerem znaku lub po prostu umieścić dany znak w pliku kodowanym UTF8\footnote{Użyty w przykładzie symbol nieskończoności można uzyskać na standardowej polskiej klawiaturze pod Linuxem przy pomocy kombinacji AltGr + Shift + M}.
+
+\begin{CodeFrame*}[python]{}
+print(chr(0x221e) + " == \u221e == ∞")
+print(hex(ord("∞")), hex(ord("\u221e")), hex(ord(chr(0x221e))) )
+\end{CodeFrame*}
+
+\teacher{
+Warto skomentować że powyższy przykład demonstruje równoważność poszczególnych zapisów (drukują taki sam znak na konsoli, generują taki sam numer unicodowy).
+}
+%  END: Konwersja znak - numer unicode
+
+%  BEGIN: Wyrażenia regularne 01
+\subsection{Wyrażenia regularne {\Symbola 🤔}}
+
+W przetwarzaniu napisów bardzo często stosowane są wyrażenia regularne służące do dopasowywania napisów do wzorca który opisują, wyszukiwaniu/zastępowaniu tego wzorca. Do typowej, podstawowej składni wyrażeń regularnych zalicza się m.in. następujące operatory:
+
+\vspace{-6pt}\begin{Verbatim}
+.      - dowolny znak
+[a-z]  - znak z zakresu
+[^a-z] - znak z poza zakresu (aby mieć zakres z ^ należy dać go nie na początku)
+^      - początek napisu/linii
+$      - koniec napisu/linii
+\end{Verbatim}
+\vspace{-8pt}\begin{Verbatim}
+*      - dowolna ilość powtórzeń
+?      - 0 lub jedno powtórzenie
++      - jedno lub więcej powtórzeń
+{n,m}  - od n do m powtórzeń
+\end{Verbatim}
+\vspace{-8pt}\begin{Verbatim}
+()     - pod-wyrażenie (może być używane dla operatorów powtórzeń,
+         a także dla referencji wstecznych)
+\end{Verbatim}
+
+\pagebreak[2]\noindent
+Python umożliwia korzystanie z wyrażeń regularnych za pomocą modułu \python{re}:
+
+\begin{CodeFrame}[python]{0.57\textwidth}
+import re
+
+y = "aa bb cc bb ff bb ee"
+x = "aa bb cc dd ff gg ee"
+
+if re.match(".*[dz]", y):
+  print("y zawiera d lub z")
+
+if re.match(".*[dz]", x):
+  print("x zawiera d lub z")
+
+if re.match(".* ([a-z]{2}) .* \\1", y):
+  print("y zawiera dwa razy to samo")
+
+if re.match(".* ([a-z]{2}) .* \\1", x):
+  print("x zawiera dwa razy to samo")
+
+# zastępowanie
+print (re.sub('[bc]+', "XX", y, 2))
+print (re.sub('[bc]+', "XX", y))
+
+# zachłanność
+print (re.sub('bb (.*) bb', "X \\1 X", y))
+print (re.sub('.*bb (.*) bb.*', "\\1", y))
+print (re.sub('.*?bb (.*) bb.*', "\\1", y))
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+x zawiera d lub z
+y zawiera dwa razy to samo
+aa XX XX bb ff bb ee
+aa XX XX XX ff XX ee
+aa X cc bb ff X ee
+ff
+cc bb ff
+\end{CodeFrame}
+
+Zwróć uwagę na:
+\begin{itemize}
+\item Działanie funkcji \Verb{match}, która dopasowuje wyrażenie do początku napisu (czyli tak jakby zaczynało się od \Verb{^}).
+\item Odwołania wsteczne do pod-wyrażeń (fragmentów ujętych w nawiasy) postaci \Verb{\\x}, gdzie \Verb{x} jest numerem pod-wyrażenia.
+\item ,,\emph{Zachłanność}'' (ang. \emph{greedy}) wyrażeń regularnych:
+	\begin{itemize}
+	\item w pierwszym wypadku \Verb{bb (.*) bb} dopasowało najdłuższy możliwy fragment, czyli \Verb{cc bb ff},
+	\item w drugim przypadku gdy zostało poprzedzone \Verb{.*} dopasowało tylko \Verb{ff}, gdyż \Verb{.*} dopasowało najdłuższy możliwy fragment czyli \Verb{aa bb cc},
+	\item w trzecim wypadku \Verb{bb (.*) bb} mogło i dopasowało najdłuższy możliwy fragment, czyli \Verb{cc bb ff}, gdyż było poprzedzone niezachłanną odmianą dopasowania dowolnego napisu, czyli: \Verb{.*?}.
+	\end{itemize}
+	Po każdym z operatorów powtórzeń (\Verb@. ? + {n,m}@) możemy dodać pytajnik (\Verb@.? ?? +? {n,m}?@) aby wskazać że ma on dopasowywać najmniejszy możliwy fragment, czyli ma działać nie zachłannie.
+\end{itemize}
+%  END: Wyrażenia regularne 01

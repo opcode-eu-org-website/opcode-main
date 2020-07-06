@@ -1,0 +1,157 @@
+% Copyright (c) 2018-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2018-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+%  BEGIN: Podstawy programowania równoległego
+\section{Podstawy programowania równoległego}
+
+\subsection{procesy i fork()}
+
+Aby w systemie mógł działać więcej niż 1 proces konieczna jest możliwość utworzenia nowego procesu (potomka) z poziomu procesu aktualnie działającego (rodzica). Możliwe są dwa podejścia:
+\begin{itemize}
+	\item utworzenie "czystego" procesu uruchamiającego podany kod programu z podanymi argumentami (spawn)
+	\item utworzenie kopii aktualnego procesu, która zacznie wykonywać się niezależnie od momentu rozgałęzienia (fork)
+\end{itemize}
+W przypadku zastosowania fork proces potomny otrzymuje kopię pamięci rodzica (ma dostęp do wszystkich jego zmiennych oraz zasobów uzyskanych przed fork(); dalsze operacje na zmiennych są niezależne). Po utworzeniu kopi procesu można (ale nie trzeba) zastąpić wykonywany w nim program innym poprzez funkcje z rodziny exec. Cechy te powodują że mechanizm fork jest bardziej elastyczny od spawn.
+
+\begin{CodeFrame*}[python]{}
+import os
+
+print("nasz pid to:", os.getpid())
+
+pid = os.fork()
+if pid == 0:
+	print("jesteśmy w procesie potomnym, nasz pid to:", os.getpid())
+else:
+	print("jesteśmy w rodzicu, pid naszego potomka to:", pid)
+\end{CodeFrame*}
+
+\begin{teacherOnly}
+Bardziej rozbudowany przykład do demonstacji życia procesów:
+\begin{Verbatim}
+import os, time, signal
+
+print("nasz pid to:", os.getpid())
+
+pid = os.fork()
+if pid == 0:
+	print("jesteśmy w procesie potomnym, nasz pid to:", os.getpid())
+	time.sleep(4);  print("potomek 1")
+	time.sleep(7);  print("potomek 2")
+else:
+	print("jesteśmy w rodzicu, pid naszego potomka to:", pid)
+	time.sleep(5);  print("rodzic 1")
+	time.sleep(4);  print("zabijam potomka")
+	os.kill(pid, signal.SIGTERM)
+	time.sleep(5);  print("rodzic 2")
+\end{Verbatim}
+\end{teacherOnly}
+
+\subsection{wywołanie zewnętrznej komendy}
+
+Najprostszym sposobem uruchomienia innej komendy z poziomu Pythona jest użycie funkcji \Verb{system()} z modułu \Verb{os}:
+
+\begin{CodeFrame*}[python]{}
+import os
+
+inStr = "Ala ma kota\nKot ma psa\n..."
+
+os.system('echo -en "' + inStr + '" | grep -v A')
+\end{CodeFrame*}
+
+Jak widać przekazujemy do niej napis takiej samej postaci jak wyglądałby komenda uruchamiana w terminalu.
+Mechanizm ten nie daje jednak zbyt dużej kontroli nad uruchamianiem tego polecenia
+(nie pozwala na proste odebranie jego standardowego wyjścia, przekazanie wejścia również wymaga dodatkowego zabiegu w postaci dodania komendy echo, itd.).
+Bardziej elastycznym rozwiązaniem jest pythonowy moduł \textit{subprocess}:
+
+\begin{CodeFrame*}[python]{}
+import subprocess
+
+inStr = "Ala ma kota\nKot ma psa\n..."
+
+# uruchamiamy subprocess z grep'em
+res = subprocess.run(["grep", "-v", "A"], input=inStr.encode(), stdout=subprocess.PIPE)
+print("Kod powrotu to: " + str(res.returncode))
+print("Standardowe wyjście z komendy to: " + res.stdout.decode())
+# warto zwrócić uwagę na kodowanie i dekodowanie napisów
+# (przekazywanych/odbieranych przez stdin/stdout) do / z utf-8
+
+# jeżeli chcemy korzystać np. z znaków uogólniających powłoki lub podać
+# komendę jako pojedynczy napis (a nie listę argumentów) to można użyć
+# opcji shell=True:
+subprocess.run(["ls -ld /etc/pa*"], shell=True)
+# jeżeli potrzebujemy tylko rozbicia napisu na listę argumentów można
+# użyć shlex.split()
+
+# run() pozwala także (obok subprocess.PIPE) na przekazywanie
+# istniejących deskryptorów (lub subprocess.DEVNULL, co ignoruje wyjście)
+# w ramach stdin, stdout, stderr
+
+# moduł subprocess oferuje także funkcję Popen() dającą większą kontrolę
+# nad uruchamianiem komendy
+\end{CodeFrame*}
+
+
+\subsection{komunikacja międzyprocesowa}
+
+W systemie wieloprocesowym konieczne jest zapewnienie mechanizmów komunikacji pomiędzy procesami, zwłaszcza jeżeli grupa procesów ma realizować wspólne zadanie.
+
+Jednym z takich mechanizmów (można powiedzieć że nawet podstawowym) jest poznane już wcześniej łącze nie nazwane
+	(pipe, uzyskiwane np. w bashowej linii poleceń przy pomocy \Verb{|}) pozwalające na przekazywanie strumienia danych od jednego do kolejnego procesu.
+Podobnie działa łącze nazwane z tym że nie jest uzyskiwane w wyniku funkcji \Verb{pipe()} a otwarcia specjalnego pliku (utworzonego \Verb{mkfifo()}) przez dwa procesy (jeden do czytania drugi do pisania).
+
+Innymi mechanizmami komunikacji międzyprocesowej są m.in:
+\begin{itemize}
+	\item sygnały \teacher{o nich będziemy mówić na dalszych zajęciach}
+	\item kolejki komunikatów
+	\item pamięć współdzielona
+\end{itemize}
+
+Stosowanie pamięci współdzielonej wymaga często też stosowania mechanizmów ochrony dostępu do niej (wejścia do „krytycznych sekcji” kodu). Koncepcja takiej ochrony wygląda następująco:
+\begin{Verbatim}
+if !blokada:
+	blokada = True
+	# działania na pamięci wspólnej
+	blokada = False
+\end{Verbatim}
+Jednak nie może być zrealizowana w tak prosty sposób, gdzyż przełączenie procesów może nastąpić pomiędzy sprawdzeniem warunku na zmiennej \Verb{blokada} a zmianą jej wartości
+	(lub mogą one działać idealnie równolegle i w tym samym momencie sprawdzać wartość zmiennej \Verb{blokada}).
+Dlatego do ochrony sekcji krytycznych stosuje się mechanizmy systemowe takie jak semafory i lock'i.
+
+\subsection{wątki}
+
+Oprócz możliwości pełnego rozgałęzienia procesu (utworzenia potomka), możliwe jest także tworzenie wątków (zwanych też lekkimi procesami) w ramach bieżącego procesu.
+Wątek (w odróżnieniu od procesu potomnego) korzysta z tej samej pamięci (przestrzeni adresowej) co oryginalny proces i wszystkie inne jego wątki (czyli \textit{out of the box} mają pamięć współdzieloną).
+Jednak każdy wątek posiada niezależny stos (umieszczany w innym fragmencie współdzielonej pamięci), który jest używany m.in. do przechowywania zmiennych lokalnych (w tym argumentów funkcji),
+	czyli dopóki ograniczamy się do zmiennych lokalnych nie ma potrzeby stosowania ochrony sekcji krytycznych ze względu na dostęp do pamięci.
+
+\subsection{„Python-way”}
+
+Zaprezentowane powyżej podejście korzysta w dużej mierze z funkcji analogicznych do funkcji systemowych biblioteki standardowej C zgromadzonych w module \textit{os}.
+Python oferuje obok wspomnianego modułu \textit{subprocess} także inne własne mechanizmy związane z tworzeniem wielu procesów poprzez moduł \textit{multiprocessing}
+	oraz oferuje wsparcie dla wątków w module \textit{threading}\footnote{
+		Należy mieć na uwadze iż pythonowe wątki są niepełnowartościowe - ze względu na konstrukcję interpretera CPython,
+		jedynie jeden wątek w danej chwili może być aktywny - wykorzystywać CPU, pozostałe mogą jedynie czekać.
+	}.
+Jednak, jako że w ramach tego kursu nie będziemy zajmować się programowaniem równoległym jako takim, to modułów tych nie omówimy w tym skrypcie ani na zajęciach.
+Zainteresowanym polecam zapoznanie się z \url{http://vip.opcode.eu.org/#Procesy_i_wątki}.
+%  END: Podstawy programowania równoległego

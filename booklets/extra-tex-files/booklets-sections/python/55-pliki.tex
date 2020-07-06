@@ -1,0 +1,115 @@
+% Copyright (c) 2016-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2016-2017 Łukasz Mazurek
+% Copyright (c) 2018-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+%  BEGIN: Pliki
+\subsection{Pliki}
+Do tej pory wszystkie dane, z których korzystały nasze programy, wprowadzaliśmy bezpośrednio do kodu programu.
+W realnych zastosowaniach bardzo często użyteczniejsze jest korzystanie z danych zapisanych w osobnych plikach.
+
+\subsubsection{Zapisywanie tekstu do pliku}
+
+Zapis do pliku tekstowego możemy zrealizować w sposób następujący:
+\begin{CodeFrame*}[python]{}
+plik = open('dane.txt', 'wt', encoding='utf8')
+plik.write("teskt1\n")
+plik.write("teskt2\nteskt3")
+plik.close()
+\end{CodeFrame*}
+
+\noindent Jak to działa?
+\begin{itemize}
+\item Polecenie z pierwszej linijki otwiera plik \Verb{dane.txt} i zapewnia dostęp do niego poprzez zmienną \Verb{plik}.
+      Opcja \python{'w'} oznacza, że plik jest otwarty ,,do zapisu'' (od angielskiego \textit{write}).
+      Opcja \python{'t'} oznacza, że plik traktowany jako plik tekstowy\footnote{
+        Tekst możemy zapisywać także do plików otwieranych jako binarne,
+        w takim wypadku argument funkcji write musi mieć typ \Verb{bytes} a nie \Verb{str}, czyli być już jawnie zakodowanym w jakimś standardzie.
+      }.
+      Argument \Verb{encoding} pozwala na określenie kodowania użytego do zapisu pliku tekstowego,
+        jest on opcjonalny i gdy nie zostanie podany kodowanie pliku zależne jest od ustawień systemowych.
+\item Druga i trzecia komenda zapisuje podany jako argument tekst do pliku \Verb{dane.txt}
+      (zwróć uwagę na wstawianie nowej linii przy pomocy \python{'\n'})
+\item Ostatnie polecenie zamyka dostęp do pliku \Verb{dane.txt}.
+\end{itemize}
+
+Po uruchomieniu powyższego kodu powinien zostać utworzony plik ,,dane.txt'', zawierający 3 linie tekstu. Jeżeli plik taki wcześniej istniał zostanie on nadpisany.
+
+\subsubsection{Wczytywanie tekstu z pliku}
+
+\begin{CodeFrame*}[python]{}
+plik = open('dane.txt', 'rt', encoding='utf8')
+for linia in plik:
+  print(linia, end="")
+plik.close()
+\end{CodeFrame*}
+
+Zauważ, że została używa opcja \python{'r'} do otwarcia pliki co oznacza otwarcie do odczytu (od angielskiego \textit{read}). Jeżeli chcemy wczytać cały plik do zmiennej napisowej możemy, zamiast pętli czytającej kolejne linie, użyć metody \python{read()}:
+\begin{CodeFrame*}[python]{}
+plik = open('dane.txt', 'rt', encoding='utf8')
+napis = plik.read()
+plik.close()
+\end{CodeFrame*}
+
+\subsubsection{Czekanie na dane}
+
+Niekiedy nasz program musi poczekać na jakieś dane (np. wprowadzane z standardowego wejścia przez użytkownika).
+Typowo funkcje odczytu (takie jak \python{sys.stdin.read()}, \python{sys.stdin.readline()}, \python{input()}) czekają na koniec wczytywanych danych lub na koniec linii.
+Komplikacja pojawia się kiedy chcielibyśmy aby nasz program miał ograniczenie czasowe takiego oczekiwania lub czekał na pojawienie się danych w jednym z kilku źródeł.
+W takich przypadkach przydatna jest funkcja systemowa \python{select()}, którą w Pythonie znajdziemy w module \textit{select}.
+
+\begin{CodeFrame*}[python]{}
+import sys, os, select
+
+rdfd, _, _ = select.select([sys.stdin], [], [], 3.0)
+
+if not rdfd:
+	print("czas minął")
+
+for fd in rdfd:
+	print("czytam z:", fd)
+	a = os.read(fd.fileno(), 1024)
+	print("wczytałem:", a)
+\end{CodeFrame*}
+
+Funkcja \python{select()} przyjmuje 3 listy „deskryptorów plików” (czyli tego co zwraca np. funkcja \python{open()}) oraz ilość sekund, którą ma czekać na początek danych. Pierwsza lista związana jest z plikami z których chcemy czytać, druga pisać, a trzecia z plikami na których czekamy na wyjątkowe warunki. Funkcja ta zwraca również 3 takie listy, ale zawierające jedynie deskryptory plików na których pożądana operacja jest możliwa (np. są dane do wczytania, można zapisać dane).
+
+Funkcja \python{select()} kończy działanie gdy pojawią się jakiekolwiek dane (nie czeka na koniec danych – EOF). Zauważ, że do odczytu zastosowana została funkcja \python{os.read()} a nie metoda \python{fd.read()}, wynika to z faktu, iż \python{fd.read()} czeka na EOF lub podaną ilość bajtów, a \python{os.read()} wczytuje to co jest dostępne i ogranicza jedynie maksymalną ilość wczytywanych danych (resztę możemy doczytać kolejnym wywołaniem).
+
+\begin{teacherOnly}
+Można pokazać różnicę w zachowaniu poniższego kodu z os.read() i fd.read() dla różnej ilości wprowadzanych znaków – np. 1 i 5
+\begin{Verbatim}
+import sys, os, select, time
+
+while True:
+	time.sleep(3)
+	rdfd, _, _ = select.select([sys.stdin], [], [], 3.0)
+	if not rdfd:
+		print("czas minął")
+	for fd in rdfd:
+		print("czytam z:", fd)
+		#a = os.read(fd.fileno(), 3)
+		a = fd.read(3)
+		print("wczytałem:", a)
+\end{Verbatim}
+\end{teacherOnly}
+%  END: Pliki
