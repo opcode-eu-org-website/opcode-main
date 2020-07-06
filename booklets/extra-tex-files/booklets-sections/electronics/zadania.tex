@@ -1,0 +1,221 @@
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+% bierne i dioda
+
+\dbEntryBegin{zadanie_kondensator}\if1\dbEntryCheckResults
+\noindent\begin{minipage}[b]{0.55\textwidth}
+Zbuduj układ przedstawiony na schemacie i zaobserwuj zmianę napięcia na kondensatorze w momencie załączania, wyłączania zasilania.
+
+\vspace{13pt}
+
+Zobacz jak zmieni się działanie układu gdy jako R2 użyjesz rezystora 22kΩ.
+\end{minipage}
+\hfill
+\begin{minipage}[b]{0.4\textwidth}
+\includegraphics[width=\textwidth]{img/elektronika/zad-kondensator}
+\end{minipage}
+\fi
+
+\dbEntryBegin{zadanie_cewka_i_dioda}\if1\dbEntryCheckResults
+Wróć do symulacji związanej z cewką \url{http://ln.opcode.eu.org/cewka} i spróbuj dodać diodę równolegle do cewki taki sposób aby wyeliminować powstawanie przepięć.
+Zobacz też że dodanie diody równolegle z elementem przełączającym nie pozwala na rozwiązanie problemu.
+\fi
+
+\dbEntryBegin{zadanie_spadek_napiecia_na_led}\if1\dbEntryCheckResults
+\noindent\begin{minipage}[b]{0.7\textwidth}
+Zbuduj układ przedstawiony na schemacie i zaobserwować że dla różnych napięć wejściowych (z zakresu 5-13V) na diodzie świecącej występuje stały spadek napięcia.
+Zaobserwuj że zmianie ulega wartość prądu płynącego w takim obwodzie oraz że wynika ona z napięcia odłożonego na rezystorze i wartości jego rezystancji.
+\end{minipage}
+\hfill
+\begin{minipage}[b]{0.25\textwidth}
+\includegraphics[width=\textwidth]{img/elektronika/zad-led}\vspace{0.5cm}
+\end{minipage}
+\fi
+
+\dbEntryBegin{zadanie_mostek}\if1\dbEntryCheckResults
+\noindent\begin{minipage}[b]{0.6\textwidth}
+Zbuduj układ przedstawiony na schemacie (nazywany mostkiem Gretza) i zauważ że polaryzacja wyjścia (podłączonego do woltomierza) jest niezależna od polaryzacji wejścia (czyli od tego czy biegun dodatni będzie przyłączony do in1 czy in2, a ujemny odpowiednio in2 lub in1).
+\end{minipage}
+\hfill
+\begin{minipage}[b]{0.35\textwidth}
+\includegraphics[width=\textwidth]{img/elektronika/zad-mostek}
+\end{minipage}
+\fi
+
+
+\dbEntryBegin{stabilizator_zener1}\if1\dbEntryCheckResults
+\noindent\begin{minipage}[b]{0.77\textwidth}
+Zbuduj układ stabilizacji napięcia w oparciu o diodę Zenera przedstawiony na schemacie obok.
+
+Zastanów się nad sposobem działania tego układu – w tym celu dokonaj pomiarów napięcia wyjściowego w zależności od napięcia wejściowego.
+
+Zobacz jak na napięcie wyjściowe wpływa wielkość obciążenia symulowanego przez R2.
+\vspace{13pt}
+\end{minipage}
+\hfill
+\begin{minipage}[b]{0.17\textwidth}
+\includegraphics[width=\textwidth]{img/elektronika/zad-stabilizator_zener1}
+\end{minipage}
+\fi
+
+
+\dbEntryBegin{stabilizator_zener2}\if1\dbEntryCheckResults
+\noindent\begin{minipage}[b]{0.7\textwidth}
+Zbuduj układ stabilizacji napięcia w oparciu o diodę Zenera i tranzystor przedstawiony na schemacie obok.
+
+Zastanów się nad sposobem działania tego układu – w tym celu dokonaj pomiarów napięcia wyjściowego oraz napięcia na bazie tranzystora w zależności od napięcia wejściowego.
+
+Zobacz jak na napięcie wyjściowe wpływa wielkość obciążenia symulowanego przez R2 (pamiętaj aby nie ustawiać zbyt małej rezystancji, bo przekroczysz maksymalny prąd dozwolony dla użytego tranzystora).
+
+W czym ukłąd ten jest lepszy od układu z zadania \ref{stabilizator_zener1}? Zastanów się dlaczego.
+\end{minipage}
+\hfill
+\begin{minipage}[b]{0.25\textwidth}
+\includegraphics[width=\textwidth]{img/elektronika/zad-stabilizator_zener2}
+\end{minipage}
+\fi
+
+
+% tranzystory
+
+\dbEntryBegin{klucz_npn1}\if1\dbEntryCheckResults
+\noindent\begin{minipage}[b]{0.6\textwidth}
+Zastanów się co przedstawia układ przedstawiony na schemacie obok. Skonstruuj go i zobacz jak działa.
+
+Czy przez obciążenie (rezystor \textit{LOAD} o wartości 1k) płynie prąd gdy rezystor \textit{Rb} poprzez przełącznik \textit{S1} podłączony jest do napięcia zasilającego, a czy płynie gdy podłączony jest do masy?
+
+Zmierz wartość prądu płynącego przez \textit{Rb} i płynącego przez \textit{LOAD} w obu wypadkach. Zastanów się do czego może być użyty taki układ?
+
+\textit{Wskazówka: Zamiast użyć przełącznika możesz po prostu przełączać kabelek na płytce stykowej.}
+\end{minipage}
+\hfill
+\begin{minipage}[b]{0.35\textwidth}
+\includegraphics[width=\textwidth]{img/elektronika/zad-npn1}
+\end{minipage}
+\fi
+
+\dbEntryBegin{klucz_npn2}\if1\dbEntryCheckResults
+\noindent\begin{minipage}[b]{0.5\textwidth}
+Zmodyfikuj układ z zadania \ref{klucz_npn1} aby wyglądał jak na schemacie obok (obecnie S1 przełącza pomiędzy napięciem z dzielnika R1/R2 oraz stanem niepodłączonym).
+
+Oblicz ile powinno wynosić napięcie wyjściowe z dzielnika R1/R2? Czy rzeczywiste napięcie zgadza się z tym co obliczyłeś?
+
+Wykonaj ponownie pomiary prądu płynącego przez \textit{Rb} i płynącego przez \textit{LOAD} w obu stanach S1.
+Jak wprowadzone zmiany wpłyneły na zachowanie układu?
+\end{minipage}
+\hfill
+\begin{minipage}[b]{0.45\textwidth}
+\includegraphics[width=\textwidth]{img/elektronika/zad-npn2}
+\end{minipage}
+\fi
+
+\dbEntryBegin{polmostek_H}\if1\dbEntryCheckResults
+Narysuj schemat układu półmostka H z zastosowaniem tranzystorów bipolarnych (NPN i PNP) jako elementów przełączających.
+\fi
+
+
+% cyfrowe
+
+\dbEntryBegin{zadanie_przerzutnik_z_bramek}\if1\dbEntryCheckResults
+\noindent\begin{minipage}[b]{0.6\textwidth}
+Na schemacie przedstawiono dwubramkową budowę przerzutnika RS w wariancie z wejściami nie zanegowanymi (zastosowanie bramek NAND w miejsce NOR spowodujwe zanegowanie wejść). Zbuduj taki układ i sprawdź jego działanie.
+\end{minipage}
+\hfill
+\begin{minipage}[b]{0.35\textwidth}
+\includegraphics[width=\textwidth]{img/elektronika/RS}
+\end{minipage}
+\fi
+
+\dbEntryBegin{zadanie_rejestr_przesuwny}\if1\dbEntryCheckResults
+Podłącz do kolejnych wyjść układu rejestru przesuwnego z buforem wyjściowym (np. CD4094 lub 74HC595) 4 diody LED (pamiętaj o rezystorach).
+Zapisz do rejestru i ustaw na wyjściach taką wartość aby świeciły się dwie pierwsze i ostatnia dioda, użyj w tym celu ręcznego manipulowania sygnałami:
+\begin{itemize}
+\item wejścia szeregowego (SERIAL IN), służącego do wprowadzania danych
+\item zegara danych (CLOCK, CLK), determinującego chwilę odczytu kolejnego bitu z wejścia szeregowego
+\item zegara wyjść (STROBE), determinującego chwilę przepisania danych z rejestru przesuwnego do rejestru wyjściowego
+\end{itemize}
+
+\textit{Wskazówka: zapoznaj się z dokumentacją posiadanego układu, ustal nazewnictwo używane do określania poszczególnych sygnałów (może się różnić nawet w zależności od producenta układu) oraz numery nóżek układu z nimi związane (mogą się różnić w zależności od modelu / wariantu obudowy).}
+\fi
+
+\dbEntryBegin{zadanie_bramka_z_tranzystorow}\if1\dbEntryCheckResults
+Spróbuj zbudować własną bramkę logiczną w oparciu o tranzystory NPN i PNP. Pamiętaj że w odróżnieniu od pokazanych na powyższym schemacie tranzystorów NMOS i PMOS wymagane jest stosowanie rezystora na bramce.
+
+\begin{teacherOnly}
+Na symulacji działa, w rzeczywistości raczej też powinno🙂: \url{http://ln.opcode.eu.org/not_bipolar}
+	% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+10.634267539816555+43+2+50%0Aw+352+240+352+288+1%0Aw+352+208+352+176+0%0Ag+352+288+352+304+0%0At+304+224+352+224+0+1+-11.982071747173658+9.999999996133773e-10+100%0Aw+240+224+304+224+1%0Ar+160+224+240+224+0+10000%0Aw+352+176+464+176+2%0AR+352+80+352+32+0+0+40+12+0+0+0.5%0AR+80+160+32+160+0+0+40+12+0+0+0.5%0AS+144+176+80+176+0+0+false+0+2%0Ag+80+192+80+208+0%0At+304+128+352+128+0+-1+-0.5984034045537907+-0.6163316563801331+100%0Aw+352+80+352+112+1%0Aw+352+144+352+176+0%0Ar+160+128+240+128+0+10000%0Aw+240+128+304+128+1%0Aw+160+128+144+128+0%0Aw+144+128+144+176+0%0Aw+144+176+144+224+0%0Aw+144+224+160+224+0%0A
+\url{http://ln.opcode.eu.org/nand_bipolar}
+	% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+11.086722712598126+43+2+50%0Aw+192+208+192+288+1%0Aw+192+176+192+144+0%0At+144+192+192+192+0+1+0.017928222207663325+-59716236393.85512+100%0Aw+80+192+144+192+1%0Ar+0+192+80+192+0+10000%0Aw+192+144+304+144+2%0AR+192+48+192+0+0+0+40+12+0+0+0.5%0AR+-80+128+-128+128+0+0+40+12+0+0+0.5%0AS+-16+144+-80+144+0+1+false+0+2%0Ag+-80+160+-80+176+0%0At+144+96+192+96+0+-1+0.01792825131972009+-5.000000413701855e-10+100%0Aw+192+48+192+80+1%0Aw+192+112+192+144+0%0Ar+0+96+80+96+0+10000%0Aw+80+96+144+96+1%0Aw+0+96+-16+96+0%0Aw+-16+96+-16+144+0%0Aw+-16+144+-16+192+0%0Aw+-16+192+0+192+0%0Aw+32+32+64+32+1%0Ar+-48+32+32+32+0+10000%0Aw+112+-16+112+16+1%0At+64+32+112+32+0+-1+-0.5984034045539346+-0.6163316563736547+100%0Ag+-240+160+-240+176+0%0AS+-176+144+-240+144+0+0+false+0+2%0AR+-240+128+-288+128+0+0+40+12+0+0+0.5%0AR+112+-16+112+-64+0+0+40+12+0+0+0.5%0Ar+0+304+80+304+0+10000%0Aw+80+304+144+304+1%0At+144+304+192+304+0+1+-59716236405.85512+-4.302645807952658e-9+100%0Ag+192+368+192+384+0%0Aw+192+320+192+368+1%0Aw+192+144+112+144+0%0Aw+112+144+112+48+0%0Aw+-176+144+-176+32+0%0Aw+-176+32+-48+32+0%0Aw+0+304+-176+304+0%0Aw+-176+304+-176+144+0%0A
+\end{teacherOnly}
+\fi
+
+\dbEntryBegin{zadanie_zidentyfikuj_uklad}\if1\dbEntryCheckResults
+\noindent\begin{minipage}[t]{\textwidth}
+	\noindent\parbox[b]{0.7\textwidth}{
+		Otrzymałeś układ logiczny w obudowie DIP14, o układzie wyprowadzeń pokazanym na rysunku obok\footnote{
+			Warto zauważyć że sposób numerowania pinów jest standardowy dla danego typu obudowy, natomiast funkcje poszczególnych pinów różnią się w zależności od danego układu i są opisywane w jego dokumentacji).
+		}.
+		Nóżki numer 10 i 9 są wejściami pewnej bramki logicznej, której wyjście jest na nóżce numer 8. Sporządź tablicę prawdy dla tej bramki i zidentyfikuj co to za bramka.
+		\vspace{0.25cm}
+	}\hfill\parbox[b]{0.25\textwidth}{
+		\includegraphics[height=0.22\textwidth,angle=90,origin=c]{img/elektronika/DIP14-zadanie}
+		\vspace{-0.5cm}
+	}
+\end{minipage}
+\fi
+
+% zadania domowe, teoretyczne, ilustrowane schematami img/elektronika/praca_domowa-[ABC]
+
+\dbEntryBegin{prad_R1}\if1\dbEntryCheckResults
+Oszacuj wartość prądu płynącego przez R1. Odpowiedź krótko uzasadnij.
+% img/elektronika/praca_domowa-A
+\fi
+
+\dbEntryBegin{napiecie_T1}\if1\dbEntryCheckResults
+Podaj wartość napięcia (względem GND) w punkcie T1 w sytuacji gdy S1 jest wciśnięty (zwarty) oraz w sytuacji gdy jest rozwarty (nie przewodzi). Odpowiedź krótko uzasadnij.
+% img/elektronika/praca_domowa-A
+\fi
+
+\dbEntryBegin{napiecie_T234}\if1\dbEntryCheckResults
+Podaj wartość napięcia (względem GND) w punkach T2, T3, T4. Odpowiedź krótko uzasadnij.
+% img/elektronika/praca_domowa-A
+\fi
+
+\dbEntryBegin{prad_R8_R10}\if1\dbEntryCheckResults
+Oszacuj wartość prądu płynącego przez R8 oraz wartość prądu płynącego przez R10. Odpowiedź krótko uzasadnij.
+% img/elektronika/praca_domowa-B
+\fi
+
+\dbEntryBegin{napiecie_T5}\if1\dbEntryCheckResults
+Podaj wartość napięcia (względem GND) w punkcie T5. Przyjmujemy iż użyte bramki działają na poziomie napięć 5V (prawda) / 0V (fałsz). Odpowiedź krótko uzasadnij.
+% img/elektronika/praca_domowa-C
+\fi
+
+\dbEntryBegin{hc574}\if1\dbEntryCheckResults
+Zapoznaj się z dokumentacją układu 74HC574 i opisz sposób jego użycia (wraz z sposobem sterowania) jako modułu podłączonego do 8 bitowej magistrali równoległej w roli układu wejściowego oraz w roli układu wyjściowego.
+\fi
+
+\dbEntryBegin{hc595}\if1\dbEntryCheckResults
+Zapoznaj się z dokumentacją układu 74HC595 i opisz sposób jego użycia (wraz z sposobem sterowania) w roli układu wyjściowego podłączonego do magistrali szeregowej.
+\fi

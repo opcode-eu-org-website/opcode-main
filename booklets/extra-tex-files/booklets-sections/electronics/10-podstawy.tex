@@ -1,0 +1,64 @@
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+% BEGIN: Elektronika - intro
+Elektronika zajmuje się wytwarzaniem i przetwarzaniem sygnałów w postaci prądów i napięć elektrycznych.
+Zjawisko prądu związane jest z przepływem ładunku (z uporządkowanym ruchem nośników ładunku), aby wystąpiło konieczna jest różnica potencjałów (napięcie) pomiędzy końcami przewodnika, prowadzi ono do neutralizacji tej różnicy.
+Dlatego dla podtrzymania stałej różnicy potencjałów konieczne jest istnienie źródeł prądu, prowadzących do rozdzielania ładunków dodatnich od ujemnych.
+
+\section{Podstawowe pojęcia}
+
+\subsection{Napięcie elektryczne}
+    Napięcie elektryczne $U$ pomiędzy punktem A i B (jakiegoś obwodu)
+    jest to różnica potencjału elektrycznego w punkcie A i w punkcie B.
+\subsection{Potencjał elektryczny}
+    Potencjał elektryczny $V$ w punkcie A
+    jest skalarną wielkością charakteryzującą pole elektryczne w danym punkcie. Odpowiada pracy którą trzeba by wykonać aby przenieść ładunek $q$ z tego punktu do nieskończoności podzielonej przez wielkość tego ładunku (jest niezależny od wartości $q$).
+    W elektronice używa się wartości potencjałów względem umownego potencjału zerowego GND (co umożliwia traktowanie ich jako różnic potencjałów - napięć elektrycznych), w efekcie tego określenia "(stałe) napięcie" i "potencjał" bardzo często stosowane są zamiennie. 
+\subsection{Masa}
+   Masa (oznaczana jako GND) jest to
+   umowny potencjał zerowy, względem którego wyraża się inne potencjały w układzie (co umożliwia traktowanie ich jako różnic potencjałów - napięć elektrycznych). Potencjał ten może być równy potencjałowi ziemi (masie ochronnej PE), bądź może być z nim nie związany (układy izolowane).
+
+\begin{ProTip}{Schematy elektryczne wg. elektronika}
+Typowo elektronicy na schematach nie rysują źródeł napięcia (np. w postaci symbolu baterii\footnote{chyba że chodzi o podkreślenie, iż dane zasilanie faktycznie odbywa się z baterii lub akumulatora}),
+zamiast tego umieszczają znaczniki potencjałów zasilania (np. +5V, +3V3, Vcc, Vbus) względem masy i znaczniki masy (GND, {\Symbola ⏚}).
+
+\vspace{3pt}Typowo potencjały wyższe umieszcza się na schemacie wyżej a niższe niżej (czyli 5V będzie na górze, a GND na dole), a przepływ prąd odbywa się w relacji od lewej do prawej i z góry na dół.
+Jest to ogólna reguła, ułatwiająca czytanie schematów, nie jest ona jednak wyrocznią i trafiają się od niej odstępstwa, podyktowane zwiększeniem czytelności schematu.
+
+\vspace{3pt}Schematy zamieszczane w tym skrypcie rysowane są według tych zasad.
+\end{ProTip}
+
+\subsection{Natężenie prądu}
+    Natężenie prądu elektrycznego $I$ (określane skrótowo jako prąd)
+    jest to stosunek przemieszczonego ładunku do czasu jego przepływu.
+
+\section{Prawo Ohma}
+Dla elementów liniowych (np. zwykły kawałek przewodu) zachodzi proporcjonalność natężenia prądu płynącego przez taki element do napięcia pomiędzy jego końcami: $R=\frac{U}{I}$.
+Zależność ta nosi nazwę prawa Ohma\footnote{Prawo Ohma nie jest uniwersalnym prawem przyrody, a jedynie relacją empiryczną spełnioną w pewnym zakresie parametrów dla niektórych materiałów.}, a stosunek ten nazywamy oporem (rezystancję).
+
+\section{Prawa Kirchhoffa}
+Węzeł układu (sam w sobie, pomijając zjawiska pasożytnicze) nie jest w stanie gromadzić ładunku elektrycznego zatem: \emph{Suma prądów wpływających do węzła jest równa sumie prądów wypływających z tego węzła.}
+
+Jeżeli rozważamy obwód zamknięty od punktu A z potencjałem $V_A$ to sumując napięcia na kolejnych elementach obwodu (oporach, źródłach napięciowych, etc) z uwzględnieniem ich znaku gdy wrócimy do punktu A to potencjał nadal musi wynosić $V_A$, zatem: \emph{Suma spadków napięć w zamkniętym obwodzie jest równa zeru.}
+% END: Elektronika - intro

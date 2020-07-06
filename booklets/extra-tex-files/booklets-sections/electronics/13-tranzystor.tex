@@ -1,0 +1,195 @@
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+% BEGIN: Elektronika - Tranzystory
+\section{Tranzystory}
+
+\begin{teacherOnly}
+	\begin{easylist}[itemize]
+	& tranzystor bipolarny
+		&& przewodzenie regulowane napięciem baza - emiter (NPN)
+		&& praca w trybie klucza (stan nasycenia i zatkania) (\textbf{symulacja})
+		&& praca jako wzmacniacz => POKAZAĆ w tym samym układzie co klucz i powiedzieć dlaczego tak się nie używa (rozrzut bety)
+		&& rezystor bazy - po co jest? analogia do diody
+		&& NPN i PNP - różnice w sposobie sterowania => różnice w zastosowaniach
+	& inne rodzaje tranzystorów - (MOS)FET
+		&& typy (N- vs P- oraz wzbogacony vs zubożony) i sposób sterowania (\textbf{symulacja})
+		&& izolowana bramka - sterowanie z 3 pozycyjnego przełącznika 5V NC 0V (zapytać o stan NC) => \textbf{POKAZAĆ} że zostaje w stanie w jakim był, dlatego często sterowanie z pół-mostka, wspomnieć o ESD
+	& mostek i pół-mostek H (\textbf{symulacja} w oparciu o schemat z switchami)
+		&& do czego służy cały (silniki), a do czego można użyć pół (wyjście o ustalonych poziomach)?
+	& wspomnieć o triakach – przełączanie w obwodach AC
+	\end{easylist}
+\end{teacherOnly}
+
+Tranzystor jest to element o regulowanym elektrycznie przewodzeniu prądu (oporze), często wykorzystywany do wzmacniania sygnałów lub jako przełącznik elektroniczny (klucz tranzystorowy).
+Klucz jest układem przełączającym wykorzystującym dwa skrajne stany pracy tranzystora - zatkania (tranzystor nie przewodzi), nasycenia (tranzystor przewodzi z minimalnymi ograniczeniami).
+
+\subsection{NPN}
+Prąd przepływający pomiędzy kolektorem a emiterem jest funkcją prądu przepływającego pomiędzy bazą a emiterem: $I_C = \beta I_B$.
+Napięcie pomiędzy kolektorem a emiterem wynosi: $U_{CE} = U_{zasilania} - I_C \cdot R_{load}$.
+Napięcie to nie może jednak spaść poniżej wartości minimalnej wynoszącej około 0.2V, gdy z powyższych zależności wynikałby taki spadek to tranzystor pracuje w stanem nasycenia i $U_{CE} \approx 0.2V$.
+
+\begin{wrapfigure}{r}{0.6\textwidth}
+  \begin{center}
+    \includegraphics[width=0.55\textwidth]{img/elektronika/npn_pnp}
+    \vspace{-10pt}
+  \end{center}
+\end{wrapfigure}
+
+Aby wprowadzić tranzystor NPN w stan zatkania należy podać na jego bazę potencjał mniejszy lub równy potencjałowi emitera (zakładamy że potencjał kolektora jest nie mniejszy niż emitera - co ma miejsce w typowych warunkach polaryzacji tranzystora NPN), czyli $U_{BE} \leq 0$.
+
+Aby wprowadzić tranzystor NPN w stan nasycenia należy na jego bazę wprowadzić potencjał większy od potencjałów emitera i kolektora, uzyskuje się to poprzez wprowadzenie do tranzystora prądu bazy $I_B \gg \frac{U_{zasilania}}{\beta R_{load}}$.
+
+Zobacz symulację pokazującą pracę tranzystora NPN w trybie klucza: \url{http://ln.opcode.eu.org/npn}.
+	% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+10.634267539816555+43+2+50%0Aw+352+256+352+304+1%0Aw+352+224+352+176+1%0Ag+352+304+352+320+0%0At+304+240+352+240+0+1+0.5443348655921529+0.6600527943196096+100%0Aw+240+240+304+240+1%0Ar+160+240+240+240+0+10000%0Ar+352+112+352+176+0+1005%0Aw+352+176+464+176+2%0AR+352+112+352+64+0+0+40+12+0+0+0.5%0AR+96+224+48+224+0+0+40+3.25+0+0+0.5%0Aw+160+240+160+288+0%0Aw+240+240+240+288+0%0As+160+288+240+288+0+1+false%0AS+160+240+96+240+0+1+false+0+2%0Ag+96+256+96+272+0%0A38+6+0+10+2000+Obci%C4%85%C5%BCenie%0A38+9+0+0+5+Vin%0A
+Zwróć uwagę na wartości napięć i prądów.
+
+Zobacz co dzieje się przy próbie podłączenia bazy tranzystora do potencjału znacznie wyższego niż potencjał emitera – złącze baza-emiter jest takim samym złączem z jakim mamy do czynienia w diodzie i tak jak w przypadku diody występuje na nim stały spadek napięcia (nie działa tu prawo Ohma). Dlatego aby ograniczyć prąd płynący tą gałęzią i zapobiec zniszczeniu tranzystora konieczne jest zastosowanie rezystora.
+
+\begin{teacherOnly}
+Pokazać pracę w trybie wzmacniacza w tym samym układzie – zmieniać suwakiem napięcie wejściowe Vin w zakresie 0.2 - 1.6V => prąd kolektora 100 razy większy od prądu bazy (wzmocnienie).
+Powiedzieć dlaczego tego układu wzmacniacza się nie używa.
+\end{teacherOnly}
+
+\subsection{PNP}
+Podobnie jak w NPE tyle że prąd przepływający pomiędzy emiterem a kolektorem jest funkcją prądu przepływającego pomiędzy emiterem a bazą.
+
+Aby wprowadzić tranzystor PNP w stan zatkania należy podać na jego bazę potencjał większy lub równy potencjałowi emitera (zakładamy że potencjał emitera jest nie mniejszy niż kolektora - co ma miejsce w typowych warunkach polaryzacji tranzystora PNP), czyli $U_{BE} \geq 0$.
+
+Aby wprowadzić tranzystor PNP w stan nasycenia należy na jego bazę wprowadzić potencjał mniejszy od potencjałów emitera i kolektora, uzyskuje się to poprzez wyprowadzenie z tranzystora prądu bazy $I_B \gg \frac{U_{zasilania}}{\beta R_{load}}$.
+
+Zobacz symulację pokazującą pracę tranzystora PNP w trybie klucza: \url{http://ln.opcode.eu.org/pnp}.
+	% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+10.634267539816555+43+2+50%0Aw+320+176+320+224+1%0Aw+320+144+320+96+1%0Ag+320+288+320+304+0%0Aw+208+160+272+160+1%0Ar+128+160+208+160+0+10000%0Aw+320+224+432+224+2%0AR+320+96+320+48+0+0+40+12+0+0+0.5%0AR+64+176+16+176+0+0+40+5+0+0+0.5%0Aw+128+160+128+208+0%0Aw+208+160+208+208+0%0As+128+208+208+208+0+1+false%0AS+128+160+64+160+0+1+false+0+2%0Ar+320+224+320+288+0+1005%0At+272+160+320+160+0+-1+11.999999998799002+-9.999983063835316e-10+100%0AR+64+144+16+144+0+0+40+12+0+0+0.5%0A38+7+0+0+5+Vin%0A
+Zwróć uwagę na podobieństwa i różnice w stosunku do tranzystora NPN –
+	w obu wypadkach tranzystor przewodzi gdy płynie prąd bazy, ale ma on różne kierunki (w NPN wpływa on bazą do tranzystora, a w PNP wypływa z niego),
+	w obu wypadkach tranzystor zostaje zatkany gdy potencjał bazy zrówna się z potencjałem emitera (ale w NPN potencjał emitera jest typowo najniższym z potencjałów w układzie, często równym masie, a w PNP najwyższym, często równym potencjałowi zasilania).
+Zauważ także, że tutaj również potrzebujemy rezystora ograniczającego prąd bazy.
+
+\subsection{N-MOSFET}
+
+\begin{wrapfigure}{r}{0.7\textwidth}
+  \begin{center}
+    \vspace{-40pt}
+    \includegraphics[width=0.65\textwidth]{img/elektronika/mosfet}
+    \vspace{-20pt}
+  \end{center}
+\end{wrapfigure}
+
+Prąd przepływający pomiędzy drenem (\emph{drain}) a źródłem (\emph{source}) jest funkcją napięcia pomiędzy bramką (\emph{gate}) a źródłem (potencjału bramki względem źródła - $U_{GS}$), bramka jest izolowana (nie płynie przez nią prąd).
+
+W kierunku dren → źródło tranzystor ten przewodzi gdy $U_{GS} > U_{GS (th)}$, natomiast w przeciwnym kierunku przewodzi zawsze. Dla tranzystorów N-MOSFET z kanałem wzbogacanym (\emph{enhancement}) $U_{GS (th)} > 0$, a z kanałem zubożonym (\emph{depletion}) $U_{GS (th)} < 0$.
+
+Konkretna wartość $U_{GS (th)}$ zależna jest od konkretnego modelu tranzystora, innym istotnym parametrem związanym z sterowaniem tranzystorem jest maksymalna i minimalna dopuszczalna wartość napięcia $U_{GS}$.
+
+Aby wprowadzić tranzystor MOSFET w stan zatkania należy podać $U_{GS} < U_{GS (th)}$. Dla tranzystorów:
+\begin{itemize}
+\item N-MOSFET z kanałem wzbogaconym wystarczy obniżyć potencjał bramki do wartości niewiele wyższej niż potencjał źródła
+\item N-MOSFET z kanałem zubożonym musi to być wartość poniżej potencjału źródła.
+\end{itemize}
+Aby wprowadzić tranzystor MOSFET w stan przewodzenia należy podać $U_{GS} \gg U_{GS (th)}$.
+
+\subsection{P-MOSFET}
+Podobnie jak N-MOSFET tyle że:
+\begin{itemize}
+\item regulowane jest przewodzenie w kierunku źródło → dren (a w kierunku dren → źródło przewodzi zawsze),
+\item przewodzenie w kierunku źródło → dren ma miejsce gdy $U_{GS} < U_{GS (th)}$,
+\item dla tranzystorów z kanałem wzbogacanym (\emph{enhancement}) $U_{GS (th)} < 0$, a z kanałem zubożonym (\emph{depletion}) $U_{GS (th)} > 0$.
+\end{itemize}
+
+Aby wprowadzić tranzystor MOSFET w stan zatkania należy podać $U_{GS} < U_{GS (th)}$. Dla tranzystorów:
+\begin{itemize}
+\item P-MOSFET z kanałem zubożonym wystarczy obniżyć potencjał bramki do wartości niewiele wyższej niż potencjał źródła
+\item P-MOSFET z kanałem wzbogaconym musi to być wartość poniżej potencjału źródła.
+\end{itemize}
+Aby wprowadzić tranzystor MOSFET w stan przewodzenia należy podać $U_{GS} \gg U_{GS (th)}$.
+
+\vspace{12pt}
+
+Zobacz symulację pokazującą pracę tranzystorów MOSFET w trybie klucza: \url{http://ln.opcode.eu.org/mosfet}.
+	% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+10.634267539816555+50+5+50%0Ar+240+144+240+304+0+300%0Aw+240+336+240+352+0%0Af+192+320+240+320+0+1.5+0.02%0AR+368+144+368+96+0+0+40+12+0+0+0.5%0Ag+240+352+240+368+0%0AS+192+320+128+320+0+1+false+0+2%0AR+128+304+80+304+0+0+40+5+0+0+0.5%0Ag+128+336+128+368+0%0Af+448+224+496+224+33+1.5+0.02%0Aw+496+144+496+208+0%0Ar+496+240+496+352+0+300%0Ag+496+352+496+368+0%0Aw+240+144+368+144+0%0Aw+368+144+496+144+0%0AR+384+208+336+208+0+0+40+12+0+0+0.5%0AS+448+224+384+224+0+1+false+0+2%0AR+384+240+336+240+0+0+40+5+0+0+0.5%0A
+Zauważ podobieństwo w sterowaniu do trnzystorów NPN i PNP (N-MOSFET przewodzi gdy potencjał bramki odpowiednio wyższy od drenu, P-MOSFET gdy odpowiednio niższy, obciążenie N-MOSFET włączane analogicznie jak NPN, a P-MOSFET jak PNP),
+	zauważ różnice (bramka jest izolowanie, nie płynie nią prąd\footnote{z pominięciem prądu związanego z przeładowaniem pojemności (pasożytniczego kondensatora)}, nie ma zatem potrzeby używania tam rezystora).
+
+\teacher{Opowiedzieć o zagadnieniu niepodłączonej bramki - pozostaje to co było, potem antena. Wspomnieć o ESD.}
+% END: Elektronika - Tranzystory
+
+% BEGIN: Elektronika - mostek H
+\subsection{Mostek H}
+
+\begin{wrapfigure}{r}{0.2\textwidth}
+  \begin{center}
+    \vspace{-33pt}
+    \includegraphics[width=0.17\textwidth]{img/elektronika/mostek_H_switche}
+    \vspace{-27pt}
+  \end{center}
+\end{wrapfigure}
+
+Mostek H jest to układ (oparty o 4 przełączniki, których rolę mogą pełnić klucze tranzystorowe) pozwalający na zmianę polaryzacji zasilania podłączonego do niego odbiornika. Układ taki złożony jest z dwóch identycznych gałęzi (S1 + S2 oraz S3 + S4, każda włączona pomiędzy dwoma biegunami zasilania). Pojedyncza taka gałąź nazywana jest pół-mostkiem i składa się z dwóch kluczy które powinny być sterowane przeciwstawnie (aby wyeliminować możliwość zwarcia zasilania z masą). Układ pół-mostka może być wykorzystywany także samodzielnie jako uniwersalny układ klucza pozwalającego na załączanie odbiornika zarówno od strony napięcia dodatniego jak i od strony masy (w zależności od sposobu jego podłączenia) lub przełączania dwóch odbiorników (jednego umieszczonego pomiędzy zasilaniem a wyjściem mostka, a drugiego pomiędzy wyjściem a masą).
+
+Rolę kluczy (przełączników) w ramach mostka mogą pełnić tranzystory PNP (jako S1, S3) i NPN (jako S2, S4) albo analogicznie tranzystory P-MOSFET i N-MOSFET.
+
+\begin{teacherOnly}
+Można pokazać: \url{http://ln.opcode.eu.org/mostek}
+	% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+10.20027730826997+50+5+43%0As+384+128+384+192+0+1+false%0As+512+128+512+192+0+1+false%0As+512+256+512+320+0+1+false%0As+384+256+384+320+0+1+false%0Aw+384+192+384+224+0%0Ap+384+224+512+224+1+0%0Aw+512+224+512+192+0%0Aw+512+224+512+256+0%0Aw+384+224+384+256+0%0Ag+384+320+384+336+0%0Ag+512+320+512+336+0%0AR+448+96+448+64+0+0+40+5+0+0+0.5%0Aw+448+96+448+128+0%0Aw+448+128+512+128+0%0Aw+448+128+384+128+0%0Aw+224+128+160+128+0%0Aw+224+96+224+128+0%0AR+224+96+224+64+0+0+40+5+0+0+0.5%0Ag+160+320+160+336+0%0Aw+160+224+160+256+0%0Aw+160+192+160+224+0%0As+160+256+160+320+0+1+false%0As+160+128+160+192+0+1+false%0Aw+160+224+224+224+2%0A
+Ale trzeba zwrócić uwagę na ograniczenie symulatora (niepodłączone to potencjał masy).
+\end{teacherOnly}
+% END: Elektronika - mostek H
+
+\subsection{Wzmacniacz}
+
+Omawiając poszczególne typy tranzystorów skupialiśmy się na ich pracy w roli przełącznika (klucza), działającego w dwóch stanach – przewodzenia (nasycenia) i zastkania.
+Jednak tranzystor będąc elementem o regulowanym przewodzeniu może zostać wykorzystany także do wzmacniania sygnałów, czyli wytworzenia na swoim wyjściu sygnału proporcjonalnego do sygnału wejściowego tyle że wzmocnionego.
+Wzmacnianiu może ulegać sygnał napięciowy lub prądowy (najprostszym przypadkiem jest wzmocnienie prądu bazy jako prądu kolektora $I_C = \beta I_B$ w tranzystorze bipolarnym).
+Więcej o różnych układach pracy tranzystora w roli wzmacniacza można przeczytać na \url{http://vip.opcode.eu.org/#Wzmacniacz_sygnału}.
+
+\vspace{5pt}
+
+\begin{wrapfigure}{r}{0.24\textwidth}
+  \begin{center}
+    \vspace{-25pt}
+    \includegraphics[width=0.21\textwidth]{img/elektronika/wzmacniacz_operacyjny-nieodwracający}
+    \vspace{-47pt}
+  \end{center}
+\end{wrapfigure}
+
+Często do wzmacniania sygnału zamiast pojedynczego tranzystora wykorzystujemy układy scalone (złożone z wielu tranzystorów) nazywane wzmacniaczami operacyjnymi.
+Cechują się one bardzo dużym wzmocnieniem różnicy napięcia pomiędzy swoimi wejściami, pożądane wzmocnienie uzyskuje się dobierając zewnętrzne elementy pętli ujemnego sprzężenia zwrotnego
+	(w najprostszym przypadku na jedno wejście podajemy sygnał wejściowy, a na drugie odpowiednio przeskalowany przy pomocy dzielnika rezystancyjnego sygnał wyjściowy).
+Więcej na ich temat można przeczytać na \url{http://vip.opcode.eu.org/#Wzmacniacz_operacyjny}.
+
+\begin{ProTip}{Przełączanie AC}
+Tranzystory stosowane są powszechnie do przełączania w obwodach prądu stałego. Istnieją także elementy półprzewodnikowe mogące pełnić funkcję przełączającą w obwodach prądu przemiennego - współcześnie są to przede wszystkim triaki.
+\end{ProTip}
+
+\begin{teacherOnly}
+\noindent\begin{minipage}[t]{0.6\textwidth}
+\strong{POKAZ: tranzystor jako klucz}\\
+Pokazać i wyjasnić działanie układu pokazanego na schemacie. Pokazać jak zmienia się prąd w obwodzie i spadek napięcia w zależności od nastawy potencjometru.
+
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.35\textwidth}
+\vspace{-10pt}
+\includegraphics[width=\textwidth]{img/elektronika/zad-npn-pokaz}
+\end{minipage}
+\end{teacherOnly}
