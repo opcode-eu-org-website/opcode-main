@@ -93,3 +93,40 @@ Istnieje wiele zestandaryzowanych interfejsów zarówno szeregowych jak i równo
     Interfejs ten najczęściej wykorzystywany jest w trybie asynchronicznym jako UART. W połączeniach UART zarówno nadajnik jak i odbiornik muszą mieć ustawione takie same parametry transmisji (szybkość, znaczenie 9 bitu (typowo bit parzystości, ale może także oznaczać np. pole adresowe), itp).
     Głównymi standardami elektrycznymi dla UART są: poziomy napięć układów elektronicznych używających tych portów (3.3V, 5V), RS-232 (w pełnym wariancie używa sygnałów kontroli przepływu, poziom logiczny 1 wynosi od -15V do -3V, a poziom logiczny 0 od +3V do +15V), RS-422 (transmisja różnicowa full-duplex pomiędzy dwoma urządzeniami) i RS-485 (transmisja różnicowa half-duplex w oparciu o szynę łączącą wiele urządzeń, kompatybilny elektrycznie z RS-422), możliwia jest też transmisja światłowodowa i bezprzewodowa.
 % END: Elektronika - Typy transmisji
+
+\begin{ProTip}[breakable]{Rezystory terminujące {\Symbola 🤔}}
+Niektóre  ze standardów interfejsów komunikacyjnych przewidują kończenie swoich magistral rezystorem terminującym.
+Zastosowanie takiego rezystora ma na celu eliminację odbić sygnału, które mogłyby powstać na końcu linii transmisyjnej.
+
+\vspace{7pt}
+
+Zjawisko to występuje w przypadku \textit{linii długich}, czyli takich których długość jest zbliżona lub większa od długości fali związanej z przesyłanym sygnałem.
+Jeżeli rozważymy np. impuls o czasie trwania 1$\mu \rm s$ to zajmie on na kablu odcinek o długości około 200m (zależy to od prędkości rozchodzenia się fali elektromagnetycznej w ośrodku który stanowi dany przewód).
+Zatem dla sygnału 1MHz (czyli takiego gdzie pojedyncze impulsy są właśnie długości 1$\mu \rm s$) przewód o długości kilkuset metrów będzie linią długą.
+
+\vspace{7pt}
+
+Odbicia te wynikają z faktu, iż przemieszczanie się sygnału (np. naszego impulsu 5V o czasie trwania 1$\mu \rm s$) wzdłuż przewodu związane jest z
+	ładowaniem kolejnych pojemności pasożytniczych, związanych z odcinkiem przewodu do którego dociera sygnał.
+Dzieje się to kosztem rozładowania pojemności odcinka przewodu który sygnał już opuścił.
+
+W momencie gdy sygnał trafia na koniec przewodnika nie ma możliwości rozładowania tej pojemności na kolejny odcinek przewodu, więc ładunek z nią związany „rozpływa się po kablu” powodując powstanie odbicia.
+Odbicie takie (biegnące od końca przewodu w stronę nadajnika) nakłada się na kolejne impulsy naszego sygnału (biegnące od nadajnika) i powoduje zakłócenia w ich odbiorze (interpretacji).
+
+Zastosowanie odpowiedniego rezystora na końcu linii pozwala na rozładowanie tej pojemności (tak jakby był tam kolejny nieskończenie długi odcinek przewodu) i eliminację odbicia.
+Wartość tej rezystancji jest charakterystyczna dla danego przewodu i określana przez parametr nazywany \textit{impedancją falową}.
+
+Rezystor terminujący stanowi obciążenie dla nadajnika i powinien on być stosowany tylko na końcach magistrali, czyli np. na ostatnich urządzeniach podłączonych do magistrali (a nie przy każdym urządzeniu do niej włączonym).
+
+\vspace{7pt}
+
+Jeżeli długość linii jest dużo mniejsza (dla sygnałów prostokątnych przyjmuje się że około 20-40 razy) od długości odcinka jaką zajmuje pojedynczy impuls (np. linia długości 3m, dla przykładowego sygnału 1MHz)
+to nie ma potrzeby stosowania rezystorów terminujących (często nawet gdy w ogólności dany standard je przewiduje), gdyż stan całej linii jest spójny i wymuszany przez nadajnik (nie jest to przypadek linii długiej).
+
+\vspace{7pt}
+
+Standard I2C nie przewiduje rezystorów terminujących (i nie powinny być w nim używane, zwłaszcza że są to linie open drain i powstawałby dzielnik z rezystorem pull-up).
+Wynika to z tego iż przy maksymalnej prędkości tego interfejsu za linie długie należałoby uznać odcinki co najmniej kilkunastometrowe, a z innych względów standard ten posiada ograniczenie do kilku metrów.
+
+Standard RS-485 przewiduje stosowanie rezystorów terminujących 120 Ω, jednak w przypadku krótkich połączeń i/lub małych prędkości transmisji mogą one być pominięte.
+\end{ProTip}
