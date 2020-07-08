@@ -1,0 +1,85 @@
+\section{Projektowanie}
+
+\ifdefined\TextRefToDRYKISS\else
+\ifdefined\UrlToPythonRefToDRYKISS
+	\newcommand{\TextRefToDRYKISS}{, o których była mowa przy omawianiu \href{\UrlToPythonRefToDRYKISS}{bibliotek w pythonie},}
+\else
+	\input{booklets-sections/python/71-dry_kiss.tex}
+	\newcommand{\TextRefToDRYKISS}{}
+\fi\fi
+
+Reguły DRY i KISS\TextRefToDRYKISS{} mają zastosowanie także w elektronice, a zwłaszcza projektowaniu układów elektronicznych i różnego rodzaju systemów automatyki.
+Przy projektowaniu elektroniki trochę trudniej niż w programowaniu jest zachować regułę DRY (zwłaszcza przy tworzeniu projektów płytek drukowanych \textit{PCB}),
+	jednak należy dążyć do tego – wydzielać powtarzające się elementy do pod-schematów, modularyzować tworzony projekt, itd.
+
+Kurs ten poświęcony jest głównie elektronice cyfrowej, a ta współcześnie opiera się na wykorzystaniu układów programowalnych.
+Zatem dalsze rady będą dotyczyły głównie projektowania systemu/urządzenia opartego na jakimś mikrokontrolerze
+(mimo to wiele z nich można zastosować także przy projektowaniu innych układów elektronicznych i nie tylko).
+\\
+Przy tworzeniu projektów tego typu systemów/urządzeń należy mieć szczególnie na uwadze:
+\begin{itemize}
+	\item trzymanie się standardów i modułowość:
+		\begin{itemize}
+			\item należy stosować standardowe, popularne, otwarte protokoły komunikacyjne, takie jak I$^2$C, RS-485/Modbus, Ethernet/IP
+			\item należy dokonywać podziału system na moduły funkcjonalne i określamy interfejsy pomiędzy nimi, zasadę tę należy stosować rekurencyjnie do wszystkich większych/bardziej złożonych jego elementów
+			\item należy unikać projektowania modułów „na miarę” (lepiej mieć n+2 jednakowych modułów niż n każdy innego rodzaju)
+			\item gdy oczekujemy większej niezawodności to należy zastosować redundancję – np. podwójne układy zasilania i komunikacji (dwa porty RS-485 lub dwa porty Ethernet) w każdym z urządzeń (modułów) składających się na system
+			
+			\item protokoły komunikacyjne, prędkość transmisji, etc należy dobierać z sporym zapasem (rzędu nawet 50-70\%), przewidując pojawienie się kolejnych rejestrów, funkcji, itp.
+			\item należy przewidzieć rezerwę miejsca w modułach (np. dostępnych wejść)
+		\end{itemize}
+	\item dokumentacja, wersjonowanie:
+		\begin{itemize}
+			\item należy stosować wersjonowanie nie tylko kodu, ale również schematów, projektów PCB, dokumentacji, etc związanych z naszym projektem
+			\item należy także oznaczać wersje związane z wykonanymi prototypami (w taki sposób aby można było je jednoznacznie powiązać z fizycznie wykonanym prototypem) i trzymać je co najmniej do zakończenia życia tych prototypów
+			\item należy umieszczać identyfikator wersji na tworzonych płytkach PCB
+			\item należy tworzyć dokumentację, np. samo użycie modbus nie rozwiązuje kwestii dokumentacji komunikacji – konieczna jest rzetelna tabela rejestrów
+		\end{itemize}
+	\item zachowanie prostoty:
+		\begin{itemize}
+			\item jeżeli używany mikrokontroler ma wbudowaną funkcję podciągania wejść – używać jej zamiast zewnętrznych rezystorów pull-up / pull-down,
+				jeżeli ma tylko pull-up to przyciski robić jako zwierane do masy aby móc z niej skorzystać
+			\item pamiętać że często (wbrew początkowej intuicji) sterowanie czymś przy pomocy wyjścia cyfrowego (zwłaszcza gdy wymagany jest do tego zewnętrzny tranzystor) prostsze jest od strony masy,
+				czyli poprzez odłączanie/podłączanie do sterowanego układu masy (a nie dodatniego bieguna zasilania)
+			\item warto także ograniczyć liczbę wykorzystywanych rodzin i modeli mikrokontrolerów
+				– w przypadku nie seryjnej produkcji oszczędności z zastosowania np. bardzo małego mikrokontrolera zostaną zatarte „kosztami” związanymi z trudnościami w jego użyciu (brak pinów do debugowania, mała pamięć programu, itd.)
+				oraz związanymi z rozwijaniem projektów na różnych mikroprocesorach (bo do kolejnego był już za mały)
+		\end{itemize}
+	\item łatwość diagnostyki i serwisu:
+		\begin{itemize}
+			\item należy zapewnić reset układów peryferyjnych wraz z resetem mikrokontrolera (np. poprzez użycie jednego z pinów GPIO mikrokontrolera w tej roli),
+				dotyczy to także przypadków gdy naszymi urządzeniami peryferyjnymi są inne mikrokontrolery
+			\item należy zapewnić łatwą możliwość przeprogramowania mikrokontrolera (bez potrzeby rozmontowywania układu, czy też wyjmowania z niego mikrokontrolera),
+				a jeżeli aktualizacja wbudowanego oprogramowania odbywa się standardowo w jakiś wyżej poziomowy sposób to należy zapewnić zabezpieczenie przed awarią w jej trakcie,
+				np. poprzez umieszczanie go na wymiennej karcie SD lub dostęp (np. poprzez UART) do sprzętowego bootloadera danego mikrokontrolera, lub zewnętrzny dostęp do programowania odpowiedniej pamięci
+			\item warto zapewnić 2-3 diody sygnalizacyjne informujące o stanie pracy / awarii naszego urządzenia
+			
+			\item należy zapewniać możliwości naprawy i modyfikacji poszczególnych elementów systemu – przede wszystkim poprzez zapewnienie dostępu do nich
+				(a gdy będzie on nie możliwy lub bardzo trudny poprzez położenie zapasowych przewodów), wykonywanie połączeń w łatwo dostępnych miejscach, itd.
+			\item należy zachowywać kompatybilność wsteczną zawsze wtedy gdy tylko to jest możliwe (nowe urządzenie, nowa wersja muszą pracować w istniejącej sieci, nowa wersja musi w prosty sposób móc zastąpić poprzednią)
+			\item należy konsekwentnie trzymać się określonych interfejsów i protokołów, jest to szczególnie ważne w niskopoziomowych (trudno aktualizowalnych, debugowalnych, występujących w dużej liczbie egzemplarzy) urządzeniach
+		\end{itemize}
+	\item nie tworzenie „potworków” (bo to się będzie mściło):
+		\begin{itemize}
+			\item należy unikać sztucznego ograniczania funkcjonalności tworzonego urządzenia (co jest nagminnie czynione w urządzeniach powszechnie dostępnych na rynku), na przykład:
+				\begin{itemize}
+					\item jeżeli urządzenia ma złącze Ethernet i używa je np. do wystawienia jakiegoś WWW to należy udostępnić pełną funkcjonalność monitoringu/konfiguracji tego urządzenia przez to TCP/IP z użyciem standardowych protokołów (np. Modbus TCP)a nie wymagać do tego osobnego modułu
+					\item jeżeli urządzenia ma system operacyjny (np. Linuxa) należy zapewnić możliwość pełnego dostępu do niego (z prawami root'a) – także użytkownikowi, jeżeli je od nas kupił to on jest jego właścicielem
+				\end{itemize}
+			\item z drugiej strony należy jednak unikać upychania funkcjonalności do granic możliwości
+				(lepiej pozwolić „zmarnować się” kilku nóżkom mikrokontrolera niż zrezygnować z czytelności, powtarzalności czy możliwości diagnostycznych na rzecz np. obsłużenia kilku dodatkowych IO)
+			\item należy unikać oszczędzania kilka złotych minimalizując ponad miarę rozmiar PCB czy eliminując jakieś złącza lub je ograniczając
+				(na złączach oprócz sygnałów należy wystawiać też potrzebne zasilania/masy w odpowiednich ilościach)
+			
+			\item należy walczyć z z problemem plątaniny kabli już na etapie założeń projektowych poprzez:
+				\begin{itemize}
+					\item stosowanie modularności – np. 1 sterownik Ethernet/IP (lub co najmniej RS-485/Modbus) na niezbyt dużą grupę wejść (np. jeden panel przycisków) / wyjść (np. jedną grupę przekaźników)
+					\item nie oszczędzanie miejsca na PCB i funduszy na gniazdka przyłączeniowe (nie robić przylutowywanej na stałe wiązki kabli, pamiętać o masach i zasilaniach)
+					\item nie oszczędzanie miejsca na PCB na otwory montażowe (najlepiej na wszystkich modułach wykonywać je w identycznych miejscach - z myślą o przyszłej obudowie, a nie tam gdzie popadnie)
+					\item w przypadku wykonywania większych układów, złożonych z kilku sterowników rozważyć stosowanie korytek grzebieniowych do ukrycia plątaniny kabli
+					\item w przypadku stosowania magistrali równoległej rozważyć multipleksowanie linii adresowej i danych
+				\end{itemize}
+			\item należy pamiętać że źle zastosowane technologie, które mają służyć ułatwieniu serwisowania i obsługi systemu (koryta kablowe, stelaże/szafy rack 19", obudowy z mocowaniem na szynę DIN / TH-35) mogą przynieść odwrotny skutek,
+				a liczy efekt w postaci dobrze zaprojektowanego, czytelnego, dobrze działającego, serwisowalnego, rozbudowywalnego urządzenia/systemu a nie konkretnie zastosowane technologie
+		\end{itemize}
+\end{itemize}
