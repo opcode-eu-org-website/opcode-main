@@ -1,0 +1,59 @@
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+% BEGIN: Struktura katalogów
+\subsection{Struktura katalogów}
+
+Systemy unix'owe posiadają drzewiasty system plików zaczynający się w katalogu głównym oznaczanym przez ukośnik (\texttt{/}), w którym zamontowany jest główny system plików (rootfs), inne systemy plików mogą być montowane w kolejnych katalogach. Do najistotniejszych katalogów należy zaliczyć:
+\begin{itemize}
+	\item \Verb{/bin}
+	      zawierający pliki wykonywalne podstawowych programów
+	\item \Verb{/sbin}
+	      zawierający pliki wykonywalne podstawowych programów administracyjnych
+	\item \Verb{/lib}
+	      zawierający pliki podstawowych bibliotek
+	\item \Verb{/usr}
+	      zawierający oprogramowanie dodatkowe (wewnętrznie ma podobną strukturę do głównego - tzn. katalogi \texttt{/usr/bin}, \texttt{/usr/sbin}, \texttt{/usr/lib}, itd)
+	
+	\vspace{6pt}
+	
+	\item \Verb{/etc}
+	      zawierający konfiguracje ogólnosystemowe
+	\item \Verb{/var}
+	      zawierający dane programów i usług (takie jak kolejka poczty, harmonogramy zadań, bazy danych)
+	\item \Verb{/home}
+	      zawierający katalogi domowe użytkowników (często montowany z innego systemu plików, dlatego też root ma swój katalog domowy w \texttt{/root}, aby był dostępny nawet gdy takie montowanie nie doszło do skutku)
+	\item \Verb{/tmp}
+	      zawierający pliki tymczasowe (typowo czyszczony przy starcie systemu); w Linuxie występuje też \texttt{/run} przeznaczony do trzymania danych tymczasowych działających usług takich jak numery pid, blokady, itp
+	
+	\vspace{6pt}
+	
+	\item \Verb{/dev}
+	      zawierający pliki reprezentujące urządzenia; w Linuxie występuje też \texttt{/sys} zawierający informacje i ustawienia dotyczące m.in. urządzeń
+	\item \Verb{/proc}
+	      zawierający informacje o działających procesach (w Linuxie także interfejs konfiguracyjny dla wielu parametrów jądra)
+\end{itemize}
+Pliki i katalogi których nazwa rozpoczyna się od kropki traktowane są jako pliki ukryte.
+
+Z punktu widzenia programisty czy też użytkownika (prawie) wszystko jest plikiem, których istnieją różne rodzaje (zwykły plik, katalog, urządzenie znakowe, urządzenie blokowe, link symboliczny, kolejka FIFO, ...); pewnym wyjątkiem są urządzenia sieciowe (które nie mają reprezentacji w systemie plików (ale gniazda związane z nawiązanymi połączeniami obsługuje się zasadniczo tak jak pliki).
+% END: Struktura katalogów

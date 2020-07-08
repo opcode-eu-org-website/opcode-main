@@ -1,0 +1,136 @@
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+% BEGIN: Użytkownicy, uprawnienia i procesy
+\section{Użytkownicy, uprawnienia i procesy}
+
+%Systemy ,,unixowe'' tworzone były jako wielo-użytkownikowe i wielo-procesowe, w wyniku tego posiadają 
+
+\subsection{Uprawnienia do plików}
+Podstawowe unixowe uprawnienia do plików składają się z trzech członów: uprawnienia dla właściciela (u), grupy (g) i pozostałych użytkowników (o).
+W każdym z członów mogą być przyznane uprawnienia do czytania (r), pisania (w) i wykonywania (x); w odniesieniu do plików jest to intuicyjne (uprawnienie do wykonywania jest potrzebne do uruchomienia programów), natomiast w stosunku do katalogów wygląda to następująco: uprawnienia do czytania pozwalają na listowanie zawartości, do wykonania pozwalają na dostęp, do zawartości katalogu (wejścia do niego) do pisania na tworzenie nowych obiektów wewnątrz niego i zmienianie nazw istniejących.
+
+Rozszerzeniem podstawowych uprawnień opisanych powyżej jest mechanizm Filesystem Access Control List (ACL, fACL).\\
+Jest on opcjonalnym mechanizmem który (na wspierających go systemach plików) pozwala na definiowanie indywidualnych uprawnień do pliku dla poszczególnych użytkowników i grup – plik ma nadal swojego właściciela, grupę i wszystkich pozostałych, ale przed prawami dla "others" wchodzą prawa użytkowników i grup definiowanych w ACL. Wypadkowe prawa obliczane są jako suma wynikła z praw użytkownika i grup do których należy.\\
+ACL pozwala ponadto definiować uprawnienia domyślne dla nowo powstałych plików w katalogu (są one opcją katalogu).
+
+Wszystkie poniższe komendy przyjmują opcję \texttt{-R} powodującą rekursywne wykonywanie zmian na drzewku katalogów/plików rozpoczynającym się w podanej ścieżce.
+\begin{itemize}
+	\item \Verb{chown [opcje] właściciel ścieżka}
+		zmiana właściciela pliku
+	\item \Verb{chgrp [opcje] grupa ścieżka}
+		zmiana grupy do której należy plik pliku
+	\item \Verb{chmod [opcje] uprawnienia ścieżka}
+		zmiana prawa dostępu do pliku(ów)
+	
+	\item \Verb{getfacl [opcje] [ścieżka]}
+		odczyt uprawnień związanych z listami kontroli dostępu fACL
+	\item \Verb{setfacl [opcje] [ścieżka]}
+		ustawianie uprawnień związanych z listami kontroli dostępu fACL
+\end{itemize}
+
+\noindent{\Symbola 🤔} Dodatkowo należy wspomnieć też o poleceniach takich jak:
+\begin{itemize}
+	\item \Verb{lsattr} / \Verb{chattr}
+		wyświetla / modyfikuje atrybuty plików związanych z systemem plików (np. zabrania jakiejkolwiek modyfikacji pliku)
+	\item \Verb{getcap} / \Verb{setcap}
+		wyświetla / modyfikuje atrybuty plików związanych z właściwościami jądra (zasadniczo zwiększonymi uprawnieniami programów je posiadających, ale bardziej ograniczonymi niż wykonanie na prawach root przez SUID)
+\end{itemize}
+
+\subsection{Użytkownicy}
+\begin{itemize}
+	\item \Verb{id [użytkownik]}
+		informacja o użytkowniku (m.in. grupy do których należy)
+	\item \Verb{whoami}
+		informacja o aktualnym użytkowniku
+	\item \Verb{w lub who}
+		informacja o zalogowanych użytkownikach
+	
+	\item \Verb{passwd [użytkownik]}
+		zmiana hasła
+		
+	\item \Verb{su [użytkownik]}
+		przełącza użytkownika (aby przełączony użytkownik miał dostęp do "naszego" x serwera wcześniej wydajemy \texttt{xhost LOCAL:użytkownik})
+	\item \Verb{sudo}
+		program pozwalający na wykonywanie uprzywilejowanych komend przez wyznaczonych użytkowników
+\end{itemize}
+
+\subsection{Procesy i zasoby}
+\begin{itemize}
+	\item \Verb{ps [opcje]}
+		wyświetla aktualnie działające procesy i informacje o nich\\
+			np. kombinacja opcji \texttt{-Alf} powoduje wyświetlenie wszystkich procesów, w długim, pełnym formacie wypisywania
+		
+	\item \Verb{top}
+		monitorowanie procesów obciążających CPU, pamięć, itd
+	\item \Verb{iotop}
+		monitorowanie procesów obciążających I/O
+	
+	\item \Verb{kill [opcje] pid}
+		przesyła sygnał do procesów o podanych PID
+	\item \Verb{killall [opcje] nazwa}
+		przesyła sygnał do procesów o pasującej nazwie
+\end{itemize}
+
+\begin{ProTip}[breakable]{kill i zabijanie procesu}
+Polecenie kill domyślnie wysyła sygnał SIGTERM, który jest prośbą o zakończenie procesu (proces może ją uszanować lub nie, np. zignorować). Więc sam kill nie zabija procesu.
+
+Wiele sygnałów może zostać przechwyconych i obsłużonych (zignorowanych) przez proces do którego są adresowane. Istnieją także sygnały, które nie mogą zostać obsłużone bądź zignorowane są to m.in.:
+	SIGKILL (zakończenie procesu bez dania mu jakiejkolwiek szansy zrobienia czegoś na „do widzenia”, wysyłany przez \Verb#kill -9#),
+	SIGSTOP (wstrzymanie procesu).
+\end{ProTip}
+
+\begin{ProTip}[breakable]{Ctrl+C / Ctrl+Z / Ctrl+D}
+\textbf{Ctrl+C} wysyła sygnał SIGINT do procesu zajmującego terminal na którym został on wprowadzony. Sygnał ten jest prośbą o zakończenie procesu, którą proces może uszanować lub nie (np. może całkiem zignorować lub poprosić o potwierdzenie). Jest on podobny do SIGTERM, jednak jest innym sygnałem i może być inaczej obsłużony (np. w SIGTERM nie ma większego sensu pytać o potwierdzenie).
+
+\vspace{6pt}\textbf{Ctrl+Z} wysyła sygnał SIGTSTP do procesu zajmującego terminal na którym został on wprowadzony. Sygnał ten jest prośbą o wstrzymanie procesu i oddanie terminala, prośba ta może być zignorowana przez proces. Proces przerwany w ten sposób może być wznowiony poleceniem \Verb#fg# (które wznowi go jako pierwszoplanowy – okupujący terminal) lub \Verb#bg# (które wznowi go jako jako proces w tle – oddając terminal, przodkowi który go posiadał wcześniej).
+
+\vspace{6pt}\textbf{Ctrl+D} nie wysyła żadnego sygnału, działa tylko gdy proces czyta dane z terminala (podłączonego zazwyczaj do jego standardowego wejścia). Wysyła on do terminala znak EOT (End-of-Transmission), w efekcie czego:
+\begin{itemize}
+	\item (jeżeli bufor wejściowy jest niepusty) terminal wypycha bufor wejściowy do programu (tak jak po wprowadzeniu nowej linii), albo
+	\item (jeżeli nie ma znaków w buforze) terminal zamyka strumień wprowadzanych danych do programu
+\end{itemize}
+Program nie otrzymuje w strumieniu znaku EOT (jest on przechwycony przez terminal).
+Zamknięcie strumienia wejściowego na ogół prowadzi także do zakończenia działania programu, jednak (w odróżnieniu od Ctrl-C) pozwala programowi na normalne przetworzenie wprowadzonych danych.
+\end{ProTip}
+
+\begin{ProTip}[breakable]{Ctrl+S / Ctrl+Q}
+\textbf{Ctrl+S} wstrzymuje przewijanie (odświeżanie) terminala, aby wznowić należy użyć \textbf{Ctrl+Q}.
+\end{ProTip}
+% END: Użytkownicy, uprawnienia i procesy
+
+% BEGIN: Planowanie zadań
+\subsection{Planowanie zadań}
+Typowo system zapewnia usługę uruchamiania zadań o zadanym czasie. Z usługi tej można skorzystać przy pomocy poleceń:
+\begin{itemize}
+	\item \Verb{crontab} pozwala oglądać i edytować tablice zaplanowanych zadań cyklicznych (dla cron'a)
+	\item \Verb{at} pozwala jednorazowo zaplanować zadanie
+\end{itemize}
+	Pliki konfiguracyjne crona / obsługiwane crontab-em mają postać: \texttt{minuty godzina  dzienMiesiaca miesiac dzienTygodnia polecenie}.
+	Wpis oznacza że polecenie ma zostać wykonane jeżeli wszystkie warunki będą spełnione, jeżeli jakiś warunek nie jest nam potrzebny można użyć gwiazdki \texttt{*},
+	z kolei \texttt{*/n} oznacza wykonywanie jeżeli dana wartość jest podzielna przez n. Np.:
+		\texttt{*/20 3  * * 1 ls} oznacza wykonanie komendy ls w każdy poniedziałek o godzinie 3:00 3:20 i 3:40
+	
+	Standardowe wyjście, wyjście błędu oraz powiadomienie o niezerowym kodzie powrotu domyślnie są wysyłane na lokalny adres mailowy użytkownika będącego właścicielem danego contaba.
+	Niekiedy dostępny jest także \texttt{anacron} pozwalający na mniej precyzyjne planowanie zadań.
+% END: Planowanie zadań

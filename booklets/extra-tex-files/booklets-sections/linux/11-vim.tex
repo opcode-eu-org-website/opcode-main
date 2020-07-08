@@ -1,0 +1,99 @@
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+% BEGIN: vi i vim
+\subsection{vi i vim}
+\Verb{vi} jest chyba najbardziej zaawansowanym edytorem, którego obecność gwarantuje standard POSIX\footnote{IEEE Std 1003.1-2017 (The Open Group Base Specifications Issue 7, 2018 edition), XCU part \url{https://pubs.opengroup.org/onlinepubs/9699919799/}}.
+\Verb{vim} jest mocno rozbudowanym jego klonem, oferującym bardzo zaawansowane funkcjonalności, powszechnie stosowanym jako zamiennik oryginalnego \Verb{vi}.
+\Verb{vim} obsługuje 3 podstawowe tryby pracy: komend (służący do wydawania opisanych niżej poleceń), wizualny (służący do zaznaczania i wydawania niektórych komend), edycji (wstawiania/nadpisywania - służący do wprowadzania tekstu).
+Podstawowa klawiszologia:
+\begin{itemize}
+\item \Verb{Esc} powrót do trybu komend
+\item \Verb{i} tryb wstawiania
+\item \Verb{R} tryb zastępowania
+\item \Verb{Insert} zmiana trybu wstawiania i zastępowania
+\item \Verb{v} tryb wizualny (umożliwia zaznaczenie przy pomocy strzałek)
+
+\vspace{6pt}
+
+\item \Verb{y} skopiuj; \Verb{d} - wytnij (skopiuj i usuń)\\
+	po \Verb{y}, \Verb{d} można podać np. \texttt{20l} lub \texttt{20[strzałka w prawo]} co oznacza 20 kolejnych znaków, \texttt{2w}~oznacza dwa słowa
+\item \Verb{x} wytnij (skopiuj i usuń) znak (może być poprzedzone ilością znaków do wycięcia)
+\item \Verb{yy} skopiuj linię; \Verb{dd} - wytnij (skopiuj i usuń)\\
+	w obu wypadkach może być poprzedzone ilością linii do skopiowania/wycięcia
+
+\vspace{6pt}
+
+\item \Verb{p} wkleja po; \Verb{P} - wkleja przed
+\item \Verb{u} cofa ostatnią operację
+
+\vspace{6pt}
+
+\item \Verb{/} szukanie
+\item \Verb{n} wyszukanie następnego wystąpienie; \Verb{N} wyszukanie poprzedniego wystąpienie
+\item \Verb{G} przejście do wskazanej linii, numer podajemy przed G, 0 oznacza ostatnią linię w pliku, więc \Verb{0G} spowoduje przejście do niej
+
+\vspace{6pt}
+
+\item \Verb{:[zakres]s@regexp@napis@[g]} wyszukaj i zastąp wyrażenie regularne regexp przez napis;
+	zakres może być:
+	\begin{itemize}
+		\item numerem linii,
+		\item przedziałem z numerami linii postaci \Verb{pierwsza,ostatnia}, gdzie:\\
+			\Verb{.}~oznacza bieżącą linię,
+			\Verb{$}~oznacza ostatnią linię w pliku,
+			wartość numeryczna poprzedzona \Verb{+}~oznacza tyle kolejnych linii od bieżącej, a poprzedzona \Verb{-}~przed bieżącą,
+		\item znakiem \Verb{%} (co oznacza cały plik),
+		\item zakresem zaznaczonym w trybie wizualnym;
+	\end{itemize}
+	podanie opcji g powoduje zastępowanie wszystkich wystąpień a nie tylko pierwszego;\\
+	znak \Verb{@} pełni rolę separatora i może zostać zamiast niego użyty inny znak
+
+\vspace{6pt}
+
+\item \Verb{:e ścieżka} otwarcie wskazanego pliku
+\item \Verb{:w} zapis (można także podać ścieżkę pod jaka ma zostać zapisany plik)
+\item \Verb{:q} wyjście
+      ;
+      \Verb{:q!} wyjście bez zapisywania
+      ;
+      \Verb{:wq} zapis i wyjście
+
+\vspace{6pt}
+
+\item \Verb{:n} - następny plik
+      ;
+      \Verb{:N} - poprzedni plik
+\item \Verb{:split} - podział okna
+      ;
+      \Verb{:vs} - pionowy podział okna
+      ;
+      \Verb{Ctrl}+\Verb{W} a następnie strzałka - przełączanie między oknami
+
+\vspace{6pt}
+
+\item \Verb{:%!xxd} pokazanie wartości numerycznych i umożliwienie edycji pliku jako binarnego;
+      \\
+      \Verb{:%!xxd -r} powrót do normalnej edycji
+\end{itemize}
+% END: vi i vim

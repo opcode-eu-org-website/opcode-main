@@ -22,6 +22,16 @@
 % OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 % SOFTWARE.
 
+\begin{teacherOnly}
+	W ramach wykładu nie ma sensu omawiania szczegółów kodu (to jest opisane w skrypcie i komentarzach), zamiast tego należy się skupić na głównych koncepcjach, czyli:
+	\begin{itemize}
+		\item konfiguracja portów GPIO i znaczenie odczytu/zapisu z/do takiego portu
+		\item przerwania (co to jest, do czego służy), wektor przerwań oraz (krótko) jak się ich używa na tej platformie
+		\item wbudowane peryferia komunikacyjne – wsparcie sprzętowe dla ich obsługi i koncepcja programowa ich użycia
+		\item znaczenie, zastosowanie ADC, a jak czas pozwoli także jego budowa i krótko o jego użyciu
+	\end{itemize}
+\end{teacherOnly}
+
 Skrypt opisuje podstawy programowania mikrokontrolerów STM32. Podczas kursu będziemy używać
 popularnej, dostępnej i prostej płytki ``Blue Pill''. Programy będą pisane w języku
 C z pomocą biblioteki \Verb$libopencm3$ (\url{https://github.com/libopencm3/libopencm3}).

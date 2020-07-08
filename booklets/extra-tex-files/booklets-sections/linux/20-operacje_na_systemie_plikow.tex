@@ -1,0 +1,166 @@
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\section{Operacje na systemie plików}
+
+\subsection{Podstawowe komendy}
+
+\teacher{Pokazać i omówić działanie komend wykonując je w terminalu na rzutniku}
+
+% BEGIN: Operacje na systemie plików
+\subsubsection{katalog roboczy}
+\begin{itemize}
+	\item \Verb{cd [ścieżka]}
+		zmiana bieżącego katalogu,\\
+			warto zauważyć, iż katalogi w ścieżce oddzielamy ukośnikami \texttt{/}, bieżący katalog oznaczamy kropką \texttt{.}, nadrzędny oznaczamy dwiema kropkami \texttt{..},\\
+			ścieżki zaczynające się od ukośnika \texttt{/} oznaczają \emph{ścieżki bezwzględne} (od korzenia systemu plików), pozostałe oznaczają \emph{ścieżkę względną} (wyrażoną względem bierzącego katalogu),\\
+			katalog domowy oznacza się tyldą\ \ \texttt{\~}
+		
+	\item \Verb{pwd}
+		wyświetla ścieżkę do bieżącego katalogu
+\end{itemize}
+
+\subsubsection{wyświetlanie i wyszukiwanie}
+\teacher{Już na początku omawiania \texttt{ls} warto omówić znaki uogólniające - patrz poniżej}
+\begin{itemize}
+	\item \Verb{ls [opcje] [ścieżka]}
+		listowanie zawartości katalogu, do ważniejszych opcji należy zaliczyć:\\
+			\texttt{-a} wyświetlaj pliki ukryte (zaczynających się od kropki)\\
+			\texttt{-l} wyświetlaj pliki w formie listy z szczegółowymi informacjami (uprawnienia, rozmiar, data modyfikacji, właściciel, grupa, rozmiar)\\
+			\texttt{-1} wyświetlaj pliki w formie 1 plik w jednej linii (bez dodatkowych informacji; stosowane domyślne gdy wynik komendy przekazywany jest strumieniem do innej komendy lub pliku)\\
+			\texttt{-h} stosuj jednostki typu k, M, G zamiast podawać rozmiar w bajtach\\
+			\texttt{-t} sortuj wg daty modyfikacji\\
+			\texttt{-S} sortuj wg rozmiaru\\
+			\texttt{-r} odwróć kolejność sortowania\\
+			\texttt{-c} użyj daty utworzenia zamiast daty modyfikacji (stosowane w połączeniu z \texttt{-l} i/lub \texttt{-t})\\
+			\texttt{-d} wyświetlaj informacje o katalogu zamiast jego zawartości
+		
+	\item \Verb{find [opcje] [katalog startowy] [wyrażenie]}
+		wyszukiwanie w systemie plików w oparciu o nazwę/ścieżkę lub właściwości pliku, do ważniejszych opcji należy zaliczyć:\\
+			\texttt{-P} wypisuj informacje o linkach symbolicznych a nie plikach przez nie wskazywanych (domyślne)\\
+			\texttt{-L} wypisuj informacje o wskazywanych przez linki symboliczne plikach\\
+		do ważniejszych elementów wyrażenia należy zaliczyć:\\
+			\texttt{-name "wyrażenie"} pliki których nazwa pasuje do wyrażenia korzystającego z shellowych znaków uogólniających\\
+				komenda find (w odróżnieniu np. od \texttt{ls}) samodzielnie interpretują wyrażenia zawierające shellowe znaki uogólniające, w związku z czym konieczne może się okazać zabezpieczenie ich przed interpretacją przez powłokę np. przy pomocy umieszczenia wewnątrz pojedynczych cudzysłowów\\
+			\texttt{-iname "wyrażenie"} jak \texttt{-name}, tyle że nie rozróżnia wielkości liter\\
+			\texttt{-path "wyrażenie"} pliki których ścieżka pasuje do wyrażenia korzystającego z shellowych znaków uogólniających\\
+			\texttt{-ipath "wyrażenie"} jak \texttt{-path}, tyle że nie rozróżnia wielkości liter\\
+			\texttt{-regex "wyrażenie"} pliki których ścieżka pasuje do wyrażenia regularnego\\
+			\texttt{-iregex "wyrażenie"} jak \texttt{-regexp}, tyle że nie rozróżnia wielkości liter\vspace{6pt}\\
+			%
+			\texttt{warunek -o warunek} łączy warunki sumą logiczną „OR” (zamiast domyślnego iloczynu logicznego „AND”)\\
+			\texttt{! warunek} negacja warunku\vspace{6pt}\\
+			%
+			\texttt{-mtime [+|-]n} pliki których modyfikacja odbyła się \texttt{n}*24 godziny temu\\
+			\texttt{-mmin [+|-]n} pliki których modyfikacja odbyła się \texttt{n} minut temu\\
+			\texttt{-ctime [+|-]n} pliki które zostały utworzone \texttt{n}*24 godziny temu\\
+			\texttt{-cmin [+|-]n} pliki które zostały utworzone \texttt{n} minut temu\\
+			\texttt{-size [+|-]n[c|k|M|G]} pliki których rozmiar wynosi \texttt{n} (c - bajtów, k - kilobajtów, M - Megabajtów, G - gigabajtów)\\
+			\strong{\emph{w powyższych testach \texttt{+} oznacza więcej niż, \texttt{-} oznacza mniej niż, uwaga: porównywaniu podlegają liczby całkowite, np. +1 oznaczacza $>1$ w liczbach całkowitych tzn. $\ge2$}}\vspace{6pt}\\
+			%
+			\texttt{-exec}\Verb@ polecenie \{\} \;@ dla każdego znalezionego pliku wykonaj \texttt{polecenie} podstawiając ścieżkę do tego pliku pod \Verb@\{\}@ (zastosowane odwrotne ukośniki służą zabezpieczeniu nawiasów klamrowych i średnika przed zinterpretowaniem ich przez powłokę)\\
+			\Verb@-execdir polecenie \{\} \;@, podobnie jak \texttt{-exec} tyle że polecenie zostanie uruchomione w katalogu w którym znajduje się wyszukany plik
+		
+	\item \Verb{du [opcje] ścieżka1 [ścieżka2 [...]]}
+		wyświetlanie informacji o zajętej przestrzeni dyskowej przez wskazane pliki / katalogi, do ważniejszych opcji należy zaliczyć:\\
+			\texttt{-s} podaje łączną ilość zajętego miejsca dla każdego argumentów (zamiast wypisywać rozmiar każdego pliku)\\
+			\texttt{-c} podaje łączną ilość zajętego miejsca dla wszystkich argumentów\\
+			\texttt{-h} stosuje jednostki typu k, M, G\\
+		podawany rozmiar może się różnić (w obie strony) od wyniku ls: ls podaje rozmiar pliku (ile zawiera informacji lub ile zostało zadekarowane że może jej zawierać), a du to ile zajmuje na dysku
+		
+	\item \Verb{df [opcje]}
+		wyświetlanie informacji o zajętości miejsca na poszczególnych systemach plików
+\end{itemize}
+
+\noindent W ścieżkach i nazwach plików można korzystać z znaków uogólniających powłoki takich jak:
+\begin{itemize}
+	\item \Verb{?} oznaczający dowolny znak
+	\item \Verb{*} oznaczający dowolny (także pusty) ciąg znaków
+	\item \Verb{[a-z AD]} oznaczający dowolny znak z wymienionych w zbiorze ujętym w nawiasach kwadratowych, zbiór może być definiowany z użyciem zakresów, np. a-z AD oznacza dowolną małą literę od a do z włącznie, spację, dużą literą A lub D
+	\item \Verb{[!a-z]} oznaczający dowolny znak z wyjątkiem znaków wymienionych w podanym zbiorze, zbiór może być definiowany z użyciem zakresów, np. a-z oznacza dowolną małą literę od a do z włącznie
+\end{itemize}
+Ścieżki mogą być podawane także jako napisy ujęte w cudzysłowie pojedynczym (\texttt{'}, np. \texttt{'aaa bbb'}) lub podwójnym (\texttt{"}, np. \texttt{"aaa bbb"}) celem np. ochrony spacji w nich występujących.
+Oba typy cudzysłowów zabezpieczają przed rozwijaniem znaków uogólniających (zastępowaniem napisu ze znakami listą pasujących nazw / ścieżek). Cudzysłów pojedynczy (w odróżnieniu od podwójnego) zabezpiecza także przed interpretacją umieszczonych wewnątrz innych znaków specjalnych takich jak odwołania do zmiennych.
+
+\begin{teacherOnly}
+Warto omówić następujące przykłady:
+\begin{Verbatim}
+# pliki z jednoznakową nazwą
+ls ?
+# pliki zaczynające się od znaku zapytania
+ls \?*
+# pliki nie zaczynające się od a
+ls [!a]*
+# pliki mające w nazwie literę b
+ls *b*
+# pliki mające w nazwie literę a lub b
+ls *[ab]*
+# pliki zaczynające się od liter a,b,c,d
+ls [a-d]*
+\end{Verbatim}
+\end{teacherOnly}
+
+Warto zauważyć, iż w przypadku komendy \texttt{ls} znaki uogólniające muszą być rozwinięte przez powłokę.
+Natomiast w przypadku komendy \texttt{find} na ogół chcemy aby nie były rozwijane przez powłokę, ale interpretowane przez samą komendę \texttt{find}.
+W tym celu powinniśmy je zabezpieczyć przed rozwinięciem przy pomocy cudzysłowów.
+
+Zauważ również, że jeżeli komanda \texttt{ls} w wyniku rozwinięcia znaków uogólniających dostanie jako argument ścieżkę do katalogu to wylistuje jego zawartość (zachowanie to zmienia opcja \texttt{-d}).
+
+\subsubsection{kopiowanie, przenoszenie, usuwanie, ...}
+\begin{itemize}
+	\item \Verb{cp [opcje] źródło1 [źródło2 [...]] cel}
+		kopiuje wskazany plik (lub pliki) do wskazanej lokalizacji, w przypadku kopiowania wielu plików cel powinien być katalogiem, do ważniejszych opcji należy zaliczyć:\\
+			\texttt{-r} pozwala na (rekursywne) kopiowanie katalogów\\
+			\texttt{-a} podobnie jak \texttt{-r}, dodatkowo zachowując atrybuty plików\\
+			\texttt{-l} zamiast kopiować tworzy twarde dowiązania (hard links)\\
+			\texttt{-s} zamiast kopiować tworzy linki symboliczne do plików\\
+			\texttt{-f} nadpisywanie bez pytania\\
+			\texttt{-i} zawsze pytaj przed nadpisaniem
+		
+	\item \Verb{ln źródło1 [źródło2 [...]] cel}
+		tworzy link (domyślnie „twardy”) do wskazanego pliku (lub plików) w wskazanej lokalizacji, w przypadku wskazania wielu plików źródłowych cel powinien być katalogiem, do ważniejszych opcji należy zaliczyć:\\
+			\texttt{-s} tworzy dowiązania symboliczne (wskazujące na ścieżkę do oryginalnego pliku) zamiast twardych (wskazujących na te same dane co oryginalny plik)\\
+			\texttt{-r} używa ścieżki względnej zamiast bezwzględnej przy tworzeniu dowiązań symbolicznych
+			\vspace{5pt}\\\hspace*{1cm}\includegraphics[width=0.75\textwidth]{link_twardy_i_symboliczny}
+			\\
+			Link twardy jest innym uchwytem do tych samych danych i może być używany także po skasowaniu oryginalnego pliku. Liczbę dowiązań do danego pliku pokazuje m.in. komenda \Verb{ls} z opcją \Verb{-l}.
+			Nie można utworzyć linków twardych do katalogów, ani do plików na innym zasobie dyskowym (innym systemie plików).
+			\\
+			Link symboliczny wskazuje na konkretną ścieżkę (względną lub bezwzględną – co może mieć znaczenie przy przenoszeniu takiego linku) do dowolnego (nawet nie istniejącego – wtedy mówimy o zerwanym linku) pliku lub katalogu.
+		
+	\item \Verb{mv [opcje] źródło1 [źródło2 [...]] cel}
+		przenosi wskazane pliki / katalogi do wskazanej lokalizacji, w przypadku przenoszenia wielu plików cel powinien być katalogiem, do ważniejszych opcji należy zaliczyć:\\
+			\texttt{-f} nadpisywanie bez pytania\\
+			\texttt{-i} zawsze pytaj przed nadpisaniem
+		
+	\item \Verb{rm [opcje] ścieżka1 [ścieżka2 [...]]}
+		usuwa wskazane pliki, do ważniejszych opcji należy zaliczyć:\\
+			\texttt{-r} pozwala na na (rekursywne) kasowanie katalogów wraz z zawartością\\
+			\texttt{-f} usuwanie bez pytania\\
+			\texttt{-i} zawsze pytaj przed usunięciem
+			
+	\item \Verb{mkdir [opcje] ścieżka1 [ścieżka2 [...]]}
+		tworzy wskazane katalogi, do ważniejszych opcji należy zaliczyć:\\
+			\texttt{-p} pozwala na tworzenie całej ścieżki a nie tylko ostatniego elementu, nie zgłasza błędu gdy wskazany katalog istnieje
+\end{itemize}
+% END: Operacje na systemie plików

@@ -1,0 +1,51 @@
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\IfStrEq{\dbEntryID}{}{
+	\insertZadanie{\currfilepath}{passwd_warunek_na_uid_awk}{}
+	\insertZadanie{\currfilepath}{awk_last}{}
+	\insertZadanie{\currfilepath}{passwd_warunek_na_uid_noawk}{}
+	\insertZadanie{\currfilepath}{rekurecyjne_wyszukaj_i_zastap}{}
+}
+
+% napisy z uzyciem awk i/lub programowanie w bash
+
+\dbEntryBegin{passwd_warunek_na_uid_awk}\if1\dbEntryCheckResults
+Korzystając z AWK wyświetl z /etc/passwd linie w których UID (3 pole) ma warość >= 1000.
+\fi
+
+\dbEntryBegin{awk_last}\if1\dbEntryCheckResults
+Polecenie \Verb{last} wypisuje informację o ostatnich zalogowaniach w systemie. Napisz polecenie (wykorzystujące \Verb{last}), które wypisze informację jak często logowali się poszczególni użytkownicy.
+\fi
+
+\dbEntryBegin{passwd_warunek_na_uid_noawk}\if1\dbEntryCheckResults
+Wyświetl z /etc/passwd linie w których UID (3 pole) ma warość >= 1000 nie korzystając z AWK.
+Jeżeli masz pomysł przedstw więcej niż jedno rozwiązanie.
+\fi
+
+\dbEntryBegin{rekurecyjne_wyszukaj_i_zastap}\if1\dbEntryCheckResults
+Napisz funkcję która przyjmuje dwa argumenty - napis wyszukiwany i napis go zastępujący oraz dokonuje rekurencyjnego wyszukania i zamiany tych napisów w wszystkich plikach w bierzącym katalogu.
+
+\textit{Wskazówka 1: polecenie \texttt{sed} z opcją \texttt{-i} i wskazaniem pliku modyfikuje zawartości tego pliku stosownie do poleceń wydanych sed'owi}\\
+\textit{Wskazówka 2: dla uproszczenia możesz przyjąć że napisy te składają się jedynie z liter i cyfr.}
+\fi
