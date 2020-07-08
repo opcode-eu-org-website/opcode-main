@@ -1,0 +1,82 @@
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\dbEntryBegin{rfc1924}\if1\dbEntryCheckResults
+Zapoznaj się z RFC1924 i napisz program konwertujący adresy IPv6 pomiędzy notacją dwukropkową a notacją base-85 zgodną z tą specyfikacją.
+
+\textit{Wskazówka: do odczytu adresu w standardowej notacji dwukropkowej możesz użyć narzędzi z modułu \texttt{ipaddress}}
+\fi
+
+% PwES domowe (?):
+
+\dbEntryBegin{czy_w_sieci_ipv4}\if1\dbEntryCheckResults
+Ustal czy host o adresie IPv4 192.168.65.20 należy do sieci 192.168.33.15/19.
+\fi
+
+\dbEntryBegin{czy_w_sieci_ipv6}\if1\dbEntryCheckResults
+Ustal czy host o adresie IPv6 2001:6a0:0:21::60:2 należy do sieci 2001:6a0:0:10::/58.
+\fi
+
+
+\dbEntryBegin{adresy_serwerow_dns}\if1\dbEntryCheckResults
+Ustal adresy serwerów DNS posiadających informację o domenie \emph{gov}. Podaj polecenie którego użyłeś.
+\fi
+
+\dbEntryBegin{trasy_pakietow}\if1\dbEntryCheckResults
+Polecenie \Verb#ip r# pokazało następują tablicę routingu:
+
+\begin{Verbatim}
+default via 192.168.29.2 dev eth0.2 
+192.168.29.192/27 dev eth0.2  proto kernel  scope link  src 192.168.29.193
+172.16.16.0/27 via 172.16.18.2 dev tun5 
+172.16.16.48/28 dev wlan0  proto kernel  scope link  src 172.16.16.49 
+172.16.18.0/30 dev tun5  proto kernel  scope link  src 172.16.18.1 
+192.168.29.0/24 dev eth0  proto kernel  scope link  src 192.168.29.1 
+\end{Verbatim}
+Ustal trasę (urządzenie którym zostanie wysłany pakiet oraz jeżeli jest potrzebny to adres routera do którego będzie przesyłany) dla następujacych adresów IP:
+\begin{itemize}
+	\item 8.8.8.8
+	\item 192.168.29.202
+	\item 172.16.16.15
+\end{itemize}
+\fi
+
+\dbEntryBegin{kalkulator_ipv4}\if1\dbEntryCheckResults
+Przeanalizuj kod programu z rozdziału \ref{czy_w_sieci_kod}. Zapoznaj się z dokumentacją modułu ipaddress\footnote{Można ją wyświetlić uruchamiając po jego zaimportowaniu: \python{help('ipaddress')}} i pamiętając, że adres IPv4 jest 32 bitową liczbą, zmodyfikuj ten program aby zamiast na adresach IPv6 działał na IPv4.
+\fi
+
+\dbEntryBegin{ustaw_adres}\if1\dbEntryCheckResults
+Napisz polecenie które ustawi adres ip \Verb#172.33.13.113# (maska sieci to \Verb#255.255.255.0#) na interfejsie \Verb#eth5#.
+\fi
+
+\dbEntryBegin{ustaw_route}\if1\dbEntryCheckResults
+Napisz polecenie które ustawi trasę routingową do sieci \Verb#10.13.0.0/16# przez bramkę o adresie ip \Verb#172.33.13.13#.
+\fi
+
+\dbEntryBegin{wlacz_forward}\if1\dbEntryCheckResults
+Napisz polecenia które włączą przekazywanie pakietów (routing) pomiędzy interfejsami \Verb#eth3# i \Verb#eth4#, ale nie zezwolą na przekazywanie pakietów innymi interfejsami
+\fi
+
+\dbEntryBegin{ustaw_route}\if1\dbEntryCheckResults
+Napisz serwer UDP lub TCP (określ który wariant wybrałeś/wybrałaś), który na ciąg znaków \texttt{ip} wysłany przez klienta odeśle do niego informację o jego numerze IP.
+\fi

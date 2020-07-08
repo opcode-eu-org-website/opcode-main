@@ -31,7 +31,7 @@ serve:
 	cd $(OUTDIR) && python3 -m http.server
 
 upload:
-	ln -sf `realpath newIndex.xhtml` $(OUTDIR)/index.xhtml
+	ln -sf `realpath $(MAINDIR)/newIndex.xhtml` $(OUTDIR)/index.xhtml
 	cd $(OUTDIR) && rsync -rLc --delete -v -e "ssh" --exclude="~rrp" ./ www.opcode.eu.org:/srv/WebPages/main/
 
 #

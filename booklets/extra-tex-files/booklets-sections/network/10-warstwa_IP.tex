@@ -1,0 +1,83 @@
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\begin{teacherOnly}
+	\begin{easylist}[itemize]
+	& co to jest sieć komputerowa? jak ona działa?
+	& jak działa internet?
+	& w jaki sposób dane są przesyłane z jednego komputera na drugi?
+	&& pakiety
+	& skąd wiedzą gdzie mają trafić?
+	&& adresy, przełączanie pakietów vs łączy
+	\end{easylist}
+\end{teacherOnly}
+
+% BEGIN: Sieci - intro
+\section{Podstawy TCP/IP}
+
+Sieci komputerowe działają na zasadzie przesyłania informacji w postaci porcji, z których każda posiada co najmniej informację o adresie odbiorcy (zwykle też nadawcy), nazywanych ramkami lub pakietami. Kierowanie pakietów w odpowiednie miejsce odbywa się na podstawie adresu pakietu i nie jest związane z fizycznym zestawianiem łącza pomiędzy nadawcą a odbiorcą - każdy pakiet jest kierowany niezależnie, a w ramach pojedynczego łącza (kanału transmisji) mogą być przekazywane pakiety adresowane do różnych odbiorców. Nazywane jest to komutacją pakietów, w odróżnieniu od komutacji łącza (która występowała np. w klasycznej, analogowej telefonii, gdzie przekaźniki w centralach dokonywały zestawienia połączeń elektrycznych między dwoma aparatami telefonicznymi).
+
+\subsection{Struktura warstwowa}
+
+Komunikacja sieciowa typowo posiada strukturę warstwową. W modelu OSI wyróżnia się 7 warstw:
+\begin{enumerate}
+	\item fizyczną (pierwszą) definiującą aspekty związane z fizycznym przesyłem sygnału takie jak częstotliwości radiowe, poziomy napięć, etc.;
+		określa sposób transmisji kolejnych bajtów
+	\item łącza danych (drugą) definiującą aspekty związane z formatem ramki, protokoły ustalania zasad dostępu do medium transmisyjnego, itd.;
+		określa sposób transmisji porcji danych pomiędzy hostami w jednej sieci
+	\item sieciową (trzecią) definiującą aspekty związane z formatem pakietu, adresacją i zasady routingu umożliwiające zapewnienie łączności pomiędzy różnymi sieciami;
+		określa sposoby transmisji porcji danych pomiędzy sieciami
+	\item transportową (czwartą) odpowiedzialną za podział strumienia na porcje informacji, kontrolę nad poprawnością transmisji, adresację usług w ramach hosta
+	\item sesji (piątą)
+	\item prezentacji (szóstą)
+	\item aplikacji (siódmą)
+\end{enumerate}
+W modelu TCP/IP wyróżnia się 4 warstwy:
+\begin{enumerate}
+	\item Dostępu do sieci - obejmującą warstwy 1 i 2 modelu OSI
+	\item Internetu - obejmującą warstwę 3 modelu OSI
+	\item Transportową - obejmującą warstwę 4 modelu OSI
+	\item Aplikacji - obejmującą warstwy 5, 6 i 7 modelu OSI
+\end{enumerate}
+
+Z punktu widzenia modelu TCP/IP można powiedzieć o enkapsulacji danych kolejnych warstw w ramach warstwy niższej, czyli "surowe" dane (np. strona HTML) obudowywane są strukturą opisywaną przez warstwę aplikacji (np. nagłówkami HTTP), następnie całość ta umieszczana jest w polu danych pakietu warstwy transportowej (np. TCP), ten z kolei w polu danych pakietu IP (warstwy sieciowej), na koniec pakiet IP jest umieszczany w polu danych ramki warstwy dostępu do sieci (np. ramki ethernetowej). W ramach podróży przez kolejne sieci pakiet IP jest wyjmowany i wkładany w kolejne ramki warstwy dostępu do sieci, na ogół tylko z niewielkimi ingerencjami w zawartość tego pakietu (prawie zawsze nie dochodzącymi do pola danych pakietu TCP lub datagramu UDP, czyli nie wykraczającymi poza warstwę 4 OSI).
+% END: Sieci - intro
+
+% BEGIN: sieci IP
+\subsection{Protokół IP}
+
+\begin{teacherOnly}
+	\begin{easylist}[itemize]
+		& struktura pakietu
+			&& pokazać i omówić dobry, kolorowy obrazek ilustrujący strukturę pakietu IPv4 i IPv6
+			&& nagłówek – dane
+			&& adresy
+		& \strong{danymi może być inny pakiet} -> struktura warstwowa
+			&& od nisko poziomowych (specyficznych dla danej fizycznej realizacji sieci)
+			&& poprzez warstwy sieciowe (,,uniwersalne'')
+			&& po wysokopoziomowe (aplikacyjne, specyficzne dla zastosowania)
+	\end{easylist}
+\end{teacherOnly}
+
+Protokół IP (Internet Protocol) odpowiedzialny jest przede wszystkim za sposób adresacji hostów oraz reguły komutacji pakietów (routing). Jest on wspomagany przez kolejny protokół z tej rodziny - ICMP (Internet Control Message Protocol), którego zadaniem jest przekazywanie informacji kontrolnych np. o nieosiągalności hosta docelowego, odrzuceniu przetwarzania pakietu ze względu na zbyt dużą liczbę skoków (gdy wartość pola TTL z nagłówka IP wyniesie zero) a także pingi (zarówno żądanie jak i odpowiedź).
+% END: sieci IP

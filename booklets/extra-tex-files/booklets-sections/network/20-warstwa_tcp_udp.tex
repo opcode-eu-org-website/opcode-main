@@ -1,0 +1,95 @@
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+% BEGIN: TCP / UDP
+\section{Komunikacja TCP/IP}
+
+\begin{teacherOnly}
+	\begin{easylist}[itemize]
+		& protokoły warstwy transportowej - TCP i UDP
+		&& czym się różnią?
+		&& numery portów – identyfikacja usługi / procesu na hoście
+	\end{easylist}
+\end{teacherOnly}
+
+W oparciu o protokół IP działają protokoły warstwy transportowej takie jak UDP, TCP, czy też (mniej znane protokoły czasu rzeczywistego, transmisji strumieniowych): RTP, RTCP i SCTP.
+Najprostszym protokołem warstwy transmisji wydaje się być UDP, protokół ten umożliwia przesłanie informacji pomiędzy dwoma hostami IP i nie kontroluje on tego czy została ona przesłana poprawnie.
+Natomiast TCP kontroluje to czy przesłana informacja dotarła do adresata i nie została uszkodzona, a w przypadku problemów informacja wysyłana jest ponownie. TCP w związku z tym w przeciwieństwie do UDP musi otworzyć połączenie i wykorzystywać je do kontroli poprawności przesłania informacji, wymaga zatem przesłania większej liczby pakietów (co może prowadzić do pewnych opóźnień itp).
+W związku z tym TCP używany jest tam gdzie konieczna jest kontrola poprawności transmisji (oraz ponowne wysłanie zgubionego pakietu), UDP tam gdzie nie jest to potrzebne (a liczy się czas).
+
+Dodatkowo zarówno UDP jak i TCP na każdym z hostów wyróżniają numeryczny identyfikator dla aplikacji/procesu/usługi będącego odbiorcą czy też nadawcą informacji zwany numerem portu.
+% END: TCP / UDP
+
+% BEGIN: Polularne usługi
+\subsection{Popularne usługi}
+
+\begin{teacherOnly}
+	\begin{easylist}[itemize]
+		& pokazać jak działa serwer dns robiąc ręcznie zapytania dig'iem o kolejne poziomy
+	\end{easylist}
+	\begin{Verbatim}
+dig NS .
+dig @g.root-servers.net. NS pl.
+dig @a-dns.pl. NS edu.pl.
+dig @a-dns.pl. NS icm.edu.pl.
+dig @ns1.agh.edu.pl. NS ciekawi.icm.edu.pl.
+# dostaliśmy   CNAME www2.icm.edu.pl.  oraz brak wpisu NS
+dig @ns1.agh.edu.pl. A www2.icm.edu.pl.
+# dostaliśmy 213.135.59.55
+	\end{Verbatim}
+\end{teacherOnly}
+
+W ramach sieci mogą być realizowane różne usługi w oparciu o różne protokoły warstwy aplikacyjnej. Standardowe usługi posiadają zdefiniowane domyślne adresy portów dla swoich protokołów. Wśród usług i protokołów sieciowych należy wymienić przynajmniej:
+\begin{itemize}
+	\item DNS (Domain Name System) - odpowiedzialny za system mapujący nazwy alfanumeryczne hostów na adresy IP.
+	\item mechanizmy auto konfiguracji hostów - DHCP, rozgłaszanie informacji routingowej poprzez ICMPv6 (protokół warstwy 3)
+	\item WWW - udostępnianie treści z użyciem protokołu HTTP
+	\item pocztę elektroniczną - przesyłanie wiadomości (protokoły SMTP, IMAP, POP)
+	\item komunikację natychmiastową i telefonię IP (protokoły SIP, XMPP, IAX)
+	\item SSH - zdalny, szyfrowany dostęp do systemów IT, przesył plików oraz tunelowanie innych usług
+\end{itemize}
+
+\subsubsection{Domain Name System}
+
+Domeny posiadają budowę hierarchiczną / drzewiastą (precyzja rośnie od prawej do lewej, a kolejne poziomy oddzielane są kropkami).
+\teacher{Wspomnieć o kropce kończącej nazwę domeny oraz o pliku \Verb$/etc/hosts$. Poopowiadać o typach rekordów także PTR. }
+Realizacja odpowiedzi na zapytanie DNS wygląda następująco:
+\begin{enumerate}
+	\item host kieruje zapytanie do określonego w jego konfiguracji serwera "rozwijającego" DNS (DNS resolver),
+	\item serwer taki sprawdza w swojej pamięci podręcznej czy zna odpowiedź na to zapytanie (i nie jest ona przeterminowana - nie upłynął czas TTL od odnalezienia), jeżeli nie ma jej w swojej pamięci to
+	\item serwer taki zna adresy głównych serwerów DNS (root serwerów) zawierających informacje na temat serwerów obsługujących domeny najwyższego rzędu i kieruje do jednego z nich zapytanie o serwer obsługujący skrajnie prawą część adresu (np. \textit{.org}),
+	\item do otrzymanego serwera kierowane jest zapytanie o większą część adresu (np. \textit{eu.org}),
+	\item itd. aż do uzyskania odpowiedzi o pytany adres
+\end{enumerate}
+
+DNS przechowuje informacje w postaci rekordów mających określony typ (w większości przypadków dla danej nazwy domenowej może być zdefiniowanych wiele rekordów, tego samego lub innych typów).
+Wśród najważniejszych typów rekordów należy wymienić:
+\begin{itemize}
+	\item \Verb@A@ - rekord typu A czyli mapowanie nazwy na adres IPv4
+	\item \Verb@AAAA@ - rekord typu AAAA czyli mapowanie nazwy na adres IPv4
+	\item \Verb@MX@ - rekord typu MX czyli informacja o serwerach obsługujących pocztę danej domeny
+	\item \Verb@NS@ - rekord typu NS czyli informacja o serwerach obsługujących DNS danej domeny
+	\item \Verb@SRV@ - rekord typu SRV czyli informacje o hoście świadczącym usługę (usługa określana jest w nazwie domeny o którą pytamy)
+	\item \Verb@TXT@ - rekord typu TXT czyli informacje dodatkowe
+\end{itemize}
+% END: Polularne usługi

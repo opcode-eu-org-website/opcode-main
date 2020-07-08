@@ -1,0 +1,159 @@
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\section{Konfiguracja sieci w Linuxie}
+
+Konfigurację interfejsów sieciowych w systemie Linux umożliwia polecenie \Verb$ip$. Przykłady użycia (ta lista w żaden sposób nie wyczerpuje dostępnych możliwości i dodatkowych opcji):
+\begin{itemize}
+	\item wyświetlanie i ustawianie adresów IP
+		\begin{itemize}
+			\item \Verb{ip addr} – wypisuje obecną konfigurację adresów i informacje o stanie interfejsu
+			                 (\Verb{UP}/\Verb{DOWN} – interfejs włączony/wyłączony,
+			                  \Verb{LOWER_UP}/\Verb{LOWER_DOWN} – link warstwy niższej na interfejsie / jego brak)
+			\item \Verb{ip addr add ADDRESS dev INTERFACE} – dodaje adres \Verb{ADDRESS} do interfejsu \Verb{INTERFACE}
+			\item \Verb{ip addr del ADDRESS dev INTERFACE} – usuwa adres \Verb{ADDRESS} z interfejsu \Verb{INTERFACE}
+		\end{itemize}
+	\item włączanie i wyłaczanie interfejsów
+		\begin{itemize}
+			\item \Verb{ip link set INTERFACE up} / \Verb{ip link set INTERFACE down} – włączenie / wyłączenie interfejsu \Verb{INTERFACE}
+			\item \Verb{ip link set INTERFACE address ADDRESS} – ustawienie adresu sprzętowego urządzenia \Verb{INTERFACE} na \Verb{ADDRESS}
+		\end{itemize}
+	\item konfiguracja tagowanych VLANów
+		\begin{itemize}
+			\item \Verb{ip link add link INTERFACE name INTERFACE.VLANID type vlan id VLANID} – dodanie interfejsu związanego z tagowanym VLANem o numerze \Verb{VLANID} na interfejsie \Verb{INTERFACE}, moduł 8021q powinien zostać załadowany automatycznie
+			\item \Verb{ip link del INTERFACE.VLANID type vlan} – usunięcie interfejsu INTERFACE.VLANID (związanego z tagowanym VLANem VLANID na interfejsie INTERFACE
+		\end{itemize}
+	\item konfiguracja BRIDGE (programowego switcha)
+		\begin{itemize}
+			\item \Verb{ip link add INTERFACE type bridge} – dodanie interfejsu bridge'owego o nazwie INTERFACE
+			\item \Verb{ip link set SLAVE master INTERFACE}  – włączenie interfejsu SLAVE w skład bridge'owego INTERFACE
+			\item \Verb{ip link set SLAVE nomaster} – wyłaczenie interfejsu SLAVE z bridge'a
+			\item \Verb{ip link show master INTERFACE} – wyświetlanie portów składowych bridge'a o nazwie INTERFACE
+		\end{itemize}
+	\item konfiguracja BONDów (interfejsów agregujących inne w grupę celem zwiększenia prędkości lub niezawodności)
+		\begin{itemize}
+			\item \Verb{ip link add INTERFACE type bond} – dodanie interfejsu bondingowego o nazwie INTERFACE
+			\item \Verb{ip link set SLAVE master INTERFACE}  – włączenie interfejsu SLAVE w skład bondingu INTERFACE
+			\item \Verb{ip link set SLAVE nomaster} - wyłaczenie interfejsu SLAVE z bondingu
+			\item \Verb{ip link show master INTERFACE} – wyświetlanie portów składowych interfejsu bondingowego o nazwie INTERFACE
+		\end{itemize}
+	\item konfiguracja routingu
+		\begin{itemize}
+			\item \Verb{ip [-6] route} – wyświetlanie informacji na temat tras routingowych dla IPv4 (gdy wywołany bez opcji \Verb{-6}) / IPv6 (gdy wywołany z opcją \Verb{-6})
+			\item \Verb{ip route add NETWORK via GATEWAY dev INTERFACE} – dodanie trasy routingowej do sieci \Verb{NETWORK} poprzez router o adresie \Verb{GATEWAY} na interfejsie \Verb{INTERFACE}
+			\item \Verb{ip route del NETWORK via GATEWAY dev INTERFACE} – usunięcie trasy routingowej do sieci \Verb{NETWORK} ...
+		\end{itemize}
+\end{itemize}
+
+Często dostępne są także klasyczne polecenia:
+\begin{itemize}
+	\item \Verb{ifconfig}
+		włączanie i wyłączanie interfejsów sieciowych (up i down), ustawianie adresu IP i wyświetlanie informacji o interfejsach.
+	\item \Verb{route}
+		konfiguracja tras routingowych
+	\item \Verb{vconfig}
+		dodawanie i usuwanie obsługi wskazanych VLANów z danego interfejsu
+	\item \Verb{brctl}
+		konfiguracja programowego switcha ethernetowego pomiędzy interfejsami (bridge)
+	\item \Verb{ifenslave}
+		konfiguracja bondów
+\end{itemize}
+
+Innym przydatnym poleceniem jest \Verb#tc#, które służy do konfiguracji ustawień kontoli przepływu (np. kolejkowania) na interfejsach sieciowych. 
+
+
+\subsection{Konfiguracja DNS}
+
+Za zamianę nazw domenowych na adresy IP odpowiadają funkcje biblioteki standardowej C. Korzysta ona do tego celu z konfiguracji zawartej w pliku \Verb#/etc/resolv.conf#.
+Powinien on zawierać co najmniej jeden wpis postaci \Verb#nameserver ip_serwera_dns#, określający serwer rozwiązujący nazwy DNS do którego będziemy kierować nasze zapytania.
+Wpisów tych może być kilka co pozwala na określenie serwerów uzywany w przypadku niedostępności podstawowego (obecnie używane są maksymalnie 3).
+
+Dodatkowo plik ten może posiadać wpisy
+	\Verb#domain# określający domenę lokalną (jeżeli nie jest tu określona a hostname zawiera domenę to używana jest ta z hostname; jeżeli nie chcemy używać można określić na \Verb#.#) oraz
+	\Verb#search# określający listę domen do przeszukiwania.
+Określają one domeny, króre będą dodawane jako surfix do domeny o którą się pytamy. Na przykład gdy mamy \Verb#domain abc.def#, a pytamy się o \Verb#xyz# (bez kropki w środku lub na końcu), biblioteka najpierw spróbuje ustalić adres \Verb#xyz.abc.def.# a potem \Verb#xyz.#
+
+Plik ten pozwala ustawić także inne opcje związane z odpytywaniem DNS - szczegóły w \Verb#man 5 resolv.conf#.
+
+Innym plikiem związanym z rozwijaniem nazw jest \Verb#/etc/hosts#, który stanowi bazę mapowań nazw na numery IP.
+Jest on użyteczny dla lokalnie definiowanych nazw i adresów.
+Wpisy w nim zawarte mają priorytet wyższy od informacji z DNS (jeżeli host został znaleziony w tym pliku nie jest wykonywane zapytanie do serwera rozwijającego DNS).
+
+
+\subsection{konfiguracja automatyczna}
+
+W zależności od ustawień sieci do której podłączony jest konfigurowany host możliwe jest także skorzystanie z konfiguracji automatycznej DHCP i/lub autokonfiguracji IPv6.
+
+\subsubsection{DHCP}
+
+DHCP jest protokołem typu klient-serwer, pozwalającym klientowi uzyskać informacje na temat konfiguracji sieci takie jak adres ip, długość prefixu, trasy routingowe (w szczególności adres bramki domyślnej), adresy serwerów DNS zarówno dla IPv4, jak i IPv6.
+
+Do pobrania konfiguracji z serwera DHCP i jej ustawienia służy najczęściej polecenie \Verb#dhclient# (dostępne są inne implementacje klienta dhcp, np: \Verb#udhcpc#, \Verb#dhcpcd#).
+Z ważniejszych opcji należy wspomnieć o:\\
+	\hspace*{1cm} \Verb#-6# – korzystanie z DHCPv6, czyli DHCP dla protokołu IPv6,\\
+	\hspace*{1cm} \Verb#-n# – nie ustawianie / używanie pobranej konfiguracji,\\
+	\hspace*{1cm} \Verb#-d# – nie przechodzenie w tło (włącza też \Verb#-v#),\\
+	\hspace*{1cm} \Verb#-v# – wypisywanie większej informacji o działaniu programu.
+
+Dostępne są też różne narzędzia diagnostyczne związane z DHCP, np: \Verb#dhcping#, \Verb#dhcp-probe#.
+Linux może pełnić także funkcję serwera DHCP, przy pomocy aplikacji takich jak np.: 
+	\textit{isc-dhcp-server}, \textit{udhcpd}, \textit{dnsmasq}, \textit{odhcp6c}, \textit{dhcpy6d}, \textit{wide-dhcpv6}.
+
+\subsubsection{IPv6 autoconf}
+
+Innym sposobem automatycznej konfiguracji interfejsów sieciowych, wprowadzonym w IPv6 jest autokonfiguracja w oparciu o adresy link-local generowane w oparciu o MAC adres karty sieciowej.
+	Polega ona na tym że dla podsieci będących LAN'em przydzielana jest pula z maską /64 co umożliwia tworzenie unikalnych numerów IP w oparciu o (niepowtarzalne) numery sprzętowe MAC.
+	64 bitowy prefiks sieci jest informacją rozgłaszaną przy pomocy ICMPv6 przez routery (mechanizm radvd), a host dokleja do niego część go identyfikującą związaną z adresem link-local.
+	Radvd rozgłasza także informacje routingowe (takie jak adres bramy - dhcpv6 tego nie potrafi), niestety nie da się rozgłaszać w ten sposób innej od standardowej dla LAN długości prefixu.
+
+Linux domyślnie ma włączony ten mechanizm, można go jednak wyłączyć poprzez \Verb#echo 0 > /proc/sys/net/ipv6/conf/${IFACE}/autoconf#, gdzie \Verb#${IFACE}# oznacza interfejs na którym chcemy wyłączyć ten mechanizm.
+
+
+\subsection{Konfiguracja w proc}
+
+Konieczne / przydatne może być dokonywanie pewnych ustawień poprzez jądrowe systemy plików \Verb$/proc$ i \Verb$/sys$.
+Najczęstszym przypadkiem jest włączenie przekazywania pakietów pomiędzy interfejsami poprzez:
+
+\begin{minted}{bash}
+for f in /proc/sys/net/ipv*/conf/*/forwarding; do echo 1 > $f; done
+\end{minted}
+(powyższy jednolinijkowiec włącza forwading pakietów IP dla IPv4 i IPv6 na wszystkich interfejsach)
+
+Innym przykładem jest pokazane wcześniej wyłączenie automatycznej konfiguracji IPv6, przydatne gdy chcemy korzystać tylko z ręcznie przydzielanych adresów.
+
+
+\subsection{Filtracja pakietów}
+
+Oprócz wyżej omówionej konfiguracji interfejsów i tras routingowych, często potrzebna jest konfiguracja jądrowych mechanizmów filtracji pakietów.
+
+Służy do tego polecenie \Verb#nft#.
+
+Na starszych systemach \Verb#nft# może być niedostępny, wtedy można korzystać z poleceń:
+\begin{itemize}
+	\item \Verb{iptables}, \Verb{ip6tables}
+		konfiguracja filtrów działających na pakietach IP (\Verb{iptables} dla IPv4, \Verb{ip6tables} dla IPv6), filtracja może odbywać się m.in. w oparciu o źródłowe i docelowe adresy IP, numery portów, protokół warstwy transportowej, interfejsy oraz mechanizm śledzenia połączeń; umożliwia także konfigurację translacji adresów (NAT).
+	\item \Verb{ebtables}
+		konfiguracja filtrów działających na poziomie switcha ethernetowego, filtracja może odbywać się m.in. w oparciu o źródłowe i docelowe interfejsy i adresy sprzętowe.
+	\item \Verb{arptables}
+		konfiguracja filtrów związanych z protokołem ARP (zamiany adresów IP na adresy sprzętowe)
+\end{itemize}

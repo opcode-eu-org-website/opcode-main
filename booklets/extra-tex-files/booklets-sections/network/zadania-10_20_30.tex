@@ -1,0 +1,116 @@
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\IfStrEq{\dbEntryID}{}{
+	\insertZadanie{\currfilepath}{czy_w_sieci}{}
+	\insertZadanie{\currfilepath}{routing}{}
+	\insertZadanie{\currfilepath}{ping1}{}
+	\insertZadanie{\currfilepath}{traceroute1}{}
+	\insertZadanie{\currfilepath}{dns1}{}
+	\insertZadanie{\currfilepath}{tcpdump}{}
+	\insertZadanie{\currfilepath}{http1}{}
+	\insertZadanie{\currfilepath}{http2}{}
+}
+
+\dbEntryBegin{czy_w_sieci}\if1\dbEntryCheckResults
+Ustal czy adres \Verb$2001:db8:0:a17::123$ należy do sieci \Verb$2001:db8::/48$. Możesz posłużyć się narzędziami do obliczania zakresów sieci IP (np. \Verb#sipcalc#) lub obliczyć to ręcznie.
+\fi
+
+\dbEntryBegin{routing}\if1\dbEntryCheckResults
+Wynik polecenia \Verb#ip -6 r# pokazującego tablicę rotingową wygląda następująco:
+\begin{Verbatim}
+2001:db8:0:21::/64 dev eth  proto kernel  metric 256 
+2001:db8:fff:21::/64 dev eth2  proto kernel  metric 256 
+2001:db8:abc:21::/64 via 2001:db8:fff:21::1 dev eth2  metric 1024 
+fe80::/64 dev eth  proto kernel  metric 256 
+fe80::/64 dev eth2  proto kernel  metric 256 
+default via 2001:db8:0:21::1 dev eth  metric 1024 
+\end{Verbatim}
+
+Ustal gdzie zostanie skierowany pakiet adresowany do \Verb$2001:db8:abc:21:123::ff3$.
+\fi
+
+\dbEntryBegin{ping1}\if1\dbEntryCheckResults
+Korzystając z narzędzi służących do diagnozowania sieci sprawdź czy host \Verb#ciekawi.icm.edu.pl# jest dostępny.
+Jakiego polecenia użyłeś(aś) w tym celu? Co jeszcze mówi wynik tego polecenia?
+
+\begin{teacherOnly}
+Rozwiązaniem powinno opierać się o użycie polecenia \Verb#ping#, inne działające rozwiązania też akceptujemy, ale komentując/dyskutując naprowadzamy na to że standardowo do tego używa się komendy \Verb#ping#.
+\end{teacherOnly}
+\fi
+
+\dbEntryBegin{traceroute1}\if1\dbEntryCheckResults
+Korzystając z narzędzi służących do diagnozowania sieci ustal jaką trasą podróżują pakiety z Twojego komputera do \Verb#www.opcode.eu.org# oraz do \Verb#www.example.org#.
+Jakiego lub jakich poleceń użyłeś(aś) w tym celu? Co jeszcze mówi ich wynik? Co możesz powiedzieć porównując uzyskane trasy?
+\fi
+
+\dbEntryBegin{dns1}\if1\dbEntryCheckResults
+Ustal (wszystkie) adresy IPv4 i IPv6 serwera \Verb#www.bitbucket.org#.
+Zastanów się czemu może służyć to że niektóre nazwy domenowe rozwijają się na wiele różnych adresów IP.
+\fi
+
+\dbEntryBegin{tcpdump}\if1\dbEntryCheckResults
+Korzystając z dwóch instancji programu \Verb#nc# (\Verb#netcat#) – jednej w roli serwera, drugiej w roli klienta prześlij między nimi jakieś dane.
+Użyj programu \Verb#tcpdump# (z odpowiednimi opcjami) aby podsłuchać komunikację sieciową między tymi programami i zobaczyć przesyłane dane.
+\fi
+
+\dbEntryBegin{http1}\if1\dbEntryCheckResults
+Korzystając bezpośrednio z poleceń protokołu HTTP i programu \Verb#nc# (\Verb#netcat#) lub \Verb#telnet#, pobierz i wyświetl kod strony \Verb#http://www.opcode.eu.org/#.
+
+\textit{Wskazówka:
+	Opis protokołu HTTP odnajdziesz bez problemu w sieci.\\
+	Ogólnie żądanie HTTP składa się z pierwszej linii określającej typ wykonywanej operacji, ścieżkę oraz wersję protokołu - np. \texttt{GET /abc.txt HTTP/1.1} oznacza prośbę o zwrócenie zawartości pliku \texttt{/abc.txt}.
+	Następnie podawane są nagłówki, w wersji HTTP 1.1 obowiązkowy jest nagłówek „Host” określający nazwę domenową serwera - np. \texttt{Host: www.example.org}.
+	Po nagłówkach występuje pusta linia po której mogą być przesłane (przy niektórych typach żądań) jakieś dane (np. z wypełnionego na stronie formularza).
+}
+\fi
+
+\dbEntryBegin{http2}\if1\dbEntryCheckResults
+Zadanie \ref{http1} można rozwiązać przy pomocy netcat'a bez dodatkowych opcji, jednak jeżeli stroną do pobrania byłoby np. \Verb#http://www.icm.edu.pl# to należałoby skorzystać z opcji \Verb#-C# netcat'a (w przeciwnym razie serwer zwraca błąd 400 "Bad Request").
+Sprawdź co robi ta opcja i zastanów się dlaczego w przypadku niektórych serwerów jest konieczna a w przypadku innych nie? Co na ten temat mówi standard HTTP?
+\fi
+
+% dodatkowe
+
+\dbEntryBegin{skrypt_dostepnosc}\if1\dbEntryCheckResults
+Korzystając z standardowych narzędzi shellowych napisz skrypt który sprawdzi dostępność hosta \Verb#ciekawi.icm.edu.pl# i w przypadku jego niedostępności wypisze \Verb#niedostępny#, a w przypadku dostępności nie wypisze niczego.
+
+\textit{Informacja: skrypty tego typu, uruchamiane automatycznie co pewien czas np. przy pomocy cron'a często są wykorzystywane do wysłania powiadomień o niedostępności danej maszyny lub usługi lub podjęcia automatycznie jakiś działań.}
+\fi
+
+\dbEntryBegin{ping_utf}\if1\dbEntryCheckResults
+Zobacz czy rozwiązanie zadania \ref{ping1} zadziała gdy użyjesz nazwy serwera zawierającej polskie znaki: \Verb#licealiści.icm.edu.pl#.
+Jak myślisz, dlaczego polskie znaki są tak rzadko używane w nazwach domenowych?
+\fi
+
+\dbEntryBegin{mail_smtp}\if1\dbEntryCheckResults
+Korzystając bezpośrednio z poleceń protokołu SMTP, programu \Verb#nc# (\Verb#netcat#) lub \Verb#telnet# i serwera \Verb#mail.opcode.eu.org# wyślij mail do \Verb#rrp@opcode.eu.org# w taki sposób aby:
+\begin{itemize}
+\item nadawca kopertowy był sfałszowany (domena w której znajduje się jego adres powinna istnieć, np. użyj \Verb#ciekawi.icm.edu.pl#)
+\item nadawca i odbiorca nagłówkowy był sfałszowany
+\end{itemize}
+Możesz poszaleć z adresami (zwłaszcza nagłówkowymi).
+Jeżeli nie popełnisz błędu mail trafi do prowadzących zajęcia, zatem jeżeli oczekujesz weryfikacji wykonania zadania to podpisz się w nim.
+Nie pisz też niczego czego nie chiałbyś aby Twój prowadzący przeczytał {\Symbola 😉}.
+\fi
+

@@ -1,0 +1,185 @@
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\subsubsection{nft (nftables)}
+
+Polecenie \Verb#nft list ruleset# pozwala na wylistowanie wszystkich reguł.
+
+\begin{figure}[h!]\begin{center}\begin{adjustbox}{scale=.9}\begin{tikzpicture}[->, >={Stealth[length=8pt,width=6pt]}, node distance=0.6cm, semithick]
+	\tikzstyle{base}=[align=center, minimum height=3.3em, minimum width=9.1em]
+	\tikzstyle{inout}=[base]
+	\tikzstyle{routing}=[draw, dotted, base]
+	\tikzstyle{hook}=[draw, base]
+	
+	% based on: https://wiki.nftables.org/wiki-nftables/index.php/Netfilter_hooks
+	
+	\node[inout]   (NETIN)                                 {pakiet\\przychodzący};
+	\node[hook]    (ingress)     [below = of NETIN]        {netdev → ingress};
+	\node[hook]    (prerouting)  [below = of ingress]      {prerouting};
+	\node[routing] (ROUTING1)    [below = of prerouting]   {wybór trasy\\routingowej};
+	\node[hook]    (input)       [below = of ROUTING1]     {input};
+	\node[inout]   (LOCAL)       [below = of input]        {lokalne przetwarzanie pakietów\\recive() / send() / ...};
+	\node[hook]    (forward)     [right = 2.3cm of LOCAL]  {forward};
+	\node[routing] (ROUTING2)    [below = of LOCAL]        {wybór trasy\\routingowej};
+	\node[hook]    (output)      [below = of ROUTING2]     {output};
+	\node[hook]    (postrouting) [below = of output]       {postrouting};
+	\node[inout]   (NETOUT)      [below = of postrouting]  {pakiet\\wychodzący};
+	
+	% to local
+	\draw (NETIN)   edge (ingress);
+	\draw (ingress) edge (prerouting);
+	\draw (prerouting) edge (ROUTING1);
+	\draw (ROUTING1) edge (input);
+	\draw (input) edge (LOCAL);
+	
+	% from local
+	\draw (LOCAL) edge (ROUTING2);
+	\draw (ROUTING2) edge (output);
+	\draw (output) edge (postrouting);
+	\draw (postrouting) edge (NETOUT);
+	
+	% forward
+	\draw (ROUTING1) -| (forward);
+	\draw (forward)  |- (postrouting);
+	
+	% łańcuch type=route
+	\path (output) edge [out=0, in=0, looseness=2] node[below, align=center,sloped] {akceptacja w\\ łańcuchu\\ \texttt{type=route}} (ROUTING2);
+\end{tikzpicture}\end{adjustbox}\end{center}
+\caption{Trasa pakietu przez filtry nftables. Wskazano punkty zaczepień dla łańcuchów reguł.}
+\end{figure}
+
+\paragraph{Tabele, łańcuchy i reguły}
+\begin{itemize}
+	\item Reguły (\Verb#rule#) grupowane są w łańcuchy (\Verb#chains#) w ramach których przetwarzane są kolejno (do momentu napotkania reguły kończącej przetwarzanie pakietu).
+	\item Łańcuchy grupowane są w tabele (\Verb#table#).
+	\item Każda tabela ma określoną rodzinę obsługiwanych adresów (\Verb#family#), mogą to być:
+	\begin{itemize}
+		\item \Verb#inet#   (osobne lub wspólne reguły dla IPv4 i IPv6),
+			\item \Verb#ip#  (reguły tylko dla IPv4),
+			\item \Verb#ip6# (reguły tylko dla IPv6),
+		\item \Verb#arp#    (reguły dla warstwy L2 przetwarzane przed uruchomieniem procesowania IP),
+		\item \Verb#bridge# (reguły przetwarzane dla pakietów przechodzących przez softwerowy bridge),
+		\item \Verb#netdev# (reguły przetwarzane w momencie wejścia ruchu na urządzenie sieciowe, urządzenie musi być określone dla łańcucha reguł, może być alternatywą dla \Verb#tc#).
+		% https://wiki.nftables.org/wiki-nftables/index.php/Nftables_families
+	\end{itemize}
+	\item Tabel danej rodziny może być wiele, stosowane będą łańcuchu z wszystkich tych tabel (odpowiednio do ich parametrów).
+	\item Tabele dla różnych rodzin mogą mieć taką samą nazwę.
+\end{itemize}
+
+\paragraph{Kierowanie ruchu do reguł}
+\begin{itemize}
+	\item Ruch do łańcucha może być kierowany jawnie przez regułę w innym łańcuchu lub automatycznie w oparciu o parametry danego łańcucha: typ (\Verb#type#), punkt zaczepienia (\Verb#hook#) i priorytet (\Verb#priority#).
+	\item Pasujące łańcuchy (o tym samym punkcie zaczepienia) będą przetwarzane kolejno wg priorytetów do momentu napotkania reguły kończącej przetwarzanie pakietu w którymś z tych łańcuchów (lub przetworzenia wszystkich reguł).
+	\item Podstawowym typem łańcuch jest \Verb#filter#. Dodatkowo mogą być użyte typy:
+	\begin{itemize}
+		\item \Verb#nat# –
+			translacja adresów sieciowych w oparciu o śledzenie połączenie (\Verb#conntrack#),
+			reguły przetwarzają tylko pierwszy pakiet połączenia, pozostałe przetwarza utworzony wpis \Verb#conntrack#,
+			typ może być użyty jedynie w łańcuchach tabel związanych z protokołami IP (inet, ip, ip6) z wyjątkiem łańcucha \Verb#forward#
+		\item \Verb#route# –
+			zaakceptowanie w takim powoduje wyszukanie nowej trasy routingowej,
+			typ może być użyty jedynie w łańcuchach wyjściowych (zaczepionych w \Verb#output#) tabel związanych z protokołami IP (inet, ip, ip6)
+	\end{itemize}
+	\item Dostępne punkty zaczepienia reguł zależą od rodziny:
+	\begin{itemize}
+		\item dla \Verb#inet#, \Verb#ip#, \Verb#ip6# i \Verb#bridge# są to:
+			prerouting
+			input
+			forward
+			output
+			postrouting
+		\item dla \Verb#arp# są to:
+			input
+			output
+		\item dla \Verb#netdev# są to:
+			ingress
+	\end{itemize}
+	\item Priorytet jest określany swobodnie i może być wartością ujemny lub dodatnią.
+		Warto mieć świadomość iż śledzenie pakietów (\Verb#conntrack#) na wejściu ma priorytet -200 (jest robione przed większością innych reguł) a na wyjściu 300 (jest robione po większości innych reguł).
+\end{itemize}
+
+\paragraph{Pliki konfiguracyjne}
+
+\begin{Verbatim}
+#!/usr/sbin/nft -f
+flush ruleset
+
+table inet filter {
+	chain INPUT {
+		type filter hook input priority 0; policy drop;
+		
+		# lo and established / invalid connections
+		iifname "lo" accept
+		ct state {established, related} accept
+		ct state invalid reject
+		
+		# icmp, igmp
+		meta l4proto icmp icmp type timestamp-request reject
+		meta l4proto {icmp, ipv6-icmp, igmp} accept
+		
+		# ssh
+		ip  saddr 10.40.0.0 tcp dport ssh accept
+		ip6 saddr {
+			2001:db8:0:a17::123,
+			2001:db8:0:1313::/64
+		} tcp dport ssh accept
+		
+		# reject all other packets with ICMP error
+		reject
+	}
+}
+\end{Verbatim}
+
+Zauważ że zamiast powtarzać regułę dla każdego adresu:
+\begin{Verbatim}
+	ip6 saddr 2001:db8:0:a17::123 tcp dport ssh accept
+	ip6 saddr 2001:db8:0:1313::/64 tcp dport ssh accept
+\end{Verbatim}
+możemy podać zbiór parametrów (np. adresów) w klamerkach w ramach jednej reguły (tak jak pokazano powyżej).
+Możliwe jest także definiowanie zbiorów adresów (\Verb$set$) i odwoływanie się do nich z użyciem \Verb$@nazwa$.
+
+Reguły możemy zapisywać zarówno w „notacji klamerkowej” (jak powyżej) jak i ciągu kolejnych poleceń:
+
+\begin{Verbatim}
+#!/usr/sbin/nft -f
+add table ip filter
+add chain ip filter POSTROUTING {type nat hook postrouting priority 100; policy accept;}
+add rule ip filter POSTROUTING oifname "ens4" ip saddr 10.40.0.0/24 snat to 213.135.50.250
+\end{Verbatim}
+
+Co jest równoważne:
+
+\begin{Verbatim}
+#!/usr/sbin/nft -f
+table ip filter {
+	chain POSTROUTING {
+		type nat hook postrouting priority 100; policy accept;
+		oifname "ens4" ip saddr 10.40.0.0/24 snat to 213.135.50.250
+	}
+}
+\end{Verbatim}
+
+Od wersji 0.9.2 nftables możliwe jest też tworzenie wspólnych reguł dla udp i tcp w następujący sposób:
+\begin{Verbatim}
+add rule inet filter INPUT meta l4proto {tcp, udp} th dport domain
+\end{Verbatim}

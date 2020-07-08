@@ -1,0 +1,140 @@
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+% BEGIN: adresacja IP
+\subsection{Adresacja IP}
+
+\begin{teacherOnly}
+	\noindent adres IP:
+	\begin{easylist}[itemize]
+		& jest to liczba, a taki lub inny zapis służy naszej wygodzie
+		& pierwsza część określa adres sieci do której należy host, druga część adres hosta
+			&& długość części określającej adres sieci wyznacza jest za pomocą tzw prefix (który rozwinąć
+			można do maski sieci)
+			&& sieci mogą być grupowane w wieksze sieci
+		& notacja kropkowo-dziesiętna (IPv4), notacja dwukropkowa (IPv6)
+		& jak mając adres hosta i prefix ustalić adres sieci
+			&& rozpiska na tablicy
+			&& pokazać sipcalc / ipcalc
+		& porównywanie adresów sieci o nie równych maskach
+			&& pokazać ilustrację - kółko w kółku (każdy host widzi tylko pierwsze otaczające go kółko)
+	\end{easylist}
+\end{teacherOnly}
+
+
+Adresy hostów (nazywane adresami IP) są to 32-bitowe (w IPv4) lub 128-bitowe (w IPv6) liczby.
+Adresy IPv4 zapisywane są najczęściej w notacji kropkowo-dziesiętnej, gdzie każdy bajt (ciąg 8 bitów) zapisywany jest jako liczba dziesiętna rozdzielana kropką od pozostałych. Adresy IPv6 zapisywane są zazwyczaj w notacji dwukropokowej, polegającej na zapisywaniu 16 bitowych części adresu liczbami szesnastkowymi oddzielanymi dwukropkiem, dodatkowo jeden ciąg zer (o długości będącej wielokrotnością 16 bitów) może być skompresowany (pominięty) co daje w zapisie dwa dwukropki \Verb$::$.
+
+\subsubsection{Długość prefixu i maska}
+
+\begin{teacherOnly}
+	\begin{easylist}[itemize]
+	& pierwsza część (najstarsze bity) określa adres sieci do której należy host, druga część adres hosta
+	&& długość części określającej adres sieci określa jest za pomocą prefixu (który rozwinąć można do maski sieci)
+	&&& wielkość prefixu określa ilość adresów dostępnych w danej sieci (dla prefixu o długości $n$ wynosi ona $2^{32-n}$ dla IPv4 i $n$ wynosi ona $2^{128-n}$)
+	&&&& dla IPv4 użyteczna liczba adresów jest mniejsza o dwa: adres sieci (część hosta binarnie – same zera) i adres rozgłoszeniowy (część hosta – binarnie same jedynki)
+	\end{easylist}
+\end{teacherOnly}
+
+Adresy hostów grupuje się w adresy sieci, bazując na jednakowym (bitowo) początku takiego adresu (zwanym adresem sieci lub prefixem). Ilość bitów stanowiących adres sieci w danym adresie IP nazywana jest długością prefixu i zapisywana jest zazwyczaj po ukośniku. Np. zapis \Verb$2001:db8::a17/48$ oznacza że pierwsze 48 bity stanowią adres sieci a kolejne $128-48 = 80$ bitów stanowi adres hosta w tej sieci.
+
+Długość prefixu jednoznacznie określa maskę danej podsieci, czyli liczbę odpowiadającą długości adresu (32 bity lub 128 bitów), złożoną z ciągu jedynek o długości prefixu oraz ciągu zer (o długości adresu hosta). W przypadku IPv4 spotykane jest także podawanie maski sieci w notacji kropkowo-dziesiętnej zamiast długości prefixu.
+
+Sieć może zostać podzielona na mniejsze sieci (z większą wartością prefixu), jak też grupa sieci może zostać zagregowana w jedną większą ($2^n$ raza) sieć (z prefixem mniejszym o n). Agregacja hostów i sieci w większe całości jest wykorzystywana w mechanizmach routingu, co pozwala na redukcję wielkości tablic routingowych.
+
+\subsubsection{Przynależność do sieci}
+Adres sieci zapisuje się typowo z wyzerowanymi bitami stanowiącymi adres hosta (czyli po dokonaniu bitowego \emph{and} z maską danej sieci) oraz podaną informacją o długości prefixu, dla powyższego przykładu będzie to \Verb$2001:db8::/48$. Informacja taka jest wystarczająca do sprawdzenia czy dowolny inny adres IP należy do tej sieci czy nie.
+
+\label{czy_w_sieci_kod}\begin{CodeFrame*}[python][fontsize=\footnotesize]{}
+from ipaddress import *
+
+a1  = IPv6Address("2001:0db8::17:15")
+aa1 = int(a1)
+print("adress IPv6 jest 128 bitową liczbą całkowitą np.: " + str(a1) + " == " + hex(aa1))
+
+n0  = IPv6Network("::/112");
+m1  = n0.netmask
+mm1 = int(m1)
+p1  = n0.prefixlen
+
+print("Maska podsieci IPv6 jest 128 bitową liczbą całkowitą np.: " + str(m1) + " == " + hex(mm1))
+print("Jako że maska jest liczbą, która zapisana binarnie, zawsze zawiera ciągły ciąg bitów")
+print("o wartości 1, a po nim ciągły ciąg bitów o wartości 0 (mogą być zerowej długości), to")
+print("często stosowany jest zapis polegający na podawaniu długości prefiksu: /" + str(p1))
+print("jest to ilość bitów o wartości 1 w masce, czyli im większy prefix tym mniejsza sieć.")
+
+n1  = IPv6Network("2001:0db8::17:15/112", strict=False);
+nn1 = int(n1.network_address)
+
+print("Aby obliczyć adres sieci (czyli wspólną dla wszystkich hostów w danej sieci część")
+print("adresu IP) należy wykonać binarny AND pomiędzy adresem IP hosta a maską podsieci.")
+print("Dla powyższego przykładu:")
+print(hex(mm1 & aa1) + " == " + str(n1) + " == " + hex(nn1))
+
+# aby sprawdzić czy adres IP należy do danej sieci trzeba obliczyć adres sieci tego hosta
+# w oparciu o maskę sieci którą sprawdzamy
+def sprawdzSiec(n, a):
+	nn = int(a) & int(n.netmask)
+	if nn == int(n.network_address):
+		print(str(a) + " należy do sieci " + str(n))
+	else:
+		print(str(a) + " NIE należy do sieci " + str(n))
+
+sprawdzSiec(n1, IPv6Address("2001:0db8::17:ab13"))
+sprawdzSiec(n1, IPv6Address("2001:0db8::13:a"))
+\end{CodeFrame*}
+% END: adresacja IP
+
+\teacher{Wskazać różnice IPvXAddress vs IPvXNetwork oraz znaczenie strict=False. Pokazać kalkulowanie z palca.}
+
+\begin{teacherOnly}
+	Można trochę rozwinąć temat adresacji:
+	\begin{easylist}[itemize]
+	& adresy IPv4
+	&& Wyróżnia się także specjalne adresy (sieci) IP:
+	&&& 0.0.0.0/0 – cały Internet
+	&&& 127.0.0.0/8 (głownie adres 127.0.0.1) – pętla zwrotna (czyli komunikacja hosta lokalnego ze sobą)
+	&&& 224.0.0.0/4 – multicast
+	&&&& 232.0.0.0/8 – source-specific multicast (RFC 4607)
+	&&&& 233.0.0.0/8 – adresy oparte na numerze AS, każdy posiadacz numeru AS może używać adresów 233.AS.AS.0/24 (RFC 3180)
+	&&&& 234.0.0.0/8 – adresy oparte na unicastowej puli o prefixie /24 lub mniejszym, dla posiadacza a.b.c.0/24 dostępny jest adres multicastowy 234.a.b.c/32 (RFC 6034)
+	&&&& 239.0.0.0/8 – adresy "prywatne" wykorzystywane w obrębie swojej "domeny" (RFC 2365)
+	&&& adresy sieci prywatnych: 10.0.0.0 do 10.255.255.255, 172.16.0.0 do 172.31.255.255 i 192.168.0.0 do 192.168.255.255
+	&& Można wspomnieć o tym że kiedyś stosowany był także podział na klasy sieci A, B i C odpowiadające maskom /8, /16 i /24 oraz klasy D, E i F (adresy 224.0.0.0 do 254.0.0.0)
+	& adresy IPv6
+	&& Wyróżnia się także specjalne adresy (sieci) IP:
+	&&& ::/0 – cały Internet
+	&&& ::1/128 – cały Internet
+	&&& ff$yx$:: – multicast, gdzie $x$ odpowiada za zasięg który obejmuje transmisja multicastowa, $y$ koduje natomiast flagi dotyczące typu adresu (0=adres przydzielony na stałe przez IANA - dobrze znane usługi, 1=nie przydzielone stale, ...)
+	&&&& ff3x::/104 – adresy multicast w oparciu o maksymalnie 64 bitowy prefiks sieci adresów unicast – dla sieci o adresie \Verb$prefix::/MM$ będzie to adres \Verb$ff3x:00mm:prefix:gropid$, gdzie \Verb$mm$ jest zapisaną w systemie szesnastkowym wartością MM, a \Verb$gropid$ identyfikatorem konkretnej grupy multicastowej (właściciel prefixu dysponuje $2^32$ grupami) (RFC3306).
+	&&&& ff3x::/96 – source-specific multicast (nie jest to sprzeczne z powyższym, gdyż odpowiada mu przy \Verb$::/0$)
+	&&& fe80:: – adresy linklocal tworzone w oparciu o MAC adres karty sieciowej,
+	&&&& nie jest on routowany do sieci zewnętrznych, zawsze może być używany wewnątrz sieci lokalnej (ale wymaga jawnego określania interfejsu sieciowego dla pakietów adresowych na taki adres np. \Verb$ping6 fe80::f66d:4ff:fe4e:ade8%eth0$);
+	&&&& adres taki (dla adresu MAC 11:22:33:44:55:66) będzie miał postać:\\ fe80::1{\bfseries 3}22:33{\bfseries FF}:{\bfseries FE}44:5566 (pierwsza część adresu MAC zwiększana jest o 2, w środku wstawiane jest FFFE).
+	& broadcast
+	&& występuje jedynie w IPv4, w IPv6 zastąpiony multicastem:
+	&&& ff0$x$::1 – wszystkie węzły
+	&&& ff0$x$::2 – wszystkie routery
+	&&& $x$ określa zasięg, np. x=2 w zakresie \emph{Link-Local}
+	\end{easylist}
+\end{teacherOnly}

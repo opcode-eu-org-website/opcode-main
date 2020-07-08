@@ -1,0 +1,151 @@
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+% BEGIN: Diagnostyka sieci
+\section{Diagnostyka sieci}
+
+\begin{teacherOnly}
+Powiedzieć że w skrypcie opis dość dużej liczby poleceń do tego. Omówić tylko najważniejsze:
+\begin{easylist}[itemize]
+	& ping
+	& tracepath / traceroute / mtr
+	& dig / host
+	& netcat / telnet
+	& tcpdump / wireshark
+\end{easylist}
+\end{teacherOnly}
+
+Istnieje wiele poleceń służących do diagnozowania ewentualnych problemów sieciowych lub mogąccyh być w tym przydatnymi.
+Poniżej znajduje się zestawienie najbardziej popularnych / użytecznych narzędzi z podziałem wg zastosowań.
+
+\subsection{Adresy}
+\begin{itemize}
+	\item \Verb#ipcalc# oraz \Verb#sipcalc# –
+		kalkulator IP (pozwalający na obliczanie adresów sieci rozgłoszeniowych, zmianę notacji itd)
+	\item \Verb#whois# –
+		informacje z bazy whois (o domenie lub adresie IP)
+\end{itemize}
+				
+\subsection{Dostępność i trasy do hostów}
+\begin{itemize}
+	\item \Verb#ping [opcje] host# lub \Verb#ping6 [opcje] host# –
+		sprawdzanie dostępności hosta z użyciem protokołu ICMP
+		(obecnie komenda \Verb@ping6@ najczęściej jest równoważna poleceniu ping z opcją \Verb@-6@ wymuszającą używanie jedynie IPv6,
+		na starszych systemach komenda ping może nie obsługiwać adresów IPv6 i wtedy konieczne jest stosowanie do nich polecenia \Verb@ping6@),
+		ważniejsze opcje:\\
+		\Verb@-c n@ wykonaj n zapytań (domyślnie pyta do momentu przerwania przy pomocy np. Ctrl-C, lub sygnału wysłanego z uzyciem komendy \Verb@kill@)\\
+		\Verb@-n@ nie zamieniaj adresu IP hosta który odpowiedział na nazwę domenową
+		
+	\item \Verb#traceroute#, \Verb#traceroute6#, \Verb#tracepath#, \Verb#tracepath6#, \Verb#tcptraceroute# lub \Verb#tcptraceroute6# – 
+		sprawdzanie ścieżki do hosta (wypisanie listy routerów przez które przechodzi pakiet w drodze do wskazanego hosta)\\
+		Istnieją różne warianty tych poleceń (nawet pod tą samą nazwą), różnią się one stosowanymi mechanizmami i domyślnymi opcjami.
+		Generalnie wszystkie uruchamia się na zasadzie \Verb@polecenie [opcje] host@.
+		Warianty z \Verb@6@ na końcu nazwy będą używały jedynie adresów IPv6, natomiast polecenia bez \Verb@6@ na końcu nazwy mogą potrafić ich używać lub nie.
+		Wszystkie popularne warianty pozwalają na podanie opcji \Verb@-n@ wyłączającej zamienianie adresu IP hosta który odpowiedział na jego nazwę domenową.\\
+		Może zdarzyć się że śledzenie urwie się na jakimś hoście (np. z powodu jego konfiguracji lub błędów w jego oprogramowaniu sieciowym),
+		może się zdarzyć że przy użyciu innej komendy z tej grupy (lub zmianie opcji) uda się prześledzić dalszą trasę pakietu.
+	\item \Verb#mtr [opcje] host# –
+		sprawdzanie ścieżki do hosta (czyli podobnie jak traceroute i tracepath) w trybie ciągłym (z ciągłym odświeżaniem)
+		wraz z wypisywaniem informacji o stratach pakietów i opóźnieniach na poszczególnych odcinkach, ważniejsze opcje:\\
+		\Verb@-n@ nie zamieniaj adresu IP hosta który odpowiedział na nazwę domenową
+	
+	\item \Verb#nmap# –
+		skaner sieciowy - sprawdzanie dostępnych hostów w sieci, otwartych portów, itd
+	\item \Verb#arping# –
+		narzędzie do pingowania z wykorzystaniem zapytań ARP zamiast ICMP\\
+		istnieją dwie zasadnicze odmiany: z iputils oraz z synscan; ta druga zawarta w debianowym pakiecie "arping" umożliwia także pingowanie po adresie MAC (ale nie przez RARP, bo on nie do tego służy), aby to jednak działało host docelowy nie może ignorować pingów rozgłoszeniowych, metoda obejścia opisana jest w README arping'a
+	
+	\item \Verb#arp-scan# –
+		wyszukiwanie hostów w oparciu o zapytania ARP (można powiedzieć że jest to równoważne uruchamianiu komendy arping w pętli)
+\end{itemize}
+
+\subsection{DNS}
+\begin{itemize}
+	\item \Verb#dig [opcje] nazwa [typRekordu]# –
+		narzędzia do uzyskania informacji z DNS,
+		pozwala na określenie poprzez \Verb#@adres# serwera który chcemy odpytać oraz na określenie (poprzez drugi argument) typu rekordu który chcemy uzyskać,
+		zamiast typu rekordu można podać: \Verb@ANY@ (powoduje odpytanie o wszystkie rekordy) lub \Verb@AXFR@ (powoduje wysłanie prośby o transfer całej strefy, działa jeżeli dany host ma prawo transferu całej strefy z danego serwera)
+	\item \Verb#host [opcje] nazwa|ip [server]# –
+		narzędzia do zamiany adresów domenowych na IP i odwrotnie oraz wyciągania innych informacji z DNS (np. rekordy MX)
+	\item \Verb#nslookup [opcje] nazwa|ip [server]# –
+		narzędzia do zamiany adresów domenowych na IP i odwrotnie oraz wyciągania innych informacji z DNS (np. rekordy MX)
+	
+	\item \Verb#dnstracer# –
+		śledzenie trasy zapytań DNS
+	\item \Verb#dnswalk# –
+		debuger DNS
+\end{itemize}
+
+\subsection{IPv6}
+\begin{itemize}
+	\item \Verb#ndisc6# –
+		testowanie ICMPv6 Neighbor Discovery
+	\item \Verb#rdisc6# –
+		testowanie ICMPv6 Router Discovery
+	\item \Verb#rltraceroute6# –
+		trasa pakietów do danego hosta IPv6 z użyciem UDP/ICMP
+	\item \Verb#tcpspray6# –
+		pomiar prędkości łącza z użyciem TCP/IP Discard/Echo
+	
+	\item \Verb#na6# / \Verb#ns6# –
+		wysyłanie pakietów Neighbor Advertisement / Solicitation
+	\item \Verb#ra6# / \Verb#rs6# –
+		wysyłanie pakietów Router Advertisement / Solicitation
+	\item \Verb#ni6# / \Verb#rd6# –
+		wysyłanie pakietów ICMPv6 Node Information / Redirect
+	\item \Verb#scan6# –
+		skanowanie sieci IPv6
+\end{itemize}
+
+\subsection{debugowanie łączności sieciowej}
+\begin{itemize}
+	\item \Verb#netcat# lub \Verb#nc# lub \Verb#netcat6# –
+		program pozwalający na wysyłanie pakietów TCP i UDP z definiowaną przez nas zawartością, oraz odbiór pakietów TCP i UDP (słuchanie na wskazanym porcie), umożliwia m.in. testowanie usług sieciowych (takich jak smtp, www, jabber, ...); uwaga: występuje w kilku wersjach różniących się opcjami
+	\item \Verb#telnet# –
+		program umożliwiający zdalny (nieszyfrowany, łącznie z hasłem!) dostęp do powłoki, a także (podobnie jak netcat) m.in. testowanie usług sieciowych
+	
+	\item \Verb#swaks# –
+		narzędzie do testowania SMTP
+	
+	\item \Verb#tcpdump# –
+		przechwytuje komunikację sieciową celem analizy nagłówków lub pełnej zawartości pakietów
+		(wsparcie dla niektórych z protokołów warst wyższych wymaga doinstalowania - np. obsługę DHCP zapewnia dhcpdump)
+	\item \Verb#wireshark# lub \Verb#tshark# –
+		przechwytuje komunikację sieciową celem analizy nagłówków lub pełnej zawartości pakietów, wspiera dekodowanie wielu protokołów warstwy aplikacyjnej, wireshark posiada graficzny interfejs użytkownika, tshark jest wersją konsolową
+\end{itemize}
+
+\subsection{informacje o wykorzystaniu i prędkości sieci}
+\begin{itemize}
+	\item \Verb#netstat# –
+		 informacje o sieci
+	\item \Verb#iptraf# –
+		monitor IP LAN
+	\item \Verb#nload# –
+		graficzne (ncurses) pokazywanie wykorzystania (prędkości) interfejsów sieciowych
+					
+	\item \Verb#ttcp# –
+		testuje prędkość połączenia sieciowego (strona domowa, najnowsza wersja oraz mutacja)
+	\item \Verb#iperf# –
+		pomiar prędkości połączenia sieciowego
+\end{itemize}
+% END: Diagnostyka sieci
