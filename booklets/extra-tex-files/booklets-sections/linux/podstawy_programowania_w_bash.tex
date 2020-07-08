@@ -1,0 +1,258 @@
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+% BEGIN: podstawy programowania w bashu
+
+\subsection{Zmienne}
+
+Określanie typów zmiennych w bashu odbywa się na podstawie wartości znajdującej się w zmiennej.
+Zasadniczo wszystkie zmienne są napisami, a interpretacja typu ma miejsce przy ich użyciu (a nie przy tworzeniu).
+\teacher{Porównując do Pythona - jest to wyraźnie mniej silne typowanie. }
+Obsługiwane są liczby całkowite oraz napisy, bash nie posiada wbudowanej obsługi liczb zmiennoprzecinkowych.
+
+\begin{CodeFrame*}[bash]{}
+zmiennaA=-91
+zmiennaB="qa z"
+zmiennaC=98.6 # to będzie traktowane jako napis a nie liczba
+\end{CodeFrame*}
+Zwróć uwagę na brak spacji pomiędzy nazwą zmiennej a znakiem równości w operacji przypisania - jest to wymóg składniowy.
+
+Odwołanie do zmiennej odbywa się z użyciem znaku dolara, po którym występuje nazwa zmiennej. Nazwa może być ujęta w klamry, ale nie musi (jest to przydatne gdy nie chcemy dawać spacji pomiędzy nazwą zmiennej a np. fragmentem napisu). Rozwijaniu ulegają nazwy zmiennych znajdujące się w napisach umieszczonych w podwójnych cudzysłowach.
+\begin{CodeFrame*}[bash]{}
+echo  $zmiennaA ${zmiennaA}AA
+echo "$zmiennaA ${zmiennaA}AA"
+echo '$zmiennaA ${zmiennaA}AA'
+\end{CodeFrame*}
+
+Jeżeli chcemy aby zmienna była widoczna przez programy uruchamiane z naszej powłoki (w tym przez kolejne instancje bash'a, odpowiedzialne np. za wykonywanie kodu skryptu uruchamianego z pliku) należy ją wyeksportować za pomocą polecenia \Verb#export zmienna# (zwróć uwagę na brak dolara w tym miejscu).
+
+\subsection{Podstawowe operacje}
+Aby wykonać działania arytmetyczne należy umieścić je wewnątrz \Verb{$((} i \Verb{))}
+
+Dodawanie, mnożenie, odejmowanie zapisuje się i działają one tak jak w normalnej matematyce, dzielenie zapisuje się przy pomocy ukośnika i jest ono zawsze dzieleniem całkowitym:
+
+\begin{CodeFrame*}[bash]{}
+a=12; b=3; x=5; y=6
+
+e=$(( ($a + $b) * 4 - $y ))
+c=$((  $x / $y ))
+
+echo $e $c $z
+\end{CodeFrame*}
+Zauważ zachowanie przy odwołaniu do niezainicjalizowanej zmiennej \Verb{z}.
+
+Operacje logiczne obsługiwane są komendą \Verb{test} lub operatorem \Verb{[ ]} wynik zwracany jest jako kod powrotu.
+Należy zwrócić uwagę na escapowanie odwrotnym ukośnikiem nawiasów i na to że spacje mają znaczenie.
+Negację realizuje \Verb{!}, należy pamiętać jednak że wynikiem negacji dowolnej liczby jest FALSE.
+
+\begin{CodeFrame*}[bash]{}
+[ \( $a -ge 0 -a $b -lt 2 \) -o $z -eq 5 ]; z=$?
+
+echo $z
+\end{CodeFrame*}
+Wartość zmiennej \Verb{z} jest wynikiem warunku: \texttt{((a większe równe od zera) AND (b mniejsze od dwóch)) OR (z równe 5)}.
+Bash stosuje logikę odwróconą 0 oznacza prawdę, coś nie zerowego to fałsz.
+
+Jako operacje podstawowe powinniśmy patrzyć także na wykonanie innych programów i pobieranie ich standardowego wyjścia i/lub kodu powrotu.
+Pobieranie standardowego wyjścia możemy realizować za pomocą ujęcia polecenia w \emph{backquotes} (\Verb{`}) lub operatora \Verb{$( )} (pozwala on na zagnieżdżanie takich operacji).
+Natomiast kod powrotu ostatniej komendy znajduje się w zmiennej \Verb{$?} (używaliśmy tego już przy obliczaniu wyrażeń logicznych).
+
+\begin{CodeFrame*}[bash]{}
+a=`cat /etc/issuse`
+b=$(cat /etc/issuse; cat /etc/resolv.conf)
+
+echo  $a
+echo  $b
+echo "$b"
+\end{CodeFrame*}
+Zwróć uwagę na różnicę w wypisaniu zmiennej zawierającej znaki nowej linii objętej cudzysłowami i nie objętej nimi.
+
+Bash nie obsługuje liczb zmiennoprzecinkowych ani operacji bitowych, nieobsługiwane operacje można wykonać za pomocą innego programu np:
+
+\begin{CodeFrame*}[bash]{}
+a=`echo 'print(3/2)' | python3`
+b=$(echo '3/2' | bc -l)
+echo $a $b
+\end{CodeFrame*}
+
+\begin{ProTip}{inne polecenia}
+Programowanie w bashu w dużej mierze polega na wywoływaniu innych programów (np. takich jak sed, grep, find, awk).
+Sam bash oferuje jedynie podstawowe konstrukcje składniowe, obsługę zmiennych i pewnych podstawowych operacji na nich.
+
+Na te zewnętrzne polecenia można patrzeć trochę jak na biblioteki w innych językach programowania –
+	komendy gwarantowane przez standard stanowią „bibliotekę standardową” basha,
+	a inne (np. użyty w powyższym przykładzie artmetyki zmiennoprzecinkowej python) stanowią dodatkowe opcjonalne „biblioteki”, które pozwalają na łatwiejsze i szybsze rozwiązywanie problemów.
+W zasadzie podobnie można patrzeć na wywołania zewnętrznych programów w ramach kodu Pythona, C czy innych języków (niekiedy łatwiej jest zrobić np. \Verb#system("mv plik nowyplik")# niż zakodować to bezpośrednio w Pythonie czy w C).
+\end{ProTip}
+
+\student{\clearpage}
+\subsection{Uruchamianie kodu z pliku}
+
+Dłuższe fragmenty kodu bashowego często wygodniej jest pisać w pliku tekstowym niż bezpośrednio w linii poleceń.
+Plik taki może zostać wykonany przy pomocy polecenia: \Verb{./nazwa_pliku} pod warunkiem że ma prawo wykonalności
+(powinien także zawierać w pierwszą linii komentarz określający program używany do interpretacji tekstowego pliku wykonywalnego,
+w postaci: \Verb{#!/bin/bash}).
+Może też być wykonany za pomocą wywołania: \Verb{bash nazwa_pliku}.
+
+Przydatną alternatywą dla powyższych metod wykonania kodu zawartego w pliku jest włączenie go do aktualnej sesji basha przy pomocy \Verb{. ./nazwa_pliku}.
+W odróżnieniu od poprzednich metod pozwala to na korzystanie z funkcji i zmiennych zdefiniowanych w tym pliku w kolejnych poleceniach.
+
+\subsection{Pętle i warunki}
+
+\subsubsection{Pętla for}
+
+W bashu możemy korzystać z kilku wariantów pętli for. Jednym z najczęściej używanych jest przypadek iterowania po plikach\footnote{
+	Dokładniej: iteracja odbywa się po liście napisów rozdzielanej spacjami - zobacz rezultat \Verb{echo /tmp/*}
+}:
+\begin{CodeFrame*}[bash]{}
+for nazwa in /tmp/* ; do
+	echo $nazwa;
+done
+\end{CodeFrame*}
+
+Możliwe jest też iterowanie po wartościach całkowitych zarówno w stylu ,,shellowym'' \teacher{(zwróć uwagę na podobieństwo do Pythona) } jak i w stylu C
+\begin{CodeFrame*}[bash]{}
+for i in `seq 0 20`; do
+	echo $i;
+done
+
+for (( i=0 ; $i<=20 ; i++ )) ; do
+	echo $i;
+done
+\end{CodeFrame*}
+
+\subsubsection{Pętla while}
+
+Często używana jest pętla while w połączeniu z instrukcją read co umożliwia przetwarzanie jakiegoś wejścia (wyniku komendy lub pliku) linia po linii (także z podziałem linii na słowa):
+\begin{CodeFrame*}[bash]{}
+cat /etc/fstab | while read slowo reszta; do
+	echo $reszta;
+done
+\end{CodeFrame*}
+Powyższa pętla wypisze po kolei wszystkie wiersze pliku \texttt{/etc/fstab} przekazanego przez stdin (przy pomocy komendy \texttt{cat})\footnote{
+	Takie rozwiązanie nazywane jest \emph{martwym kotem} i powinno go się unikać.
+	Lepszym rozwiązaniem jest przekazywanie pliku przez przekierowanie strumienia wejściowego przy pomocy \texttt{< plik},
+	który w tym przypadku powinien znaleźć się za kończącym pętle słowem kluczowym \texttt{done}.
+} z pominięciem pierwszego słowa (które wczytywane było do zmiennej slowo).
+
+Słowa domyślnie rozdzielane są przy pomocy dowolnego ciągu spacji lub tabulatorów, separator można zmienić za pomocą zmiennej \texttt{IFS}, np:
+\begin{CodeFrame*}[bash]{}
+IFS=":"
+while read a b; do echo $a; done < /etc/group
+unset IFS # przywracamy domyślne zachowanie read poprzez usunięcie zmiennej IFS
+\end{CodeFrame*}
+
+\subsubsection{Instrukcja if}
+
+Poznane wcześniej obliczanie wartości wyrażeń logicznych najczęściej stosowane jest w instrukcji warunkowej \Verb{if}\footnote{
+	Może być też stosowane np. w pokazanej wcześniej pętli \Verb{while}
+}.
+\begin{CodeFrame*}[bash]{}
+# instruikcja if - else
+if [ "$xx" = "kot" -o "$xx" = "pies" ]; then
+	echo  "kot lub pies";
+elif [ "$xx" = "ryba" ];  then
+	echo  "ryba"
+else
+	echo  "coś innego"
+fi
+\end{CodeFrame*}
+
+Zauważ że spacje wokół i wewnątrz nawiasów kwadratowych przy warunku są istotne składniowo,
+zawartość nawiasów kwadratowych to tak naprawdę argumenty dla komendy \Verb{test}.
+Oprócz typowych warunków logicznych możemy sprawdzać np. istnienie plików, czy też ich typ (link, katalog, etc).
+Szczegółowy opis dostępnych warunków które mogą być użyte w tej konstrukcji znajduje się w \Verb{man test}.
+\teacher{Zwrócić szczególną uwagę na tą dokumentację.}
+
+Jako warunek może wystąpić dowolne polecenie wtedy sprawdzany jest jego kod powrotu 0 oznacza prawdę / zakończenie sukcesem,
+a wartość nie zerowa fałsz / błąd
+\begin{CodeFrame*}[bash]{}
+if grep '^root:' /etc/passwd > /dev/null; then
+	echo /etc/passwd zawiera root-a;
+fi
+\end{CodeFrame*}
+
+Istnieje możliwość skróconego zapisu warunków z użyciem łączenia instrukcji
+przy pomocy \Verb{&&} (wykonaj gdy poprzednia zwróciła zero -- true)
+lub \Verb{||} (wykonaj gdy poprzednia zwróciła nie zero -- false):
+\begin{CodeFrame*}[bash]{}
+[ -f /etc/issuse ] && echo "jest plik /etc/issuse"
+
+grep '^root:' /etc/passwd > /dev/null && echo /etc/passwd zawiera root-a;
+\end{CodeFrame*}
+
+\subsubsection{Instrukcja case}
+Instrukcja \Verb{case} służy do rozważania wielu przypadków opartych na równości zmiennej z podanymi napisami.
+\teacher{Zwróć uwagę na podobieństwo do switch z C/C++ oraz różnicę - operuje na napisach a nie liczbach}
+
+\begin{CodeFrame*}[bash]{}
+case $xx in
+	kot | pies)
+		echo  "kot lub pies"
+		;;
+	ryba)
+		echo  "ryba"
+		;;
+	*)
+		echo  "cos innego"
+		;;
+esac
+\end{CodeFrame*}
+
+\subsection{Definiowanie funkcji}
+
+W bashu każda funkcja może przyjmować dowolną ilość parametrów pozycyjnych
+(w identyczny sposób obsługiwane są argumenty linii poleceń dla całego skryptu).
+Ilość parametrów znajduje się w zmiennej \Verb{$#}, lista wszystkich parametrów w \Verb{$@},
+a do kolejnych parametrów możemy odwoływać się z użyciem \Verb{$1}, \Verb#$2#, itd.
+
+\begin{CodeFrame*}[bash]{}
+f1() {
+	echo "wywołano z $# parametrami, parametry to: $@"
+	
+	[ $# -lt 2 ] && return;
+	
+	echo -e "drugi: $2\npierwszy: $1"
+	
+	# albo kolejnych w pętli
+	for a in "$@"; do  echo $a;  done
+	
+	# lub z użyciem polecenia shift
+	for i in `seq 1 $#`; do
+		echo $1
+		shift # powoduje zapomnienie $1
+		      # i przenumerowanie argumentów pozycyjnych o 1
+		      # wpływa na wartości $@ $# itp
+	done
+	
+	# funkcja może zwracać tylko wartość numeryczną -- tzw kod powrotu
+	return 83
+}
+\end{CodeFrame*}
+
+Zwróć uwagę że w nawiasach po nazwie funkcji nie podajemy przyjmowanych argumentów, natomiast puste nawiasy te są elementem składniowym i muszą wystąpić. Jeżeli zapisujesz definicję funkcji w jednej linii, np. \Verb@abc() { echo "abc"; }@ to pamiętaj, że spacje po otwierającym i przed kończącym nawiasem klamrowym są obowiązkowe, podobnie jak średniki występujące po każdej instrukcji w ciele funkcji.
+
+Wywołanie funkcji nie różni się niczym od wywołania programów czy instrukcji wbudowanych
+(możemy używać przekierowań strumieni wejścia, wyjścia, czy też przechwycić wyjście do zmiennej). Powyższą funkcję możemy wywołać np. w następujący sposób: \Verb{f1 a "b c"   d}
+
+% END: podstawy programowania w bashu

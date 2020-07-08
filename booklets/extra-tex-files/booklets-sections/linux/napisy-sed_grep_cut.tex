@@ -1,0 +1,67 @@
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+% BEGIN: grep cut sed
+\subsection{grep, cut, sed, ...}
+
+Jako że większość operacji wykonywanych w powłoce takiej jak bash wiąże się z uruchamianiem zewnętrznych programów,
+to także przetwarzanie napisów może być realizowane w ten sposób.
+Opiera się na tym jedno z podejść do obsługi napisów w bashu,
+którym jest korzystanie z standardowych komend POSIX, takich jak grep, cut, sed.
+
+\begin{CodeFrame*}[bash]{}
+# obliczanie długości napisu w znakach, w bajtach i ilości słów w napisie
+echo -n "aąbcć 123" | wc -m
+echo -n "aąbcć 123" | wc -c
+echo -n "aąbcć 123" | wc -w
+
+# obliczanie ilości linii (dokładniej ilości znaków nowej linii)
+wc -l < /etc/passwd
+
+# wypisanie 5 pola (rozdzielanego :) z pliku /etc/passwd  z eliminacją
+# pustych linii oraz linii złożonych tylko ze spacji i przecinków
+cut -f5 -d: /etc/passwd | grep -v '^[ ,]*$'
+# komenda cut wybiera wskazane pola, opcja -d określa separator
+\end{CodeFrame*}
+
+Inną bardzo przydatną komendą jest sed pozwala ona m.in na zastępowanie
+wyszukiwanego na podstawie wyrażenia regularnego tekstu innym:
+\begin{CodeFrame*}[bash]{}
+echo "aa bb cc bb dd bb ee" | sed -e 's@\([bc]\+\) \([bc]\+\)@X-\2-X@g'
+\end{CodeFrame*}
+
+Sedowe polecenie s przyjmuje 3 argumenty (oddzielane mogą być dowolnym znakiem który wystąpi za~\Verb@s@),
+pierwszy to wyszukiwane wyrażenie, drugi tekst którym ma zostać zastąpione,
+a trzeci gdy jest \Verb@g@ to powoduje zastępowanie wszystkich wystąpień a nie tylko pierwszego.
+
+Należy zwrócić uwagę na różnicę w składni wyrażenia regularnego polegającą na poprzedzaniu
+\Verb@(@, \Verb@)@ i \Verb@+@ odwrotnym ukośnikiem aby miały znaczenie specjalne
+(jeżeli nie chcemy tego robić możemy włączyć obsługę ERE w sed poprzez opcję \Verb@-E@).
+
+Innymi przydatnymi komendami przetwarzającymi (specyficznej postaci) napisy są polecaenia \Verb@basename@ i \Verb@dirname@.
+Służą one do uzyskania nazwy najgłębszego elementu ścieżki oraz ścieżki bez tego najglębszego elementu. Zobacz wynik działania:
+\begin{CodeFrame*}[bash]{}
+basename /proc/sys/net/core/
+dirname /proc/sys/net/core/
+\end{CodeFrame*}
+% END: grep cut sed

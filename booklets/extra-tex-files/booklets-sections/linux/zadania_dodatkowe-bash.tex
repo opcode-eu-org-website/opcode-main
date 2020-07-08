@@ -1,0 +1,84 @@
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\IfStrEq{\dbEntryID}{}{
+	\insertZadanie{\currfilepath}{passwd_warunek_na_uid}{}
+	\insertZadanie{\currfilepath}{kopiowanie_tylko_plikow}{}
+	\insertZadanie{\currfilepath}{rekurecyjne_wyszukaj_i_zastap}{}
+	\insertZadanie{\currfilepath}{wyszukaj_napis_kopiuj}{}
+	
+	\insertZadanie{\currfilepath}{zmiana_rozszerzenia}{}
+	\insertZadanie{\currfilepath}{pliki_zawierajace_napis}{}
+	\insertZadanie{\currfilepath}{parsowanie_cmdline}{}
+}
+
+
+
+% bash
+
+\dbEntryBegin{passwd_warunek_na_uid}\if1\dbEntryCheckResults
+Wyświetl z /etc/passwd linie w których UID (3 pole) ma warość >= 1000 ... jeżeli ktoś ma pomysł to na dwa lub trzy sposoby
+\fi
+
+\dbEntryBegin{passwd_warunek_na_uid_noawk}\if1\dbEntryCheckResults
+Wyświetl z /etc/passwd linie w których UID (3 pole) ma warość >= 1000 nie korzystając z AWK.
+\fi
+
+\dbEntryBegin{kopiowanie_tylko_plikow}\if1\dbEntryCheckResults
+Napisz polecenie które skopiuje wszystkie pliki (nie katalogi ani linki symboliczne) z katalogu \Verb{/etc} do \Verb{/tmp}
+% wyłączamy linki symboliczne aby uniknąć: cp /etc/* /tmp
+\fi
+
+\dbEntryBegin{rekurecyjne_wyszukaj_i_zastap}\if1\dbEntryCheckResults
+Napisz funkcję która przyjmuje dwa argumenty - napis wyszukiwany i napis go zastępujący oraz dokonuje rekurencyjnego wyszukania i zamiany tych napisów w wszystkich plikach w bierzącym katalogu.
+
+\textit{Wskazówka 1: polecenie \texttt{sed} z opcją \texttt{-i} i wskazaniem pliku modyfikuje zawartości tego pliku stosownie do poleceń wydanych sed'owi}\\
+\textit{Wskazówka 2: dla uproszczenia możesz przyjąć że napisy te składają się jedynie z liter i cyfr.}
+\fi
+
+\dbEntryBegin{wyszukaj_napis_kopiuj}\if1\dbEntryCheckResults
+Napisz polecenie które przekopiuje wszystkie pliki zawierające słowo \Verb{hostname} z katalogu \Verb{/etc} (wraz z jego podkatalogami) do katalogu \Verb{/tmp/etc}
+zachowując strukturę katalogów (czyli plik /etc/a/b kopiowany jest do katalogu /tmp/etc/b).
+Przyjmij że katalog \Verb{/tmp/etc} nie istnieje.
+\fi
+
+% PwES domowe (?):
+
+\dbEntryBegin{zmiana_rozszerzenia}\if1\dbEntryCheckResults
+Napisz polecenie które dla wszystkich plików z rozszerzeniem \Verb{.TXT}  w bierzącym katalogu (bez podkatalogów) dokona zmiany ich nazwy zmieniając rozszerzenie na \Verb{.txt}, zachowując podstawową część nazwy bez modyfikacji.
+W rozwiązaniu nie korzystamy z polecenia \Verb{rename}.
+\fi
+
+\dbEntryBegin{pliki_zawierajace_napis}\if1\dbEntryCheckResults
+Napisz polecenie które wyszuka i przekopiuje do katalogu \Verb{/tmp} pliki z katalogu \Verb{/etc} (wraz z jego podkatalogami), które (w swojej treści) zawierają napis \Verb{nameserver}.
+\fi
+
+\dbEntryBegin{parsowanie_cmdline}\if1\dbEntryCheckResults
+Plik \Verb{/proc/cmdline} zawiera informację o opcjach przekazanych do jądra podczas startu. Kolejne opcje rozdzielane są spacją, a nazwę opcji od jej argumentu rozdziela znak rówwności.
+Napisz polecenie które wypisze argument opcji root. Dla pliku \Verb{/proc/cmdline} postaci:\\
+ \Verb{BOOT_IMAGE=/vmlinuz-4.9-amd64 root=UUID=cad866ab-aabd-4686-8376-e4b9f1c2ae9e rw}\\
+polecenie powinno wypisać:\\
+ \Verb{UUID=cad866ab-aabd-4686-8376-e4b9f1c2ae9e}
+
+\textbf{Uwaga:} nie wolno zakładać że \Verb#root=# jest drugą opcją linii poleceń jądra, nie wolno zakładać że nie ma tam innej opcji kończącej się na \Verb#root=# (np. \Verb#nfsroot=#).
+\fi

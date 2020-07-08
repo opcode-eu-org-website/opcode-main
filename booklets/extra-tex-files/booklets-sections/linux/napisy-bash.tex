@@ -1,0 +1,107 @@
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+% BEGIN: Wbudowane przetwarzanie napisów w bashu
+\subsection{Wbudowane przetwarzanie napisów w bash'u}
+
+Wbudowane przetwarzanie napisów w bashu opiera się na odwołaniach do zmiennych w postaci \Verb@${}@:
+
+\begin{itemize}
+	\item \shell@${zmienna:-"napis"}@ zwróci napis gdy zmienna nie jest zdefiniowana lub jest pusta
+	\item \shell@${zmienna:="napis"}@ zwróci napis oraz wykona podstawienie zmienna="napis" gdy zmienna nie jest zdefiniowana lub jest pusta
+	\item \shell@${zmienna:+"napis"}@ zwróci napis gdy zmienna jest zdefiniowana i nie pusta
+	
+	\vspace{6pt}
+	
+	\item \shell@${#str}@    zwróci długość napisu w zmiennej str
+	\item \shell@${str:n}@   zwróci pod-napis zmiennej str od n do końca
+	\item \shell@${str:n:m}@ zwróci pod-napis zmiennej str od n o długości m
+	
+	\vspace{6pt}
+	
+	\item \shell@${str/"n1"/"n2"}@  zwróci wartość str z zastąpionym pierwszym wystąpieniem n1 przez n2
+	\item \shell@${str//"n1"/"n2"}@  zwróci wartość str z zastąpionymi wszystkimi wystąpieniami n1 przez n2
+	
+	\vspace{6pt}
+	
+	\item \shell@${str#"ab"}@ zwróci wartość str z obciętym "ab" z początku
+	\item \shell@${str%"fg"}@ zwróci wartość str z obciętym "fg" z końca
+\end{itemize}
+W napisach do obcięcia możliwe jest stosowanie shellowych znaków uogólniających, czyli \Verb@*@, \Verb@?@, \Verb@[abc]@, itd operator \Verb@#@ i \Verb@%@ dopasowują minimalny napis do usunięcia, natomiast operatory \Verb@##@ i \Verb@%%@ dopasowują maksymalny napis do usunięcia.
+
+\begin{teacherOnly}
+Przykład do zademonstrowania:
+
+\begin{CodeFrame*}[bash]{}
+a=""; b=""; c=""
+echo ${a:-"aa"} ${b:="bb"} ${c:+"cc"}
+echo $a $b $c
+
+a="x"; b="y"; c="z"
+echo ${a:-"aa"} ${b:="bb"} ${c:+"cc"}
+echo $a $b $c
+
+x=abcdefg
+echo ${#x} ${x:2} ${x:0:3} ${x:0:$((${#x}-2))}
+echo ${x#"abc"} ${x%"efg"}
+echo ${x#"ac"}  ${x%"eg"}
+
+x=abcd.e.fg
+echo ${x#*.} ${x##*.} ${x%.*} ${x%%.*}
+
+y="aa bb cc bb dd bb ee"
+echo ${y/"bb"/"XX"}
+echo ${y//"bb"/"XX"}
+\end{CodeFrame*}
+
+\end{teacherOnly}
+Możliwe jest także korzystanie z wyrażeń regularnych.
+Polecenie \Verb@expr match $x 'wr1\(wr2\)wr3'@ zwróci na stdout (wypisze) część \Verb@$x@ pasującą do wyrażenia regularnego \Verb@wr2@,
+wyrażenia regularne \Verb@wr1@ i \Verb@wr2@ pozwalają na określanie części napisu do odrzucenia.
+Alternatywną składnią jest \Verb@expr $x : 'wr1\(wr2\)wr3'@
+
+\begin{teacherOnly}
+Przykład do zademonstrowania:
+
+\begin{CodeFrame*}[bash]{}
+z="ab=cd"
+expr match $z '^\([^=]*\)='
+expr $z : '^[^=]*=\(.*\)$'
+\end{CodeFrame*}
+\end{teacherOnly}
+
+Możliwe jest też sprawdzanie dopasowań wyrażeń regularnych poprzez (zwróć uwagę na brak cytowania wyrażenia regularnego):
+
+\begin{CodeFrame*}[bash]{}
+[[ "$z" =~ ^([^=]*)= ]] && echo "OK"
+\end{CodeFrame*}
+
+Możliwe jest także zaawansowane formatowanie napisów, konwertowanie liczb na napisy,
+w tym wypisywanie w różnych systemach liczbowych przy pomocy \Verb@printf@\footnote{
+	Instrukcja \Verb@printf@ ma składnię opartą na tej funkcji z C, interpretuje ona także liczby zmiennoprzecinkowe.
+}:
+
+\begin{CodeFrame*}[bash]{}
+printf "0o%o %d 0x%x\n" 0xf 010 3
+\end{CodeFrame*}
+% END: Wbudowane przetwarzanie napisów w bashu
