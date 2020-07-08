@@ -21,9 +21,18 @@
 % OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 % SOFTWARE.
 
-\section{Zadania dodatkowe}
+\IfStrEq{\dbEntryID}{}{
+	\section{Zadania dodatkowe}
+	\insertZadanie{\currfilepath}{wypisz_mape}{}
+	\insertZadanie{\currfilepath}{parsuj_klucz_wartosc_cpp}{}
+	\insertZadanie{\currfilepath}{podnapis_utf}{}
+	\insertZadanie{\currfilepath}{funkcja_niepodzielne_cpp}{}
+	\insertZadanie{\currfilepath}{funkcja_wypisz_tablice}{}
+	\insertZadanie{\currfilepath}{licz_powtorzenia_cpp}{}
+}
 
-\begin{Zadanie}{}{wypisz_mape}
+
+\dbEntryBegin{wypisz_mape}\if1\dbEntryCheckResults
 Napisz funkcję \Verb#wypiszMape# (szablon funkcji) która wypisuje mapę dowolnych typów. Na przykład dla wywołania:
 \begin{CodeFrame*}[cpp]{}
 std::map<std::string, float> a = { {"xy", 1.3}, {"qw", 16.3} };
@@ -38,9 +47,9 @@ xy → 1.3
 1 → a
 2 → b
 \end{Verbatim}
-\end{Zadanie}
+\fi
 
-\begin{Zadanie}{}{parsuj_klucz_wartosc_cpp}
+\dbEntryBegin{parsuj_klucz_wartosc_cpp}\if1\dbEntryCheckResults
 Napisz funkcję która konwertuje listę napisów postaci \Verb#klucz=wartosc# na mapę.
 Funkcja musi dodawać kolejne napisy do mapy w taki sposób że część przed znakiem równości stanowi klucz, a część po znaku równości stanowi wartość.
 Funkcja powinna modyfikować mapę otrzymaną (przez wskaźnik lub referencję) jako swój argument. Na przykład dla wywołania:
@@ -56,9 +65,9 @@ aa → 13
 b → Ala=kot
 f → xyz
 \end{Verbatim}
-\end{Zadanie}
+\fi
 
-\begin{Zadanie}{}{podnapis_utf}
+\dbEntryBegin{podnapis_utf}\if1\dbEntryCheckResults
 Zmodyfikuj rozwiązanie zadanie \ref{podnapis} tak aby poprawnie obsługiwało znaki kodowane jako UTF8.
 \\ \textit{
 	Wskazówka 1: Zobacz opis kodowania UTF-8 na \url{https://en.wikipedia.org/wiki/UTF-8},
@@ -66,5 +75,30 @@ Zmodyfikuj rozwiązanie zadanie \ref{podnapis} tak aby poprawnie obsługiwało z
 	natomiast pierwszy bajt znaku nigdy nie ma takiej wartości najstarszych bitów.}
 \\ \textit{
 	Wskazówka 2: Zauważ, że aby odnaleźć pierwszy znak do wypisania, musisz przejść po napisie od samego początku.}
-\end{Zadanie}
+\fi
 
+% PwES domowe(?):
+
+\dbEntryBegin{funkcja_niepodzielne_cpp}\if1\dbEntryCheckResults
+Napisz funkcję która wypisze liczby z zakresu od 0 do 20 nie podzielne przez wartość określoną w jej argumencie.
+\fi
+
+\dbEntryBegin{funkcja_wypisz_tablice}\if1\dbEntryCheckResults
+Napisz funkcję, która przyjmuje dwa argumenty: tablicę C (czyli wskaźnik na zerowy element) liczb naturalnych i jej długość.
+Funkcja ma wypisać każdy element tablicy oraz zwiększyć o jeden wartość tego elementu w oryginalnej tablicy.
+Napisz \ul[black]{dwa warianty} tej funkcji:
+\begin{enumerate}[label=\alph*)]
+\item operujący arytmetyką wskaźnikową
+\item operujący tablicami (czyli używający operatora dostępu do elementu tablicy: \Verb#[]#)
+\end{enumerate}
+\fi
+
+\dbEntryBegin{licz_powtorzenia_cpp}\if1\dbEntryCheckResults
+Napisz funkcję \Verb{zlicz} która dla podanej listy napisów policzy powtórzenia jej elementów. Na przykład dla wywołania:
+\cpp#std::list<std::string> l = {"AX", "B", "AX"}; zlicz(l);# program powinien wypisać:
+\vspace{-8pt}\begin{Verbatim}
+AX wystepuje 2 razy
+B wystepuje 1 razy
+\end{Verbatim}
+\vspace{-8pt}\textit{Wskazówka: Użyj mapy, w której element będzie stanowił klucz, a krotność jego wystąpień wartość.}
+\fi

@@ -650,62 +650,7 @@ topnika (np. kalafonii).\\
 Umiejętne lutowanie wymaga trochę praktyki, ale nie jest skomplikowane. Pamiętaj, aby lutować w dobrze wentylowanym
 pomieszczeniu. Po zakończeniu umyj ręce.
 
-\subsection{Instalacja i przygotowanie narzędzi}
-
-Do programowania mikrokontrolera STM32 użyjemy następujących narzędzi programistycznych:
-
-\begin{itemize}
-\item Toolchain\footnotemark  dla architektury \emph{arm-none-eabi} (\Verb$gcc-arm-none-eabi$ oraz \Verb$binutils-arm-none-eabi$)
-  \footnotetext{Tooolchain to zbiorowe określenie na narzędzia do przekształcania kodu źródłowego na kod maszynowy. Zawiera m.in. kompilator, linker (konsolidator), narzędzia obsługujące pliki obiektowe oraz kopujące dane między formatami plików wykonywalnych (\texttt{objcopy}) itd.}
-\item Implementację libC (\Verb$libstdc++-arm-none-eabi-newlib$)
-\item Narzędzie do programowania przez UART (\Verb$stm32flash$)
-\item Program terminalowy do obsługi portów~szeregowych (\Verb$picocom$)
-\item Bibliotekę \Verb$libopencm3$
-\end{itemize}
-Wszystkie narzędzia, oprócz ostatniego, dostępne są w repozytoriach Debiana (i systemów na nim opartych). Możesz je zainstalować
-za pomocą polecenia:
-
-\begin{CodeFrame*}[bash]{}
-sudo apt install gcc-arm-none-eabi binutils-arm-none-eabi libstdc++-arm-none-eabi-newlib stm32flash picocom git make
-\end{CodeFrame*}
-
-Instalacja i kompilacja \Verb$libopencm3$ odbywa się w następujący sposób:
-
-\begin{CodeFrame*}[bash]{}
-git clone https://github.com/libopencm3/libopencm3.git
-cd libopencm3
-make
-\end{CodeFrame*}
-
-\subsection{Połączenie mikrokontrolera}
-Aby móc uruchomić nasz kod na mikrokontrolerze, musimy podłączyć go do komputera w celu wgrywania na niego skompilowanych programów.
-STM32 można programować na wiele sposobów, my będziemy używać do tego interfejsu UART\footnote{Inne z nich to SWD oraz JTAG}.\\
-
-Aby zaprogramować mikrokontroler musisz podłączyć go do przejściówki USB-UART (nie podłączaj jeszcze
-przejściówki do komputera).
-Za pomocą pasujących kabelków podłącz następujące piny przejściówki do pinów na mikrokontrolerze:
-\begin{itemize}
-\item masę (GND) do (dowolnej) masy miktrokontrolera (GND lub G)
-\item RX do TX mikrokontrolera (pin A9)
-\item TX do RX mikrokontrolera (pin A10)
-\item 5V do 5V mikrokontrolera
-\end{itemize}
-
-Za pomocą obcążków lub pęsety przełóż górną (patrząc na mikrokontroler tak aby port USB był po lewej) zworkę na
-pozycję ``1''.
-
-Sprawdź wszystkie połączenia i podłącz przejściówkę do portu USB komputera. Na mikrokontrolerze powinna zaświecić się tylko czerwona dioda
-\texttt{PWR}
-
-Możesz sprawdzić połączenie z mikrokontrolerem używając \Verb$stm32flash$ do obliczenia sumy kontrolnej pamięci mikrokontrolera.
-Jeżeli polecenie poniżej nie zgłosi błędów, oznacza to, że wszystko działa poprawnie.
-
-\begin{CodeFrame*}[bash]{}
-stm32flash -C /dev/ttyUSB0
-\end{CodeFrame*}
-
-Tak przygotowany mikrokontroler jest gotowy do pracy.
-
+\input{booklets-sections/stm32/01-przygotowanie.tex}
 
 \section{Płytka stykowa}
 Płytka stykowa pozwala na szybkie prototypowanie układów bez konieczności lutowania. Składa się ona z macierzy dziurek,

@@ -5,7 +5,7 @@
 	Projekt ,,Matematyka dla Ciekawych Świata'',\\
 	Krzysztof Lasocki\\\normalsize\ttfamily <krz.lasocki@gmail.com>
 }
-\date  {2020-07-04}
+\date  {2020-07-08}
 
 \makeatletter\hypersetup{
 	pdftitle = {\@title}, pdfauthor = {\@author}
@@ -16,11 +16,22 @@
 \maketitle
 
 \input{booklets-sections/stm32/00-into.tex}
-\input{booklets-sections/stm32/10-digital_input_output.tex}
+\section{Przygotowanie}\input{booklets-sections/stm32/01-przygotowanie.tex}
+\input{booklets-sections/stm32/10-digital_output.tex}
+	\insertZadanie{booklets-sections/stm32/zadania.tex}{miganie_wolniej}{}
+\input{booklets-sections/stm32/11-digital_input.tex}
+	\insertZadanie{booklets-sections/stm32/zadania.tex}{wewnetrzny_pullup}{}
+	\insertZadanie{booklets-sections/stm32/zadania.tex}{przycisk_na_innym_pinie}{}
+	\insertZadanie{booklets-sections/stm32/zadania.tex}{przycisk_jako_przelacznik}{}
 \input{booklets-sections/stm32/20-uart.tex}
 \input{booklets-sections/stm32/30-adc.tex}
+	\insertZadanie{booklets-sections/stm32/zadania.tex}{adc_volty}{}
+	\insertZadanie{booklets-sections/stm32/zadania.tex}{adc_volty2}{}
 \input{booklets-sections/stm32/40-i2c.tex}
-\input{booklets-sections/stm32/90-dodatkowe.tex}
+	\insertZadanie{booklets-sections/stm32/zadania.tex}{zmiana_i2c}{}
+\input{booklets-sections/stm32/90-literatura.tex}
+
+\input{booklets-sections/stm32/zadania-dodatkowe.tex}
 
 \copyrightFooter{
 	© Matematyka dla Ciekawych Świata, 2020.\\
