@@ -38,6 +38,7 @@ zmiennaC=98.6 # to będzie traktowane jako napis a nie liczba
 Zwróć uwagę na brak spacji pomiędzy nazwą zmiennej a znakiem równości w operacji przypisania - jest to wymóg składniowy.
 
 Odwołanie do zmiennej odbywa się z użyciem znaku dolara, po którym występuje nazwa zmiennej. Nazwa może być ujęta w klamry, ale nie musi (jest to przydatne gdy nie chcemy dawać spacji pomiędzy nazwą zmiennej a np. fragmentem napisu). Rozwijaniu ulegają nazwy zmiennych znajdujące się w napisach umieszczonych w podwójnych cudzysłowach.
+
 \begin{CodeFrame*}[bash]{}
 echo  $zmiennaA ${zmiennaA}AA
 echo "$zmiennaA ${zmiennaA}AA"
@@ -105,7 +106,6 @@ Na te zewnętrzne polecenia można patrzeć trochę jak na biblioteki w innych j
 W zasadzie podobnie można patrzeć na wywołania zewnętrznych programów w ramach kodu Pythona, C czy innych języków (niekiedy łatwiej jest zrobić np. \Verb#system("mv plik nowyplik")# niż zakodować to bezpośrednio w Pythonie czy w C).
 \end{ProTip}
 
-\student{\clearpage}
 \subsection{Uruchamianie kodu z pliku}
 
 Dłuższe fragmenty kodu bashowego często wygodniej jest pisać w pliku tekstowym niż bezpośrednio w linii poleceń.
@@ -124,6 +124,7 @@ W odróżnieniu od poprzednich metod pozwala to na korzystanie z funkcji i zmien
 W bashu możemy korzystać z kilku wariantów pętli for. Jednym z najczęściej używanych jest przypadek iterowania po plikach\footnote{
 	Dokładniej: iteracja odbywa się po liście napisów rozdzielanej spacjami - zobacz rezultat \Verb{echo /tmp/*}
 }:
+
 \begin{CodeFrame*}[bash]{}
 for nazwa in /tmp/* ; do
 	echo $nazwa;
@@ -131,6 +132,7 @@ done
 \end{CodeFrame*}
 
 Możliwe jest też iterowanie po wartościach całkowitych zarówno w stylu ,,shellowym'' \teacher{(zwróć uwagę na podobieństwo do Pythona) } jak i w stylu C
+
 \begin{CodeFrame*}[bash]{}
 for i in `seq 0 20`; do
 	echo $i;
@@ -143,7 +145,12 @@ done
 
 \subsubsection{Pętla while}
 
-Często używana jest pętla while w połączeniu z instrukcją read co umożliwia przetwarzanie jakiegoś wejścia (wyniku komendy lub pliku) linia po linii (także z podziałem linii na słowa):
+Często używana jest pętla while w połączeniu z instrukcją \Verb$read$\footnote{
+	Polecenie \Verb$read$ można także wykorzystać do wczytania danych podawanych przez użytkownika do jakiejś zmiennej – np. \Verb$read -p "wpisz coś >> " xyz$ wczyta tekst do zmiennej \Verb$xyz$.
+	\Verb$read$ z opcją \Verb$-e$ potrafi kożystać z biblioteki readline, jednak np. współdzieli histiorię z historią basha. Dlatego często wygodniejsze może być zainstalowanie i użycie \Verb$rlwrap$, np:
+	\Verb$xyz=`rlwrap -H historia.txt -S "wpisz coś >> " head -n1`$.
+} co umożliwia przetwarzanie jakiegoś wejścia (wyniku komendy lub pliku) linia po linii (także z podziałem linii na słowa):
+
 \begin{CodeFrame*}[bash]{}
 cat /etc/fstab | while read slowo reszta; do
 	echo $reszta;
@@ -156,6 +163,7 @@ Powyższa pętla wypisze po kolei wszystkie wiersze pliku \texttt{/etc/fstab} pr
 } z pominięciem pierwszego słowa (które wczytywane było do zmiennej slowo).
 
 Słowa domyślnie rozdzielane są przy pomocy dowolnego ciągu spacji lub tabulatorów, separator można zmienić za pomocą zmiennej \texttt{IFS}, np:
+
 \begin{CodeFrame*}[bash]{}
 IFS=":"
 while read a b; do echo $a; done < /etc/group
@@ -167,6 +175,7 @@ unset IFS # przywracamy domyślne zachowanie read poprzez usunięcie zmiennej IF
 Poznane wcześniej obliczanie wartości wyrażeń logicznych najczęściej stosowane jest w instrukcji warunkowej \Verb{if}\footnote{
 	Może być też stosowane np. w pokazanej wcześniej pętli \Verb{while}
 }.
+
 \begin{CodeFrame*}[bash]{}
 # instruikcja if - else
 if [ "$xx" = "kot" -o "$xx" = "pies" ]; then
@@ -186,6 +195,7 @@ Szczegółowy opis dostępnych warunków które mogą być użyte w tej konstruk
 
 Jako warunek może wystąpić dowolne polecenie wtedy sprawdzany jest jego kod powrotu 0 oznacza prawdę / zakończenie sukcesem,
 a wartość nie zerowa fałsz / błąd
+
 \begin{CodeFrame*}[bash]{}
 if grep '^root:' /etc/passwd > /dev/null; then
 	echo /etc/passwd zawiera root-a;
@@ -195,6 +205,7 @@ fi
 Istnieje możliwość skróconego zapisu warunków z użyciem łączenia instrukcji
 przy pomocy \Verb{&&} (wykonaj gdy poprzednia zwróciła zero -- true)
 lub \Verb{||} (wykonaj gdy poprzednia zwróciła nie zero -- false):
+
 \begin{CodeFrame*}[bash]{}
 [ -f /etc/issuse ] && echo "jest plik /etc/issuse"
 

@@ -31,12 +31,14 @@ Awk jest interpreterem prostego skryptowego języka umożliwiający przetwarzani
 Wyżej zaprezentowane wypisanie 5 pola (rozdzielanego :) z pliku \Verb@/etc/passwd@  z eliminacją pustych linii oraz
 linii złożonych tylko ze spacji i przecinków, realizowane przy użyciu poleceń \Verb@cut@ i \Verb@grep@
 może być zrealizowane za pomocą samego awk:
+
 \begin{CodeFrame*}[bash]{}
 awk -F: '$5 !~ "^[ ,]*$" {print $5}' /etc/passwd
 \end{CodeFrame*}
 
 Awk daje duże możliwości przy przetwarzaniu tego typu tekstowych baz danych -- możemy np.
 wypisywać wypisywać pierwsze pole w oparciu o warunki nałożone na inne:
+
 \begin{CodeFrame*}[bash]{}
 awk -F: '$5 !~ "^[ ,]*$" && $3 >= 1000 {print $1}' /etc/passwd
 \end{CodeFrame*}
@@ -93,6 +95,7 @@ AWK obsługuje także tablice asocjacyjne pozwala to np. policzyć powtórzenia 
 
 Podobny efekt możemy uzyskać stosując "uniq -c" (który wypisuje unikalne wiersze wraz z ich ilością)
 na odpowiednio przygotowanym napisie (spacje zastąpione nową linią, a linie posortowane):
+
 \begin{CodeFrame*}[bash]{}
 echo "aa bb aa ee dd aa dd" | tr ' ' '\n' | sort | uniq -c
 \end{CodeFrame*}

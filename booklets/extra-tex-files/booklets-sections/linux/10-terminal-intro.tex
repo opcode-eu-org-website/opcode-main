@@ -37,9 +37,19 @@ W terminalu mogą być uruchamiane kolejne (takie same lub różne) interpretery
 Różne interpretery korzystają z różnych składni oraz często różnią się znakiem zachęty (czyli wypisanym tekstem poprzedzającym wprowadzane polecenia).
 
 \subsubsection{bash}
-Bash jest chyba najpopularniejszą powłoką (interpreterem poleceń).
+Bash jest chyba najpopularniejszą powłoką (interpreterem poleceń) systemową w środowiskach linuksowych.
 Jest zgodny ze składnią z sh, zapewnia m.in. obsługę zmiennych (zasadniczo napisowych) oraz omówionych w dalszej części skryptu znaków uogólniających.
-Umożliwia edycję linii poleceń, dopełnianie komend, ścieżek, itp przy pomocy tabulatora oraz zapewnia dostęp do historii linii poleceń (poruszanie się po historii strzałkami, wyszukiwanie przy pomocy Ctrl+R, polecenie \texttt{history}).
+
+\begin{ProTip}[breakable]{Edycja i historia linii poleceń}
+Bash, podobnie jak wiele innych interpreterów poleceń (np. Python) umożliwia edycję linii poleceń oraz korzystanie z jej historii.\footnote{
+	Bash korzysta w tym celu z popularnej biblioteki \textit{GNU Readline} (więcej na jej temat: \url{https://en.wikipedia.org/wiki/GNU\_Readline}).
+	Biblioteka ta może zostać użyta w kodzie programu do obsługi wejścia, ale może zostać dodana do także zewnętrznie przy pomocy np. \Verb$rlwrap$.
+}
+Poruszanie się po historii linii poleceń możliwe jest strzałkami góra/dół, wyszukiwanie w historii przy pomocy Ctrl+R.
+Dostępne jest też polecenie wbudowane \texttt{history} umożliwiające wypisanie całej zapamiętanej historii oraz zarządzanie nią.
+
+Bash pozwala także na dopełnianie nazw poleceń i ścieżek (a po odpowiedniej konfiguracji – pakiet \textit{bash-completion} – także innych argumentów poleceń) przy pomocy tabulatora.
+\end{ProTip}
 
 \subsubsection{screen i tmux}
 \texttt{screen} i \texttt{tmux} są tzw. multiplexerami terminala - pozwala na uzyskanie wielu okien konsoli (także np. wyświetlanych jedno obok drugiego) na pojedynczym terminalu.
@@ -62,7 +72,7 @@ Jeżeli któryś z składników komendy (np. argument) zawiera spacje należy je
 Informację na temat działania danej komendy oraz jej opcji można uzyskać w wbudowanym systemie pomocy przy pomocy poleceń \Verb{man} lub \Verb{info} / \Verb{pinfo}.
 Większość poleceń obsługuje także opcje \Verb{--help} lub \Verb{-h}, które wyświetlają informację na temat ich użycia.
 
-\pagebreak[2]\begin{ProTip}{\normalfont{\strong{Do zapamiętania}}}
+\pagebreak[2]\begin{ProTip}{Notacja}
 Zarówno w tekstach pomocy jak i w tym dokumencie stosowana jest konwencja polegająca na oznaczaniu opcjonalnych argumentów poprzez umieszczanie ich w nawiasach kwadartowych (jeżeli podajemy ten argument do komendy nie obejmujemy go już tymi nawiasami) oraz rozdzielaniu alternatywnych opcji przy pomocy~\Verb{|}. Np. \Verb{a [b] c|d} oznacza iż polecenie \Verb{a} wymaga argumentu postaci \Verb{c} albo \Verb{d}, który może być poprzedzony argumentem \Verb{b}.
 \end{ProTip}
 
@@ -87,3 +97,43 @@ Konstrukcja ta przekieruje wynik komendy \Verb{ls} uruchomionej z opcją \Verb{-
 Możemy także przekierować standardowe wyjście do pliku (przy pomocy~\Verb{>} lub~\Verb{>>}, gdy chcemy dopisywać do pliku) lub pobrać standardowe wejście z pliku (przy pomocy \Verb{<}).
 \Verb{2>} pozwala na przekierowanie standardowego wyjścia błędu do pliku, a \Verb{>&} i \Verb{|&} pozwala na przekierowanie obu strumieni odpowiednio do pliku lub standardowego wejścia innego polecenia.
 % END: unix intro
+
+\subsection{Kod powrotu polecenia oraz łączenie poleceń}
+
+Każde uruchamiane polecenie po zakończeniu działania zwraca liczbowy kod powrotu (w przypadku programów w C jest to wartość zwracana z funkcji \Verb$main$).
+Zero oznacza że polecenie zakończyło się sukcesem (np. znaleziono szukane pliki), wartość nie zerowa że zakończyło się porażką (np. nie ma pasujących plików) lub błędem (np. składnia wprowadzonego polecenia była niepoprawna).
+
+Polecenia mogą być łączone na różne sposoby – z wykorzystaniem tej informacji lub nie:
+\begin{itemize}
+	\item \Verb$a && b$ – polecenie b wykona się gdy a zakończyło się sukcesem (zwróciło kod 0)
+	\item \Verb$a || b$ – polecenie b wykona się gdy a zakończyło się porażką lub błędem (zwróciło kod różny od~0)
+	\item \Verb$a ; b$ – polecenie b po zakończeniu polecenia a (bez względu na jego kod powrotu)
+	\item \Verb$a & b$ – polecenie b będzie wykonywane równocześnie z a (dokładniej polecenie a zostanie uruchomione w tle, a na terminal zajmie polecenie b)
+\end{itemize}
+
+Spacje w powyższych konstrukcjach są opcjonalne.
+Średnik i pojedynczy \Verb$&$ mogą być dodane do polecenia także gdy nie ma kolejnego w ciągu:
+\begin{itemize}
+	\item \Verb$a&$ uruchomi polecenie a w tle i odda linię poleceń,
+	\item \Verb$a;$ uruchomi polecenie a (dokładnie tak samo jakby nie było tego średnika).
+\end{itemize}
+
+% BEGIN: katalog roboczy
+\subsection{Katalog roboczy}
+
+System plików ma strukturę hierarchiczną (drzewiastą) i rozpoczyna się w korzeniu oznaczanym ukośnikiem: \texttt{/}.
+Możliwe jest wyrażanie wszystkich ścieżek od korzenia, jednak nie jest to zbytnio wygodne.
+Interpreter poleceń taki jak \textit{bash} potrafi znajdować się gdzieś w tej strukturze plików i miejsce to nazywane jest bieżącym katalogiem roboczym (\textit{Present Working Directory}).
+Względem niego będą wyrażane ścieżki nie zaczynające się od korzenia, może być też oznaczony jawnie przy pomocy pojedynczej kropki.
+
+\begin{itemize}
+	\item \Verb{cd [ścieżka]}
+		zmiana bieżącego katalogu,\\
+			warto zauważyć, iż katalogi w ścieżce oddzielamy ukośnikami \texttt{/}, bieżący katalog oznaczamy kropką \texttt{.}, nadrzędny oznaczamy dwiema kropkami \texttt{..},\\
+			ścieżki zaczynające się od ukośnika \texttt{/} oznaczają \emph{ścieżki bezwzględne} (od korzenia systemu plików), pozostałe oznaczają \emph{ścieżkę względną} (wyrażoną względem bierzącego katalogu),\\
+			katalog domowy oznacza się tyldą\ \ \texttt{\~}
+		
+	\item \Verb{pwd}
+		wyświetla ścieżkę do bieżącego katalogu
+\end{itemize}
+% END: katalog roboczy
