@@ -35,19 +35,6 @@ upload:
 	cd $(OUTDIR) && rsync -rLc --delete -v -e "ssh" --exclude="~rrp" ./ www.opcode.eu.org:/srv/WebPages/main/
 
 #
-# addionals files
-#
-
-include $(MAINDIR)/booklets/Makefile
-
-$(TEXBUILDDIR)/img/%.pdf: $(MAINDIR)/booklets/extra-tex-files/%.svg
-	inkscape $^ --export-pdf=$@
-
-$(TEXBUILDDIR)/pdfArticle.cls $(TEXBUILDDIR)/labels4easylist.sty $(TEXBUILDDIR)/vtable.sty $(TEXBUILDDIR)/ehhline.sty:
-	mkdir -p $(TEXBUILDDIR)
-	wget -O "$@" "https://bitbucket.org/OpCode-eu-org/latex-libs/raw/HEAD/pkgs/$(@F)"
-
-#
 # submodules
 #
 
@@ -68,3 +55,13 @@ protect-submodules:
 #
 
 -include $(MAINDIR)/TextUtils/makefiles/buildWebSite.mk
+
+#
+# addionals files
+#
+
+include $(MAINDIR)/booklets/Makefile
+
+$(TEXBUILDDIR)/pdfArticle.cls $(TEXBUILDDIR)/labels4easylist.sty $(TEXBUILDDIR)/vtable.sty $(TEXBUILDDIR)/ehhline.sty:
+	mkdir -p $(TEXBUILDDIR)
+	wget -O "$@" "https://bitbucket.org/OpCode-eu-org/latex-libs/raw/HEAD/pkgs/$(@F)"
