@@ -1,1 +1,1 @@
-../../../OpCode-vip/vademecum/images-src4web/magistrala_rownolegla.sch
+../../../OpCode-vip/vademecum/images-src/magistrala_rownolegla.sch

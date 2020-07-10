@@ -25,46 +25,8 @@
 
 Polecenie \Verb#nft list ruleset# pozwala na wylistowanie wszystkich reguł.
 
-\begin{figure}[h!]\begin{center}\begin{adjustbox}{scale=.9}\begin{tikzpicture}[->, >={Stealth[length=8pt,width=6pt]}, node distance=0.6cm, semithick]
-	\tikzstyle{base}=[align=center, minimum height=3.3em, minimum width=9.1em]
-	\tikzstyle{inout}=[base]
-	\tikzstyle{routing}=[draw, dotted, base]
-	\tikzstyle{hook}=[draw, base]
-	
-	% based on: https://wiki.nftables.org/wiki-nftables/index.php/Netfilter_hooks
-	
-	\node[inout]   (NETIN)                                 {pakiet\\przychodzący};
-	\node[hook]    (ingress)     [below = of NETIN]        {netdev → ingress};
-	\node[hook]    (prerouting)  [below = of ingress]      {prerouting};
-	\node[routing] (ROUTING1)    [below = of prerouting]   {wybór trasy\\routingowej};
-	\node[hook]    (input)       [below = of ROUTING1]     {input};
-	\node[inout]   (LOCAL)       [below = of input]        {lokalne przetwarzanie pakietów\\recive() / send() / ...};
-	\node[hook]    (forward)     [right = 2.3cm of LOCAL]  {forward};
-	\node[routing] (ROUTING2)    [below = of LOCAL]        {wybór trasy\\routingowej};
-	\node[hook]    (output)      [below = of ROUTING2]     {output};
-	\node[hook]    (postrouting) [below = of output]       {postrouting};
-	\node[inout]   (NETOUT)      [below = of postrouting]  {pakiet\\wychodzący};
-	
-	% to local
-	\draw (NETIN)   edge (ingress);
-	\draw (ingress) edge (prerouting);
-	\draw (prerouting) edge (ROUTING1);
-	\draw (ROUTING1) edge (input);
-	\draw (input) edge (LOCAL);
-	
-	% from local
-	\draw (LOCAL) edge (ROUTING2);
-	\draw (ROUTING2) edge (output);
-	\draw (output) edge (postrouting);
-	\draw (postrouting) edge (NETOUT);
-	
-	% forward
-	\draw (ROUTING1) -| (forward);
-	\draw (forward)  |- (postrouting);
-	
-	% łańcuch type=route
-	\path (output) edge [out=0, in=0, looseness=2] node[below, align=center,sloped] {akceptacja w\\ łańcuchu\\ \texttt{type=route}} (ROUTING2);
-\end{tikzpicture}\end{adjustbox}\end{center}
+\begin{figure}[h!]
+\input{booklets-sections/network/ilustracje/51-nft.tex}
 \caption{Trasa pakietu przez filtry nftables. Wskazano punkty zaczepień dla łańcuchów reguł.}
 \end{figure}
 

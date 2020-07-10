@@ -1,1 +1,1 @@
-../../../OpCode-vip/vademecum/images-src4web/open_drain.sch
+../../../OpCode-vip/vademecum/images-src/open_drain.sch

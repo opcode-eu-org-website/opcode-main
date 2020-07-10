@@ -1,1 +1,1 @@
-../../../OpCode-vip/vademecum/images-src4web/bramki_cmos.sch
+../../../OpCode-vip/vademecum/images-src/bramki_cmos.sch

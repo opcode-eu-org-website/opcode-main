@@ -1,1 +1,1 @@
-../../../OpCode-vip/vademecum/images-src4web/npn_pnp.sch
+../../../OpCode-vip/vademecum/images-src/npn_pnp.sch

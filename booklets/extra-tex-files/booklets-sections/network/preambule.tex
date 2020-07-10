@@ -1,4 +1,4 @@
-% Copyright (c) 2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% Copyright (c) 2019-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
 % 
 % MIT License
 % 
@@ -20,33 +20,12 @@
 % OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 % SOFTWARE.
 
-\documentclass{pdfBooklets}
-
-\title{Programowanie w elektronice: Podstawy C i C++}
-\author{%
-	Projekt ,,Matematyka dla Ciekawych Świata'',\\
-	Robert Ryszard Paciorek\\\normalsize\ttfamily <rrp@opcode.eu.org>
+\usepackage{tikz}
+\usetikzlibrary{positioning} % for positionig nodes with `right = of X`
+\usetikzlibrary{arrows.meta, decorations.markings} % for arrows formating in tikzpicture
+\tikzset{
+  invisibleNode/.style={inner sep=0, outer sep = 0pt, minimum size=0},
 }
-\date  {2020-04-08}
 
-\makeatletter\hypersetup{
-	pdftitle = {\@title}, pdfauthor = {\@author}
-}\makeatother
-
-\begin{document}
-
-\maketitle
-
-\input{booklets-sections/c_cpp/00-intro.tex}
-\input{booklets-sections/c_cpp/10-podstawy_c.tex}
-\input{booklets-sections/c_cpp/20-wskazniki.tex}
-\input{booklets-sections/c_cpp/30-cpp.tex}
-\input{booklets-sections/c_cpp/zadania.tex}
-\input{booklets-sections/c_cpp/zadania_dodatkowe.tex}
-
-\copyrightFooter{
-	© Matematyka dla Ciekawych Świata, 2017-2020.\\
-	© Robert Ryszard Paciorek <rrp@opcode.eu.org>, 2003-2020.\\
-	Kopiowanie, modyfikowanie i redystrybucja dozwolone pod warunkiem zachowania informacji o autorach.
-}
-\end{document}
+\newcommand{\btt}[1]{\texttt{\color{blue}#1}}
+\newcommand{\ord}[1]{{\color{red}(#1)}}

@@ -1,0 +1,73 @@
+\begin{center}\begin{adjustbox}{scale=.9}\begin{tikzpicture}[->, >={Stealth[length=8pt,width=6pt]}, node distance=0.6cm, semithick]
+	\tikzstyle{info1}=[above, align=center]
+	\tikzstyle{info2}=[below=0.8cm, align=center]
+	\tikzstyle{base}=[align=center, minimum height=3.3em, minimum width=8.6em]
+	\tikzstyle{inout}=[base]
+	\tikzstyle{routing}=[draw, base]
+	\tikzstyle{table_raw}=[draw, base]
+	\tikzstyle{table_mangle}=[draw, base]
+	\tikzstyle{table_nat}=[draw, base]
+	\tikzstyle{table_filter}=[draw, base]
+	
+	\node[inout] (INPUT) {pakiet\\przychodzący};
+	\node[table_raw] (RAW_PREROUTING) [below = of INPUT] {raw\\PREROUTING};
+	\node[routing] (TRACK1) [below = of RAW_PREROUTING] {śledzenie\\stanu połączeń};
+	\node[table_mangle] (MANGLE_PREROUTING) [below = of TRACK1] {mangle\\PREROUTING};
+		\node[table_nat] (NAT_PREROUTING) [right = 2.5cm of MANGLE_PREROUTING] {nat\\PREROUTING};
+		\node[routing] (ROUTING1) [below = of NAT_PREROUTING] {wybór trasy\\routingowej};
+	
+	\node[table_mangle] (MANGLE_INPUT) [below = 2.7cm of MANGLE_PREROUTING] {mangle\\INPUT};
+		\node[table_mangle] (MANGLE_FORWARD) [below = 1.7cm of ROUTING1] {mangle\\FOWRARD};
+	\node[table_filter] (FILTER_INPUT) [below = of MANGLE_INPUT] {filter\\INPUT};
+	\node[table_nat] (NAT_INPUT) [below = of FILTER_INPUT] {nat\\INPUT};
+	\node[inout] (RECIVE) [below = of NAT_INPUT] {przetwarzanie\\lokalne};
+		\node[table_filter] (FILTER_FORWARD) [below = of MANGLE_FORWARD] {filter\\FORWARD};
+	
+	\node[inout] (GENERATE) [right = 7.6cm of INPUT] {pakiet\\generowany lokalnie};
+	\node[routing] (ROUTING2) [below = of GENERATE] {wybór trasy\\routingowej};
+	\node[table_raw] (RAW_OUTPUT) [below = of ROUTING2] {raw\\OUTPUT};
+	\node[routing] (TRACK2) [below = of RAW_OUTPUT] {śledzenie\\stanu połączeń};
+	\node[table_mangle] (MANGLE_OUTPUT) [below = of TRACK2] {mangle\\OUTPUT};
+	\node[table_nat] (NAT_OUTPUT) [below = of MANGLE_OUTPUT] {nat\\OUTPUT};
+	\node[routing] (ROUTING3) [below = of NAT_OUTPUT] {wybór trasy\\routingowej};
+	\node[table_filter] (FILTER_OUTPUT) [below = of ROUTING3] {filter\\OUTPUT};
+	\node[table_mangle] (MANGLE_POSTROUTING) [below = of FILTER_OUTPUT] {mangle\\POSTROUTING};
+	
+	\node[table_nat] (NAT_POSTROUTING) [below = 1.7cm of MANGLE_POSTROUTING] {nat\\POSTROUTING};
+	\node[inout] (OUTPUT) [below = of NAT_POSTROUTING] {pakiet\\wychodzący};
+	
+	\draw (INPUT) edge (RAW_PREROUTING);
+	\draw (RAW_PREROUTING) edge (TRACK1);
+	\draw (TRACK1) edge (MANGLE_PREROUTING);
+		\draw (MANGLE_PREROUTING) edge node[info1] {nie z\\localhost} (NAT_PREROUTING);
+		\draw (MANGLE_PREROUTING) node[info2] {z localhost} edge (MANGLE_INPUT);
+	\draw (NAT_PREROUTING) edge (ROUTING1);
+		\draw (ROUTING1) node[info2] {nie do localhost} edge (MANGLE_FORWARD);
+		\node[invisibleNode] (ROUTING1a) [left = 3.6cm of ROUTING1] {};
+		\draw[-] (ROUTING1) edge node[info1] {do localhost} (ROUTING1a);
+		\draw (ROUTING1a) -| (MANGLE_INPUT);
+	\draw (MANGLE_INPUT) edge (FILTER_INPUT);
+	\draw (FILTER_INPUT) edge (NAT_INPUT);
+	\draw (NAT_INPUT) edge (RECIVE);
+	
+	\draw (MANGLE_FORWARD) edge (FILTER_FORWARD);
+	\draw (FILTER_FORWARD) |- (MANGLE_POSTROUTING);
+	
+	\draw (GENERATE) edge (ROUTING2);
+	\draw (ROUTING2) edge (RAW_OUTPUT);
+	\draw (RAW_OUTPUT) edge (TRACK2);
+	\draw (TRACK2) edge (MANGLE_OUTPUT);
+	\draw (MANGLE_OUTPUT) edge (NAT_OUTPUT);
+	\draw (NAT_OUTPUT) edge (ROUTING3);
+	\draw (ROUTING3) edge (FILTER_OUTPUT);
+	\draw (FILTER_OUTPUT) edge (MANGLE_POSTROUTING);
+	
+	\draw (MANGLE_POSTROUTING) node[info2] {nie do localhost} edge (NAT_POSTROUTING);
+	\node[invisibleNode] (MANGLE_POSTROUTINGa) [right = 0.7cm of MANGLE_POSTROUTING] {};
+	\node[invisibleNode] (OUTPUTa) [right = 0.7cm of OUTPUT] {};
+	\draw[-] (MANGLE_POSTROUTINGa) -| (MANGLE_POSTROUTING);
+	\draw[-] (MANGLE_POSTROUTINGa) edge node[below,rotate=90] {do localhost} (OUTPUTa);
+	\draw (OUTPUTa) |- (OUTPUT);
+	\draw (NAT_POSTROUTING) edge (OUTPUT);
+	
+\end{tikzpicture}\end{adjustbox}\end{center}

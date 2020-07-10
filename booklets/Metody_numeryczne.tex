@@ -1,3 +1,4 @@
+\ifdefined\inputOnlyContent\else
 \documentclass{pdfBooklets}
 
 \title{Laboratorium programistyczne: metody numeryczne (interpolacja, różniczkowanie i całkowanie)}
@@ -15,6 +16,7 @@
 \begin{document}
 
 \maketitle
+\fi
 
 \teacher{Skrypt przeznaczony do realizacji na dwóch ostatnich labach programistycznych. W przypadku braku czasu można pominąć wybrane zagadnienia. W przypadku przedwczesnego skończenia skryptu można pokazać inne algorytmy numeryczne lub wrócić do materiałów dodatkowych z pierwszego skryptu.}
 
@@ -450,9 +452,11 @@ Narysuj wykres funkcji $sin(x)$ dla x z przedziału [1,2] oraz styczne w punkcie
 
 \rozwiazania
 
+\ifdefined\inputOnlyContent\else
 \copyrightFooter{
 	© Matematyka dla Ciekawych Świata, 2018.\\
 	© Robert Ryszard Paciorek <rrp@opcode.eu.org>, 2003-2018.\\
 	Kopiowanie, modyfikowanie i redystrybucja dozwolone pod warunkiem zachowania informacji o autorach.
 }
 \end{document}
+\fi

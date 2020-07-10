@@ -1,3 +1,4 @@
+\ifdefined\inputOnlyContent\else
 \documentclass{pdfBooklets}
 
 \title{Laboratorium programistyczne:\\ Sumator i zastosowania automatów}
@@ -47,6 +48,7 @@
 \begin{document}
 
 \maketitle
+\fi
 
 %  BEGIN: Systemy liczbowe 01
 \section{Systemy liczbowe}
@@ -806,9 +808,11 @@ Zadanie możesz rozwiązać także z odwróconą kolejnością list.
 
 \rozwiazania
 
+\ifdefined\inputOnlyContent\else
 \copyrightFooter{
 	© Matematyka dla Ciekawych Świata, 2019.\\
 	© Robert Ryszard Paciorek <rrp@opcode.eu.org>, 2008-2019.\\
 	Kopiowanie, modyfikowanie i redystrybucja dozwolone pod warunkiem zachowania informacji o autorach.
 }
 \end{document}
+\fi

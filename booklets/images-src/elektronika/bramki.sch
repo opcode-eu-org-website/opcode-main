@@ -1,1 +1,1 @@
-../../../OpCode-vip/vademecum/images-src4web/bramki.sch
+../../../OpCode-vip/vademecum/images-src/bramki.sch
