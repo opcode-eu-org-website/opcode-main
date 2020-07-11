@@ -146,8 +146,12 @@ Innym przykładem jest pokazane wcześniej wyłączenie automatycznej konfigurac
 
 Oprócz wyżej omówionej konfiguracji interfejsów i tras routingowych, często potrzebna jest konfiguracja jądrowych mechanizmów filtracji pakietów.
 
-Służy do tego polecenie \Verb#nft#.
+Filtracja pakietów umożliwia m.in. ignorowanie (\textit{drop}) lub odrzucenie z komunikatem błędu (\textit{reject}) niepożądanego ruchu sieciowego
+	– zarówno wchodzącego, wychodzącego, jak i przekazywanego (jeżeli uruchomiona jest funkcjonalność routera poprzez wpisanie wartości 1 do \Verb$/proc/sys/net/ipv*/conf/*/forwarding$).
+Pozwala także na śledzenie połączeń (np. w celu innego traktowania połączeń nawiązanych niż nowych)
+	i manipulowanie przechodzącymi pakietami (np. modyfikację adresów IP i numerów portów w ramach mechanizmów \textit{snat} modyfikującego adresy źródłowe i \textit{dnat} modyfikujące adresy docelowe).
 
+Do konfiguracji filtracji pakietów służy polecenie \Verb#nft#.
 Na starszych systemach \Verb#nft# może być niedostępny, wtedy można korzystać z poleceń:
 \begin{itemize}
 	\item \Verb{iptables}, \Verb{ip6tables}

@@ -1,4 +1,10 @@
-\begin{center}\begin{adjustbox}{scale=.9}\begin{tikzpicture}[->, >={Stealth[length=8pt,width=6pt]}, node distance=0.6cm, semithick]
+\ifdefined\inputOnlyContent\else
+	\documentclass[tikz]{standalone}
+	\usetikzlibrary{positioning,arrows.meta}
+	\begin{document}
+\fi
+
+\begin{tikzpicture}[->, >={Stealth[length=8pt,width=6pt]}, node distance=0.6cm, semithick]
 	\tikzstyle{base}=[align=center, minimum height=3.3em, minimum width=9.1em]
 	\tikzstyle{inout}=[base]
 	\tikzstyle{routing}=[draw, dotted, base]
@@ -37,4 +43,6 @@
 	
 	% łańcuch type=route
 	\path (output) edge [out=0, in=0, looseness=2] node[below, align=center,sloped] {akceptacja w\\ łańcuchu\\ \texttt{type=route}} (ROUTING2);
-\end{tikzpicture}\end{adjustbox}\end{center}
+\end{tikzpicture}
+
+\ifdefined\inputOnlyContent\else\end{document}\fi

@@ -1,4 +1,11 @@
-\begin{center}\begin{adjustbox}{scale=.9}\begin{tikzpicture}[->, >={Stealth[length=8pt,width=6pt]}, node distance=0.6cm, semithick]
+\ifdefined\inputOnlyContent\else
+	\documentclass[tikz]{standalone}
+	\usetikzlibrary{positioning,arrows.meta}
+	\begin{document}
+\fi
+
+\begin{tikzpicture}[->, >={Stealth[length=8pt,width=6pt]}, node distance=0.6cm, semithick]
+	\tikzstyle{invisibleNode}=[inner sep=0, outer sep = 0pt, minimum size=0]
 	\tikzstyle{info1}=[above, align=center]
 	\tikzstyle{info2}=[below=0.8cm, align=center]
 	\tikzstyle{base}=[align=center, minimum height=3.3em, minimum width=8.6em]
@@ -69,5 +76,6 @@
 	\draw[-] (MANGLE_POSTROUTINGa) edge node[below,rotate=90] {do localhost} (OUTPUTa);
 	\draw (OUTPUTa) |- (OUTPUT);
 	\draw (NAT_POSTROUTING) edge (OUTPUT);
-	
-\end{tikzpicture}\end{adjustbox}\end{center}
+\end{tikzpicture}
+
+\ifdefined\inputOnlyContent\else\end{document}\fi

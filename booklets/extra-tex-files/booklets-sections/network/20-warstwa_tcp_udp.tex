@@ -43,22 +43,6 @@ Dodatkowo zarówno UDP jak i TCP na każdym z hostów wyróżniają numeryczny i
 % BEGIN: Polularne usługi
 \subsection{Popularne usługi}
 
-\begin{teacherOnly}
-	\begin{easylist}[itemize]
-		& pokazać jak działa serwer dns robiąc ręcznie zapytania dig'iem o kolejne poziomy
-	\end{easylist}
-	\begin{Verbatim}
-dig NS .
-dig @g.root-servers.net. NS pl.
-dig @a-dns.pl. NS edu.pl.
-dig @a-dns.pl. NS icm.edu.pl.
-dig @ns1.agh.edu.pl. NS ciekawi.icm.edu.pl.
-# dostaliśmy   CNAME www2.icm.edu.pl.  oraz brak wpisu NS
-dig @ns1.agh.edu.pl. A www2.icm.edu.pl.
-# dostaliśmy 213.135.59.55
-	\end{Verbatim}
-\end{teacherOnly}
-
 W ramach sieci mogą być realizowane różne usługi w oparciu o różne protokoły warstwy aplikacyjnej. Standardowe usługi posiadają zdefiniowane domyślne adresy portów dla swoich protokołów. Wśród usług i protokołów sieciowych należy wymienić przynajmniej:
 \begin{itemize}
 	\item DNS (Domain Name System) - odpowiedzialny za system mapujący nazwy alfanumeryczne hostów na adresy IP.
@@ -71,8 +55,15 @@ W ramach sieci mogą być realizowane różne usługi w oparciu o różne protok
 
 \subsubsection{Domain Name System}
 
-Domeny posiadają budowę hierarchiczną / drzewiastą (precyzja rośnie od prawej do lewej, a kolejne poziomy oddzielane są kropkami).
-\teacher{Wspomnieć o kropce kończącej nazwę domeny oraz o pliku \Verb$/etc/hosts$. Poopowiadać o typach rekordów także PTR. }
+DNS umożliwia mapowanie nazwy na adres IP (lub wiele adresów IP) oraz przechowywanie dodatkowych informacji na temat domeny i znajdujących się w niej usług.
+
+Domeny posiadają budowę hierarchiczną / drzewiastą:
+\begin{itemize}
+	\item precyzja rośnie od prawej do lewej
+	\item kolejne poziomy oddzielane są kropkami
+	\item najwyższym poziomem jest kropka będąca ostatnim znakiem w pełnej nazwie domenowej (np. \texttt{ciekawi.icm.edu.pl\textbf{\color{red}{.}}}), którą najczęściej pomija się w zapisie
+	\item hierarchia ta jest niezależna od hierarchii routingu i wynika z faktu posiadania/użytkowania danej (pod)domeny)
+\end{itemize}
 Realizacja odpowiedzi na zapytanie DNS wygląda następująco:
 \begin{enumerate}
 	\item host kieruje zapytanie do określonego w jego konfiguracji serwera "rozwijającego" DNS (DNS resolver),
@@ -82,14 +73,36 @@ Realizacja odpowiedzi na zapytanie DNS wygląda następująco:
 	\item itd. aż do uzyskania odpowiedzi o pytany adres
 \end{enumerate}
 
+\begin{teacherOnly}
+pokazać jak działa serwer dns robiąc ręcznie zapytania dig'iem o kolejne poziomy:
+
+\begin{Verbatim}
+dig NS .
+dig @g.root-servers.net. NS pl.
+dig @a-dns.pl. NS edu.pl.
+dig @a-dns.pl. NS icm.edu.pl.
+dig @ns1.agh.edu.pl. NS ciekawi.icm.edu.pl.
+# dostaliśmy   CNAME www2.icm.edu.pl.  oraz brak wpisu NS
+dig @ns1.agh.edu.pl. A www2.icm.edu.pl.
+# dostaliśmy 213.135.59.55
+\end{Verbatim}
+\end{teacherOnly}
+
+\begin{center}\begin{adjustbox}{scale=.9}
+\inputFileContent{booklets-sections/network/ilustracje/20-dns.tex}
+\end{adjustbox}\end{center}
+
 DNS przechowuje informacje w postaci rekordów mających określony typ (w większości przypadków dla danej nazwy domenowej może być zdefiniowanych wiele rekordów, tego samego lub innych typów).
 Wśród najważniejszych typów rekordów należy wymienić:
 \begin{itemize}
-	\item \Verb@A@ - rekord typu A czyli mapowanie nazwy na adres IPv4
-	\item \Verb@AAAA@ - rekord typu AAAA czyli mapowanie nazwy na adres IPv4
-	\item \Verb@MX@ - rekord typu MX czyli informacja o serwerach obsługujących pocztę danej domeny
-	\item \Verb@NS@ - rekord typu NS czyli informacja o serwerach obsługujących DNS danej domeny
-	\item \Verb@SRV@ - rekord typu SRV czyli informacje o hoście świadczącym usługę (usługa określana jest w nazwie domeny o którą pytamy)
-	\item \Verb@TXT@ - rekord typu TXT czyli informacje dodatkowe
+	\item \Verb@A@    – mapowanie nazwy na adres IPv4
+	\item \Verb@AAAA@ – mapowanie nazwy na adres IPv4
+	\item \Verb@MX@   – informacja o serwerach obsługujących pocztę danej domeny
+	\item \Verb@NS@   – informacja o serwerach obsługujących DNS danej domeny
+	\item \Verb@PTR@  – mapowanie adresów IP na nazwy domenowe, realizowane w specjalnym drzewie \Verb@in-addr.arpa@ (dla IPv4) lub \Verb@ip6.arpa@ (IPv6),
+	                    gdzie adres IP zapisywany jest w odwróconej kolejności po bajcie dla IPv4 lub cyfrze szesnastkowej dla IPv6
+	                    \teacher{Pokazać wynik polecenia \texttt{host} z adresem IPv4 i IPv6}
+	\item \Verb@SRV@  – informacje o hoście świadczącym usługę w tej domenie (usługa określana jest w nazwie domeny o którą pytamy)
+	\item \Verb@TXT@  – informacje dodatkowe (np. jakie serwery pocztowe, są upoważnione do wysyłania poczty z tej domeny)
 \end{itemize}
 % END: Polularne usługi

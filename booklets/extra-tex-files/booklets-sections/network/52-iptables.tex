@@ -27,8 +27,9 @@
 
 Iptables wykorzystuje kilka tablic reguł (najistotniejszymi są \Verb{filter} i \Verb{nat}). Tablica może zostać określona przy pomocy opcji \Verb{-t}, jeżeli nie użyto tej opcji operacje będą wykonywane na tablicy \Verb{filter}. Zależności pomiędzy poszczególnymi łańcuchami i tablicami przedstawia (uproszczony) diagram przejścia pakietu przez mechanizm iptables:
 
-\begin{figure}[h!]
-\input{booklets-sections/network/ilustracje/52-iptables.tex}
+\begin{figure}[h!]\begin{center}\begin{adjustbox}{scale=.9}
+\inputFileContent{booklets-sections/network/ilustracje/52-iptables.tex}
+\end{adjustbox}\end{center}
 \caption{Trasa pakietu przez filtry iptables. Wskazano punkty zaczepień nazwy łańcuchów.}
 \end{figure}
 
