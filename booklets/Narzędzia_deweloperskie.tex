@@ -20,9 +20,10 @@
 % OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 % SOFTWARE.
 
+\ifdefined\inputOnlyContent\else
 \documentclass{pdfBooklets}
 
-\title{Narzędzia deweloperskie: git, make i cmake}
+\title{Narzędzia deweloperskie: git, make i cmake, pip i virtualenv}
 \author{%
 	%Projekt ,,Matematyka dla Ciekawych Świata'',\\
 	Robert Ryszard Paciorek\\\normalsize\ttfamily <rrp@opcode.eu.org>
@@ -37,6 +38,7 @@
 \begin{document}
 
 \maketitle
+\fi
 
 \section{Systemem kontroli wersji}
 
@@ -468,6 +470,55 @@ target_link_libraries(Run ${Libraries})
 SCons jest alternatywnym rozwiązaniem wobec zestawu \Verb{cmake} + \Verb{make},
 pozwalającym na tworzenie plików zarządzających procesem budowania w postaci skryptów Pythona. 
 
+
+\section{Narzędzia pythonowe}
+
+\subsection{PIP}
+
+Pip jest narzędziem służącym do instalowania modułów pythonowych z dedykowanego repozytorium (managerem/instalatorem pakietów pythonowych). W przypadku Pythona w wersji 3 należy wywoływać go poleceniem \Verb{pip3}.
+Po nazwie polecenia podaje się komendę określającą działania które ma wykonać manager, do najistotniejszych należy zaliczyć:\\
+\begin{itemize}
+	\item \texttt{install \textit{nazwa}} instaluje podany pakiet
+	\item \texttt{install -U \textit{nazwa}} aktualizuje podany pakiet
+	\item \texttt{uninstall \textit{nazwa}} usuwa podany pakiet
+	\item \texttt{search \textit{słowo}} wyszukuje pakiety w oparciu o podane słowo kluczowe
+	\item \texttt{list -v} wypisuje zainstalowane pakiety wraz z informacją o katalogu w którym zostały zainstalowane oraz czy pakiet był instalowany przy pomocy pip, czy w inny sposób (np. przez systemowego menagera pakietów)
+\end{itemize}
+
+Pip automatycznie instaluje zależności pakietu, w niektórych przypadkach może to wymagać zainstalowanych narzędzi i odpowiednich bibliotek C i/lub C++.
+
+\begin{Zadanie}{}{}
+Zainstaluj (lub zaktualizuj jeżeli jest obecnie zainstalowany) przy pomocy pip pakiet virtualenv
+\end{Zadanie}
+
+\subsection{Virtualenv}
+
+Virtualenv jest narzędziem pozwalającym na tworzenie środowisk pythonowych udostępniających różne wersje modułów. W celu utworzenia nowego środowiska wywołuje się go poleceniem \Verb{virtualenv ścieżka}, gdzie \Verb{ścieżka} wskazuje na miejsce w którym ma zostać utworzone środowisko. Po utworzeniu środowiska można doinstalować wewnątrz niego wymagane wersje bibliotek przy pomocy komendy pip dostępnej w pod-katalogu \Verb{bin} katalogu utworzonego środowiska. Do wywołania programów pythonowych z użyciem danego środowiska należy korzystać z pliku wykonywalnego python3 w pod-katalogu \Verb{bin} danego środowiska. Można także skorzystać z pliku \Verb{bin/activate} w katalogu utworzonego środowiska, poprzez wczytanie go w bierzącej powłoce basha (\Verb{. scizeka_do_enva/bin/activate}) celem uzyskania powłoki w której domyślnym interpreterem pythona będzie ten z utworzonego środowiska ,,virtualenv''. Zmiany w środowisku wprowadzone w wyniku wczytania pliku \Verb{bin/activate} obowiązują tylko w bierzącej powłoce, można je także odwrócić przy pomocy polecenia \Verb{deactivate}.
+
+\begin{CodeFrame*}[bash]{}
+# tworzenie nowego środowiska
+virtualenv /tmp/py1
+# użycie pip wewnątrz środowiska
+/tmp/py1/bin/pip3 list
+# wywołanie pytana wewnątrz środowiska
+/tmp/py1/bin/python3
+
+# "przełączenie" na pythona z środowiska
+. /tmp/py1/bin/activate
+# teraz aby użyć pip lub wewnątrz środowiska wystarczy uruchomić
+pip3 list
+python3
+\end{CodeFrame*}
+
+\begin{ProTip}{Informacja {\Symbola 🤔}}
+Virtualenv nie jest chroot'em - Python z tak utworzonego środowiska ,,widzi'' resztę systemu, a także ,,wie'' w jakiej ścieżce jest zainstalowany (zobacz zawartość zmiennej \Verb{sys.path}).
+\end{ProTip}
+
+\begin{Zadanie}{}{}
+Utwórz środowisko pythonowe typu ,,virtualenv'' w katalogu ytdl i zainstaluj wewnątrz niego pakiet pythonowy youtube-dl.
+\end{Zadanie}
+
+\ifdefined\inputOnlyContent\else
 \rozwiazania
 
 \copyrightFooter{
@@ -475,3 +526,4 @@ pozwalającym na tworzenie plików zarządzających procesem budowania w postaci
 	Kopiowanie, modyfikowanie i redystrybucja dozwolone pod warunkiem zachowania informacji o autorach.
 }
 \end{document}
+\fi

@@ -56,9 +56,24 @@ Adresy IPv4 zapisywane są najczęściej w notacji kropkowo-dziesiętnej, gdzie 
 	\end{easylist}
 \end{teacherOnly}
 
-Adresy hostów grupuje się w adresy sieci, bazując na jednakowym (bitowo) początku takiego adresu (zwanym adresem sieci lub prefixem). Ilość bitów stanowiących adres sieci w danym adresie IP nazywana jest długością prefixu i zapisywana jest zazwyczaj po ukośniku. Np. zapis \Verb$2001:db8::a17/48$ oznacza że pierwsze 48 bity stanowią adres sieci a kolejne $128-48 = 80$ bitów stanowi adres hosta w tej sieci.
+Adresy hostów grupuje się w adresy sieci, bazując na jednakowym (bitowo) początku takiego adresu (zwanym adresem sieci lub prefixem). Ilość bitów stanowiących adres sieci w danym adresie IP nazywana jest długością prefixu i zapisywana jest zazwyczaj po ukośniku\footnote{
+	Jest to notacja \textit{CIDR}. Przed wprowadzeniem tego mechanizmu w IPv4 funkcjonował klasowy sposób routingu (\textit{classful}), gdzie wielkość maski była deteminowana wartością pierwszych bitów adresu – ale to już historia.
+}. Na przykład zapis \Verb$2001:db8::a17/48$ oznacza że pierwsze 48 bity stanowią adres sieci a kolejne $128-48 = 80$ bitów stanowi adres hosta w tej sieci.
 
 Długość prefixu jednoznacznie określa maskę danej podsieci, czyli liczbę odpowiadającą długości adresu (32 bity lub 128 bitów), złożoną z ciągu jedynek o długości prefixu oraz ciągu zer (o długości adresu hosta). W przypadku IPv4 spotykane jest także podawanie maski sieci w notacji kropkowo-dziesiętnej zamiast długości prefixu.
+
+\begin{Verbatim}[frame=single,label=\textrm{\bfseries Przykład},commandchars=\\\{\},commentchar=\%]
+adres IPv4 zapisany z informacją o długości prefixu: 10.23.45.56/{\color{violet}13}, czyli:
+adres: 10.23.45.56 = {\color{blue}0000101000010}{\color{brown}1110010110100111000}
+maska: 255.248.0.0 = {\color{blue}1111111111111}{\color{brown}0000000000000000000}
+                     {\color{blue}prefix sieci }{\color{brown}adres hosta w sieci}
+adres sieci        = {\color{blue}0000101000010}{\color{brown}0000000000000000000} = 10.16.0.0\vspace{4pt}
+{\footnotesize{}Adres sieci obliczany jest jako bitowy AND pomiędzy adresem i maską.}\vspace{4pt}
+{\footnotesize{}Maska zawsze jest złożona z ciągu samych bitów o wartości {\color{blue}1} a następnie o wartości {\color{brown}0}.}
+{\footnotesize{}Bitów o wartości {\color{blue}1} jest tyle ile wynosi długość prefixu (podawana po /), czyli w tym przykładzie {\color{violet}13}.}\vspace{4pt}
+{\footnotesize{}W IPv6 działa to analogicznie, tyle że adres ma 128 bitów długości, stosuje się notacje dwukropkową}
+{\footnotesize{}zamiast kropkowo-dziesiętnej i nie stosuje się jawnego zapisu maski (a jedynie długość prefixu).}
+\end{Verbatim}
 
 Sieć może zostać podzielona na mniejsze sieci (z większą wartością prefixu), jak też grupa sieci może zostać zagregowana w jedną większą ($2^n$ raza) sieć (z prefixem mniejszym o n). Agregacja hostów i sieci w większe całości jest wykorzystywana w mechanizmach routingu, co pozwala na redukcję wielkości tablic routingowych.
 
