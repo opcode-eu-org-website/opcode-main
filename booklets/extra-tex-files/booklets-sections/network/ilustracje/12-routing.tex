@@ -1,0 +1,99 @@
+\ifdefined\inputOnlyContent\else
+	\documentclass[tikz]{standalone}
+	\usepackage{tikzPackets}
+	\InputIfFileExists{booklets-sections/network/preambule.tex}{}{}
+	\begin{document}
+\fi
+
+
+\providecommand{\addrouter}[5][]{
+	\node[router, #1]  (#2_0) {\bfseries #3};
+	\foreach \txt[remember=\n as \lastn (initially 0), count=\n from 1] in {#4} {
+		\node[riface] (#2_\n) [] at (#2_\lastn.south west) {eth\n: \txt};
+	}
+	\node[rtable] (#2_TABLE)  [] at (#2_\lastn.south west) {#5};
+}
+
+\providecommand{\addhost}[5][]{
+	\node[base, #1]  (#2) {\textbf{#3}\\#4};
+}
+
+\begin{tikzpicture}[semithick]
+	\tikzstyle{base}=[draw, minimum height = 0.8cm, anchor = north west, outer sep = 0pt, align=center]
+	\tikzstyle{router}=[base, minimum width=4.5cm]
+	\tikzstyle{riface}=[router, node font=\footnotesize]
+	\tikzstyle{rtable}=[router, node font=\ttfamily\scriptsize, align=left, minimum height = 1.3cm]
+	
+	\addrouter[yshift=2.5cm,xshift=-6.5cm]{RA}{Router A}{
+		10.0.4.1/24,
+		10.9.1.2/30
+	}{
+		10.0.3.0/24 via 10.9.1.1\\
+		10.0.5.0/24 via 10.9.1.1\\
+		10.0.8.0/24 via 10.9.1.1\\
+		default via 10.0.5.1
+	}
+
+	\addrouter[yshift=-2.5cm,xshift=-6.5cm]{RB}{Router B}{
+		10.0.5.1/24,
+		10.9.2.2/30,
+		10.3.0.1/22
+	}{
+		10.0.3.0/24 via 10.0.2.1\\
+		default via 10.3.1.1
+	}
+	
+	\addrouter{RC}{Router C}{
+		10.9.1.1/30,
+		10.9.3.2/30,
+		10.9.2.1/30,
+		10.9.4.2/30
+	}{
+		10.0.3.0/24 via 10.9.3.1\\
+		10.0.4.0/24 via 10.9.1.2\\
+		10.0.5.0/24 via 10.9.3.2
+	}
+
+	\addrouter[yshift=2.5cm,xshift=6.5cm]{RD}{Router D}{
+		10.0.3.1/24,
+		10.9.3.1/30
+	}{
+		default via 10.0.3.100\\
+		10.0.4.1/23 via 10.9.3.2
+	}
+
+	\addrouter[yshift=-2.5cm,xshift=6.5cm]{RE}{Router E}{
+		10.0.8.1/24,
+		10.9.4.1/30
+	}{
+		default via 10.9.4.2
+	}
+	
+	\draw (RA_2.east) -- (RC_1.west);
+	\draw (RB_2.east) -- (RC_3.west);
+	\draw (RD_2.west) -- (RC_2.east);
+	\draw (RE_2.west) -- (RC_4.east);
+	
+	\node[base, yshift=2.5cm, xshift=-10.5cm] (HA1) {HA1\\\footnotesize 10.0.4.33/24};
+	\draw (HA1.east) -- (RA_1.west);
+	\node[base, xshift=-10.5cm] (HA2) {HA2\\\footnotesize 10.0.4.71/24};
+	\draw (HA2.east) -- (RA_1.west);
+	
+	\node[base, yshift=-2.5cm, xshift=-10.5cm] (HB1) {HB1\\\footnotesize 10.0.5.13/24};
+	\draw (HB1.east) -- (RB_1.west);
+	
+	\node[base, yshift=2.5cm, xshift=12.5cm] (HD1) {HD1\\\footnotesize 10.0.3.5/24};
+	\draw (HD1.west) -- (RD_1.east);
+	
+	\node[base, yshift=-2.5cm, xshift=12.5cm] (HE1) {HE1\\\footnotesize 10.0.8.8/24};
+	\draw (HE1.west) -- (RE_1.east);
+	
+	\node[yshift=-8.1cm, xshift=2.25cm, text width=22cm] {\small
+		Uwaga: W tablicach routingu na ilustracji pominięto wpisy związane z pokazanymi interfejsami i ich adresami IP.
+		Pominięto też tablice routingowe hostów H*, należy zakładać że oprócz wpisu związanego z adresem IP ustawionym na interfejsie mają one jedynie wpis default wskazujący na „ich” router np. tablica HA1 ma dwa wpisy:
+		\Verb$default via 10.0.4.1$ i \Verb$10.0.4.0/24 dev eth0$.
+	};
+\end{tikzpicture}
+
+\ifdefined\inputOnlyContent\else\end{document}\fi
+

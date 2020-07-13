@@ -1,0 +1,27 @@
+\noindent Przykłady:
+\begin{easylist}[itemize]
+& Pakiet wysłany z HA1 do \Verb$10.0.3.13$:
+	&& zostanie przesłany przez \textit{Router A}, który ma wpis \Verb$10.0.3.0/24 via 10.9.1.1$, do \textit{Router C}
+	&& z \textit{Router C}, który ma wpis \Verb$10.0.3.0/24 via 10.9.3.1$, zostanie przekazany do \textit{Router D}
+	&& \textit{Router D} przekaże go do odpowiedniego hosta (HD1) poprzez interfejs eth1
+
+& Pakiet wysłany z HD1 do \Verb$10.0.4.33$:
+	&& zostanie przesłany przez \textit{Router D}, który ma wpis \Verb$10.0.4.1/23 via 10.9.3.2$, do \textit{Router C}
+	&& z \textit{Router C}, który ma wpis \Verb$10.0.4.0/24 via 10.9.1.2$, zostanie przekazany do \textit{Router A}
+	&& \textit{Router A} przekaże go do odpowiedniego hosta (HA1) poprzez interfejs eth1
+	
+& Pakiet wysłany z HD1 do \Verb$10.0.5.13$:
+	&& zostanie przesłany przez \textit{Router D}, który ma wpis \Verb$10.0.4.1/23 via 10.9.3.2$, do \textit{Router C}
+	&& z \textit{Router C}, który ma wpis \Verb$10.0.5.0/24 via 10.9.3.2$, zostanie przekazany do \textit{Router B}
+	&& \textit{Router B} przekaże go do odpowiedniego hosta (HB1) poprzez interfejs eth1
+\end{easylist}
+
+\noindent Zwróć uwagę że:
+\begin{easylist}[itemize]
+	& aby możliwa była komunikacja trasa routingowa musi być:
+		&& skonfigurowana w obie strony (tak jak ma to miejsce między HA1 i HD1)
+			&&& z tego powodu HE1 nie może komunikować się np. z HD1
+		&& skonfigurowana zarówno na routerach brzegowych (takich jak A i D), jak i wszystkich routerach pośrednich (takich jak C)
+	& \textit{Router D} posiada zagregowany wpis w tablicy routingu obejmujący zarówno sieci podłączone do \textit{Router A}, jak i do \textit{Router B},
+	  ale np. wpisy w \textit{Router A} nie są i nie mogą być zagregowane
+\end{easylist}
