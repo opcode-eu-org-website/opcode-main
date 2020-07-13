@@ -20,6 +20,55 @@
 % OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 % SOFTWARE.
 
-\usepackage{tikz}
+\usepackage{tikzPackets}
 \usetikzlibrary{positioning} % for positionig nodes with `right = of X`
 \usetikzlibrary{arrows.meta, decorations.markings} % for arrows formating in tikzpicture
+
+\ifdefined\inputOnlyContent\else
+	% redefine looks of footnotes to:
+	%   margin (3mm), number (with constant filed width 6mm), empty space (remained from number filed width), text
+	\makeatletter\renewcommand{\@makefntext}[1]{%
+		\setlength{\@tempdima}{\columnwidth}\addtolength{\@tempdima}{-9mm}%
+		\protect\footnotesize\hspace{1mm}\makebox[4mm][l]{\@thefnmark.}\parbox[t]{\@tempdima}{#1}%
+	}\makeatother
+\fi
+
+\newcommand{\inputSideBySide}[4]{
+\noindent
+\begin{varwidth}[t]{9.3cm}
+	\begin{center}
+		#1:
+	\end{center}
+	\vspace{-0.35cm}
+	\begin{adjustbox}{scale=.561}\inputFileContent{
+		#2
+	}\end{adjustbox}
+\end{varwidth}
+\hspace{0.4cm}
+\begin{varwidth}[t]{9.3cm}
+	\begin{center}
+		#3:
+	\end{center}
+	\vspace{-0.35cm}
+	\begin{adjustbox}{scale=.561}\inputFileContent{
+		#4
+	}\end{adjustbox}
+\end{varwidth}
+}
+
+\newcommand{\inputSideBySideAsFigure}[6]{
+\begin{figure}[h!]\label{#6}\inputSideBySide
+	{#1}{#2}
+	{#3}{#4}
+	\caption{#5}
+\end{figure}
+}
+
+\newcommand{\inputSingleAsFigure}[4][1.0]{
+\begin{figure}[h!]\label{#4}
+	\begin{center}\begin{adjustbox}{scale=#1}
+		\inputFileContent{#2}
+	\end{adjustbox}\end{center}
+	\caption{#3}
+\end{figure}
+}

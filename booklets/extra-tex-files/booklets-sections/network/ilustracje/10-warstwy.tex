@@ -1,0 +1,39 @@
+\ifdefined\inputOnlyContent\else
+	\documentclass[tikz]{standalone}
+	\usepackage{tikzPackets}
+	\InputIfFileExists{booklets-sections/network/preambule.tex}{}{}
+	\begin{document}
+\fi
+
+\begin{tikzpicture}[semithick]
+	\tikzstyle{base}  =[draw, minimum width=2.5cm, anchor = north west, outer sep = 0pt, align=center]
+	\tikzstyle{header}=[base, minimum height = 1.3cm]
+	\tikzstyle{data}  =[base, minimum height = 1.7cm]
+	\tikzstyle{packet}=[base, minimum height = 1cm, anchor = south west, rotate=90]
+	
+	\node[header]                                         (L2_HEADER)                             {Nagłówek};
+	\node[data, minimum height = 2.7cm]                   (L2_DATA)  [] at (L2_HEADER.south west) {Dane};
+	\node[packet, minimum width=4cm, text width=3.7cm]    (L2)       [] at (L2_DATA.south west)   {\small ramka warstwy\\ sprzętowej};
+	
+	\node[header, xshift=5.25cm, yshift=-0.5cm]           (L3_HEADER)                             {Nagłówek};
+	\node[data, minimum height = 2.2cm]                   (L3_DATA)  [] at (L3_HEADER.south west) {Dane};
+	\node[packet, minimum width=3.5cm, text width=3.2cm]  (L3)       [] at (L3_DATA.south west)   {\small pakiet warstwy\\ sieciowej};
+	
+	\node[header, xshift=10.5cm, yshift=-1cm]             (L4_HEADER)                             {Nagłówek};
+	\node[data]                                           (L4_DATA)  [] at (L4_HEADER.south west) {Dane};
+	\node[packet, minimum width=3cm, text width=2.7cm]    (L4)       [] at (L4_DATA.south west)   {\small pakiet warstwy\\ transportowej};
+	
+	\node[anchor = north west, outer sep = 0pt, minimum height=2.5cm, minimum width=1cm, xshift=14cm, yshift=-1.5cm, align=center]   (Lx)  {\ldots\\\ldots\\\ldots};
+	
+	
+	\draw[dotted] (L2_DATA.north east) -- (L3.north east);
+	\draw[dotted] (L2_DATA.south east) -- (L3.north west);
+	
+	\draw[dotted] (L3_DATA.north east) -- (L4.north east);
+	\draw[dotted] (L3_DATA.south east) -- (L4.north west);
+	
+	\draw[dotted] (L4_DATA.north east) -- (Lx.north);
+	\draw[dotted] (L4_DATA.south east) -- (Lx.south);
+\end{tikzpicture}
+
+\ifdefined\inputOnlyContent\else\end{document}\fi

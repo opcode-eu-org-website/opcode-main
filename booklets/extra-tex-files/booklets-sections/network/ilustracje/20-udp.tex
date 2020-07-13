@@ -1,0 +1,43 @@
+\ifdefined\inputOnlyContent\else
+	\documentclass[tikz]{standalone}
+	\usepackage{tikzPackets}
+	\InputIfFileExists{booklets-sections/network/preambule.tex}{}{}
+	\begin{document}
+\fi
+
+\begin{minipage}[t]{31\packetsBitWidth}\hspace{-0.5\packetsBitWidth}\begin{tikzpicture}[semithick]
+	\packetsInit
+	\tikzstyle{data}=[protocolsField, minimum height = 1.5cm, align=center, fill=black!10]
+	\tikzstyle{prev}=[protocolsField, minimum height = 1.2cm, align=center, fill=black!30, node font=\footnotesize]
+	
+	\packetsPrintBitScale{31}
+	
+	\ifdefined\hideLowerHeaders\else
+		\packetsPutField[prev]{32}{Nagłówek warstwy sprzętowej.}
+		\packetsNextLine
+		\packetsPutField[prev]{32}{Nagłówek IPv4 (z ew. opcjami) lub IPv6 (z ew. kolejnymi nagłówkami)\\ z polem „Protokół” / „Next Header” o wartości 0x11.}
+		\packetsNextLine
+	\fi
+	
+	% 0-31
+	\packetsPutField{16}{Port źródłowy}
+	\packetsPutField{16}{Port docelowy}
+	\packetsEndLine{0}{31}
+	
+	% 32-63
+	\packetsPutField{16}{Długość ($\rm{LEN}$)}
+	\packetsPutField{16}{Suma kontrolna\footnote{Uwzględnia też wybrane pola z nagłówków IPv4 lub IPv6.}}
+	\packetsEndLine{32}{63}
+	
+	% 64-...
+	\packetsPutField[data]{32}{Dane\\\vspace{3pt}\footnotesize  długość $= (\rm{LEN} - 8) * 8$ bitów}
+	\packetsEndLine{64}{\ldots}
+	
+	% footnotes
+	\node[align=left, anchor = north west, minimum width=32\packetsBitWidth, text width=31\packetsBitWidth, xshift=-0.3cm] [] at (\packetsLastNode.south west) {
+		% for correct text wrap in footer parent minipage enviromet must use width equal to this „text width”
+		\makeatletter\unvbox\@mpfootins\makeatother % print minipage footnotes without „footnoterule”
+	};
+\end{tikzpicture}\end{minipage}
+
+\ifdefined\inputOnlyContent\else\end{document}\fi

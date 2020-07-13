@@ -1,0 +1,60 @@
+\ifdefined\inputOnlyContent\else
+	\documentclass[tikz]{standalone}
+	\usepackage{tikzPackets}
+	\InputIfFileExists{booklets-sections/network/preambule.tex}{}{}
+	\begin{document}
+\fi
+
+\begin{minipage}[t]{31\packetsBitWidth}\hspace{-0.5\packetsBitWidth}\begin{tikzpicture}[semithick]
+	\packetsInit
+	\tikzstyle{addr}=[protocolsField, minimum height = 1.5cm]
+	\tikzstyle{data}=[protocolsField, minimum height = 1.5cm, align=center, fill=black!10]
+	\tikzstyle{prev}=[protocolsField, minimum height = 1.2cm, align=center, fill=black!30, minimum width=32\packetsBitWidth, node font=\footnotesize]
+	
+	\packetsPrintBitScale{31}
+	
+	\ifdefined\hideLowerHeaders\else
+		\packetsPutField[prev]{32}{Nagłówek warstwy sprzętowej.}
+		\packetsNextLine
+	\fi
+	
+	% 0-31
+	\packetsPutField{4}{Wersja}
+	\packetsPutField{8}{Klasa ruchu}
+	\packetsPutField{20}{Losowy identyfikator strumienia}
+	\packetsEndLine{0}{31}
+	
+	% 32-63
+	\packetsPutField{16}{Długość ładunku ($\rm{LEN}$)}
+	\packetsPutField{8}{Next Header\footnote{
+		Tak samo jak pole „Protokół” w nagłówku IPv4.\\
+		Jednak w odróżnieniu od IPv4 pole to może wskazywać nie tylko nagłówek warstwy wyższej, ale także opcjonalny, dodatkowy nagłówek IPv6, zastępujący informacje podawane w polu opcji IPv4.
+		W takim wypadku posiada on także swoje pole „Next Header”, itd., aż do momentu dotarcia do nagłówka warstwy transportowej.}
+	}
+	\packetsPutField{8}{Hop Limit\footnote{
+		Pełni rolę taką jak \textit{Time To Live}.}
+	}
+	\packetsEndLine{32}{63}
+	
+	% 64...
+	\packetsPutField[addr]{32}{Adres źródłowy (nadawcy), 128 bitów}
+	\packetsEndLine{64}{191}
+	
+	\packetsPutField[addr]{32}{Adres docelowy (odbiorcy), 128 bitów}
+	\packetsEndLine{192}{319}
+	
+	\packetsPutField[data]{32}{Dane\footnote{
+		Zależnie od wartości pola „Next Header” mogą to być kolejne opcjonalne nagłówki dodatkowe IPv6 i następnie „dane warstwy wyższej” lub od razu „dane warstwy wyższej”.
+		}\\
+		\vspace{3pt}\footnotesize  długość $= \rm{LEN} \cdot 8$ bitów
+	}
+	\packetsEndLine{320}{\ldots}
+	
+	% footnotes
+	\node[align=left, anchor = north west, minimum width=32\packetsBitWidth, text width=31\packetsBitWidth, xshift=-0.3cm] [] at (\packetsLastNode.south west) {
+		% for correct text wrap in footer parent minipage enviromet must use width equal to this „text width”
+		\makeatletter\unvbox\@mpfootins\makeatother % print minipage footnotes without „footnoterule”
+	};
+\end{tikzpicture}\end{minipage}
+
+\ifdefined\inputOnlyContent\else\end{document}\fi

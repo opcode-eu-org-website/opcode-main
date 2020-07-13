@@ -52,6 +52,10 @@ Komunikacja sieciowa typowo posiada strukturę warstwową. W modelu OSI wyróżn
 	\item prezentacji (szóstą)
 	\item aplikacji (siódmą)
 \end{enumerate}
+
+\inputSingleAsFigure[.9]{booklets-sections/network/ilustracje/10-warstwy.tex}{Struktura warstwowa protokołów sieciowych}{ilustracja-warstwy}
+
+\noindent
 W modelu TCP/IP wyróżnia się 4 warstwy:
 \begin{enumerate}
 	\item Dostępu do sieci - obejmującą warstwy 1 i 2 modelu OSI
@@ -60,7 +64,19 @@ W modelu TCP/IP wyróżnia się 4 warstwy:
 	\item Aplikacji - obejmującą warstwy 5, 6 i 7 modelu OSI
 \end{enumerate}
 
-Z punktu widzenia modelu TCP/IP można powiedzieć o enkapsulacji danych kolejnych warstw w ramach warstwy niższej, czyli "surowe" dane (np. strona HTML) obudowywane są strukturą opisywaną przez warstwę aplikacji (np. nagłówkami HTTP), następnie całość ta umieszczana jest w polu danych pakietu warstwy transportowej (np. TCP), ten z kolei w polu danych pakietu IP (warstwy sieciowej), na koniec pakiet IP jest umieszczany w polu danych ramki warstwy dostępu do sieci (np. ramki ethernetowej). W ramach podróży przez kolejne sieci pakiet IP jest wyjmowany i wkładany w kolejne ramki warstwy dostępu do sieci, na ogół tylko z niewielkimi ingerencjami w zawartość tego pakietu (prawie zawsze nie dochodzącymi do pola danych pakietu TCP lub datagramu UDP, czyli nie wykraczającymi poza warstwę 4 OSI).
+\noindent
+Z punktu widzenia modelu TCP/IP można powiedzieć o enkapsulacji danych kolejnych warstw w ramach warstwy niższej, czyli „surowe” dane (np. strona HTML) obudowywane są strukturą opisywaną przez warstwę aplikacji (np. nagłówkami HTTP), następnie całość ta umieszczana jest w polu danych pakietu warstwy transportowej (np. TCP), ten z kolei w polu danych pakietu IP (warstwy sieciowej), na koniec pakiet IP jest umieszczany w polu danych ramki warstwy dostępu do sieci (np. ramki ethernetowej). W ramach podróży przez kolejne sieci pakiet IP jest wyjmowany i wkładany w kolejne ramki warstwy dostępu do sieci, na ogół tylko z niewielkimi ingerencjami w zawartość tego pakietu (prawie zawsze nie dochodzącymi do pola danych pakietu TCP lub datagramu UDP, czyli nie wykraczającymi poza warstwę 4 OSI).
+
+\begin{teacherOnly}
+	Można porównać do  podróży listu różnymi środkami transportu:
+	\begin{easylist}[itemize]
+		& list ma jakąś zawartość - dane które na ogół nie są sprawdzane po drodze
+		& koperta ma adres nadawcy i docelowy
+		& pociąg którym podróżuje ma "lokalnuy"/"sprzętowy" adres nadawcy i docelowy (stacja początkowa, końcowa)
+		& później koperta może być przeniesiona do innego pociągu (ten sam typ sieci fizycznej, ale inna sieć), lub np. na statek (inny typ sieci fizycznej)
+	\end{easylist}
+\end{teacherOnly}
+
 % END: Sieci - intro
 
 % BEGIN: sieci IP
@@ -81,3 +97,9 @@ Z punktu widzenia modelu TCP/IP można powiedzieć o enkapsulacji danych kolejny
 
 Protokół IP (Internet Protocol) odpowiedzialny jest przede wszystkim za sposób adresacji hostów oraz reguły komutacji pakietów (routing). Jest on wspomagany przez kolejny protokół z tej rodziny - ICMP (Internet Control Message Protocol), którego zadaniem jest przekazywanie informacji kontrolnych np. o nieosiągalności hosta docelowego, odrzuceniu przetwarzania pakietu ze względu na zbyt dużą liczbę skoków (gdy wartość pola TTL z nagłówka IP wyniesie zero) a także pingi (zarówno żądanie jak i odpowiedź).
 % END: sieci IP
+
+\inputSideBySideAsFigure
+	{Pakiet IPv4}{booklets-sections/network/ilustracje/10-ipv4.tex}
+	{Pakiet IPv6}{booklets-sections/network/ilustracje/10-ipv6.tex}
+	{Struktura pakietów IP}{ilustracja_pakiety_ip}
+

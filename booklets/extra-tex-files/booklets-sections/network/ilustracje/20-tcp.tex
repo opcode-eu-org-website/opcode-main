@@ -1,0 +1,60 @@
+\ifdefined\inputOnlyContent\else
+	\documentclass[tikz]{standalone}
+	\usepackage{tikzPackets}
+	\InputIfFileExists{booklets-sections/network/preambule.tex}{}{}
+	\begin{document}
+\fi
+
+\begin{minipage}[t]{31\packetsBitWidth}\hspace{-0.5\packetsBitWidth}\begin{tikzpicture}[semithick]
+	\packetsInit
+	\tikzstyle{opts}=[protocolsField, minimum height = 1.5cm]
+	\tikzstyle{data}=[protocolsField, minimum height = 1.5cm, align=center, fill=black!10]
+	\tikzstyle{prev}=[protocolsField, minimum height = 1.2cm, align=center, fill=black!30, minimum width=32\packetsBitWidth, node font=\footnotesize]
+	
+	\packetsPrintBitScale{31}
+	
+	\ifdefined\hideLowerHeaders\else
+		\packetsPutField[prev]{32}{Nagłówek warstwy sprzętowej.}
+		\packetsNextLine
+		\packetsPutField[prev]{32}{Nagłówek IPv4 (z ew. opcjami) lub IPv6 (z ew. kolejnymi nagłówkami)\\ z polem „Protokół” / „Next Header” o wartości 0x06.}
+		\packetsNextLine
+	\fi
+	
+	% 0-31
+	\packetsPutField{16}{Port źródłowy}
+	\packetsPutField{16}{Port docelowy}
+	\packetsEndLine{0}{31}
+	
+	% 32-63
+	\packetsPutField{32}{Numer sekwencyjny}
+	\packetsEndLine{32}{63}
+	
+	% 64-95
+	\packetsPutField{32}{Numer potwierdzenia}
+	\packetsEndLine{64}{95}
+	
+	% 96-127
+	\packetsPutField{4}{THL}
+	\packetsPutField{12}{Flagi\footnote{3 bity rezerwy i flagi związane ze stanem połączenia TCP.}}
+	\packetsPutField{16}{Rozmiar okna\footnote{Informuje o ilości danych które odbiorca może aktualnie przyjąć.}}
+	\packetsEndLine{96}{127}
+	
+	% 128-159
+	\packetsPutField{16}{Suma kontrolna\footnote{Uwzględnia też wybrane pola z nagłówków IPv4 lub IPv6.}}
+	\packetsPutField{16}{Wskaźnik priorytetu}
+	\packetsEndLine{128}{159}
+	
+	% 160-...
+	\packetsPutField[opts]{32}{Opcje\\\vspace{3pt}\footnotesize długość $= (\rm{THL} - 5) \cdot 32$ bitów, mogą nie występować (gdy THL=5)}
+	\packetsEndLine{160}{\ldots}
+	\packetsPutField[data]{32}{Dane\\\vspace{3pt}\footnotesize  długość określona przez długość całości pakietu i nagłówków IP i TCP}
+	\packetsEndLine{$\geq160$}{\ldots}
+	
+	% footnotes
+	\node[align=left, anchor = north west, minimum width=32\packetsBitWidth, text width=31\packetsBitWidth, xshift=-0.3cm] [] at (\packetsLastNode.south west) {
+		% for correct text wrap in footer parent minipage enviromet must use width equal to this „text width”
+		\makeatletter\unvbox\@mpfootins\makeatother % print minipage footnotes without „footnoterule”
+	};
+\end{tikzpicture}\end{minipage}
+
+\ifdefined\inputOnlyContent\else\end{document}\fi

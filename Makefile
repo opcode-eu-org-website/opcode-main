@@ -32,7 +32,7 @@ export PATH := $(shell realpath $(MAINDIR)/TextUtils/convert):$(PATH)
 help:
 	@ cd $(MAINDIR) && awk '/^#/ {x=0} x==1 {print $0} /^## Install/ {x=1}' README.md
 
-init: | checkout-submodules $(TEXBUILDDIR)/pdfArticle.cls $(TEXBUILDDIR)/labels4easylist.sty $(TEXBUILDDIR)/vtable.sty $(TEXBUILDDIR)/ehhline.sty
+init: | checkout-submodules $(TEXBUILDDIR)/pdfArticle.cls $(TEXBUILDDIR)/labels4easylist.sty $(TEXBUILDDIR)/vtable.sty $(TEXBUILDDIR)/ehhline.sty $(TEXBUILDDIR)/tikzPackets.sty
 	@ echo "init done"
 
 installDependencies:
@@ -85,6 +85,6 @@ protect-submodules:
 
 include $(MAINDIR)/booklets/Makefile
 
-$(TEXBUILDDIR)/pdfArticle.cls $(TEXBUILDDIR)/labels4easylist.sty $(TEXBUILDDIR)/vtable.sty $(TEXBUILDDIR)/ehhline.sty:
+$(TEXBUILDDIR)/pdfArticle.cls $(TEXBUILDDIR)/labels4easylist.sty $(TEXBUILDDIR)/vtable.sty $(TEXBUILDDIR)/ehhline.sty $(TEXBUILDDIR)/tikzPackets.sty:
 	mkdir -p $(TEXBUILDDIR)
 	wget -O "$@" "https://bitbucket.org/OpCode-eu-org/latex-libs/raw/HEAD/pkgs/$(@F)"
