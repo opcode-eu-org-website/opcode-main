@@ -39,8 +39,10 @@
 \end{figure}
 
 \begin{figure}[h!]
+\begin{ProTip}{}
 Na ilustracji \ref{routing_ilustracja} pokazano kilka przykładowych sieci wraz z ustawieniami routerów zapewniającyh komunikacje między nimi.
-\vspace{7pt}\small\inputFileContent{booklets-sections/network/ilustracje/12-routing-opis.tex}
+\inputFileContent{booklets-sections/network/ilustracje/12-routing-opis.tex}
+\end{ProTip}
 \end{figure}
 
 Router kieruje każdy z pakietów do kolejnego routera lub bezpośrednio do hosta docelowego na podstawie jego adresu docelowego i tablicy routingu. Tablica taka zawiera adresy sieci wraz z adresami następnych routerów do nich prowadzących bądź wskazaniem lokalnego interfejsu sieciowego poprzez który powinny być osiągalne hosty z danej sieci. W tym celu korzysta z sprawdzania przynależności adresu do sieci, w celu ustalenia adresu następnego routera i/lub interfejsu sieciowego na który ma zostać przekazany pakiet.

@@ -25,3 +25,19 @@
 	& \textit{Router D} posiada zagregowany wpis w tablicy routingu obejmujący zarówno sieci podłączone do \textit{Router A}, jak i do \textit{Router B},
 	  ale np. wpisy w \textit{Router A} nie są i nie mogą być zagregowane
 \end{easylist}
+
+Polecenia wyświetlające trasy routingowe mogą wypisywać więcej informacji niż w powyższym przykładzie.
+Na przykład (jest wynik \Verb$ip r$, pokolorowany celem ilustracji, w innych, czy przy użyciu różnych opcji poleceniach może to wyglądać inaczej):
+\begin{Verbatim}[commandchars=\\\{\},commentchar=\%]
+{\color{orange}default} {\color{blue}via 213.135.60.1} {\color{red}dev eth-pub}
+{\color{orange}192.168.0.0/23} {\color{blue}via 10.0.1.100} {\color{red}dev eth-rsc}
+{\color{orange}10.0.1.0/24} {\color{red}dev eth-rsc}  proto kernel  scope link  {\color{brown}src 10.0.1.13}
+\end{Verbatim}
+W poszczególnych wpisach są to m.in.:
+\begin{easylist}[itemize]
+	& {\color{orange}sieć docelowa}, {\color{orange}default} oznacza to samo co {\color{orange}0.0.0.0/0} lub {\color{orange}::/0}
+	& {\color{blue}via x.x.x.x} – adres routera do którego ma trafić pakiet
+	& {\color{red}dev ...} – urządzenie którym ma zostać wysłany
+	& {\color{brown}src x.x.x.x} – adres który ma zostać użyty jako adres nadacy
+\end{easylist}
+Ogólnie wpisy z {\color{blue}via x.x.x.x} oznaczają przesłanie do innego routera a wpisy bez tej informacji bezpośrednie wysłanie do hosta docelowego na wskazanym interfejsie.
