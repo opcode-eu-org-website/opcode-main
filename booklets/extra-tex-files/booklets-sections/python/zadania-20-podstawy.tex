@@ -27,9 +27,15 @@
 	
 	\insertZadanie{\currfilepath}{funkcja_suma2}{}
 	\insertZadanie{\currfilepath}{suma_poteg}{}
-	\teacher{\insertRozwiazanie{\currfilepath}{suma_poteg}{}}
 	\insertZadanie{\currfilepath}{funkcja_znak}{}
 	\insertZadanie{\currfilepath}{suma_poteg2}{}
+}
+
+\IfStrEq{\dbEntryID}{rozwiazania}{
+	\insertRozwiazanie{\currfilepath}{funkcja_suma2}{}
+	\insertRozwiazanie{\currfilepath}{suma_poteg}{}
+	\insertRozwiazanie{\currfilepath}{funkcja_znak}{}
+	\insertRozwiazanie{\currfilepath}{suma_poteg2}{}
 }
 
 
@@ -39,23 +45,38 @@ Napisz funkcję, która przyjmuje dwa argumenty i \ul[black]{zwraca} ich sumę. 
 
 \teacher{Warto zwrócić uwagę na to zadnie - jest ono dobrą okazją do wyjaśnienia różnicy między „funkcja wypisuje” a „funkcja zwraca”.}
 \fi
+\dbEntryBegin{funkcja_suma2-rozwiazanie}\if1\dbEntryCheckResults
+\begin{CodeFrame*}[python]{}
+def suma(a, b):
+  return a + b
+
+a = suma(17, 15)
+print(a, suma(13, 16), suma(a, 11))
+\end{CodeFrame*}
+%
+Zwróć uwagę na użycie słowa kluczowego \python{return} do zwrócenia wartości z funkcji.
+W odróżnieniu od bezpośredniego wpisania wyniku na ekran z użyciem np. \python{print} pozwala to m.in. na przechowanie tego wyniku w zmiennej i użycie w dalszych obliczeniach,
+co zostało zademonstrowane w drugiej części przykładu.
+\fi
+
 
 \dbEntryBegin{suma_poteg}\if1\dbEntryCheckResults
 Napisz program obliczający sumę $1^2 + 2^2 + 3^2 + \ldots + 99^2 + 100^2$. \teacher{(wynik: 338350)}
 \fi
-
 \dbEntryBegin{suma_poteg-rozwiazanie}\if1\dbEntryCheckResults
-\begin{minted}[frame=single]{python}
+\begin{CodeFrame*}[python]{}
 sum = 0
 for x in range(101):
     sum = sum + x**2
 print(sum)
-\end{minted}
+\end{CodeFrame*}
 %
 Zwróć uwagę na użycie zewnętrznej w stosunku co do pętli zmiennej \python{sum},
 służącej do przechowywania wartości modyfikowanej w każdym obiegu pętli (wyniku sumy)
 – jest to typowy schemat rozwiązywania tego typu problemów programistycznych.
 \fi
+
+
 
 \dbEntryBegin{funkcja_znak}\if1\dbEntryCheckResults
 Napisz funkcję \python{znak(liczba)} która wypiszę informację o znaku podanej liczby (wyróżniając zero) i zwróci jej wartość bezwzględną.
@@ -75,8 +96,39 @@ print(a, b, c)
 7 13 0
 \end{CodeFrame}
 \fi
+\dbEntryBegin{funkcja_znak-rozwiazanie}\if1\dbEntryCheckResults
+\begin{CodeFrame*}[python]{}
+def znak(liczba): 
+  if liczba > 0:
+    print(liczba, "jest dodatnia")
+    return liczba
+  elif liczba < 0:
+    print(liczba, "jest ujemna")
+    return -liczba
+  else:
+    print(liczba, "to zero")
+    return 0
+\end{CodeFrame*}
+%
+Zadanie można by rozwiązać także używając funkcji obliczającej wartość bezwzględną (\python{abs()}), jednak ze względu na konstrukcję zadania musimy sami ustalić znak liczby, natomiast użycie tej (i tak już posiadanej) informacji do obliczenia wartości bezwzględnej jest wydajniejsze niż kolejne sprawdzanie znaku wewnątrz funkcji \python{abs()}.
+\fi
+
 
 \dbEntryBegin{suma_poteg2}\if1\dbEntryCheckResults
 Rozwiąż zadanie \ref{suma_poteg} stosując pętlę \python{while}.
 \fi
-
+\dbEntryBegin{suma_poteg2-rozwiazanie}\if1\dbEntryCheckResults
+\begin{CodeFrame*}[python]{}
+sum = 0
+x = 1
+while x <= 100:
+    sum = sum + x**2
+    x = x + 1
+print(sum)
+\end{CodeFrame*}
+Zauważ że w tym wariancie zadania potrzebujemy dwóch zmiennych zewnętrznych w stosunku co do pętli –
+  jednej do przechowywania obliczanej sumy, a drugiej do przechowywania numeru kroku (wartości którą sumujemy).
+Ta druga zmienna w rozwiązaniu z użyciem pętli \python{for} jest dostarczana przez samą konstrukcję tamtej pętli.
+W przypadku pętli \python{while} to my jako twórcy kodu musimy ją zainicjalizować i zwiększać w każdym kroku.
+Pozwala to jednak na stosowanie bardziej zaawansowanych mechanizmów modyfikowania tej zmiennej.
+\fi

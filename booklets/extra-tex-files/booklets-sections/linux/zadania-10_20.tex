@@ -29,28 +29,150 @@
 	\insertZadanie{\currfilepath}{findetc2}{}
 }
 
+\IfStrEq{\dbEntryID}{rozwiazania}{
+	\insertRozwiazanie{\currfilepath}{vim}{}
+	\insertRozwiazanie{\currfilepath}{lsetc}{}
+	\insertRozwiazanie{\currfilepath}{findetc}{}
+	\insertRozwiazanie{\currfilepath}{linki_symboliczne}{}
+	\insertRozwiazanie{\currfilepath}{findetc2}{}
+}
+
 
 % BEGIN: system plikow - zadania
 \dbEntryBegin{vim}\if1\dbEntryCheckResults
 Przy pomocy edytora \textit{vim} otwórz plik \Verb#/etc/passwd# i zastąp wszystkie wystąpienia \Verb#bin# przez \Verb#XYZ#. Nie zapisuj pliku.
 \fi
+\dbEntryBegin{vim-rozwiazanie}\if1\dbEntryCheckResults
+\begin{enumerate}
+\item Uruchomić edytor za pomocą polecenia \Verb{vim /etc/passwd}.
+\item W uruchomionym edytorze należy wydać polecenie \Verb{:%s@false@FALSE@g}, które spowoduje zastąpienie wszystkich wystąpień \Verb{false} przez \Verb{FALSE}.
+\item Edytor należy opuścić bez zapisywania zmian przy pomocy polecenia \Verb{:q!}
+\end{enumerate}
+
+\noindent Zwróć uwagę że:
+\begin{itemize}
+\item Plik do otwarcia wskazujemy w linii poleceń przy pomocy ścieżki bezwzględnej zaczynającej się od \Verb{/}.
+      Zamiast tego możnaby także otworzyć plik po uruchomieniu edytora lub użyć ścieżki względnej.
+      Użycie ścieżki bezwzględnej zapewnia niezależność tej komendy od katalogu roboczego w którym zostanie wykonana.
+\item Do zamiany i zamknięcia edytora używane są polecenia linii poleceń vim'a uruchamianej przy pomocy dwukropka (\Verb{:}) i dlatego są one poprzedzane dwukropkiem.
+      Jest to inny zbiór komend niż komendy wprowadzane bezpośrednio (takie jak np. \Verb{dd} kasują bierzącą linię).
+      Ta linia poleceń też ma swoją historią.
+\item Edytor opuszczamy z użyciem \Verb{:q!}, dodanie wykrzyknika jest potrzebne żeby zamknąć edytor bez zapisywania zmian.
+\end{itemize}
+\fi
+
 
 \dbEntryBegin{lsetc}\if1\dbEntryCheckResults
 Wyświetlić nazwy (mogą być wraz z pełną ścieżką) wszystkich plików i katalogów znajdujących się bezpośrednio w \texttt{/etc/} których druga litera to \texttt{a} natomiast trzecia to \texttt{p} lub \texttt{s}.
 
 \emph{Wskazówka: to zadanie nie wymaga stosowania find.}
 \fi
+\dbEntryBegin{lsetc-rozwiazanie}\if1\dbEntryCheckResults
+\begin{CodeFrame*}[bash]{}
+ls -d /etc/?a[sp]*
+\end{CodeFrame*}
+
+albo:
+
+\begin{CodeFrame*}[bash]{}
+ls -d /etc/?as* /etc/?ap*
+\end{CodeFrame*}
+
+\noindent Zwróć uwagę że:
+\begin{itemize}
+\item Polecenie \Verb{ls} listuje wszystkie podane w linii poleceń argumenty oddzielane spacjami.
+\item Jeżeli argumenty te zawierają znaki uogulniające powłoki to każdy taki argument zostanie zastapiony przez powłoke listą pasujących plików lub zostanie przekazany w formie nie zmienionej jeżeli nie ma pasujacych plików. Ma to kilka konsekwencji:
+	\begin{itemize}
+	\item W wyniku dopasowania nazw do polecenia ls moga zostać przekazane ścieżki do katalogów, dla których ls domyślnie listuje ich zawartość.
+	      Tutaj tego nie chemy i dlatego używamy opcji \Verb{-d}
+	\item W pierwszym wariancie wszystkie pliki opisaliśmy pojedynczym wyrażeniem uogulniającym basha, a w drugim podaliśmy dwa argumenty.
+	      Polecenia te są prawie równoważne - wypiszą te ścieżki.
+	      Jednak w przypadku braku dopsaowań do jednego z wariantów (np. braku plików z trzecią literą p) – drugie polecenie wypisałoby dodatkowo komunikat o braku dopasowania do jednego z podanych argumentów (np. do \Verb{/etc/?ap*}). Wynika to z tego iż przy barku dopsowania do tegoa rgumentu bash przekazałbygo w formie niezmienionej do polecenia \Verb{ls}.
+	\end{itemize}
+\end{itemize}
+\fi
+
 
 \dbEntryBegin{findetc}\if1\dbEntryCheckResults
 Wyszukaj (rekurencyjnie) wszystkie pliki w katalogu \texttt{/etc/} zmodyfikowane w przeciągu ostatnich 48 godzin.
 \fi
+\dbEntryBegin{findetc-rozwiazanie}\if1\dbEntryCheckResults
+\begin{CodeFrame*}[bash]{}
+cd /etc
+find -mtime -2
+\end{CodeFrame*}
+
+lub
+
+\begin{CodeFrame*}[bash]{}
+find /etc -mtime -2
+\end{CodeFrame*}
+
+jeżeli nie uważamy katalogów za pliki to możemy dodać stosowny warunek
+
+\begin{CodeFrame*}[bash]{}
+find -mtime -2 -type f
+\end{CodeFrame*}
+
+\noindent Zwróć uwagę że:
+\begin{itemize}
+\item polecenie find przeszukuje rekurencyjnie katalog podany przed warunkami. Jeżeli nie został on podany to przeszukuje bieżący katalog (\Verb{.}), który mozemy zmienić poleceniem \Verb{cd}.
+\end{itemize}
+\fi
+
 
 \dbEntryBegin{linki_symboliczne}\if1\dbEntryCheckResults
 Utworzyć w katalogu \texttt{/tmp} linki symboliczne \texttt{ll1} i \texttt{ll2} wskazujące na \texttt{/etc/passwd} odpowiednio poprzez ścieżkę bezwzględną i względną.
 \fi
+\dbEntryBegin{linki_symboliczne-rozwiazanie}\if1\dbEntryCheckResults
+Podając pełne ścieżki do pliku docelowego:
+
+\begin{CodeFrame*}[bash]{}
+ln -s /etc/passwd /tmp/ll1
+ln -s -r /etc/passwd /tmp/ll2
+\end{CodeFrame*}
+
+lub wchodząc do katalogu docelowego i podając tylko nazwy plików
+
+\begin{CodeFrame*}[bash]{}
+cd /tmp
+ln -s /etc/passwd ll1
+ln -s ../etc/passwd ll2
+\end{CodeFrame*}
+
+Link ze ścieżką względna można utworzyć także będąc w dowolnym katalogu poprzez wywołanie:
+
+\begin{CodeFrame*}[bash]{}
+ln -s ../etc/passwd ll2
+\end{CodeFrame*}
+
+\noindent Zwróć uwagę że:
+\begin{itemize}
+\item Pierwszy wariant możemy wykonać także będąc w \Verb{/tmp}
+\item W przypadku podawania w ln ścieżki względnej (\Verb{ln -s ../etc/passwd ll2}) należy pamiętać iż zostanie ona literalnie zapisana w tworzonym linku.
+	\begin{itemize}
+	\item W związku z tym musi to być poprawna ścieżka z katalogu docelowego a nie z bieżącego katalogu roboczego.
+	\item Np. będąc w \Verb{/usr/local/bin/} ścieżka wzglęna do \Verb{/etc/passwd} to \Verb{../../../etc/passwd}, ale gdy będąc w tamtym katalogu chemy utworzyć plik \Verb{/tmp/llX} linkujący ścieżką względną do \Verb{/etc/passwd} wykonamy polecenie \Verb{ln -s ../etc/passwd /tmp/llX}, bo ścieżka względem \Verb{/tmp} ma postać \Verb{ln -s ../etc/passwd}.
+	\end{itemize}
+\end{itemize}
+\fi
+
 
 \dbEntryBegin{findetc2}\if1\dbEntryCheckResults
 Zmodyfikuj rozwiązanie zadania \ref{findetc} tak aby wyświetlać szczegóły (w tym datę modyfikacji) dla wyszukanych plików.
+\fi
+\dbEntryBegin{findetc2-rozwiazanie}\if1\dbEntryCheckResults
+\begin{Verbatim}
+find /etc -mtime -2 -exec ls -ld \{\} \;
+\end{Verbatim}
+
+\noindent Zwróć uwagę że:
+\begin{itemize}
+\item Wykorzystanie warunku \Verb{-exec}, który dodatkowo wyłącza standardowy output find'a
+\item Zabezpieczenie klamerek (nie zawsze wymagane) i średnika (praktycznie zawsze wymagane) oraz spację pomiędzy klamerkami a średnikiem.
+      Możemy je zabezpieczyć także cudzysłowami: \verb{find /etc -mtime -2 -exec ls -ld '{}' ';'},
+      ale nie możemy umieścić klamerek i średnika w jednym napisie (np. \verb{find -mtime -2 -exec ls -ld '{\} ;'}).
+\end{itemize}
 \fi
 % END: system plikow - zadania
 

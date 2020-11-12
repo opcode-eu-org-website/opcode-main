@@ -26,7 +26,6 @@
 	\subsection{napisy}
 	
 	\insertZadanie{\currfilepath}{funkcja_wspak}{}
-	\teacher{\insertRozwiazanie{\currfilepath}{funkcja_wspak}{}}
 	\insertZadanie{\currfilepath}{funkcja_wyiksuj}{}
 	\insertZadanie{\currfilepath}{dekodowanie_utf8_w_base64}{}
 	
@@ -36,6 +35,13 @@
 	\insertZadanie{\currfilepath}{regex_czy_liczba}{}
 }
 
+\IfStrEq{\dbEntryID}{rozwiazania}{
+	\insertRozwiazanie{\currfilepath}{funkcja_wspak}{}
+	\insertRozwiazanie{\currfilepath}{funkcja_wyiksuj}{}
+	\insertRozwiazanie{\currfilepath}{dekodowanie_utf8_w_base64}{}
+	\insertRozwiazanie{\currfilepath}{regex_czy_slowo}{}
+	\insertRozwiazanie{\currfilepath}{regex_czy_liczba}{}
+}
 
 %
 % napisy
@@ -67,7 +73,9 @@ def wskap(lista):
   for slowo in lista:
     print(slowo[::-1])
 \end{minted}
+które korzysta z odwrócenia napisu przy pomocy pobrania wszystkich jego elemntów z krokiem -1 poprzez \python{slowo[::-1]}
 \fi
+
 
 \dbEntryBegin{funkcja_wyiksuj}\if1\dbEntryCheckResults
 Napisz funkcję \python{wyiksuj(napis)}, która zwróci dany \Verb{napis}, zastępując każdą małą literę przez \Verb{x} i
@@ -80,22 +88,111 @@ Dla każdego znaku użyj konstrukcji \python{if}/\python{elif}/\python{else}, ab
 małe litery, wielkie litery, pozostałe znaki.
 \end{teacherOnly}
 \fi
+\dbEntryBegin{funkcja_wyiksuj-rozwiazanie}\if1\dbEntryCheckResults
+\begin{CodeFrame*}[python]{}
+def wyiksuj(napis):
+  duzy_alfabet = 'AĄBCĆDEĘFGHIJKLŁMNŃOÓPRSŚTUWYZŹŻ'
+  maly_alfabet = 'aąbcćdeęfghijklłmnńoóprsśtuwyzźż'
+  for c in napis:
+    if c in duzy_alfabet:
+      print('X', end = '')
+    elif c in maly_alfabet:
+      print('x', end = '')
+    else:
+      print(c, end = '')
+\end{CodeFrame*}
+
+inne rozwiązanie:
+
+\begin{CodeFrame*}[python]{}
+def wyiksuj(napis):
+  for c in napis:
+    if c.isupper():
+      print('X', end = '')
+    elif c.islower():
+      print('x', end = '')
+    else:
+      print(c, end = '')
+\end{CodeFrame*}
+
+jeszcze inne rozwiązanie (w tej formie obsługuje tylko litery ASCII, ale aktualna wersja zadania to dopuszcza):
+
+\begin{CodeFrame*}[python]{}
+def wyiksuj(napis):
+  import re
+  napis = re.sub("[a-z]", "x", napis)
+  return re.sub("[A-Z]", "X", napis)
+\end{CodeFrame*}
+
+\noindent Zwróć uwagę że:
+\begin{itemize}
+\item iterowanie po elementach napisu (znakach) z użyciem pętli \python{for}
+\item zastosowanie konstrukcji \python{a in b} do sprawdzenia czy element a (w tym wypadku znak) należy do kolekcji b (w tym wypadku napisu, ale mogał by to być także np. lista znaków)
+\item zastosowanie metod \python{isupper()} i \python{islower()} w drugim wariancie rozwiązania, podobne porównanie dla znaków ASCI można łatwo wykonać w oparciu o wartość numerycznego kodu tego znaku
+\item zwięzłość rozwiązania z użyciem wyrażeń regularnych
+\end{itemize}
+\fi
+
 
 \dbEntryBegin{dekodowanie_utf8_w_base64}\if1\dbEntryCheckResults
 Napisz program dekodujący napis kodowany w UTF8 zakodowany przy pomocy base64 mający postać:
 \python{b'UHl0aG9uIGplc3QgZmFqbnkg8J+Yjg==\n'}.\\
 Wskazówka: dane wejściowe funkcji \python{decode()} muszą być typu "bytes", można to uzyskać poprzedzając napis prefiksem \Verb{b}, tak jak powyżej.
 \fi
+\dbEntryBegin{dekodowanie_utf8_w_base64-rozwiazanie}\if1\dbEntryCheckResults
+\begin{CodeFrame*}[python]{}
+import codecs
+d = b'UHl0aG9uIGplc3QgZmFqbnkg8J+Yjg==\n'
+d = codecs.decode(d, 'base64')
+d = d.decode()
+print(d)
+\end{CodeFrame*}
+
+Zakodowany tekst to: \textcolor{red}{Python jest fajny {\Symbola 😎}}
+
+\noindent Zwróć uwagę że:
+\begin{itemize}
+\item zdejmowanie kolejnych kodowań w kolejnych krokach procedury – w odwrotnej kolejności niż były nakładane
+\item funckcja \python{codecs.decode} wymaga jako danych wejściowych ciągu bajtowego, i taki ciąg zrwaca
+\item metoda \python{decode} ciągu bajtowego zwraca napis powstały przez zdekodowanie tego ciągu z użyciem utf-8
+\end{itemize}
+\fi
+
 
 
 %
 % wyrażenia regularne
 %
 
+\dbEntryBegin{regex_czy_slowo}\if1\dbEntryCheckResults
+Napisz funkcję która sprawdzi z użyciem wyrażeń regularnych czy dany napis jest słowem (tzn. nie zawiera spacji).
+\fi
+\dbEntryBegin{regex_czy_slowo-rozwiazanie}\if1\dbEntryCheckResults
+\begin{CodeFrame*}[python]{}
+import re
+def spr(x):
+  if re.match("[^ ]*$", x):
+    print(x, "jest słowem")
+  else:
+    print(x, "NIE jest słowem")
+\end{CodeFrame*}
+
+Zadanie polega przede wszystkim na wymyśleniu odpowiedniego wyrażenia regularnego.
+Ze względu że funkcja \python{match} dopasowuje zawsze od początku napisu (ale nie wymaga dojścia do końca napisu) nasze wyrażenie musi konczyć się dolarem,
+aby wyrażenie było dopasowywane do całości sprawdzanego napisu.
+Zastosowane wyrażenie wymaga aby napis nie zawierał spacji - wtedy uznajemy go za słowo.
+\fi
+
 \dbEntryBegin{regex_czy_liczba}\if1\dbEntryCheckResults
 Napisz funkcję która sprawdzi z użyciem wyrażeń regularnych czy dany napis jest liczbą (tzn. jest złożony z cyfr i kropki, a na początku może wystąpić + albo -).
 \fi
-
-\dbEntryBegin{regex_czy_slowo}\if1\dbEntryCheckResults
-Napisz funkcję która sprawdzi z użyciem wyrażeń regularnych czy dany napis jest słowem (tzn. nie zawiera spacji).
+\dbEntryBegin{regex_czy_liczba-rozwiazanie}\if1\dbEntryCheckResults
+\begin{CodeFrame*}[python]{}
+import re
+def spr(x):
+  if re.match("[+-]?[0-9.]+$", x):
+    print(x, "jest liczbą")
+  else:
+    print(x, "NIE jest liczbą")
+\end{CodeFrame*}
 \fi
