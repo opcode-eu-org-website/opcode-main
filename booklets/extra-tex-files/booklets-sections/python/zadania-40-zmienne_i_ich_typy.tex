@@ -28,6 +28,11 @@
 	\insertZadanie{\currfilepath}{funkcja_jako_argument}{}
 }
 
+\IfStrEq{\dbEntryID}{rozwiazania}{
+	\insertRozwiazanie{\currfilepath}{obiektowo_string}{}
+	\insertRozwiazanie{\currfilepath}{licz_powtorzenia}{}
+	\insertRozwiazanie{\currfilepath}{funkcja_jako_argument}{}
+}
 
 \dbEntryBegin{obiektowo_string}\if1\dbEntryCheckResults
 Zapoznaj się z dokumentacją klasy odpowiedzialnej za napisy (\Verb{str}),
@@ -43,6 +48,23 @@ Funkcja powinna działać w następujący sposób:
 \end{Verbatim}
 \fi
 
+\dbEntryBegin{obiektowo_string-rozwiazanie}\if1\dbEntryCheckResults
+\begin{minted}[frame=single]{python}
+def parse(t):
+    t = t.replace("XY", " ")
+    return t.split(":")
+\end{minted}
+
+\noindent Zwróć uwagę że:
+\begin{itemize}
+\item używamy metody \python{replace} na oryginalnym napisie celem zastąpienie XY spacją,
+      należy zauważyć że metoda ta nie modyfikuje oryginalnego napisu tylko zwraca nowy (zmieniony) napis, dlatego zapisujemy jej wynik do zmiennej, celem dalszego przetwarzania
+\item używamy metody split z określeniem separatora w jej argumencie, zwraca ona listę powstałą z podziału napisu przy pomocy wskazanego separatora
+\item listę tą zwracamy z funkcji za pomocą return
+\end{itemize}
+\fi
+
+
 \dbEntryBegin{licz_powtorzenia}\if1\dbEntryCheckResults
 Napisz funkcję \Verb{zlicz} która dla podanej listy policzy powtórzenia jej elementów. Przykład użycia:
 \begin{Verbatim}
@@ -54,6 +76,27 @@ Wskazówka: Użyj słownika, w którym element będzie stanowił klucz, a krotno
 Możesz użyć metody \python{get()} do pobierania wartości z słownika, jeżeli w nim jest lub wartości domyślnej w przeciwnym wypadku - szczegóły zobacz w dokumentacji
 \fi
 
+\dbEntryBegin{licz_powtorzenia-rozwiazanie}\if1\dbEntryCheckResults
+\begin{minted}[frame=single]{python}
+def zlicz(l):
+    s = {}
+    for e in l:
+        s[e] = s.get(e, 0) + 1
+    for k in s:
+        print (str(k) + " wystepuje " + str(s[k]) + " razy")
+\end{minted}
+
+\noindent Zwróć uwagę że:
+\begin{itemize}
+\item wykorzystujemy słownik \texttt{s} do trzymania mapy element - ilosć powtórzeń
+\item przed pętlą zliczającą inicjujemy \texttt{s} jako pusty słownik
+\item w pętli zliczającej (iterującej po liście) używamy metody get słownika, aby pobrać wartość odpowiadającą danemu kluczowi lub zero gdy takiego klucza nie było,
+      zamiast tej metody moglibyśmy użyć konstrukcji \python{if e in s:} do rozróżnienia przypadku pierwszego i kolejnego wystąpienie elementu \texttt{e}.
+\item po pętli zliczającej mamy osobną pętlę iterującą po słowniku celem wypisania ilości wystąpień
+\end{itemize}
+\fi
+
+
 \dbEntryBegin{funkcja_jako_argument}\if1\dbEntryCheckResults
 Napisz funkcję która przyjmuje dwa argumenty: listę oraz funkcję. Funkcja ma za zadanie wykonać przekazaną do niej funkcję na każdym elemencie listy. Przykład użycia:
 \begin{Verbatim}
@@ -62,4 +105,15 @@ Napisz funkcję która przyjmuje dwa argumenty: listę oraz funkcję. Funkcja ma
 2
 3
 \end{Verbatim}
+\fi
+
+\dbEntryBegin{funkcja_jako_argument-rozwiazanie}\if1\dbEntryCheckResults
+\begin{minted}[frame=single]{python}
+def wykonaj(lista, funkcja):
+  for x in lista:
+    funkcja(x)
+\end{minted}
+
+\noindent Zwróć uwagę że funkcję przekazujemy do zmiennej tak samo jak dowolny inny argument (zmienną).
+Użycie funkcji przechowywanej w zmiennej polega na wywołaniu tej zmiennej z nawiasami okrągłymi i ewentualnymi argumentami tej funkcji.
 \fi

@@ -27,6 +27,12 @@
 	\insertZadanie{\currfilepath}{zapis_do_pliku}{}
 }
 
+\IfStrEq{\dbEntryID}{rozwiazania}{
+	\insertRozwiazanie{\currfilepath}{zadanie_select}{}
+	\insertRozwiazanie{\currfilepath}{zadanie_fork}{}
+	\insertRozwiazanie{\currfilepath}{zapis_do_pliku}{}
+}
+
 
 \dbEntryBegin{zadanie_select}\if1\dbEntryCheckResults
 Napisz funkcję, który wczytuje dane z standardowego wejścia. Funkcja powinna przyjmować jeden argument określający maksymalny czas oczekiwania na kolejną porcję danych.
@@ -34,9 +40,64 @@ Każde pojawienie się danych wejściowych powinno resetować odliczanie timeout
 \\\textit{Wskazówka: zmodyfikuj przykład użycia funkcji select() podany w skrypcie.}
 \fi
 
-\dbEntryBegin{zadanie_fork}\if1\dbEntryCheckResults
-Napisz program który utworzy 1 potomka, rodzić powinien wypisać PID potomka i swój. Natomiast potomek powinien utworzyć kolejny proces w którym zostanie uruchomiona komenda \Verb#ps -Al# w taki sposób aby potomek odebrał do zmiennej jej standardowe wyjście i wypisał je na ekran.
+\dbEntryBegin{zadanie_select-rozwiazanie}\if1\dbEntryCheckResults
+\begin{minted}[frame=single]{python}
+import sys, os, select
+
+def czytaj(timeout):
+  bufor = ""
+  while True:
+    rdfd, _, _ = select.select([sys.stdin], [], [], timeout)
+
+    if not rdfd:
+      return bufor
+
+    for fd in rdfd:
+      bufor += os.read(fd.fileno(), 1024).decode()
+
+czytaj(13)
+\end{minted}
+
+\noindent Zwróć uwagę że:
+\begin{itemize}
+\item funkcja w nieskończonej pętli wykonuje \python{select} z ustawioną wartością timeoutu
+\item w oparciu o wynik działania select funkcja rozróżnia przypadek timeoutu (rdfd jest \python{None}, czyli \python{not rdfd} jest prawdą) i zwraca w tej sytuacji wczytane wcześniej dane
+\item jeżeli nie było timeoutu, a pojawiły się jakieś dane (rdfd nie jest \python{None}) to funkcja wczytuje je z użyciem funkcji read
+\item jako że funkcja read wymaga określenia jakiegoś skończonej wielkości bufora, to do wczytywania danych użyta jest pętla for, co zapewnia wczytanie wszystkich dostępnych w danym momencie danych
+\item na wczytanych danych użyta jest metoda \python{decode} w celu zamiany ciągu bitowego na napis i tak przekonwertowane dane dodawane są do bufora napisowego (o dynamicznie dostosowywanej przez Pythona długości)
+\end{itemize}
 \fi
+
+
+\dbEntryBegin{zadanie_fork}\if1\dbEntryCheckResults
+Napisz program który utworzy 1 potomka, rodzić powinien wypisać PID potomka i swój. Natomiast potomek powinien utworzyć kolejny proces w którym zostanie uruchomiona komenda \Verb#ps -Af# w taki sposób aby potomek odebrał do zmiennej jej standardowe wyjście i wypisał je na ekran.
+\fi
+
+\dbEntryBegin{zadanie_fork-rozwiazanie}\if1\dbEntryCheckResults
+\begin{minted}[frame=single]{python}
+import os, subprocess
+
+pid = os.fork()
+
+if pid == 0:
+   res = subprocess.run(["ps", "-Af"], stdout=subprocess.PIPE)
+   print("Standardowe wyjście z komendy to: " + res.stdout.decode())
+else:
+  print("Mój PID to ", os.getpid(), "PID mojego potomka to:", pid)
+\end{minted}
+
+\noindent Zwróć uwagę że:
+\begin{itemize}
+\item korzystamy z funkcji fork do rozdzielania procesu na dwa (rodzica i potomka)
+\item każdy z tych procesów zaczyna wykonywanie od wyjścia z funkcji fork, przy czym różni się w nich wartość, którą ta funkcja zwróciła
+\item wartości tej używamy do rozróżnienia rodzica od potomka
+\item w rodzicu (który otrzymał niezerową wartość, będącą numerem PID utworzonego potomka) wypisujemy stosowny komunikat na temat numerów PID
+\item w potomku używamy \python{subprocess.run} do uruchomienia wskazanego polecenia w kolejnym potomku i przechwycenia jego wyjścia (opcjonalny argument \python{stdout=subprocess.PIPE})
+\item po zakończeniu działania subprocess wypisujemy dane otrzymane na standardowym wyjściu uruchomionego polecenia
+\item dane te w ogólności są danymi binarnymi i Python używa typu ciągu bajtowego do ich przechowywania, my wiemy że ps wypisuje tekst na standardowym wyjściu zatem korzystamy z metody \python{decode} do jego konwersji na napis
+\end{itemize}
+\fi
+
 
 \dbEntryBegin{zapis_do_pliku}\if1\dbEntryCheckResults
 Napisz funkcję \Verb#zapisz# która przyjmuje dwa argumenty: słownik oraz nazwę pliku. Funkcja ma utworzyć plik o podanej nazwie i zapisać do niego otrzymany słownik, w taki sposób że każda linii odpowiada jednej parze klucz wartość, a separatorem pomiędzy kluczem a wartością jest znak tabulacji. Dla uproszczenia zakładamy że elementy słownika są napisami (zarówno klucze jak i wartości) i nie zawierają znaków nowej linii ani tabulacji.
@@ -46,4 +107,21 @@ Na przykład dla wywołania \python{zapisz({"a": "qwe", "d": "123"}, "xx")} funk
 a	qwe
 d	123
 \end{Verbatim}
+\fi
+
+\dbEntryBegin{zapis_do_pliku-rozwiazanie}\if1\dbEntryCheckResults
+\begin{minted}[frame=single]{python}
+def zapisz(slownik, nazwa):
+  plik = open(nazwa, 'wt', encoding='utf8')
+  for klucz in slownik:
+    plik.write(klucz + "\t" + slownik[klucz] +"\n")
+  plik.close()
+\end{minted}
+
+\noindent Zwróć uwagę że:
+\begin{itemize}
+\item funkcja używa open z argumentami wskazującymi otwarcie pliku tekstowego w trybie do zapisu, w tym przykładzie podaliśmy także kodowanie, ale jest to zbędne gdyż podany utf8 byłby i tak użyty domyślnie
+\item następnie w ramach pętli przechodzącej po przekazanym do funkcji słowniku (dokładnie po kluczach w tym słowniku) wywołujemy funkcję write i podajemy do niej odpowiednio przygotowany napis (jako że plik otworzyliśmy w trybie tekstowym, write przyjmuje napisy)
+\item po wpisaniu wszystkich danych dokonujemy zamknięcia pliku (bez wykonania tej operacji część danych mogłaby nie być fizycznie zapisana w pliku w momencie kończenia funkcji)
+\end{itemize}
 \fi
