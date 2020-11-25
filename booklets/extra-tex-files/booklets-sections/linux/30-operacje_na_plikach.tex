@@ -82,10 +82,14 @@ Wspomnieć także o opcji -x wymagającej dopasowania całej linii.
 			\texttt{-f "plik"} - wczytaj polecenia z pliku plik\\
 			\texttt{-E} - używaj rozszerzonych wyrażeń regularnych\\
 			\texttt{-i} - modyfikuj podany plik zamiast wypisywać zmieniony na stdout\\
+			\texttt{-n} - wyłącza domyślne wypisywanie linii, wypisanie musi być wykonane jawnie poleceniem \texttt{p}\\
 		przydatne polecenia:\\
 			\texttt{s@regexp@napis@[g]} - wyszukaj dopasowania do wyrażenia regularnego regexp i zastąp je przez napis, podanie opcji g powoduje zastępowanie wszystkich wystąpień a nie tylko pierwszego, znak \texttt{@} pełni rolę separatora i może zostać zamiast niego użyty inny znak\\
 			\texttt{y@zbiór1@zbiór2@} - zastąp znaki z zbiór1 znakami odpowiadającymi im pod względem kolejności znakami z zbiór2, znak \texttt{@} pełni rolę separatora i może zostać zamiast niego użyty inny znak\\
-		możliwe jest też m.in. adresowanie linii na których ma być wykonywana operacja, np: \texttt{0,/regexp/ s@regexp@napis@} wykona polecenie s na liniach od początku pliku do linii pasującej do wyrażenia regularnego regexp, czyli zastąpi tylko pierwsze wystąpienie w pliku
+		możliwe jest też m.in. adresowanie linii na których ma być wykonywana operacja, np: \texttt{0,/regexp/ s@regexp@napis@} wykona polecenie s na liniach od początku pliku do linii pasującej do wyrażenia regularnego regexp, czyli zastąpi tylko pierwsze wystąpienie w pliku\\
+		Sed jest dość rozbudowanym narzędziem stanowiącym praktycznie coś na kształt interpretera języka programowania (o trochę dziwnej składni)
+		i nie ogranicza się jedynie do prostych przypadków zaprezentowanych w tym skrypcie.
+		Wiele przykładów użytecznych sktyptów sed'owych można znaleźć w spisie dostępnym pod adresem: \url{http://sed.sf.net/sed1line.txt}.
 	% END: sed
 	
 	\vspace{6pt}

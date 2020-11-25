@@ -245,10 +245,15 @@ co pozwala m.in. na osadzanie danych binarnych (np. obrazki) w plikach tekstowyc
 \subsubsection{Konwersja pomiędzy znakiem a jego numerem}
 
 Możliwe jest także konwertowanie pomiędzy liczbowym numerem znaku Unicode, a napisem go reprezentującym i w drugą stronę --- służą do tego odpowiednio funkcje \python{chr()} i \python{ord()}.
-W ramach napisów można też użyć \python{\uNNNN}, gdzie \Verb{NNNN} jest (czterocyfrowym) numerem znaku lub po prostu umieścić dany znak w pliku kodowanym UTF8\footnote{Użyty w przykładzie symbol nieskończoności można uzyskać na standardowej polskiej klawiaturze pod Linuxem przy pomocy kombinacji AltGr + Shift + M}.
+W ramach napisów można też użyć \python{\uNNNN} lub \python{\UNNNNNNNN} (gdzie \Verb{NNNN}/\Verb{NNNNNNNN} jest cztero/ośmio\footnote{
+	Użycie wariantu cztero cyfrowego jest możliwe jedynie dla znaków unicode o numerach mniejszych niż 0xffff
+} cyfrowym numerem znaku zapisanym szesnastkowo)
+lub po prostu umieścić dany znak w pliku kodowanym UTF8\footnote{
+	Użyty w przykładzie symbol nieskończoności można uzyskać na standardowej polskiej klawiaturze pod Linuxem przy pomocy kombinacji AltGr + Shift + M
+}.
 
 \begin{CodeFrame*}[python]{}
-print(chr(0x221e) + " == \u221e == ∞")
+print(chr(0x221e) + " == \u221e == ∞ == \U0000221e")
 print(hex(ord("∞")), hex(ord("\u221e")), hex(ord(chr(0x221e))) )
 \end{CodeFrame*}
 
@@ -278,6 +283,8 @@ $      - koniec napisu/linii
 \vspace{-8pt}\begin{Verbatim}
 ()     - pod-wyrażenie (może być używane dla operatorów powtórzeń,
          a także dla referencji wstecznych)
+|      - alternatywa: wystąpienie wyrażenia podanego po lewej stronie
+         albo wyrażenia podanego prawej stronie
 \end{Verbatim}
 
 \pagebreak[2]\noindent
@@ -289,17 +296,26 @@ import re
 y = "aa bb cc bb ff bb ee"
 x = "aa bb cc dd ff gg ee"
 
-if re.match(".*[dz]", y):
+if re.search("[dz]", y):
   print("y zawiera d lub z")
 
-if re.match(".*[dz]", x):
+if re.search(".*[dz]", x):
   print("x zawiera d lub z")
 
-if re.match(".* ([a-z]{2}) .* \\1", y):
+if re.search(" ([a-z]{2}) .* \\1", y):
   print("y zawiera dwa razy to samo")
 
-if re.match(".* ([a-z]{2}) .* \\1", x):
+if re.search(" ([a-z]{2}) .* \\1", x):
   print("x zawiera dwa razy to samo")
+
+# wypisanie dopasowania
+wynik = re.search("cc (xx)|(dd) ff", x)
+if wynik:
+  print( wynik.group(0) )
+
+wynik = re.search("cc (xx|dd) ff", x)
+if wynik:
+  print( wynik.group(0) )
 
 # zastępowanie
 print (re.sub('[bc]+', "XX", y, 2))
@@ -313,6 +329,8 @@ print (re.sub('.*?bb (.*) bb.*', "\\1", y))
 \begin{CodeFrame}{auto}
 x zawiera d lub z
 y zawiera dwa razy to samo
+dd ff
+cc dd ff
 aa XX XX bb ff bb ee
 aa XX XX XX ff XX ee
 aa X cc bb ff X ee
@@ -322,7 +340,10 @@ cc bb ff
 
 Zwróć uwagę na:
 \begin{itemize}
-\item Działanie funkcji \Verb{match}, która dopasowuje wyrażenie do początku napisu (czyli tak jakby zaczynało się od \Verb{^}).
+\item Działanie funkcji \Verb{search}, która wyszukuje podnapis pasujący do wyrażenia i umożliwia zaróno uzyskanie pasującego podnapisu, jak też samej informacji o fakcie pasowania lub nie do wyrażenia.
+\item Działanie alternatywy i nawiasów - standardowo alternatywa obejmuje wszystko co po lewej kontra wszystko co po prawej,
+	nawiasy obejmujące fragment prawej bądź lewej strony na to nie wpływają (\Verb{cc (xx)|(dd) ff} nie zadziało jako "xx" ablo "dd" pomiędzy "cc" a "ff", a jako "cc xx" albo "dd ff"),
+	aby ograniczyć działanie alternatywy tylko do fragmentu wyrażenia należy objąć nawiasami ten fragment wraz z alternatywą w nim umieszczoną (\Verb{cc (xx|dd) ff} zadziało jako "xx" ablo "dd" pomiędzy "cc" a "ff".
 \item Odwołania wsteczne do pod-wyrażeń (fragmentów ujętych w nawiasy) postaci \Verb{\\x}, gdzie \Verb{x} jest numerem pod-wyrażenia.
 \item ,,\emph{Zachłanność}'' (ang. \emph{greedy}) wyrażeń regularnych:
 	\begin{itemize}

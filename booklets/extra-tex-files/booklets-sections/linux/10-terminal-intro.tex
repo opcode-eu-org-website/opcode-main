@@ -88,14 +88,21 @@ Programy te umożliwiają też wyświetlanie wskazanych jako argumenty plików.
 
 \subsection{Przekierowania}
 
-Typowo program posiada trzy strumienie danych: jednen wejściowy (stdin) i dwa wyjściowe (stdout i stderr). Standardowe wyjście możemy przekierować na standardowe wejście innego programu przy pomocy~\Verb{|}, np:
+Typowo program posiada trzy strumienie danych: jeden wejściowy (stdin) i dwa wyjściowe (stdout i stderr). Standardowe wyjście możemy przekierować na standardowe wejście innego programu przy pomocy~\Verb{|}, np:
 \begin{Verbatim}
 ls --help | less
 \end{Verbatim}
 Konstrukcja ta przekieruje wynik komendy \Verb{ls} uruchomionej z opcją \Verb{--help} do komendy \Verb{less}.
 
 Możemy także przekierować standardowe wyjście do pliku (przy pomocy~\Verb{>} lub~\Verb{>>}, gdy chcemy dopisywać do pliku) lub pobrać standardowe wejście z pliku (przy pomocy \Verb{<}).
-\Verb{2>} pozwala na przekierowanie standardowego wyjścia błędu do pliku, a \Verb{>&} i \Verb{|&} pozwala na przekierowanie obu strumieni odpowiednio do pliku lub standardowego wejścia innego polecenia.
+\Verb{2>} pozwala na przekierowanie standardowego wyjścia błędu do pliku.
+Jeżeli zachodzi potrzeba połączenia obu strumieni możemy użyć \Verb{2>&1} w celu przekierowania strumienia drugiego do pierwszego.
+Następnie możemy użyć ~\Verb{|} aby przekierować połączony strumień do następnej komendy.
+Jeżeli chcemy przekierować go do pliku połączenie strumieni powinno mieć miejsce po przekierowaniu pierwszego z nich do pliku, np.:
+\begin{Verbatim}
+ls . NieIstniejącyPlik >log.txt 2>&1
+\end{Verbatim}
+Bash pozwala użyć \Verb{>&} i \Verb{|&}, które przekierowują oba strumienie odpowiednio do pliku lub standardowego wejścia innego polecenia, ale jest to rozszerzenie wykraczające poza standardową składnię sh.
 % END: unix intro
 
 \subsection{Kod powrotu polecenia oraz łączenie poleceń}
