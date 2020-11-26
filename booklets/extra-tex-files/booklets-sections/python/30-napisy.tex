@@ -171,13 +171,33 @@ abXdeXgh
 \end{CodeFrame}
 %  END: Napisy - wprowadzenie
 
+%  BEGIN: Obiektowość
+\subsection{Obiektowość}
+
+Jak być może zauważyliśmy wszystkie podstawowe typy w Pythonie są klasami. Związane z tym jest m.in. to iż posiadają one metody służące do operowania na nich.
+Metodą nazywamy funkcję związaną z danym typem i wykonywaną na obiekcie tego typu.
+Zapisywane jest to z użyciem kropki, nazwy metody i nawiasów okrągłych które mogą zawierać dodatkowe argumenty.
+Na przykład: \python{"aącd".islower()} jest wywołaniem metody \python{islower} typu napisowego na napisie \python{"aącd"}; metoda ta sprawdza czy w podanym ciągu znaków nie występują wielkie litery.
+
+Klasy posiadają także konstruktory, które możemy wywołać używając nazwy danej klasy jak funkcji i użyć np. do konwersji pomiędzy różnymi typami.
+Jak już wiemy wszystkie nazwy w pythonie żyją w jednym świecie, dotyczy to też nazw klas.
+Dlatego warto uważać aby nie nazywać swoich zmiennych zarówno tak jak nazywają się wbudowane funkcje, ani tak jak nazywają się wbudowane typy danych (takie jak int, bool, str, folat i tak dalej).
+
+Opis danego typu wraz z dostępnymi metodami można obejrzeć przy pomocy polecenia \python{help()}, np. \python{help("str")}.
+\teacher{
+Chcemy nauczyć korzystania z dokumentacji, więc w zadaniach związanych z stosowaniem metod jakiejś klasy starajmy się aby uczniowie sami odnajdywali w niej odpowiedzi.
+}
+
+W przypadku napisów za pomocą metod tej klasy mamy możliwość między innymi wyszukania miejsca wystąpienia podnapisu, zamiany wielkich liter na małe i odwrotnie, etc.
+%  END: Obiektowość
+
 %  BEGIN: Konwersje liczba -- napis
 \subsection{Konwersje liczba -- napis}
 
 Z punktu widzenia komputera liczba czy też element napisu, którym jest litera są pewną wartością numeryczną.
 Natomiast my do zapisu liczb używamy różnych systemów (np. dziesiętnego, czy też szesnastkowego).
 Domyślnie liczby wprowadzane do programu interpretowane są jako zapisane w systemie dziesiętnym,
-podobnie liczby uzyskiwane poprzez konwersję napisu przy pomocy funkcji \python{int()}.
+podobnie liczby uzyskiwane poprzez konwersję napisu przy pomocy funkcji \python{int()} (dokładniej jest to konstruktor typu całkowitego).
 Możliwe jest jednak wprowadzanie liczb zapisanych w innych systemach liczbowych lub konwersja z napisu zawierającego liczbę ---
 drugi, opcjonalny argument \python{int()} pozwala określić podstawę systemu z którego konwertujemy, zero oznacza automatyczne wykrycie w oparciu o prefix:
 

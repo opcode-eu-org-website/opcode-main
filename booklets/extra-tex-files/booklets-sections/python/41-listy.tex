@@ -87,10 +87,31 @@ s = "abcdefgh"
 l = list(s)
 l[2] = "X"
 del(l[5])
-s = "".join(l)
+s = str.join("", l)
 print(s)
 \end{CodeFrame}
 \begin{CodeFrame}{auto}
 abXdegh
 \end{CodeFrame}
 %  END: Lista jako modyfikowalny napis
+
+\subsubsection{Obiektowość list}
+
+W przypadku list za pomocą metod tej klasy mamy możliwość wstawiania wartości na daną pozycję, sortowania i odwracania kolejności elementów:
+
+\begin{CodeFrame}[python]{0.50\textwidth}
+l = ["i", "m"]
+l.insert(1, "c")
+print(l)
+l.reverse()
+print(l)
+l.sort()
+print(l)
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+['i', 'c', 'm']
+['m', 'c', 'i']
+['c', 'i', 'm']
+\end{CodeFrame}
+
+Zwróć uwagę że sortowanie i odwracanie modyfikuje istniejącą listę a nie tworzy kopii.
