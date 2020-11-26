@@ -28,72 +28,103 @@
 \Verb{vim} obsługuje 3 podstawowe tryby pracy: komend (służący do wydawania opisanych niżej poleceń), wizualny (służący do zaznaczania i wydawania niektórych komend), edycji (wstawiania/nadpisywania - służący do wprowadzania tekstu).
 Podstawowa klawiszologia:
 \begin{itemize}
-\item \Verb{Esc} powrót do trybu komend
-\item \Verb{i} tryb wstawiania
-\item \Verb{R} tryb zastępowania
-\item \Verb{Insert} zmiana trybu wstawiania i zastępowania
-\item \Verb{v} tryb wizualny (umożliwia zaznaczenie przy pomocy strzałek)
-
-\vspace{6pt}
-
-\item \Verb{y} skopiuj; \Verb{d} - wytnij (skopiuj i usuń)\\
-	po \Verb{y}, \Verb{d} można podać np. \texttt{20l} lub \texttt{20[strzałka w prawo]} co oznacza 20 kolejnych znaków, \texttt{2w}~oznacza dwa słowa
-\item \Verb{x} wytnij (skopiuj i usuń) znak (może być poprzedzone ilością znaków do wycięcia)
-\item \Verb{yy} skopiuj linię; \Verb{dd} - wytnij (skopiuj i usuń)\\
-	w obu wypadkach może być poprzedzone ilością linii do skopiowania/wycięcia
-
-\vspace{6pt}
-
-\item \Verb{p} wkleja po; \Verb{P} - wkleja przed
-\item \Verb{u} cofa ostatnią operację
-
-\vspace{6pt}
-
-\item \Verb{/} szukanie
-\item \Verb{n} wyszukanie następnego wystąpienie; \Verb{N} wyszukanie poprzedniego wystąpienie
-\item \Verb{G} przejście do wskazanej linii, numer podajemy przed G, 0 oznacza ostatnią linię w pliku, więc \Verb{0G} spowoduje przejście do niej
-
-\vspace{6pt}
-
-\item \Verb{:[zakres]s@regexp@napis@[g]} wyszukaj i zastąp wyrażenie regularne regexp przez napis;
-	zakres może być:
+	\item przełączanie pomiędzy trybami:
 	\begin{itemize}
-		\item numerem linii,
-		\item przedziałem z numerami linii postaci \Verb{pierwsza,ostatnia}, gdzie:\\
-			\Verb{.}~oznacza bieżącą linię,
-			\Verb{$}~oznacza ostatnią linię w pliku,
-			wartość numeryczna poprzedzona \Verb{+}~oznacza tyle kolejnych linii od bieżącej, a poprzedzona \Verb{-}~przed bieżącą,
-		\item znakiem \Verb{%} (co oznacza cały plik),
-		\item zakresem zaznaczonym w trybie wizualnym;
+		\item \Verb{Esc} powrót do trybu komend
+		\item \Verb{i} tryb wstawiania; \Verb{A} tryb wstawiania ze skokiem na koniec linii, \Verb{o} / \Verb{O} tryb wstawiania ze wstawieniem nowej linii po / przed bierzącą
+		\item \Verb{R} tryb zastępowania
+		\item \Verb{Insert} zmiana trybu wstawiania i zastępowania
+		\item \Verb{v} tryb wizualny (umożliwia zaznaczenie przy pomocy strzałek); \Verb{ctrl+v} tryb wizualny blokowy, \Verb{V} tryb wizualny liniowy
+		
+		\item \Verb{:set paste} włącza \Verb{:set nopaste} wyłącza tryb wklejania (nie będzie działać automatyczne formatowanie itp.)
+		\item \Verb{gv} ponawia ostatnie zaznaczenie trybu wizualnego
 	\end{itemize}
-	podanie opcji g powoduje zastępowanie wszystkich wystąpień a nie tylko pierwszego;\\
-	znak \Verb{@} pełni rolę separatora i może zostać zamiast niego użyty inny znak
 
-\vspace{6pt}
+	\item wycinanie i kopiowanie:
+	\begin{itemize}
+		\item \Verb{y} skopiuj; \Verb{d} - wytnij (skopiuj i usuń)
+			po \Verb{y}, \Verb{d} można podać np. \Verb{20l} lub \Verb{20[strzałka w prawo]} co oznacza 20 kolejnych znaków, \Verb{2w} oznacza dwa słowa
+			(więcej o takich punktach skoku poniżej)
+		\item \Verb{x} wytnij (skopiuj i usuń) znak (może być poprzedzone ilością znaków do wycięcia); wielkie \Verb{X} działa analogicznie, tyle że w tył
+		\item \Verb{yy} skopiuj linię; \Verb{dd} - wytnij (skopiuj i usuń)
+			w obu wypadkach może być poprzedzone ilością linii do skopiowania/wycięcia
+		
+		\item \Verb{p} wkleja po; \Verb{P} - wkleja przed
+		
+		\item komendy kopiowania i wklejania mogą być poprzedzone jedno-znakową nazwą rejestru w którym umieszczane są dane (poprzedzamy ją znakiem \Verb{"} i podajemy przed licznikiem, np. \Verb{"a3dd} wytnie do rejestru a 3 linie), część rejestrów jest używana automatycznie, a niektóre są tylko do odczytu, podgląd aktualnej zawartości rejestrów możliwy jest przy pomocy komendy \Verb{:registers}
+	\end{itemize}
+	
+	\item wyszukiwanie, zastępowanie, skok do linii:
+	\begin{itemize}
+		\item \Verb{/} szukanie w przód, \Verb{?} szukanie w tył; \Verb{*} szukanie w przód słowa pod kursorem, \Verb{#} szukanie w tył słowa pod kursorem
+		\item \Verb{n} wyszukanie następnego wystąpienie; \Verb{N} wyszukanie poprzedniego wystąpienie
+		
+		\item \Verb{G} przejście do wskazanej linii, numer podajemy przed G, 0 oznacza ostatnią linię w pliku, więc \Verb{0G} spowoduje przejście do niej
+		
+		\item \Verb{:[zakres]s@regexp@napis@[g]} wyszukaj i zastąp wyrażenie regularne regexp przez napis;
+			zakres może być:
+			\begin{itemize}
+				\item numerem linii,
+				\item przedziałem z numerami linii postaci \Verb{pierwsza,ostatnia}, gdzie:
+					\Verb{.} oznacza bieżącą linię,
+					\Verb{$} oznacza ostatnią linię w pliku,
+					wartość numeryczna poprzedzona \Verb{+} oznacza tyle kolejnych linii od bieżącej, a poprzedzona \Verb{-} przed bieżącą,
+				\item znakiem \Verb{%} (co oznacza cały plik),
+				\item zakresem zaznaczonym w trybie wizualnym;
+			\end{itemize}
+			podanie opcji g powoduje zastępowanie wszystkich wystąpień a nie tylko pierwszego;
+			znak \Verb{@} pełni rolę separatora i może zostać zamiast niego użyty inny znak
+	\end{itemize}
+	
+	\item otwieranie, zapisywanie, zamykanie plików:
+	\begin{itemize}
+		\item \Verb{:e ścieżka} otwarcie wskazanego pliku
+		\item \Verb{:w} zapis (można także podać ścieżkę pod jaka ma zostać zapisany plik)
+		\item \Verb{:q} wyjście
+		\item \Verb{:q!} wyjście bez zapisywania
+		\item \Verb{:wq} zapis i wyjście
+	\end{itemize}
+	
+	\item przełączanie się między otwartymi plikami i oknami:
+	\begin{itemize}
+		\item \Verb{:n} następny plik; \Verb{:N} poprzedni plik
+		\item \Verb{:split} poziomy podział okna; \Verb{:vs} pionowy podział okna; \Verb{Ctrl}+\Verb{W} a następnie strzałka - przełączanie między oknami
+	\end{itemize}
+	
+	\item cofanie i ponawianie edycji:
+	\begin{itemize}
+		\item \Verb{u}, \Verb{:undo} cofa ostatnią operację
+		\item \Verb{Ctrl+r}, \Verb{:redo} ponawia cofniętą operację
+	\end{itemize}
+	
+	\item punkty skoku (mogą być używane jako polecenia do poruszania się lub jako adresy w poleceniach takich jak \Verb{d}, \Verb{y}):
+	\begin{itemize}
+		\item \Verb{l} / \Verb{h} / \Verb{k} / \Verb{j} jeden znak/linię w prawo / lewo / górę / dół (działa tak jak strzałki)
+		\item \Verb{0} / \Verb{^} / \Verb{$} początek linii / początek tekstu w linii, koniec linii
+		
+		\item \Verb{w} / \Verb{b} / \Verb{e} następne słowo / poprzednie słowo / koniec słowa; wielkie \Verb{W} / \Verb{B} / \Verb{E} działa analogicznie, różni się traktowaniem spacji przy słowie
+		\item \Verb{f} / \Verb{F} następny / poprzedni znak podany po tej komendzie, włącznie z nim (np. \Verb{dfX} usunie wszystko do najbliższego wystąpienia X wraz z tym X); \Verb{t} / \Verb{T} działa analogicznie, tyle wyłącza podany znak
+		
+		\item poprzedzenie powyższych komend liczbą powoduje powtórzenie ich tyle razy - np. \Verb{10l} - 10 znaków w prawo, \Verb{3F:} - trzeci dwukropek w lewo
+		\item punktem skoku jest też wyżej opisane polecenie \Verb{G} poprzedzane numerem linii do której ma się odbyć skok
+		
+		\item punktem skoku mogą być także swobodnie umieszczane z dokumencie zakładki identyfikowane pojedynczym znakiem:
+		\begin{itemize}
+				\item \Verb{m} i następie znak ją identyfikujący - utworzenie zakładki w miejscu kursora (np. \Verb{ma} - utworzy zakładkę a)
+				\item \Verb{`} / \Verb{'} skod do zakładki / linii z zakładką podaną po tej komendzie
+				\item \Verb{:marks} - lista zakładek; \Verb{:delmarks} / \Verb{:delmarks!} - usunięcie zakładki / usunięcie wszystkich nie automatycznych zakładek
+		\end{itemize}
+	\end{itemize}
 
-\item \Verb{:e ścieżka} otwarcie wskazanego pliku
-\item \Verb{:w} zapis (można także podać ścieżkę pod jaka ma zostać zapisany plik)
-\item \Verb{:q} wyjście
-      ;
-      \Verb{:q!} wyjście bez zapisywania
-      ;
-      \Verb{:wq} zapis i wyjście
-
-\vspace{6pt}
-
-\item \Verb{:n} - następny plik
-      ;
-      \Verb{:N} - poprzedni plik
-\item \Verb{:split} - podział okna
-      ;
-      \Verb{:vs} - pionowy podział okna
-      ;
-      \Verb{Ctrl}+\Verb{W} a następnie strzałka - przełączanie między oknami
-
-\vspace{6pt}
-
-\item \Verb{:%!xxd} pokazanie wartości numerycznych i umożliwienie edycji pliku jako binarnego;
-      \\
-      \Verb{:%!xxd -r} powrót do normalnej edycji
+	\item inne:
+	\begin{itemize}
+		\item \Verb{:r plik}, wstawienie zawartości pliku
+		\item \Verb{:%!xxd} pokazanie wartości numerycznych i umożliwienie edycji pliku jako binarnego; \Verb{:%!xxd -r} powrót do normalnej edycji
+		
+		\item \Verb{>} / \Verb{<} zwiększanie / zmniejszanie wcięcia zaznaczonego (w trybie wizualnym) tekstu
+		\item \Verb{zc} zwija bieżący blok, \Verb{zC} zwija bieżący blok aż do najwyższego poziomu, \Verb{zo} rozwija bieżące zwinięcie, \Verb{zO} rozwija rekurencyjnie bieżące zwinięcie, \Verb{zR} rozwija wszystkie zwinięcia w dokumencie
+		
+		\item \Verb{:set wrap} włącza \Verb{:set nowrap} wyłącza zawijania linii w podglądzie
+	\end{itemize}
 \end{itemize}
 % END: vi i vim
