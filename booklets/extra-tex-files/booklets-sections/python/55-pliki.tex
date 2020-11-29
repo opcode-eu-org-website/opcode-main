@@ -70,6 +70,8 @@ napis = plik.read()
 plik.close()
 \end{CodeFrame*}
 
+Po otwartym pliku możemy się przemieszczać metodą \python{seek}, na przykład \python{plik.seek(0)} przesunie punkt odczytu na początek pliku i umożliwi jego ponowne przeczytanie.
+
 \subsubsection{Czekanie na dane}
 
 Niekiedy nasz program musi poczekać na jakieś dane (np. wprowadzane z standardowego wejścia przez użytkownika).

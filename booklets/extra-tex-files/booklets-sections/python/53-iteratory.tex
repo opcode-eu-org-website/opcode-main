@@ -47,8 +47,8 @@ możemy tez używać iteratorów do pobierania kolejnych wartości z generatora:
 def f(l):
     a, b = 0, 1
     for i in range(l):
-        r, a, b = a, b, a + b
-        yield r
+        yield a
+        a, b = b, a + b
 
 ii = iter( f(8) )
 for i in f(16):
@@ -63,7 +63,7 @@ Można także tworzyć generatory nieskończone:
 def ff():
     a, b = 0, 1
     while True:
-        r, a, b = a, b, a + b
-        yield r
+      yield a
+      a, b = b, a + b
 \end{CodeFrame*}
 %  END: Iteratory i generatory
