@@ -373,6 +373,34 @@ Pętla \python{while} jest też naturalnym wyborem gdy w Pythonie chcemy przecho
 	(wcześniej poznana instrukcja \python{range}, stosowana do iterowania po zakresie liczbowym w pętli \python{for}, wymaga aby krok był całkowity).
 %  END: Pętla while
 
+\subsection{\python{break} i \python{continue}}
+
+W ramach zarówno pętli for jak i while możemy użyć instrukcji:
+\begin{itemize}
+	\item \python{break} powodującej przerwanie wykonywania pętli
+	\item \python{continue} powodującej pominięcie pozostałych instrukcji w aktualnym obiegu pętli
+\end{itemize}
+
+Ich działanie może zobrazować poniższy kod:
+\begin{CodeFrame}[python]{0.50\textwidth}
+for x in [1, 2, 3, 4, 5, 6]:
+  print("start", x)
+  if x == 2:
+    continue
+  if x == 4:
+    break
+  print("...")
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+start 1
+...
+start 2
+start 3
+...
+start 4
+\end{CodeFrame}
+
+
 %  BEGIN: Wielokrotne przypisanie
 \subsection{Wielokrotne przypisanie}
 

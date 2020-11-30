@@ -28,19 +28,76 @@
 	\insertZadanie{\currfilepath}{funkcja_liczba_kotow}{}
 }
 
+\IfStrEq{\dbEntryID}{rozwiazania}{
+	\insertRozwiazanie{\currfilepath}{petla_linki_html}{}
+	\insertRozwiazanie{\currfilepath}{warunek_istnienie_pliku}{}
+	\insertRozwiazanie{\currfilepath}{funkcja_n_razy_napis}{}
+	\insertRozwiazanie{\currfilepath}{funkcja_liczba_kotow}{}
+}
+
 % BEGIN: podstawy programowania w bashu - zadania
 \dbEntryBegin{petla_linki_html}\if1\dbEntryCheckResults
 Napisz pętle, która wypisze wszystkie pliki nieukryte z bieżącego katalogu w postaci linków HTML, czyli:
 dla pliku o nazwie \Verb{ABC} powinna wypisać \Verb{<a href="ABC">ABC</a>}. Przedstaw zarówno rozwiązanie z użyciem pętli \Verb{for}, jak i pętli \Verb{while}.
 \fi
+\dbEntryBegin{petla_linki_html-rozwiazanie}\if1\dbEntryCheckResults
+\begin{CodeFrame*}[bash]{}
+for f in *; do echo "<a href=\"$f\">$f</a>"; done
+ls | while read f; do echo "<a href=\"$f\">$f</a>"; done
+\end{CodeFrame*}
+
+\noindent Zwróć uwagę że:
+\begin{itemize}
+\item rozwiązania te różnią się jedynie sposobem uzyskania listy plików ald której mają wypisać linki
+\item pętla for w każdym obiegu podstawia pod f kolejny element z listy nazw dopasowanych do gwiazdki (czyli wszystkich plików nieukrytych)
+\item pętla while listę plików dostaje na standardowe wejście (jeden plik na linię) i wczytuje każdą kolejną linię (czyli kolejną nazwę pliku) stosując komendę read – jest to bardzo standardowe rozwiązanie do przetwarzania standardowego wejścia linia po linii
+\item w obu wypadkach używamy takiego echo z napisem w podwójnych cudzysłowach (aby móc umieścić w nim zmienną), cudzysłowa które mają być wypisane zabezpieczamy odwrotnym ukośnikiem
+\item wypisywanie można rozwiązać na kilka innych sposobów np.: \shell{echo '<a href="'"$f"'">'"$f"'</a>'} – zadziała tak samo, ale wydaje się być to mniej czytelne
+\end{itemize}
+\fi
+
 
 \dbEntryBegin{warunek_istnienie_pliku}\if1\dbEntryCheckResults
 Napisz warunek, który sprawdzi czy \Verb{/tmp/abc} istnieje i jest katalogiem.
 \fi
+\dbEntryBegin{warunek_istnienie_pliku-rozwiazanie}\if1\dbEntryCheckResults
+\begin{CodeFrame*}[bash]{}
+if [ -d /tmp/abc ]; then echo "jest katalogiem"; else echo "nie";
+\end{CodeFrame*}
+
+lub krócej:
+
+\begin{CodeFrame*}[bash]{}
+[ -d /tmp/abc ] && echo "jest katalogiem";
+\end{CodeFrame*}
+
+\noindent Zwróć uwagę że:
+\begin{itemize}
+\item w celu warunkowego wypisania jakiejś informacji możemy użyć zarówno konstrukcji if, jak też łączenia poleceń,
+	jednak w przypadku większej ilości poleceń objętych warunkiem konstrukcja z if jest bardziej czytelna
+\item sprawdzenie czy podana ścieżka istnieje i jest katalogiem odbywa się przy pomocy opcji -d, informacja ta celowo nie była podana w treści skryptu – należało to sprawdzić w dokumentacji systemowej (\shell{man test}). \textbf{Czytanie dokumentacji jest ważne!}
+\end{itemize}
+\fi
+
 
 \dbEntryBegin{funkcja_n_razy_napis}\if1\dbEntryCheckResults
 Napisać funkcję przyjmującą dwa argumenty - liczbę i napis; funkcja ma wypisać napis tyle razy ile wynosi podana liczba.
 \fi
+\dbEntryBegin{funkcja_n_razy_napis-rozwiazanie}\if1\dbEntryCheckResults
+\begin{CodeFrame*}[bash]{}
+f() { for i in `seq 1 $1`; do echo $2; done; }
+\end{CodeFrame*}
+
+\noindent Zwróć uwagę że:
+\begin{itemize}
+\item w nawiasach po nazwie funkcje nie piszemy nic na temat jej argumentów - one są puste
+\item do argumentów odwołujemy się poprzez dolar numer argumentu
+\item do n krotnego powtórzenia czynności używamy pętli for która iteruje po liście liczb zwracanej przez seq
+\item seq objęta jest znakami ` oznaczającymi że należy wykonać podany w nich kod i podstawić w to miejsce jego standardowe wyjście, nie należy ich mylić z apostrofami używanymi do napisów (')
+\item spacja po { oraz średnik (lub nowa linia) przed } są istotne składniowo
+\end{itemize}
+\fi
+
 
 \dbEntryBegin{funkcja_liczba_kotow}\if1\dbEntryCheckResults
 Napisać funkcję przyjmującą jeden argument - liczbę kotów i wypisującą:
@@ -49,5 +106,16 @@ Napisać funkcję przyjmującą jeden argument - liczbę kotów i wypisującą:
 	\item "Ala ma x koty" lub "Ala ma x kotów" gdzie dobrana jest poprawna forma, a pod x podstawiona podana w argumencie ilość kotów.
 \end{itemize}
 Dla uproszczenia należy założyć że podana ilość kotów jest w zakresie od 1 do 9.
+\fi
+\dbEntryBegin{funkcja_liczba_kotow-rozwiazanie}\if1\dbEntryCheckResults
+\begin{CodeFrame*}[bash]{}
+koty() {
+	case $1 in
+		1) echo "Ala ma kota";;
+		2|3|4) echo "Ala ma $1 koty";;
+		*) echo "Ala ma $1 kotów";;
+	esac
+}
+\end{CodeFrame*}
 \fi
 % END: podstawy programowania w bashu - zadania

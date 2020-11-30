@@ -24,8 +24,11 @@
 \IfStrEq{\dbEntryID}{}{
 	\insertZadanie{\currfilepath}{passwd_warunek_na_uid_awk}{}
 	\insertZadanie{\currfilepath}{awk_last}{}
-	\insertZadanie{\currfilepath}{passwd_warunek_na_uid_noawk}{}
-	\insertZadanie{\currfilepath}{rekurecyjne_wyszukaj_i_zastap}{}
+}
+
+\IfStrEq{\dbEntryID}{rozwiazania}{
+	\insertRozwiazanie{\currfilepath}{passwd_warunek_na_uid_awk}{}
+	\insertRozwiazanie{\currfilepath}{awk_last}{}
 }
 
 % napisy z uzyciem awk i/lub programowanie w bash
@@ -33,18 +36,46 @@
 \dbEntryBegin{passwd_warunek_na_uid_awk}\if1\dbEntryCheckResults
 Korzystając z AWK wyświetl z /etc/passwd linie w których UID (3 pole) ma warość >= 1000.
 \fi
+\dbEntryBegin{passwd_warunek_na_uid_awk-rozwiazanie}\if1\dbEntryCheckResults
+\begin{CodeFrame*}[bash]{}
+awk -F: '$3>=1000 {print $0}' /etc/passwd
+\end{CodeFrame*}
+
+\noindent Zwróć uwagę na:
+\begin{itemize}
+\item ustawienie separatora pól przy pomocy opcji -F na dwukropek
+\item wykorzystanie charakterystyki AWK polegającej na wykonywaniu bloku dla każdej pasującej linii
+\item warunek na wartość 3 pola, awk sam zadba o konwersję napisu przeczytanego z pliku na liczbę celem wykonania tego porównania
+\end{itemize}
+\fi
+
 
 \dbEntryBegin{awk_last}\if1\dbEntryCheckResults
 Polecenie \Verb{last} wypisuje informację o ostatnich zalogowaniach w systemie. Napisz polecenie (wykorzystujące \Verb{last}), które wypisze informację jak często logowali się poszczególni użytkownicy.
 \fi
+\dbEntryBegin{awk_last-rozwiazanie}\if1\dbEntryCheckResults
+\begin{CodeFrame*}[bash]{}
+last | awk '/^wtmp begins/ {next} $1 !="" {x[$1]++} END{for (u in x) print u, x[u]}'
+\end{CodeFrame*}
+
+\noindent Zwróć uwagę na:
+\begin{itemize}
+\item zignorowanie linii zaczynającej się od "wtmp begins" z użyciem dopasowania wyrażenia regularnego i komendy next
+\item zliczanie wystąpień nazwy użytkownika w tablicy x (indeksowanej tymi nazwami)
+\item zastosowanie bloku END do wypisania zawartości tablicy, której używaliśmy do zliczania użytkowników
+\end{itemize}
+\fi
+
+
+% DODATKOWE
 
 \dbEntryBegin{passwd_warunek_na_uid_noawk}\if1\dbEntryCheckResults
 Wyświetl z /etc/passwd linie w których UID (3 pole) ma warość >= 1000 nie korzystając z AWK.
-Jeżeli masz pomysł przedstw więcej niż jedno rozwiązanie.
+Jeżeli masz pomysł przedstaw więcej niż jedno rozwiązanie.
 \fi
 
 \dbEntryBegin{rekurecyjne_wyszukaj_i_zastap}\if1\dbEntryCheckResults
-Napisz funkcję która przyjmuje dwa argumenty - napis wyszukiwany i napis go zastępujący oraz dokonuje rekurencyjnego wyszukania i zamiany tych napisów w wszystkich plikach w bierzącym katalogu.
+Napisz funkcję która przyjmuje dwa argumenty - napis wyszukiwany i napis go zastępujący oraz dokonuje rekurencyjnego wyszukania i zamiany tych napisów w wszystkich plikach w bieżącym katalogu.
 
 \textit{Wskazówka 1: polecenie \texttt{sed} z opcją \texttt{-i} i wskazaniem pliku modyfikuje zawartości tego pliku stosownie do poleceń wydanych sed'owi}\\
 \textit{Wskazówka 2: dla uproszczenia możesz przyjąć że napisy te składają się jedynie z liter i cyfr.}

@@ -25,7 +25,12 @@
 	\insertZadanie{\currfilepath}{upper_false}{}
 	\insertZadanie{\currfilepath}{ls_nazwy}{}
 	\insertZadanie{\currfilepath}{wyszukaj_napis}{}
-	\insertZadanie{\currfilepath}{ls_nazwy_cd}{}
+}
+
+\IfStrEq{\dbEntryID}{rozwiazania}{
+	\insertRozwiazanie{\currfilepath}{upper_false}{}
+	\insertRozwiazanie{\currfilepath}{ls_nazwy}{}
+	\insertRozwiazanie{\currfilepath}{wyszukaj_napis}{}
 }
 
 % napisy nie wymagające awk ani programowania w bash
@@ -33,15 +38,53 @@
 \dbEntryBegin{upper_false}\if1\dbEntryCheckResults
 Wyświetl plik \texttt{/etc/passwd} z zastąpionym \texttt{false} przez \texttt{FALSE}.
 \fi
+\dbEntryBegin{upper_false-rozwiazanie}\if1\dbEntryCheckResults
+\begin{CodeFrame*}[bash]{}
+sed -e "s#false#FALSE#g" /etc/passwd
+\end{CodeFrame*}
+\fi
+
 
 \dbEntryBegin{ls_nazwy}\if1\dbEntryCheckResults
 Polecenie \Verb#ls -1d /etc/p*# wyświetla pełne ścieżki do plików i katalogów, znajdujących się (bezpośrednio) w \texttt{/etc/}, których nazwa zaczyna się literą \texttt{p}.
 Przekieruj standardowe wyjście tej komendy do takiego ciągu poleceń aby uzyskać tylko nazwy tych plików (bez ścieżki).
 \fi
+\dbEntryBegin{ls_nazwy-rozwiazanie}\if1\dbEntryCheckResults
+\begin{CodeFrame*}[bash]{}
+ls -1d /etc/p* | cut -f3 -d/
+\end{CodeFrame*}
+
+\begin{CodeFrame*}[bash]{}
+ls -1d /etc/p* | sed -e 's#^/etc/##'
+\end{CodeFrame*}
+
+\noindent Zwróć uwagę na:
+\begin{itemize}
+\item przekierowanie standardowego wyjścia polecenia ls do komendy modyfikującej strumieniowo napisy
+\item uzycie poleceń cut lub sed w roli takiej komendy
+\end{itemize}
+\fi
+
 
 \dbEntryBegin{wyszukaj_napis}\if1\dbEntryCheckResults
 Napisz polecenie które wyszuka wszystkie wystąpienia napisu \Verb{nameserver} w plikach znajdujących się w katalogu \Verb{/etc} (wraz z jego podkatalogami).
 \fi
+\dbEntryBegin{wyszukaj_napis-rozwiazanie}\if1\dbEntryCheckResults
+\begin{CodeFrame*}[bash]{}
+grep -r nameserver /etc/
+\end{CodeFrame*}
+
+\noindent Zwróć uwagę że:
+\begin{itemize}
+\item do wyszukiwania po zawartości używamy polecenia grep z opcją -r, a nie find
+\item można by użyć find z warunkiem exec wykonującym grep na danym pliku:\\
+	\shell{find /etc/ -exec grep nameserver \{\} \;}\\
+	ale gdy nie mamy potrzeby stosować innych warunków (dla których potrzebny byłby find) jest to przerostem formy (zarówno w zapisie jak i koszcie obliczeniowym wykonania – find dla każdego pliku musi zrobić fork i exec na odpowiedniego grep'a)
+\end{itemize}
+\fi
+
+
+% DODATKOWE
 
 \dbEntryBegin{ls_nazwy_cd}\if1\dbEntryCheckResults
 Wyświetl nazwy (bez ścieżki) plików i katalogów znajdujących się (bezpośrednio) w \texttt{/etc/}, których nazwa zaczyna się literą \texttt{p} (jak w zadaniu \ref{ls_nazwy}),

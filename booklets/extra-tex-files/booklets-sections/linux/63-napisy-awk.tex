@@ -115,4 +115,9 @@ Innym użytecznym zastosowaniem AWK może być wypisanie pliku bez linii pasują
 	END {if (print_last == 1) print last}
 \end{minted}
 \vspace{-0.95em}\Verb@}'@\end{oframed}
+
+AWK pozwala także na definiowanie funkcji:
+\begin{CodeFrame*}[bash]{}
+awk 'function f(x) {return 2*x} { print f($1+$2) }'
+\end{CodeFrame*}
 % END: AWK
