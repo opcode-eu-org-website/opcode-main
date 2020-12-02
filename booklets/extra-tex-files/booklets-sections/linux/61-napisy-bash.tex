@@ -46,8 +46,11 @@ Wbudowane przetwarzanie napisów w bashu opiera się na odwołaniach do zmiennyc
 	
 	\item \shell@${str#"ab"}@ zwróci wartość str z obciętym "ab" z początku
 	\item \shell@${str%"fg"}@ zwróci wartość str z obciętym "fg" z końca
+	
+	\item \shell@${!x}@ zwróci wartość zmiennej, której nazwa jest w zmiennej x
 \end{itemize}
 W napisach do obcięcia możliwe jest stosowanie shellowych znaków uogólniających, czyli \Verb@*@, \Verb@?@, \Verb@[abc]@, itd operator \Verb@#@ i \Verb@%@ dopasowują minimalny napis do usunięcia, natomiast operatory \Verb@##@ i \Verb@%%@ dopasowują maksymalny napis do usunięcia.
+Należy pamiętać że wiele z powyzszych zapisów jest rozszerzeniami basha niedostepnymi w podstaowej składni sh.
 
 \begin{teacherOnly}
 Przykład do zademonstrowania:
@@ -73,22 +76,22 @@ y="aa bb cc bb dd bb ee"
 echo ${y/"bb"/"XX"}
 echo ${y//"bb"/"XX"}
 \end{CodeFrame*}
-
 \end{teacherOnly}
+
+\subsubsection{Wyrażenia regularne}
+
 Możliwe jest także korzystanie z wyrażeń regularnych.
 Polecenie \Verb@expr match $x 'wr1\(wr2\)wr3'@ zwróci na stdout (wypisze) część \Verb@$x@ pasującą do wyrażenia regularnego \Verb@wr2@,
 wyrażenia regularne \Verb@wr1@ i \Verb@wr2@ pozwalają na określanie części napisu do odrzucenia.
 Alternatywną składnią jest \Verb@expr $x : 'wr1\(wr2\)wr3'@
 
-\begin{teacherOnly}
-Przykład do zademonstrowania:
+Przykład użycia jednego i drugiego wariantu składni do podziału napisu na część przed i po znaku równości:
 
 \begin{CodeFrame*}[bash]{}
 z="ab=cd"
 expr match $z '^\([^=]*\)='
 expr $z : '^[^=]*=\(.*\)$'
 \end{CodeFrame*}
-\end{teacherOnly}
 
 Możliwe jest też sprawdzanie dopasowań wyrażeń regularnych poprzez (zwróć uwagę na brak cytowania wyrażenia regularnego):
 
@@ -96,12 +99,17 @@ Możliwe jest też sprawdzanie dopasowań wyrażeń regularnych poprzez (zwróć
 [[ "$z" =~ ^([^=]*)= ]] && echo "OK"
 \end{CodeFrame*}
 
+\subsubsection{printf}
+
 Możliwe jest także zaawansowane formatowanie napisów, konwertowanie liczb na napisy,
 w tym wypisywanie w różnych systemach liczbowych przy pomocy \Verb@printf@\footnote{
 	Instrukcja \Verb@printf@ ma składnię opartą na tej funkcji z C, interpretuje ona także liczby zmiennoprzecinkowe.
 }:
 
-\begin{CodeFrame*}[bash]{}
+\begin{CodeFrame}[bash]{0.57\textwidth}
 printf "0o%o %d 0x%x\n" 0xf 010 3
-\end{CodeFrame*}
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+0o17 8 0x3
+\end{CodeFrame}
 % END: Wbudowane przetwarzanie napisów w bashu

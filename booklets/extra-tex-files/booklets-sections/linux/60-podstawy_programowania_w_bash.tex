@@ -62,7 +62,16 @@ echo $e $c $z
 \end{CodeFrame*}
 Zauważ zachowanie przy odwołaniu do niezainicjalizowanej zmiennej \Verb{z}.
 
-Operacje logiczne obsługiwane są komendą \Verb{test} lub operatorem \Verb{[ ]} wynik zwracany jest jako kod powrotu.
+Do operacji arytmetycznych może być też jest wykorzystywane polecenie let.
+Najczęściej jest stosowane do inkrementacji podanej zmiennej, tak jak w poniższym przykładzie.
+\begin{CodeFrame*}[bash]{}
+echo $a
+let a++
+echo $a
+\end{CodeFrame*}
+
+Zarówno operator podwójnych nawiasów okrągłych jak i komenda let mogą obsługiwać wyrażenia logiczne.
+Mimo to operacje logiczne najczęściej obsługiwane są komendą \Verb{test} lub operatorem \Verb{[ ]} wynik zwracany jest jako kod powrotu.
 Należy zwrócić uwagę na escapowanie odwrotnym ukośnikiem nawiasów i na to że spacje mają znaczenie.
 Negację realizuje \Verb{!}, należy pamiętać jednak że wynikiem negacji dowolnej liczby jest FALSE.
 
@@ -162,13 +171,44 @@ Powyższa pętla wypisze po kolei wszystkie wiersze pliku \texttt{/etc/fstab} pr
 	który w tym przypadku powinien znaleźć się za kończącym pętle słowem kluczowym \texttt{done}.
 } z pominięciem pierwszego słowa (które wczytywane było do zmiennej slowo).
 
+\begin{ProTip}[breakable]{przekierowania strumieni a zmienne}
+Przekierowanie standardowego wyjścia na standardowe wejście odbywa się między dwoma różnymi procesami.
+Zatem w konstrukcjach typu \texttt{while read} pętla while uruchamiana może być procesie potomnym obecnej powłoki.
+Efektem tego jest iż w niektórych przypadkach wykonywane modyfikacje zmiennych wewnątrz takiej pętli nie będą widoczne poza nią.
+
+Przykładem takiej sytuacji jest poniższy kod (polecenie ps dodano aby pokazać utworzneie procesu potomnego powłoki):
+
+\begin{CodeFrame*}[bash]{}
+zm=0; ps -f
+cat /etc/fstab | while read x; do
+	[ $zm -lt 1 ] && ps -f
+	zm=13
+done
+echo $zm
+\end{CodeFrame*}
+
+Jednak analogiczny kod w którym następuje przekierowanie z pliku zadziała poprawnie:
+
+\begin{CodeFrame*}[bash]{}
+zm=0; ps -f
+while read x; do
+	[ $zm -lt 1 ] && ps -f
+	zm=13
+done < /etc/fstab
+echo $zm
+\end{CodeFrame*}
+\end{ProTip}
+
 Słowa domyślnie rozdzielane są przy pomocy dowolnego ciągu spacji lub tabulatorów, separator można zmienić za pomocą zmiennej \texttt{IFS}, np:
 
 \begin{CodeFrame*}[bash]{}
 IFS=":"
-while read a b; do echo $a; done < /etc/group
+while read a b c; do echo "$a -- $c"; done < /etc/passwd
 unset IFS # przywracamy domyślne zachowanie read poprzez usunięcie zmiennej IFS
 \end{CodeFrame*}
+
+Należy mieć na uwadze, że cudzysłowa wokół wypisania zmiennej c są istotne – bez nich znak dwókropka mógłby być zmieniony na spacje.
+
 
 \subsubsection{Instrukcja if}
 
@@ -261,9 +301,38 @@ f1() {
 }
 \end{CodeFrame*}
 
-Zwróć uwagę że w nawiasach po nazwie funkcji nie podajemy przyjmowanych argumentów, natomiast puste nawiasy te są elementem składniowym i muszą wystąpić. Jeżeli zapisujesz definicję funkcji w jednej linii, np. \Verb@abc() { echo "abc"; }@ to pamiętaj, że spacje po otwierającym i przed kończącym nawiasem klamrowym są obowiązkowe, podobnie jak średniki występujące po każdej instrukcji w ciele funkcji.
+Zwróć uwagę że w nawiasach po nazwie funkcji nie podajemy przyjmowanych argumentów, natomiast puste nawiasy te są elementem składniowym i muszą wystąpić. Jeżeli zapisujesz definicję funkcji w jednej linii, np. \Verb@abc() { echo "abc"; }@ to pamiętaj, że spacja po otwierającym nawiasie klamrowym jest obowiązkowa, podobnie jak średniki występujące po każdej (także ostatniej) instrukcji w ciele funkcji.
 
 Wywołanie funkcji nie różni się niczym od wywołania programów czy instrukcji wbudowanych
 (możemy używać przekierowań strumieni wejścia, wyjścia, czy też przechwycić wyjście do zmiennej). Powyższą funkcję możemy wywołać np. w następujący sposób: \Verb{f1 a "b c"   d}
 
+\subsection{Grupowanie poleceń}
+
+Funkcje są przykładem grupowania poleceń – funkcja stanowi nazwany blok kodu, czyli nazwaną grupę poleceń.
+Polecenia w bashu możemy też grupować bez definiowania funkcji.
+W tym celu możemy zastosować nawiasy klamrowe (tak jak w definicji funkcji) lub nawiasy okrągłe.
+
+Stosując nawiasy klamrowe musimy pamiętać (tak samo jak było to w przypadku funkcji)
+	o spacji po otwierającym nawiasie klamrowym i średniku (lub nowej linii) przed zamykającym.
+Instrukcje podane w nawiasach klamrowych będą wykonane w bieżącej powłoce basha, czyli mogą modyfikować zmienne.
+
+Polecenia podane w nawiasach okrągłych będą wykonane w podpowłoce, czyli ustawione lub zmodyfikowane w nich zmienne nie będą widoczne po zakończeniu bloku. Nawiasy okrągłe nie wymagają spacji i ostatniego średnika.
+
+\begin{CodeFrame*}[bash]{}
+a=0;
+{ echo abc; a=1; }
+echo $a
+(echo abc; a=2)
+echo $a
+\end{CodeFrame*}
+
+Grupowanie poleceń jest przydatne na przykład w celu grupowania ich przy używaniu operatorów łączenia poleceń w oparciu o kod powrotu (\shell{&&} i \shell{||}), a także w celu przekazania standardowego wyjścia wielu poleceń w ramach jednego strumienia.
+
+\begin{CodeFrame*}[bash]{}
+a=0;
+{ echo AbC; echo abc; echo XyZ; a=1; } | grep b
+echo $a
+\end{CodeFrame*}
+
+Zauważ że w tym wypadku nawiasy klamrowe zachowały się jak nawiasy okrągłe – modyfikacja zmiennej a nie jest widoczna po zakończeniu bloku. Wynika to z użycia przekierowania strumienia podobnie jak w sytuacji omawianej przy pętli while.
 % END: podstawy programowania w bashu
