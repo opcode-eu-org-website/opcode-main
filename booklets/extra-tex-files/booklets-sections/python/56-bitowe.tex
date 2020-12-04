@@ -1,0 +1,100 @@
+% Copyright (c) 2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+%  BEGIN: Kod binarny
+\subsection{Kod binarny {\Symbola 🤔}}
+
+Jak wiemy liczby możemy zapisywać w różnych systemach liczbowych i jednym z nich jest system dwójkowy, nazywany też binarnym.
+Taka reprezentacja liczb jest podstawą działania elektroniki cyfrowej w tym współczesnych komputerów.
+
+Napis przedstawiający liczbę w reprezentacji dwójkowej w Pythonie można z pomocą funkcji \python{bin}. Funkcja ta niestety nie pozwala wymusić długości wypisywanej liczby (co jest bardzo przydatne jeżeli chcemy operować na poszczególnych bitach) a dodatkowo liczby ujemne wypisuje ze znakiem minus i reprezentacją liczby dodatniej (czyli zasadniczo w kodzie znak moduł) a nie rzeczywiście stosowanym do zapisu takich liczb na zdecydowanej większości architektur kodzie uzupełnień do dwóch. Dlatego na potrzeby przykładów w tym rozdziale będziemy używać własnej funkcji zwracającej binarną reprezentację liczb 8bitowych (czyli 1 bajta):
+
+\begin{CodeFrame}[python]{0.55\textwidth}
+def bin8(x):
+	return "0b{0:08b}".format(x & 0xff)
+\end{CodeFrame}
+
+Liczby dodatnie w systemie binarny zapisuje się praktycznie zawsze w postaci NKB. Zapis taki jest analogiczny do zapisu dziesiętnego stosowanego na co dzień, z tym że kolejne cyfry liczby mają wagę $2^n$ a nie $10^n$ (gdzie $n$ jest numerem cyfry, zaczynającym się od zera dla skrajnie prawej).
+
+$$ a_{n}a_{n-1}...a_{1}a_{0} \leftrightarrow a_{n} \cdot 2^{n} + a_{n-1} \cdot 2^{n-1} + ... + a_{1} \cdot 2^{1} + a_{0} \cdot 2^{0} $$
+
+Liczby ujemne mogą być zapisywane na różne sposoby.
+Wspomniany kod moduł-znak polega na zapisie modułu liczby w postaci NKB oraz umieszczenia flagi znaku w najstarszym bicie (0 – liczba dodatnia, 1 – ujemna).
+Najczęściej stosowany jest jednak kod uzupełnień do dwóch (określany jako U2) przypominający NKB tyle że najstarszy n-ty bit wchodzi z wagą $-(2^n)$ a nie $2^n$:
+
+$$ a_{n}a_{n-1}...a_{1}a_{0} \leftrightarrow - a_{n} \cdot 2^{n} + a_{n-1} \cdot 2^{n-1} + ... + a_{1} \cdot 2^{1} + a_{0} \cdot 2^{0} $$
+
+\begin{CodeFrame}[python]{0.55\textwidth}
+print(bin8(3),  bin(3))
+print(bin8(-3), bin(-3))
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+0b00000011 0b11
+0b11111101 -0b11
+\end{CodeFrame}
+
+Możemy sprawdzić czy bin8 rzeczywiście wypisało reprezentację -3 w kodzie U2 wykonując proste obliczenie:
+
+\begin{CodeFrame}[python]{0.75\textwidth}
+-2**7 + 2**6 + 2**5 + 2**4 + 2**3 + 2**2 + 0*(2**1) + 2**0
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+-3
+\end{CodeFrame}
+
+\subsubsection{Operacje bitowe}
+
+Python, jak wiele innych języków, pozwala wykonywać operacje boolowskie nie tylko na wartościach reprezentujących pradwę i fałsz, ale także na odpowiadajacych sobie bitach dwóch liczb.
+Operację bitowego AND zapisujemy z pomocą \python{&}, OR z pomocą \python{|}, XOR z pomocą \python{^}, a NOT  z pomocą \python{~}:
+
+\begin{CodeFrame}[python]{0.55\textwidth}
+print(bin8( 0b11001010 & 0b10101110 ))
+print(bin8( 0b11001010 | 0b10101110 ))
+print(bin8( 0b11001010 ^ 0b10101110 ))
+print(bin8( ~0b11001010 ))
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+0b10001010
+0b11101110
+0b01100100
+0b00110101
+\end{CodeFrame}
+
+Jak widzimy w pokazanym przykładzie operacje te są wykonywane na każdym z bitów liczby niezależnie czyli n-ty bit wyniku bitowego AND to n-ty bit pierwszej liczby AND n-ty bit drugiej liczby, itd.
+
+\begin{CodeFrame}[python]{0.55\textwidth}
+print(bin8( 0b11001010 << 3 ))
+print(bin8( 0b11001010 >> 3 ))
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+0b01010000
+0b00011001
+\end{CodeFrame}
+
+Dostępne są także operacje przesunięcia bitów w ramach liczby w lewo lub prawo (brakujące bity uzupełniane są zerami, a bity wystające poza długość liczby binarnej są obcinane\footnote{
+	W przypadku Pythona liczby całkowite nie mają maksymalnej wielkości, a obcinanie przy przesuwaniu w lewo realizuje nasza funkcja wypisująca bin8.
+}). Operacje te odpowiadają mnożeniu i dzieleniu całkowitemu przez $2^x$, gdzie $x$ to ilość bitów do przesuniecia podawana po prawej stronie operatora przesuniecia w postaci \python{<<} lub \python{>>}.
+
+Operacje takie są przydatne do sprawdzania bądź ustawiania wartości poszczególnych bitów.
+Są to operacje dość niskopoziomowe i nie często stosowane w Pythonie, ale wiedza o nich przyda nam się w niedalekiej przyszłości.
+%  END: Kod binarny
