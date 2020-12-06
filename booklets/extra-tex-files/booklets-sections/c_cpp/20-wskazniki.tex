@@ -91,7 +91,7 @@ void ff(int a) {
     a = 15;
 }
 int main() {
-    x = 10;
+    int x = 10;
     ff(x);
     printf("%d\n", x); // wypisze 10
 }
@@ -169,9 +169,9 @@ int main() {
     printf(
         "A1: %x %x %x %x\n",
         (aa[0] >> 8) & 0xff, aa[0] & 0xff,
-        (aa[0] >> 8) & 0xff, aa[0] & 0xff
+        (aa[1] >> 8) & 0xff, aa[1] & 0xff
     );
-    // efekt też jest oczywisty:  A1: 12 34 12 34
+    // efekt też jest oczywisty:  A1: 12 34 56 78
     
     // każemy na te same dane patrzeć jako na liczby 8 bitowe
     // (poszczególne bajty)

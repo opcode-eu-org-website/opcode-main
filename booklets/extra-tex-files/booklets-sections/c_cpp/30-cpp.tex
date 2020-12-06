@@ -111,20 +111,20 @@ Język C od wersji C99 pozwala na korzystanie z tablic zmiennej długości (\tex
 void xxx(int n) {
     float vals[n];
     v[0] = 21;
-    ...
+    /* ... */
 }
 \end{CodeFrame*}
 
-C++ posiada typ std:vector pozwalający na definiowanie tablic, których rozmiar można łatwo (z punktu widzenia programisty, niekoniecznie maszyny wykonującej ten kod) zmieniać nawet po utworzeniu tablicy:
+C++ tablic zmiennej długości w stylu C99 C++ oficjalnie nie obsługuje, przy czym niektóre z kompilatorów dopuszczają użycie VLA w C++.
+C++ posiada za to typ std:vector pozwalający na definiowanie tablic, których rozmiar można łatwo (z punktu widzenia programisty, niekoniecznie maszyny wykonującej ten kod) zmieniać nawet po utworzeniu tablicy:
 \begin{CodeFrame*}[cpp]{}
 void xxx(int n) {
     std::vector<float> vals(n);
     v[0] = 21;
-    ...
+    /* ... */
 }
 \end{CodeFrame*}
 
-Natomiast z C++ tablic zmiennej długości w stylu C99 C++ oficjalnie pozwala korzystać dopiero od wersji C++14 (wcześniej zgodnie ze standardem wyrażenie określające długość tablicy musiało być wyrażeniem stałym \textit{constant-expression}, przy czym niektóre z kompilatorów dopuszczały VLA w C++).
 
 \subsection{listy}
 
