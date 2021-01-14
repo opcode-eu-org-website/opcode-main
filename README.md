@@ -35,11 +35,15 @@
 
 To build pdf booklets and xhtml files from this repo you must install dependencies:
 
-1. download and install *Libraries and tools for free EDA suites (gEDA/gschem and pcb-rnd)* from [https://bitbucket.org/OpCode-eu-org/eda-libs](https://bitbucket.org/OpCode-eu-org/eda-libs) with its dependencies:
+1. run `make init` in main dir of this repo
+2. download and install *Libraries and tools for free EDA suites (gEDA/gschem and pcb-rnd)* from [https://bitbucket.org/OpCode-eu-org/eda-libs](https://bitbucket.org/OpCode-eu-org/eda-libs) with its dependencies:
     1. `git clone https://bitbucket.org/OpCode-eu-org/eda-libs && cd eda-libs`
-    2. `make installLibs; sudo make installTools; sudo make installDependencies`
-2. run `make init` in main dir of this repo
+    2. `sudo make installDependencies`
+    3. `make installLibs; sudo make installTools`
 3. run `sudo make installDependencies` in main dir of this repo
+
+**NOTE:** Steps 2.2 and 3 are dedicated for Debian based system (`installDependencies` targets use apt for software installation).
+On non-Debian system see `Makefile` (in this repo main dir and in *eda-libs* repo main dir) for list of needed software and install it manually.
 
 After this you can build all document by run `make all` or single document by run `make dokumentName` in source dir for this document (for example `cd booklets; make Podstawowe_polecenia_Unix`).
 
@@ -47,12 +51,23 @@ After this you can build all document by run `make all` or single document by ru
 
 To compile the tex toolkit, several packages are necessary (on Debian Buster)
 
-    texlive-latex-base
-    texlive-latex-extra
-    texlive-xetex
-    texlive-luatex
-    poppler-utils:amd64 0.71.0-5 -> 0.48.0-2+deb9u2  (this had to be manually downgraded and put on hold)
-    pdf2svg
-    psutils
-    texlive-font-utils
-    fonts-symbola
+	texlive-xetex
+	texlive-luatex
+	texlive-latex-base
+	texlive-latex-recommended
+	texlive-latex-extra
+	texlive-font-utils
+	fonts-symbola
+	
+	poppler-utils:amd64 0.71.0-5 -> 0.48.0-2+deb9u2  (this had to be manually downgraded and put on hold)
+	python3-pygments
+	pdftk
+	make
+	wkhtmltopdf
+	
+	geda-gschem  (need also symbols and tools from [https://bitbucket.org/OpCode-eu-org/eda-libs](eda-libs) repo)
+	ps2eps
+	ghostscript
+	pdf2svg
+	inkscape
+	netpbm
