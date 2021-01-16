@@ -70,8 +70,8 @@ update-submodules: | checkout-submodules
 	git submodule | awk '{print $$2}' | while read sm; do git add $$sm 2>/dev/null; done
 
 protect-submodules:
-	chmod 111 `git submodule | awk '{print $$2}'`
-	git submodule | awk '{print $$2}' | while read sm; do git config --local "submodule.$$sm.ignore" all; done
+	chmod 311 `git submodule | awk '! /extra-tex-files/ {print $$2}'`
+	git submodule | awk '! /extra-tex-files/ {print $$2}' | while read sm; do git config --local "submodule.$$sm.ignore" all; done
 
 #
 # include core makefile from TextUtils
