@@ -60,7 +60,6 @@ Rzeczywisty rezystor oprócz samej wartości oporu elektrycznego charakteryzują
 \subsubsection{rezystancyjny dzielnik napięcia}\label{dzielnik}
 
 Jednym z najprostszych, użytecznych obwodów są dwa rezystory połączone szeregowo z źródłem napięcia. Układ taki nazywamy rezystancyjnym dzielnikiem napięcia. Pozwala on na uzyskanie napięcia niższego od napięcia źródła zgodnie z proporcją użytych rezystorów. Zobacz symulację: \url{http://ln.opcode.eu.org/dzielnik}.
-	% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+10.20027730826997+54+5+50%0Ag+336+320+336+336+0%0Aw+336+192+416+192+0%0Ar+416+256+416+320+0+1000%0Ag+416+320+416+336+0%0Ar+336+112+336+192+0+500%0As+416+192+416+256+0+1+false%0As+480+192+480+256+0+1+false%0Ag+480+320+480+336+0%0Ar+480+256+480+320+0+100%0Aw+416+192+480+192+0%0AR+336+112+336+80+0+0+40+12+0+0+0.5%0Aw+480+192+560+192+0%0Ap+560+192+560+320+1+0%0Ag+560+320+560+336+0%0Ar+336+192+336+320+0+500%0A38+10+0+2+24+Voltage%0A
 Zwróć uwagę że napięcie wyjściowe z takiego układu jest bardzo zależne od pobieranego prądu / wielkości dołączonego obciążenia (w tym celu możesz użyć przełączników umieszczonych w symulowanym układzie), z tego powodu dzielnik rezystancyjny stosowany jest głównie w przypadkach gdy wiemy że obciążenie będzie pobierało niewielki prąd.
 
 Rezystancyjny dzielnik napięcia jest bardzo często stosowany w celu proporcjonalnego podziału (obniżenia) napięcia wejściowego nieznanej (zmiennej) wielkości (np. celem jego pomiaru, przy użyciu miernika o ograniczonej skali),
@@ -84,12 +83,10 @@ Kondensator typowo służy do ograniczania zmian napięcia (poprzez gromadzenie 
 Czas potrzebny do zmiany napięcia na kondensatorze dany jest zależnością: $\Delta T = \frac{C \cdot \Delta U}{I}$.
 
 Zobacz symulację procesu ładowania / rozładowywania kondensatora: \url{http://ln.opcode.eu.org/cap}
-	% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+16.13108636308289+50+5+50%0Av+96+336+96+64+0+0+40+5+0+0+0.5%0AS+256+144+256+64+0+1+false+0+3%0Aw+96+64+240+64+0%0Aw+272+64+400+64+0%0Ac+256+144+256+256+0+0.00019999999999999998+0.001%0Ar+256+256+256+336+0+100%0Aw+96+336+256+336+0%0Aw+256+336+400+336+0%0Ar+400+64+400+336+0+1000%0Ao+4+128+0+4102+0.009765625+0.00009765625+0+2+4+3%0A38+4+0+0.000009999999999999999+0.00101+Capacitance%0A
 (klikając na przełącznik w górnej części schematu  można wybierać pomiędzy rozładowywaniem a ładowaniem kondensatora, zwróć uwagę na różną wartość oporu użytego do tych operacji).
 
 Innym częstym zastosowaniem jest kondensatora jest odcinanie składowej stałej – kondensator stanowi rozwarcie dla prądu stałego, ale przewodzi prąd zmienny (ze względu na prąd związany z jego ładowanie / rozładowywaniem).
 Zobacz symulację: \url{http://ln.opcode.eu.org/cap_ac}
-	% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+16.13108636308289+50+5+50%0Aw+112+144+256+144+1%0Ac+256+144+256+256+0+0.00019999999999999998+-0.8719567578156338%0Ar+256+256+256+336+0+100%0Aw+112+336+256+336+0%0Av+112+336+112+144+0+1+20.000500000000002+5+0+0+0.5%0Ao+1+128+0+4102+5+0.00009765625+0+2+1+3%0A38+1+0+0.000009999999999999999+0.00101+Capacitance%0A38+4+3+0.001+40+Frequency%0A
 
 Najistotniejszym parametrem rzeczywistych kondensatorów oprócz pojemności nominalnej jest maksymalne napięcie przy którym może pracować oprócz tego istotne mogą być parametry takie jak rezystancja wewnętrzna, maksymalna temperatura w której kondensator może pracować, żywotność tego elementu, itd.
 
@@ -117,7 +114,6 @@ Innym urządzeniem opartym o cewki są transformatory - wykorzystują one kilka 
 
 Jako że cewka jest elementem który dąży do zachowania płynącego przez niego prądu, to w przypadku rozwarcia obwodu zawierającego cewkę napięcie na niej będzie rosło i bez problemów może wielokrotnie przekroczyć napięcie zasilania.
 Zobacz symulację: \url{http://ln.opcode.eu.org/cewka} (rozłącz przełącznik i zaobserwuj co dzieje się z napięciem na cewce).
-	% https://www.falstad.com/circuit/circuitjs.html?cct=%24+1+0.000005+12.050203812241895+46+5+50%0Av+96+336+96+144+0+0+40+5+0+0+0.5%0Ac+256+144+256+256+0+2e-8+2.185811780586783%0Ar+256+256+256+336+0+100%0Al+336+144+336+336+0+1+0.2814236307368567%0Aw+256+144+336+144+0%0Aw+336+336+256+336+0%0As+96+144+256+144+0+0+false%0Ar+96+336+256+336+0+10%0Ao+1+16+0+4354+640+0.00009765625+0+2+3+0%0A38+1+0+0.000009999999999999999+0.00101+Capacitance%0A
 Zjawisko to bywa użyteczne i jest wykorzystywane w niektórych układach (np. przetwornicach podnoszących napięcie), ale często bywa też niepożądane, a nawet bardzo szkodliwe – może prowadzić do uszkadzania innych elementów w obwodzie (w szczególności elementu przełączającego).
 
 Aby przeciwdziałać temu zjawisku można dołączyć równolegle do cewki odpowiednio mały opór, który pozwoli na rozładowanie się cewki.
