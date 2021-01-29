@@ -65,6 +65,27 @@ Zwróć uwagę że napięcie wyjściowe z takiego układu jest bardzo zależne o
 Rezystancyjny dzielnik napięcia jest bardzo często stosowany w celu proporcjonalnego podziału (obniżenia) napięcia wejściowego nieznanej (zmiennej) wielkości (np. celem jego pomiaru, przy użyciu miernika o ograniczonej skali),
 a nie w celu uzyskania napięcia wyjściowego o konkretnej wartości (co można uzyskać w lepszy - bardziej stabilny sposób).
 
+\subsubsection{Rezystor podciągający}
+
+\begin{wrapfigure}{r}{0.35\textwidth}
+  \begin{center}
+    \vspace{-40pt}
+    \includegraphics[width=0.3\textwidth]{img/elektronika/podciagajacy}
+    \vspace{-20pt}
+  \end{center}
+\end{wrapfigure}
+
+Rezystor jest też często używany w celu wymuszenia domyślnego poziomu napięcia na jakiejś linii.
+Jest to zasadniczo forma dzielnika w którym jeden z rezystorów został zastąpiony jakiegoś rodzaju przełącznikiem, czyli czymś co w zależności od swojego stanu ma prawie zerową albo (prawie) nieskończoną rezystancję.
+Zobacz symulację: \url{http://ln.opcode.eu.org/pullup}
+
+Rozwiązanie takie ma zastosowanie głównie na jakiś liniach sygnalizacyjnych, z których nie jest pobierany żaden większy prąd.
+W efekcie, w układzie pokazanym obok jeżeli styk jest rozwarty to prąd nie płynie, zatem spadek na rezystorze wynosi zero i na wyjściu mamy napięcie zasilania.
+Jeżeli styk zostanie zwarty prąd płynie, ale ze względu na małą rezystancję styku praktycznie całe napięcie odkłada się na rezystorze i na wyjściu mamy zero voltów.
+
+Układ taki pozwla na przykład stosowanie zwykłego styku zwiernego zamiast przełączalnego i jest bardzo często spotykany.
+Oczywiście możemy zamienić rezystor z przełącznikiem miejscami i wtedy domyślnym stanem (przy rozwartym styku) będzie zero woltów.
+
 \subsection{Kondensator}
 \begin{teacherOnly}
 	\begin{easylist}[itemize]

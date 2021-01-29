@@ -2,6 +2,8 @@
 
 dir=$(realpath $(dirname "$0"))
 
-while read id url; do
-	echo 'rewrite   ^/'"$id"'$    https://www.falstad.com/circuit/circuitjs.html?'"$url"';'
-done < "$dir/simulations.txt"
+grep -v '^#' "$dir/simulations.txt" | while read id url; do
+	if [ "$id" != "" ]; then
+		echo 'rewrite   ^/'"$id"'$    https://www.falstad.com/circuit/circuitjs.html?'"$url"';'
+	fi
+done
