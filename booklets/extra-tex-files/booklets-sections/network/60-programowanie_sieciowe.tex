@@ -69,12 +69,27 @@ if len(sys.argv) != 3:
   print("USAGE: " + sys.argv[0] + " dstHost dstPort", file=sys.stderr)
   exit(1)
 
-dstAddrInfo = socket.getaddrinfo(sys.argv[1], sys.argv[2])
+# pobieramy informacje o adresach na które rozwija się podana nazwa hosta / usługi
+# dzięki tej funkcji jako dstHost możemy podać zarówno nazwę domenową jak i numer IP 
+# (w którejś z standardowych notacji) hosta z którym chcemy się połączyć
+# a jako dstPort numer portu lub nazwę usługi z /etc/services
+dstAddrInfo = socket.getaddrinfo(sys.argv[1], sys.argv[2], type=socket.SOCK_DGRAM)
+
+# funkcja ta nam zwraca listę dostępnych możliwości połączenia (np. nazwa domenowa
+# może rozwijać się na wiele różnych adresów), przekazując do getaddrinfo
+# opcjonalny argument type zawęziliśmy ta listę do połączeń UDP (SOCK_DGRAM)
+
+# moglibyśmy próbować kolejnych adresów w pętli, ale w tym prostym przykładzie
+# próbujemy użyć jedynie pierwszego ze zwróconych adresów
 dstAddrInfo = dstAddrInfo[0]
+
+# otwieramy gniazdo
 sfd = socket.socket(dstAddrInfo[0], socket.SOCK_DGRAM)
 
+# wysyłamy dane
 sfd.sendto("Ala ma kota".encode(), dstAddrInfo[4])
 \end{CodeFrame*}
+
 
 \subsection{odbiór danych po UDP}
 \begin{CodeFrame*}[python]{}
@@ -84,12 +99,20 @@ if len(sys.argv) != 2:
   print("USAGE: " + sys.argv[0] + " listenPort", file=sys.stderr)
   exit(1)
 
+# otwieramy gniazdo
 sfd = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
+
+# ustawiamy opcję gniazda pozwalającą na jednoczesną obsługę IPv4 i IPv6
 sfd.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_V6ONLY, 0)
+
+# ustawiamy adres i port na którym słuchamy
+# adres zerowy oznacza słuchanie na wszystkich adresach IP danego hosta
 sfd.bind(('::', int(sys.argv[1])))
 
 while True:
+  # czekamy na dane, gdy je otrzymamy to odbieramy
   data, sAddr, = sfd.recvfrom(4096)
+  # i wypisujemy co i od kogo dostaliśmy
   print("odebrano od", sAddr, ":", data.decode());
 \end{CodeFrame*}
 
