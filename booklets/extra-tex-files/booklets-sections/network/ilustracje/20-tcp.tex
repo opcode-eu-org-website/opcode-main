@@ -48,7 +48,7 @@
 	\packetsPutField[opts]{32}{Opcje\\\vspace{3pt}\footnotesize długość = (THL - 5)·32 bitów, mogą nie występować (gdy THL = 5)}
 	\packetsEndLine{160}{\ldots}
 	\packetsPutField[data]{32}{Dane\\\vspace{3pt}\footnotesize  długość określona przez długość całości pakietu i nagłówków IP i TCP}
-	\packetsEndLine{$\geq160$}{\ldots}
+	\packetsEndLine{$\geq$160}{\ldots}
 	
 	% footnotes
 	\node[align=left, anchor = north west, minimum width=32\packetsBitWidth, text width=31\packetsBitWidth, xshift=-0.3cm] [] at (\packetsLastNode.south west) {

@@ -41,7 +41,7 @@ Konfigurację interfejsów sieciowych w systemie Linux umożliwia polecenie \Ver
 	\item konfiguracja tagowanych VLANów
 		\begin{itemize}
 			\item \Verb{ip link add link INTERFACE name INTERFACE.VLANID type vlan id VLANID} – dodanie interfejsu związanego z tagowanym VLANem o numerze \Verb{VLANID} na interfejsie \Verb{INTERFACE}, moduł 8021q powinien zostać załadowany automatycznie
-			\item \Verb{ip link del INTERFACE.VLANID type vlan} – usunięcie interfejsu INTERFACE.VLANID (związanego z tagowanym VLANem VLANID na interfejsie INTERFACE
+			\item \Verb{ip link del INTERFACE.VLANID type vlan} – usunięcie interfejsu INTERFACE.VLANID (związanego z tagowanym VLANem VLANID na interfejsie INTERFACE)
 		\end{itemize}
 	\item konfiguracja BRIDGE (programowego switcha)
 		\begin{itemize}
@@ -49,6 +49,7 @@ Konfigurację interfejsów sieciowych w systemie Linux umożliwia polecenie \Ver
 			\item \Verb{ip link set SLAVE master INTERFACE}  – włączenie interfejsu SLAVE w skład bridge'owego INTERFACE
 			\item \Verb{ip link set SLAVE nomaster} – wyłaczenie interfejsu SLAVE z bridge'a
 			\item \Verb{ip link show master INTERFACE} – wyświetlanie portów składowych bridge'a o nazwie INTERFACE
+			\item przydatne może być także polecenie \Verb{bridge}
 		\end{itemize}
 	\item konfiguracja BONDów (interfejsów agregujących inne w grupę celem zwiększenia prędkości lub niezawodności)
 		\begin{itemize}
@@ -79,7 +80,10 @@ Często dostępne są także klasyczne polecenia:
 		konfiguracja bondów
 \end{itemize}
 
-Innym przydatnym poleceniem jest \Verb#tc#, które służy do konfiguracji ustawień kontoli przepływu (np. kolejkowania) na interfejsach sieciowych. 
+Innym przydatnym poleceniem z pakietu iproute2 jest \Verb#tc#, które służy do konfiguracji ustawień kontroli przepływu (np. kolejkowania) na interfejsach sieciowych.
+
+Warto zaznaczyć iż konfiguracja dokonywana poleceniami takimi jak \Verb#ip#, \Verb#tc#, \Verb#ifconfig#, itp. jest konfiguracją typu \textit{runtime}, czyli jest tracona po wyłączeniu systemu.
+Aby konfiguracja sieci była trwała należy polecenia takie zapisać w postaci skryptu uruchamianego przy starcie systemu lub skorzystać z systemowych plików konfiguracyjnych związanych z siecią.
 
 
 \subsection{Konfiguracja DNS}
@@ -141,6 +145,8 @@ for f in /proc/sys/net/ipv*/conf/*/forwarding; do echo 1 > $f; done
 
 Innym przykładem jest pokazane wcześniej wyłączenie automatycznej konfiguracji IPv6, przydatne gdy chcemy korzystać tylko z ręcznie przydzielanych adresów.
 
+Z opisem poszczególnych ustawień w ramach systemu \Verb$/proc/sys$ (w tym tych poświęceonych obsłudze sieci z \Verb$/proc/sys/net$) można zapoznać się m.in. na stronie \url{https://sysctl-explorer.net/}.
+
 
 \subsection{Filtracja pakietów}
 
@@ -161,3 +167,5 @@ Na starszych systemach \Verb#nft# może być niedostępny, wtedy można korzysta
 	\item \Verb{arptables}
 		konfiguracja filtrów związanych z protokołem ARP (zamiany adresów IP na adresy sprzętowe)
 \end{itemize}
+
+Konfiguracja filtracji pakietów dokonywana z użyciem poleceń \Verb#nft#, \Verb#iptables# jest konfiguracją \textit{runtime} i jest tracona po wyłączeniu systemu.

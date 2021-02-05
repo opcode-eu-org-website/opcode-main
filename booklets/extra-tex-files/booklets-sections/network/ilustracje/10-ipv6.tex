@@ -25,7 +25,7 @@
 	\packetsEndLine{0}{31}
 	
 	% 32-63
-	\packetsPutField{16}{Długość ładunku ($\rm{LEN}$)}
+	\packetsPutField{16}{Długość ładunku (LEN)}
 	\packetsPutField{8}{Next Header\footnote{
 		Tak samo jak pole „Protokół” w nagłówku IPv4.\\
 		Jednak w odróżnieniu od IPv4 pole to może wskazywać nie tylko nagłówek warstwy wyższej, ale także opcjonalny, dodatkowy nagłówek IPv6, zastępujący informacje podawane w polu opcji IPv4.
@@ -46,7 +46,7 @@
 	\packetsPutField[data]{32}{Dane\footnote{
 		Zależnie od wartości pola „Next Header” mogą to być kolejne opcjonalne nagłówki dodatkowe IPv6 i następnie „dane warstwy wyższej” lub od razu „dane warstwy wyższej”.
 		}\\
-		\vspace{3pt}\footnotesize  długość $= \rm{LEN} \cdot 8$ bitów
+		\vspace{3pt}\footnotesize  długość = LEN·8 bitów
 	}
 	\packetsEndLine{320}{\ldots}
 	
