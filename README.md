@@ -71,3 +71,41 @@ To compile the tex toolkit, several packages are necessary (on Debian Buster)
 	pdf2svg
 	inkscape
 	netpbm
+
+Those packages will be installed automatically (with apt) when run `installDependencies` make target during the procedure described above.
+
+## Usage instruction
+
+## Build PDF documents
+
+* To build all the files use `make all` (in a given subdirectory or in the root directory).
+* To build a single PDF file run the command `make filename` in a directory with its sources, where `name` is the name of the file without extension,
+  e.g. for a file `aaa.pdf` built from `dir/aaa.tex` it will be `cd dir && make aaa`.
+* To build a *teacher version* add the suffix `--teacher` to the filename, e.g. `make aaa - teacher` 
+* To force a file rebuild (ignoring *make* dependency tracking) add `VERBOSE=1` to the command, e.g. `make aaa VERBOSE=1`
+* The output files are located in the `output-www` directory
+
+## Build XHTML documents
+
+It is only possible for XML sources and is identical to building PDF documents from LaTeX sources.
+A PDF document is also built based on the conversion (printout) of XHTML to PDF using `wkhtmltopdf`. 
+
+## Directory structure and Makefile
+
+Source directories (e.g. `booklets`) can also (besides `.tex`, `.xml` files) contain:
+
+* `extra-tex-files` directory for additional files used by LaTeX (e.g. pictures or LaTeX files)
+	* in LaTeX files you should refer to them without the name of this directory – e.g. to the file `extra-tex-files/abc/xyz.jpg` via `abc/xyz.jpg` or `abc/xyz`
+* `extra-web-files` directory for additional files used in XML / XHTML (e.g. images)
+	* in XML files you should refer to them without the name of this directory – e.g. to the file `extra-tex-files/abc/xyz.jpg` via `abc/xyz.jpg`
+* `images-src` directory for source versions of images that will be automatically converted to formats supported by LaTeX or WWW
+	* supported are:
+		* vector graphics `.svg` (LaTeX only, convert to pdf)
+		* [gEDA] (http://www.geda-project.org/) schemas `.sch` (convert to pdf for LaTeX or svg for XHTML)
+	* in LaTeX files you should refer to them with replacing the directory name with `img` and omitting the extension – e.g. to the file `images-src/abc/xyz.sch` via `abc/xyz`
+	* in XML files you should refer to them with replacing the directory name with `img` and replacing the extension with `.svg` - e.g. to the file `images-src/abc/xyz.sch` via `abc/xyz.svg`
+* `Makefile` file for specify dependencies of the output file on files from `extra-tex-files` and `images-src` directories should be specified
+	* for example:  when content in `aaa.tex` used files from images-src/abc` directory and `extra-tex-files/xyz.png file, it would be: <br />
+	   `$(OUTDIR)/aaa.pdf:  extra-tex-files/xyz.png  $(call img4tex_from_src,abc/*)`
+	* omitting dependencies from `images-src` will result in failure to perform the conversion and inaccessibility of these files while building the LaTeX file
+	* omitting dependencies from `extra-tex-files` or `extra-web-files` will only cause make not to rebuild the script after modifying these files 

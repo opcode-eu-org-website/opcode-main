@@ -100,15 +100,17 @@ dig @ns1.agh.edu.pl. A www2.icm.edu.pl.
 DNS przechowuje informacje w postaci rekordów mających określony typ (w większości przypadków dla danej nazwy domenowej może być zdefiniowanych wiele rekordów, tego samego lub innych typów).
 Wśród najważniejszych typów rekordów należy wymienić:
 \begin{itemize}
-	\item \Verb@NS@   – informacja o serwerach obsługujących DNS danej domeny
-	\item \Verb@A@    – mapowanie nazwy na adres IPv4
-	\item \Verb@AAAA@ – mapowanie nazwy na adres IPv4
-	\item \Verb@MX@   – informacja o serwerach obsługujących pocztę danej domeny
-	\item \Verb@SRV@  – informacje o hoście świadczącym usługę w tej domenie (usługa określana jest w nazwie domeny o którą pytamy)
-	\item \Verb@PTR@  – mapowanie adresów IP na nazwy domenowe, realizowane w specjalnym drzewie \Verb@in-addr.arpa@ (dla IPv4) lub \Verb@ip6.arpa@ (IPv6),
-	                    gdzie adres IP zapisywany jest w odwróconej kolejności po bajcie dla IPv4 lub cyfrze szesnastkowej dla IPv6
-	                    \teacher{Pokazać wynik polecenia \texttt{host} z adresem IPv4 i IPv6}
-	\item \Verb@TXT@  – informacje dodatkowe (np. jakie serwery pocztowe, są upoważnione do wysyłania poczty z tej domeny)
+	\item \Verb@NS@    – informacja o serwerach obsługujących DNS danej domeny
+	\item \Verb@A@     – mapowanie nazwy na adres IPv4
+	\item \Verb@AAAA@  – mapowanie nazwy na adres IPv4
+	\item \Verb@MX@    – informacja o serwerach obsługujących pocztę danej domeny
+	\item \Verb@SRV@   – informacje o hoście świadczącym usługę w tej domenie (usługa określana jest w nazwie domeny o którą pytamy)
+	\item \Verb@PTR@   – mapowanie adresów IP na nazwy domenowe, realizowane w specjalnym drzewie \Verb@in-addr.arpa@ (dla IPv4) lub \Verb@ip6.arpa@ (IPv6),
+	                     gdzie adres IP zapisywany jest w odwróconej kolejności po bajcie dla IPv4 lub cyfrze szesnastkowej dla IPv6
+	                     \teacher{Pokazać wynik polecenia \texttt{host} z adresem IPv4 i IPv6}
+	\item \Verb@TXT@   – informacje dodatkowe (np. jakie serwery pocztowe, są upoważnione do wysyłania poczty z tej domeny)
+	\item \Verb@SOA@   – informacje podstawowe o strefie opisującej domenę
+	\item \Verb@CNAME@ – alias na inną domenę (domena którą aliasujemy nie może mieć innych wpisów, nawet SOA)
 \end{itemize}
 
 \subsubsection{Standardowe numery portów}

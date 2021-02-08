@@ -22,7 +22,7 @@
 
 MAINDIR     := $(dir $(lastword $(MAKEFILE_LIST)))
 OUTDIR      := $(MAINDIR)/output-www
-TEXBUILDDIR := $(MAINDIR)/output-tmp
+TEXBUILDDIR := $(MAINDIR)/tmp-build
 LIBFILESDIR := $(MAINDIR)/OpCode-core/lib
 SVGICONURL  := https://bytebucket.org/OpCode-eu-org/svgiconset/raw/HEAD/other/
 export PATH := $(shell realpath $(MAINDIR)/TextUtils/convert):$(PATH)
@@ -55,6 +55,10 @@ serve:
 upload:
 	ln -sf `realpath $(MAINDIR)/newIndex.xhtml` $(OUTDIR)/index.xhtml
 	cd $(OUTDIR) && rsync -rLc --delete -v -e "ssh" --exclude="~rrp" ./ www.opcode.eu.org:/srv/WebPages/main/
+
+upload-ln:
+	cd booklets/booklets-sections/electronics && ./simulations2nginx.sh | ssh dragon 'cat > /srv/WebPages/ln/circuitjs.short_links.conf'
+	@ /bin/echo -e '\033[93mYou need to reload nginx to apply the changes.\033[39m'
 
 #
 # submodules
