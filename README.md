@@ -45,8 +45,6 @@ To build pdf booklets and xhtml files from this repo you must install dependenci
 **NOTE:** Steps 2.2 and 3 are dedicated for Debian based system (`installDependencies` targets use apt for software installation).
 On non-Debian system see `Makefile` (in this repo main dir and in *eda-libs* repo main dir) for list of needed software and install it manually.
 
-After this you can build all document by run `make all` or single document by run `make dokumentName` in source dir for this document (for example `cd booklets; make Podstawowe_polecenia_Unix`).
-
 ### Package dependencies
 
 To compile the tex toolkit, several packages are necessary (on Debian Buster)

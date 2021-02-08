@@ -1,4 +1,4 @@
-# Copyright (c) 2019-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+# Copyright (c) 2019-2021 Robert Ryszard Paciorek <rrp@opcode.eu.org>
 # 
 # MIT License
 # 
@@ -20,17 +20,18 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-MAINDIR     := $(dir $(lastword $(MAKEFILE_LIST)))
+MAINDIR     := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 OUTDIR      := $(MAINDIR)/output-www
 TEXBUILDDIR := $(MAINDIR)/tmp-build
 LIBFILESDIR := $(MAINDIR)/OpCode-core/lib
 SVGICONURL  := https://bytebucket.org/OpCode-eu-org/svgiconset/raw/HEAD/other/
-export PATH := $(shell realpath $(MAINDIR)/TextUtils/convert):$(PATH)
+export PATH := $(MAINDIR)/TextUtils/convert:$(PATH)
 
 
 .PHONY: help init installDependencies all upload serve
 help:
 	@ cd $(MAINDIR) && awk '/^#/ {x=0} x==1 {print $0} /^## Install/ {x=1}' README.md
+	@ echo "Run \`make all\` to build all documents or build single document by run \`make dokumentName\` in source dir for this document (e.g. \`cd booklets; make Sieci\`)."
 
 init: | checkout-submodules $(TEXBUILDDIR)/pdfArticle.cls $(TEXBUILDDIR)/labels4easylist.sty $(TEXBUILDDIR)/vtable.sty $(TEXBUILDDIR)/ehhline.sty $(TEXBUILDDIR)/tikzPackets.sty
 	@ echo "init done"
@@ -46,19 +47,19 @@ installDependencies:
 
 all:
 	$(MAKE) buildAll
-	[ "$(abspath $(MAINDIR))" = "$(PWD)" ] && (cd booklets    && $(MAKE) -f ../Makefile buildAll) || true
-	[ "$(abspath $(MAINDIR))" = "$(PWD)" ] && (cd LaTeX-demos && $(MAKE) -f ../Makefile buildAll) || true
+	[ "$(MAINDIR)" = "$(PWD)" ] && (cd booklets    && $(MAKE) -f ../Makefile buildAll) || true
+	[ "$(MAINDIR)" = "$(PWD)" ] && (cd LaTeX-demos && $(MAKE) -f ../Makefile buildAll) || true
 
 serve:
 	cd $(OUTDIR) && python3 -m http.server
 
 upload:
-	ln -sf `realpath $(MAINDIR)/newIndex.xhtml` $(OUTDIR)/index.xhtml
+	ln -sf $(MAINDIR)/newIndex.xhtml $(OUTDIR)/index.xhtml
 	cd $(OUTDIR) && rsync -rLc --delete -v -e "ssh" --exclude="~rrp" ./ www.opcode.eu.org:/srv/WebPages/main/
 
 upload-ln:
 	cd booklets/booklets-sections/electronics && ./simulations2nginx.sh | ssh dragon 'cat > /srv/WebPages/ln/circuitjs.short_links.conf'
-	@ /bin/echo -e '\033[93mYou need to reload nginx to apply the changes.\033[39m'
+	@echo -e '\033[93mYou need to reload nginx to apply the changes.\033[0m'
 
 #
 # submodules
