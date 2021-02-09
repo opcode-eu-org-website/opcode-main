@@ -28,7 +28,7 @@
 
 Jeżeli mamy w zmiennej nazwę polecenia do wykonania to możemy je wykonać uruchamiając po prostu tą zmienną:
 
-\begin{CodeFrame}[bash]{0.57\textwidth}
+\begin{CodeFrame}[bash]{0.5\textwidth}
 a="echo"
 $a ABC
 \end{CodeFrame}
@@ -38,7 +38,7 @@ ABC
 
 Możemy nawet uruchamiać polecenia które zapisane mamy w zmiennej wraz z opcjami i argumentami:
 
-\begin{CodeFrame}[bash]{0.57\textwidth}
+\begin{CodeFrame}[bash]{0.5\textwidth}
 a="echo -e abc\ndef ..."
 $a ABC
 \end{CodeFrame}
@@ -56,7 +56,7 @@ Zapewnia ono podstawienie występujących w tym napisie zmiennych, itd.
 
 Polecenia tego możemy użyć np. do z wartości zmiennej, której nazwę mamy w innej zmiennej (zamiast \shell@${!x}@, które nie jest dostępne w czystym sh):
 
-\begin{CodeFrame}[bash]{0.57\textwidth}
+\begin{CodeFrame}[bash]{0.5\textwidth}
 A='tekst do wypisania, $SHELL, `ls -d`'
 B="A"
 
@@ -69,7 +69,7 @@ tekst do wypisania, $SHELL, `ls -d`
 
 Jeżeli chcielibyśmy aby kod znajdujący się w zmiennej A także został przetworzony (podstawiona wartość zmiennej oraz output komendy ls), możemy użyć eval dwukrotnie:
 
-\begin{CodeFrame}[bash]{0.57\textwidth}
+\begin{CodeFrame}[bash]{0.5\textwidth}
 A='tekst do wypisania, $SHELL, `ls -d`'
 B="A"
 
@@ -82,7 +82,7 @@ tekst do wypisania, /bin/bash, .
 
 Dzięki użyciu eval możemy też budować kod bashowy (np. fragmenty konstrukcji case) w oparciu o zawartość zmiennych:
 
-\begin{CodeFrame}[bash]{0.57\textwidth}
+\begin{CodeFrame}[bash]{0.5\textwidth}
 x=a
 
 LISTA_WYBORU="a) echo AA;; b) echo BB;;"
@@ -105,7 +105,7 @@ W odróżnieniu od eval nie wykonuje on podanego kodu, a jedynie przetwarza napi
 (zatem jest bezpieczniejsza przy przetwarzaniu danych niewiadomego pochodzenia).
 Jako że jest to zewnętrzny program używane zmienne muszą być dla niego dostępne, czyli muszą być wyeksportowane.
 
-\begin{CodeFrame}[bash]{0.57\textwidth}
+\begin{CodeFrame}[bash]{0.5\textwidth}
 x=12
 A='tekst, ${x}, $SHELL, $x, `ls -d`'
 

@@ -50,12 +50,11 @@ Wbudowane przetwarzanie napisów w bashu opiera się na odwołaniach do zmiennyc
 	\item \shell@${!x}@ zwróci wartość zmiennej, której nazwa jest w zmiennej x
 \end{itemize}
 W napisach do obcięcia możliwe jest stosowanie shellowych znaków uogólniających, czyli \Verb@*@, \Verb@?@, \Verb@[abc]@, itd operator \Verb@#@ i \Verb@%@ dopasowują minimalny napis do usunięcia, natomiast operatory \Verb@##@ i \Verb@%%@ dopasowują maksymalny napis do usunięcia.
-Należy pamiętać że wiele z powyzszych zapisów jest rozszerzeniami basha niedostepnymi w podstaowej składni sh.
+Należy pamiętać że wiele z powyższych zapisów jest rozszerzeniami basha niedostepnymi w podstaowej składni sh.
 
-\begin{teacherOnly}
-Przykład do zademonstrowania:
+Przykład:
 
-\begin{CodeFrame*}[bash]{}
+\begin{CodeFrame}[bash]{.65\textwidth}
 a=""; b=""; c=""
 echo ${a:-"aa"} ${b:="bb"} ${c:+"cc"}
 echo $a $b $c
@@ -75,8 +74,19 @@ echo ${x#*.} ${x##*.} ${x%.*} ${x%%.*}
 y="aa bb cc bb dd bb ee"
 echo ${y/"bb"/"XX"}
 echo ${y//"bb"/"XX"}
-\end{CodeFrame*}
-\end{teacherOnly}
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+aa bb
+bb
+x y cc
+x y z
+7 cdefg abc abcde
+defg abcd
+abcdefg abcdefg
+e.fg fg abcd.e abcd
+aa XX cc bb dd bb ee
+aa XX cc XX dd XX ee
+\end{CodeFrame}
 
 \subsubsection{Wyrażenia regularne}
 

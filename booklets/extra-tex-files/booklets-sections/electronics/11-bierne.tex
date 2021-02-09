@@ -33,15 +33,6 @@
 \end{wrapfigure}
 
 \subsection{Rezystor}
-\begin{teacherOnly}
-	\begin{easylist}[itemize]
-		& czy opór to jedyny parametr rezystora?
-			&&& mamy też dokładność, stabilność temperaturową, napięciową, ...
-			&&& ... ale przede wszystkim moc
-		& prawo Ohma i rezystor
-		& rezystancyjny dzielnik napięcia (\textbf{symulacja})
-	\end{easylist}
-\end{teacherOnly}
 
 Rezystor (opornik) wprowadza do układu rezystancję związaną z swoją wartością nominalną. Typowo służy do ograniczania wartości prądu przez niego przepływającego.
 
@@ -87,15 +78,6 @@ Układ taki pozwla na przykład stosowanie zwykłego styku zwiernego zamiast prz
 Oczywiście możemy zamienić rezystor z przełącznikiem miejscami i wtedy domyślnym stanem (przy rozwartym styku) będzie zero woltów.
 
 \subsection{Kondensator}
-\begin{teacherOnly}
-	\begin{easylist}[itemize]
-		& "magazynuje napięcie"
-		& zastosowania:
-		&& stabilizacja napięcia
-		&& opóźnienie zmiany jakiegoś sygnału (stała czasowa) (\textbf{symulacja})
-		&& odcinanie składowej sygnały zmiennego (rozwarcie dla prądu stałego, ale przewodzi zmienny) (\textbf{symulacja})
-	\end{easylist}
-\end{teacherOnly}
 
 Kondensator wprowadza do układu pojemność związaną z swoją wartością nominalną.
 Pojemność wyraża zdolność do gromadzenia ładunku przez dany element - im większa pojemność tym więcej ładunku (przy takim samym przyłożonym napięciu) zgromadzi element. $C = \frac{q}{U}$
@@ -112,13 +94,6 @@ Zobacz symulację: \url{http://ln.opcode.eu.org/cap_ac}
 Najistotniejszym parametrem rzeczywistych kondensatorów oprócz pojemności nominalnej jest maksymalne napięcie przy którym może pracować oprócz tego istotne mogą być parametry takie jak rezystancja wewnętrzna, maksymalna temperatura w której kondensator może pracować, żywotność tego elementu, itd.
 
 \subsection{Cewka}
-\begin{teacherOnly}
-	\begin{easylist}[itemize]
-		& mówiliśmy o magazynowaniu ... cewka "magazynuje prąd"
-		& gdzie występuje (w jakich bardziej złożonych elementach) - transformator, przekaźnik
-		& sterowanie przez tranzystor => dioda zabezpieczająca (\textbf{symulacja})
-	\end{easylist}
-\end{teacherOnly}
 
 Cewka (dławik) wprowadza do układu indukcyjność związaną z swoją wartością nominalną. Samodzielnie występująca cewka typowo służy do ograniczania zmian prądu (poprzez gromadzenie energii w polu magnetycznym). Czas potrzebny zmiany prądu płynącego przez cewkę (dławik stawia opór takiej zmianie tak jak kondensator zmianie napięcia) dany jest zależnością: $\Delta T = \frac{L \cdot \Delta I}{U}$.
 

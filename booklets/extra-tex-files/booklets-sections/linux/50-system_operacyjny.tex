@@ -23,41 +23,6 @@
 
 % BEGIN: System operacyjny - intro
 \section{System operacyjny}
-\begin{teacherOnly}
-\begin{easylist}[itemize]
-	& \textbf{proces startu}
-		&& "co komputer zaczyna robić po włączeniu?"
-		&& zasysanie instrukcji przez procesor
-		&& załadowanie i uruchomienie bootloadera
-		&& załadowanie i uruchomienie jądra
-		&& opcja init
-	& funkcje systemu operacyjnego
-		&& procesy
-			&&& co to jest proces
-			&&& wątki (wątek vs proces)
-			&&& \textbf{szeregowanie zadań}
-			&&& drzewo procesów (rodzice)
-			&&& ew. algorytmy szeregowania
-			&&& fork()
-			&&& sygnały
-				&&&& kill
-				&&&& czy proces może nie umrzeć? ... pokazać: wynik ps, wskazać pid bash'a, zrobić kill bash
-				&&&& wiele różnych sygnałów ... Ctr+C ... Ctrl+Z ... info o zakończeniu potomka ...
-		&& obsługa plików
-			&&& wszystko jest plikiem
-			&&& select(), czyli czekanie na dane ...
-		&& \textbf{obsługa dostępu do pamięci}
-			&&& pokazać rysując na tablicy stronnicowanie
-			&&& pamięć współdzielona
-				&&&& problem  if a==1: a=0
-				&&&& semafory
-		&& obsługa dostępu do urządzeń
-			&&& interfejsy sieciowe, itd
-		&& standardowe usługi
-			&&& cron
-			&&& mail
-\end{easylist}
-\end{teacherOnly}
 
 System operacyjny jest programem uruchamianym po starcie komputera (co prawda nie jako pierwszym, ale zastępującym / usuwającym z pamięci uruchomione wcześniej, więc najstarszym z działających).
 % END: System operacyjny - intro

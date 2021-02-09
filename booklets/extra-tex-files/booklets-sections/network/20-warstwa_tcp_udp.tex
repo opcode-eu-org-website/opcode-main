@@ -24,14 +24,6 @@
 % BEGIN: TCP / UDP
 \section{Komunikacja TCP/IP}
 
-\begin{teacherOnly}
-	\begin{easylist}[itemize]
-		& protokoły warstwy transportowej - TCP i UDP
-		&& czym się różnią?
-		&& numery portów – identyfikacja usługi / procesu na hoście
-	\end{easylist}
-\end{teacherOnly}
-
 W oparciu o protokół IP działają protokoły warstwy transportowej takie jak UDP, TCP, czy też (mniej znany protokół dedykowany dla  strumieniowych transmisji czasu rzeczywistego) SCTP.
 
 Jednym z zadań tych protokołów jest identyfikowanie usługi (procesu) w ramach systemu posiadającego dany adres IP, do którego mają trafić dane.
@@ -80,21 +72,6 @@ Realizacja odpowiedzi na zapytanie DNS wygląda następująco:
 	\item itd. aż do uzyskania odpowiedzi o pytany adres
 \end{enumerate}
 
-\begin{teacherOnly}
-pokazać jak działa serwer dns robiąc ręcznie zapytania dig'iem o kolejne poziomy:
-
-\begin{Verbatim}
-dig NS .
-dig @g.root-servers.net. NS pl.
-dig @a-dns.pl. NS edu.pl.
-dig @a-dns.pl. NS icm.edu.pl.
-dig @ns1.agh.edu.pl. NS ciekawi.icm.edu.pl.
-# dostaliśmy   CNAME www2.icm.edu.pl.  oraz brak wpisu NS
-dig @ns1.agh.edu.pl. A www2.icm.edu.pl.
-# dostaliśmy 213.135.59.55
-\end{Verbatim}
-\end{teacherOnly}
-
 \inputSingleAsFigure[.9]{booklets-sections/network/ilustracje/20-dns.tex}{Realizacja zapytania o rekord DNS}{ilustracja_dns}
 
 DNS przechowuje informacje w postaci rekordów mających określony typ (w większości przypadków dla danej nazwy domenowej może być zdefiniowanych wiele rekordów, tego samego lub innych typów).
@@ -107,7 +84,6 @@ Wśród najważniejszych typów rekordów należy wymienić:
 	\item \Verb@SRV@   – informacje o hoście świadczącym usługę w tej domenie (usługa określana jest w nazwie domeny o którą pytamy)
 	\item \Verb@PTR@   – mapowanie adresów IP na nazwy domenowe, realizowane w specjalnym drzewie \Verb@in-addr.arpa@ (dla IPv4) lub \Verb@ip6.arpa@ (IPv6),
 	                     gdzie adres IP zapisywany jest w odwróconej kolejności po bajcie dla IPv4 lub cyfrze szesnastkowej dla IPv6
-	                     \teacher{Pokazać wynik polecenia \texttt{host} z adresem IPv4 i IPv6}
 	\item \Verb@TXT@   – informacje dodatkowe (np. jakie serwery pocztowe, są upoważnione do wysyłania poczty z tej domeny)
 	\item \Verb@SOA@   – informacje podstawowe o strefie opisującej domenę
 	\item \Verb@CNAME@ – alias na inną domenę (domena którą aliasujemy nie może mieć innych wpisów, nawet SOA)

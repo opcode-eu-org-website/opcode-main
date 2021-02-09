@@ -35,10 +35,7 @@ Zatem na wszystkie zmienne pythonowe możemy patrzeć jak na referencje do obiek
 
 Do uzyskania identyfikatora obiektu związanego z daną nazwą, lub elementem innego obiektu służy funkcja \python{id} (w przypadku standardowej implementacji Pythona jest to po prostu adres w pamięci).
 
-\begin{teacherOnly}
-Warto trochę rozwinąć ten temat, np. bazgrząc po tablicy zmienne wskazujące na obiekty i zmieniając/zrywając połączania między zmienną a obiektem.
-
-Warto także pokazać działanie wspomnianych funkcji \python{globals()} i \python{locals()} (zwróć uwagę na różnicę między a i b oraz c i d):
+\begin{teacherOnly} Warto także pokazać działanie wspomnianych funkcji \python{globals()} i \python{locals()} (zwróć uwagę na różnicę między a i b oraz c i d):
 \begin{CodeFrame*}[python]{}
 a, b = 0, 0
 
@@ -73,12 +70,11 @@ Należy jednak pamiętać iż w Pythonie usunięcie zmiennej nie wiąże się z 
 
 Python w momencie przypisania wartości jednej zmiennej do innej nie tworzy kopii obiektu na który wskazuje zmienna, zamiast tego przypisuje referencję do istniejącego obiektu.
 Jest to szczególnie zauważalne w obiektach, które mogą być wewnętrznie modyfikowalne (takich jak listy czy słowniki)\footnote{
-Zauważ że jedyną możliwością modyfikacji liczby czy napisu jest przypisanie wartości wyrażenia do zmiennej,
-a dla list czy słowników możemy je modyfikować bez operacji przypisania całej listy czy słownika do nowej czy tej samej zmiennej.
-\teacher{
+	Zauważ że jedyną możliwością modyfikacji liczby czy napisu jest przypisanie wartości wyrażenia do zmiennej,
+	a dla list czy słowników możemy je modyfikować bez operacji przypisania całej listy czy słownika do nowej czy tej samej zmiennej.
 	Jest to podział na typy "immutable" i "mutable" - te pierwsze nie są wewnętrznie modyfikowalne
-	(każda modyfikacja odbywa się przez przypisanie, w wyniku którego pod zmienną może zostać podpięty nowy obiekt).
-}}:
+	(każda modyfikacja odbywa się przez przypisanie obiektu do zmiennej, w wyniku którego pod zmienną może zostać podpięty nowy obiekt).
+}:
 
 \begin{CodeFrame}[python]{0.55\textwidth}
 a = [1, 2, 3]
@@ -118,23 +114,6 @@ Zauważ że tak utworzone \Verb{b} ma inny identyfikator obiektu niż \Verb{a}.
 Należy mieć także na uwadze że nawet argumenty funkcji przekazywane są jako referencje na obiekty a nie kopie obiektów,
 natomiast dopiero operacja przypisania nowej wartości do zmiennej związanej z argumentem powoduje że zaczyna ona wskazywać
 na nowo utworzony (w wyniku wyrażenia po prawej stronie znaku równości) obiekt.
-
-\begin{teacherOnly}
-Można także zwrócić uwagę na poniższy kod pokazujący różnicę w obsłudze referencji do obiektów i samych obiektów "immutable" i "mutable":
-\begin{CodeFrame*}[python]{}
-a, b = 5, 5
-print(id(a), id(b))
-b = 3
-print(id(a), id(b))
-
-a, b = [1, 2, 3], [1, 2, 3]
-print(id(a), id(b))
-b[2] = 5
-print(id(a), id(b))
-b = [1, 2, 3]
-print(id(a), id(b))
-\end{CodeFrame*}
-\end{teacherOnly}
 
 \subsubsection{Dla jeszcze bardziej dociekliwych \zaawansowane{***}}
 

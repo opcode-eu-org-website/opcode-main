@@ -33,38 +33,57 @@ Aby w systemie mógł działać więcej niż 1 proces konieczna jest możliwoś�
 \end{itemize}
 W przypadku zastosowania fork proces potomny otrzymuje kopię pamięci rodzica (ma dostęp do wszystkich jego zmiennych oraz zasobów uzyskanych przed fork(); dalsze operacje na zmiennych są niezależne). Po utworzeniu kopi procesu można (ale nie trzeba) zastąpić wykonywany w nim program innym poprzez funkcje z rodziny exec. Cechy te powodują że mechanizm fork jest bardziej elastyczny od spawn.
 
-\begin{CodeFrame*}[python]{}
+\begin{CodeFrame}[python]{.6\textwidth}
 import os
 
-print("nasz pid to:", os.getpid())
+print("pid to:", os.getpid())
 
 pid = os.fork()
 if pid == 0:
-	print("jesteśmy w procesie potomnym, nasz pid to:", os.getpid())
+	print("potomek: mój pid to", os.getpid())
 else:
-	print("jesteśmy w rodzicu, pid naszego potomka to:", pid)
-\end{CodeFrame*}
+	print("rodzic: pid potomka to", pid)
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+pid to: 8763
+rodzic: pid potomka to: 8764
+potomek: mój pid to 8764
+\end{CodeFrame}
 
-\begin{teacherOnly}
-Bardziej rozbudowany przykład do demonstacji życia procesów:
-\begin{Verbatim}
+Przykład możemy trochę rozbudować używając funkcji sleep aby zaobserwować współistnienie tych dwóch procesów
+oraz funkcji signal do zakończenia procesu potomnego przez rodzica:
+
+\begin{CodeFrame}[python]{.6\textwidth}
 import os, time, signal
 
-print("nasz pid to:", os.getpid())
+print("pid to:", os.getpid())
 
 pid = os.fork()
 if pid == 0:
-	print("jesteśmy w procesie potomnym, nasz pid to:", os.getpid())
-	time.sleep(4);  print("potomek 1")
-	time.sleep(7);  print("potomek 2")
+	print("potomek: mój pid to", os.getpid())
+	time.sleep(4)
+	print("potomek 1")
+	time.sleep(7)
+	print("potomek 2")
 else:
-	print("jesteśmy w rodzicu, pid naszego potomka to:", pid)
-	time.sleep(5);  print("rodzic 1")
-	time.sleep(4);  print("zabijam potomka")
+	print("rodzic: pid potomka to", pid)
+	time.sleep(5)
+	print("rodzic 1")
+	time.sleep(4)
+	print("zabijam potomka")
 	os.kill(pid, signal.SIGTERM)
-	time.sleep(5);  print("rodzic 2")
-\end{Verbatim}
-\end{teacherOnly}
+	time.sleep(5)
+	print("rodzic 2")
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+pid to: 5295
+rodzic: pid potomka to 5301
+potomek: mój pid to 5301
+potomek 1
+rodzic 1
+zabijam potomka
+rodzic 2
+\end{CodeFrame}
 
 \subsection{wywołanie zewnętrznej komendy}
 
@@ -121,7 +140,7 @@ Podobnie działa łącze nazwane z tym że nie jest uzyskiwane w wyniku funkcji 
 
 Innymi mechanizmami komunikacji międzyprocesowej są m.in:
 \begin{itemize}
-	\item sygnały \teacher{o nich będziemy mówić na dalszych zajęciach}
+	\item sygnały
 	\item kolejki komunikatów
 	\item pamięć współdzielona
 \end{itemize}

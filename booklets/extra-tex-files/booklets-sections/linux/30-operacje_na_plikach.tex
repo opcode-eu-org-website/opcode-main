@@ -60,17 +60,9 @@ $      - koniec napisu/linii
 ()     - pod-wyrażenie (może być używane dla powtórzeń, a także referencji wstecznych)
 \end{Verbatim}
 
-\begin{teacherOnly}
-Należy wspomnieć o historii, różnych formatach wyrażeń regularnych, kompatybilności wstecznej, czyli dlaczego
-	\Verb#grep '^.\?$'# to to samo co \Verb#grep -E '^.?$'# i dlaczego w niektórych przypadkach stosujemy jedną a w innych inną notację.
-
-Należy zwrócić uwagę na ,,pazerność'' dopasowań - na ogół dopasowawany najdłuższy możliwy fragment:\\
-\Verb{echo '<a xx="oo" />bb<a yy="ii" />' | \grep -E --color '<a.*/>'} a:\\
-\Verb{echo '<a xx="oo" />bb<a yy="ii" />' | \grep -E --color '<a[^>]*/>'} vs:\\
-\Verb{echo '<a xx="oo" />bb<a yy="ii" />' | \grep -P --color '<a.*?/>'}
-
-Wspomnieć także o opcji -x wymagającej dopasowania całej linii.
-\end{teacherOnly}
+Występowanie przełączników \texttt{-E} i \texttt{-P} wiąże  się z ewolucją składni wyrażeń regularnych przy jednoczesnym zachowywaniu kompatybilności z poprzednimi wersjami polecenia grep.
+Jeżeli  coś było traktowane jako zwykły znak nie mogło się tak po prostu stać znakiem specjalnym i należało zastosować zabezpieczanie przy pomocy odwrotnym ukośnikiem lub wybór innego wariantu składni przy pomocy odpowiedniej opcji.
+W efekcie \Verb#grep '^.\?$'# to to samo co \Verb#grep -E '^.?$'#, a \Verb#grep '^.?$'# to to samo co \Verb#grep -E '^.\?$'#.
 % END: grep
 
 \subsection{sed i inne narzędzia przetwarzania tekstów}

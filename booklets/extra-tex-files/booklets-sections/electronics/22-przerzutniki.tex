@@ -1,23 +1,6 @@
 % BEGIN: Elektronika - Przerzutniki i rejestry
 \section{Przerzutniki i rejestry}
 
-\begin{teacherOnly}
-	\begin{easylist}[itemize]
-	& elektronika cyfrowa - rejestry i magistrale
-		&& przerzutnik jako podstawowa jednostka pamięci
-			&&& zatrzask RS => konstrukcję z 2 NAND (\textbf{symulacja})
-			&&& chcemy zapamiętywać sygnał w określonym momencie a nie tylko mieć osobne sygnały ,,zapamiętaj 1'', ,,zapamiętaj '' => wejścia D i CLK
-				&&&& zatrzask D (\textbf{symulacja})
-				&&&& zatrzask vs przerzutnik
-				&&&& przerzutnik z dwóch zatrzasków (\textbf{symulacja})
-		&& rejestr równoległy, szeregowy, ... (\textbf{symulacja})
-		&& sterowanie linią => bufory, trójstanowość, open-colektor
-		&& topologie połączeń
-		&& magistrale => transmisja równoległa i szeregowa, typowe sygnały sterujące magistralą
-		&& przykłady interfejsów w elektronicy: SPI, I2C (zwrócić uwagę na open-drain), UART (zrócić uwagę na brak zegara), 1wire
-	\end{easylist}
-\end{teacherOnly}
-
 \subsection{przerzutniki i ich budowa}
 
 RS Flip-flop (RS Latch) jest podstawowym układem służącym do zapamiętania jednego bitu informacji. Posiada on dwa wejścia (set i reset) i dwa wyjścia (Q i NOT Q), wejścia mogą reagować na stan wysoki (oznaczane jako S i R) lub niski (oznaczane jako wejścia zanegowane ~S i ~R), jedno z wyjść może być jedynie wewnętrzne (nie wyprowadzone na zewnątrz układu). Podanie stanu wysokiego na wejście S (niskiego na ~S) powoduje wystawienie stanu wysokiego na wyjściu Q, a podanie stanu wysokiego na wejście R (niskiego na ~R) powoduje wystawienie stanu niskiego na wyjściu Q. Stan na wyjściu Q nie zmienia się po zmianie wejść S i R na stan niski (zostaje zapamiętany).

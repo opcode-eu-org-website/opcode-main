@@ -24,37 +24,10 @@
 % BEGIN: adresacja IP
 \subsection{Adresacja IP}
 
-\begin{teacherOnly}
-	\noindent adres IP:
-	\begin{easylist}[itemize]
-		& jest to liczba, a taki lub inny zapis służy naszej wygodzie
-		& pierwsza część określa adres sieci do której należy host, druga część adres hosta
-			&& długość części określającej adres sieci wyznacza jest za pomocą tzw prefix (który rozwinąć
-			można do maski sieci)
-			&& sieci mogą być grupowane w wieksze sieci
-		& notacja kropkowo-dziesiętna (IPv4), notacja dwukropkowa (IPv6)
-		& jak mając adres hosta i prefix ustalić adres sieci
-			&& rozpiska na tablicy
-			&& pokazać sipcalc / ipcalc
-		& porównywanie adresów sieci o nie równych maskach
-			&& pokazać ilustrację - kółko w kółku (każdy host widzi tylko pierwsze otaczające go kółko)
-	\end{easylist}
-\end{teacherOnly}
-
-
 Adresy hostów (nazywane adresami IP) są to 32-bitowe (w IPv4) lub 128-bitowe (w IPv6) liczby.
 Adresy IPv4 zapisywane są najczęściej w notacji kropkowo-dziesiętnej, gdzie każdy bajt (ciąg 8 bitów) zapisywany jest jako liczba dziesiętna rozdzielana kropką od pozostałych. Adresy IPv6 zapisywane są zazwyczaj w notacji dwukropokowej, polegającej na zapisywaniu 16 bitowych części adresu liczbami szesnastkowymi oddzielanymi dwukropkiem, dodatkowo jeden ciąg zer (o długości będącej wielokrotnością 16 bitów) może być skompresowany (pominięty) co daje w zapisie dwa dwukropki \Verb$::$.
 
 \subsubsection{Długość prefixu i maska}
-
-\begin{teacherOnly}
-	\begin{easylist}[itemize]
-	& pierwsza część (najstarsze bity) określa adres sieci do której należy host, druga część adres hosta
-	&& długość części określającej adres sieci określa jest za pomocą prefixu (który rozwinąć można do maski sieci)
-	&&& wielkość prefixu określa ilość adresów dostępnych w danej sieci (dla prefixu o długości $n$ wynosi ona $2^{32-n}$ dla IPv4 i $n$ wynosi ona $2^{128-n}$)
-	&&&& dla IPv4 użyteczna liczba adresów jest mniejsza o dwa: adres sieci (część hosta binarnie – same zera) i adres rozgłoszeniowy (część hosta – binarnie same jedynki)
-	\end{easylist}
-\end{teacherOnly}
 
 Adresy hostów grupuje się w adresy sieci, bazując na jednakowym (bitowo) początku takiego adresu (zwanym adresem sieci lub prefixem). Ilość bitów stanowiących adres sieci w danym adresie IP nazywana jest długością prefixu i zapisywana jest zazwyczaj po ukośniku\footnote{
 	Jest to notacja \textit{CIDR}. Przed wprowadzeniem tego mechanizmu w IPv4 funkcjonował klasowy sposób routingu (\textit{classful}), gdzie wielkość maski była deteminowana wartością pierwszych bitów adresu – ale to już historia.
@@ -128,37 +101,3 @@ sprawdzSiec(net2, ip_interface("2001:0db8::17:ab13").ip)
 sprawdzSiec(net2, ip_interface("2001:0db8::13:a").ip)
 \end{CodeFrame*}
 % END: adresacja IP
-
-\teacher{Wskazać różnice IPvXAddress vs IPvXNetwork oraz znaczenie strict=False. Pokazać kalkulowanie z palca.}
-
-\begin{teacherOnly}
-	Można trochę rozwinąć temat adresacji:
-	\begin{easylist}[itemize]
-	& adresy IPv4
-	&& Wyróżnia się także specjalne adresy (sieci) IP:
-	&&& 0.0.0.0/0 – cały Internet
-	&&& 127.0.0.0/8 (głownie adres 127.0.0.1) – pętla zwrotna (czyli komunikacja hosta lokalnego ze sobą)
-	&&& 224.0.0.0/4 – multicast
-	&&&& 232.0.0.0/8 – source-specific multicast (RFC 4607)
-	&&&& 233.0.0.0/8 – adresy oparte na numerze AS, każdy posiadacz numeru AS może używać adresów 233.AS.AS.0/24 (RFC 3180)
-	&&&& 234.0.0.0/8 – adresy oparte na unicastowej puli o prefixie /24 lub mniejszym, dla posiadacza a.b.c.0/24 dostępny jest adres multicastowy 234.a.b.c/32 (RFC 6034)
-	&&&& 239.0.0.0/8 – adresy "prywatne" wykorzystywane w obrębie swojej "domeny" (RFC 2365)
-	&&& adresy sieci prywatnych: 10.0.0.0 do 10.255.255.255, 172.16.0.0 do 172.31.255.255 i 192.168.0.0 do 192.168.255.255
-	&& Można wspomnieć o tym że kiedyś stosowany był także podział na klasy sieci A, B i C odpowiadające maskom /8, /16 i /24 oraz klasy D, E i F (adresy 224.0.0.0 do 254.0.0.0)
-	& adresy IPv6
-	&& Wyróżnia się także specjalne adresy (sieci) IP:
-	&&& ::/0 – cały Internet
-	&&& ::1/128 – cały Internet
-	&&& ff$yx$:: – multicast, gdzie $x$ odpowiada za zasięg który obejmuje transmisja multicastowa, $y$ koduje natomiast flagi dotyczące typu adresu (0=adres przydzielony na stałe przez IANA - dobrze znane usługi, 1=nie przydzielone stale, ...)
-	&&&& ff3x::/104 – adresy multicast w oparciu o maksymalnie 64 bitowy prefiks sieci adresów unicast – dla sieci o adresie \Verb$prefix::/MM$ będzie to adres \Verb$ff3x:00mm:prefix:gropid$, gdzie \Verb$mm$ jest zapisaną w systemie szesnastkowym wartością MM, a \Verb$gropid$ identyfikatorem konkretnej grupy multicastowej (właściciel prefixu dysponuje $2^32$ grupami) (RFC3306).
-	&&&& ff3x::/96 – source-specific multicast (nie jest to sprzeczne z powyższym, gdyż odpowiada mu przy \Verb$::/0$)
-	&&& fe80:: – adresy linklocal tworzone w oparciu o MAC adres karty sieciowej,
-	&&&& nie jest on routowany do sieci zewnętrznych, zawsze może być używany wewnątrz sieci lokalnej (ale wymaga jawnego określania interfejsu sieciowego dla pakietów adresowych na taki adres np. \Verb$ping6 fe80::f66d:4ff:fe4e:ade8%eth0$);
-	&&&& adres taki (dla adresu MAC 11:22:33:44:55:66) będzie miał postać:\\ fe80::1{\bfseries 3}22:33{\bfseries FF}:{\bfseries FE}44:5566 (pierwsza część adresu MAC zwiększana jest o 2, w środku wstawiane jest FFFE).
-	& broadcast
-	&& występuje jedynie w IPv4, w IPv6 zastąpiony multicastem:
-	&&& ff0$x$::1 – wszystkie węzły
-	&&& ff0$x$::2 – wszystkie routery
-	&&& $x$ określa zasięg, np. x=2 w zakresie \emph{Link-Local}
-	\end{easylist}
-\end{teacherOnly}

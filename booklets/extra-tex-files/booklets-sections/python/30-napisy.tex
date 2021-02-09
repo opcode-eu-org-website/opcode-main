@@ -139,10 +139,6 @@ TypeError: 'str' object does not support item assignment
 Zwróć uwagę na komunikat błędu, który został wyświetlony, podaje on informacji o tym co wywołało błąd (opis błędu) i w  której linii programu on wystąpił.
 \strong{Czytanie ze zrozumieniem komunikatów o błędach ułatwia naprawianie niedziałającego programu.}
 
-\teacher{
-	\ \\ \strong{Warto pokazać kilka innych komunikatów o błędach i poprosić uczestników o ich wyjaśnienie.}\\\ 
-}
-
 Jeżeli zachodzi potrzeba modyfikowania napisu konkretnych znaków w napisie możemy użyć poznanej wcześniej metody uzyskiwania podnapisów:
 
 \begin{CodeFrame}[python]{0.50\textwidth}
@@ -184,9 +180,7 @@ Jak już wiemy wszystkie nazwy w pythonie żyją w jednym świecie, dotyczy to t
 Dlatego warto uważać aby nie nazywać swoich zmiennych zarówno tak jak nazywają się wbudowane funkcje, ani tak jak nazywają się wbudowane typy danych (takie jak int, bool, str, folat i tak dalej).
 
 Opis danego typu wraz z dostępnymi metodami można obejrzeć przy pomocy polecenia \python{help()}, np. \python{help("str")}.
-\teacher{
-Chcemy nauczyć korzystania z dokumentacji, więc w zadaniach związanych z stosowaniem metod jakiejś klasy starajmy się aby uczniowie sami odnajdywali w niej odpowiedzi.
-}
+\teacher{ Chcemy nauczyć korzystania z dokumentacji, więc w zadaniach związanych z stosowaniem metod jakiejś klasy starajmy się aby uczniowie sami odnajdywali w niej odpowiedzi. }
 
 W przypadku napisów za pomocą metod tej klasy mamy możliwość między innymi wyszukania miejsca wystąpienia podnapisu, zamiany wielkich liter na małe i odwrotnie, etc.
 %  END: Obiektowość
@@ -216,9 +210,6 @@ print("",h1,o1,b1, "\n",h2,o2,b2, "\n",h3,o3,b3)
  31 15 5
  31 15 5
 \end{CodeFrame}
-\teacher{
-Zwrócić uwagę że w każdym wariancie konwersji dostajemy ten sam wynik. Jako ciekawostkę można zapytać się o konwertowanie z innych systemów liczbowych.
-}
 
 Możliwe jest także konwertowanie wartości liczbowej na napis w określonym systemie liczbowym:
 
@@ -277,9 +268,7 @@ print(chr(0x221e) + " == \u221e == ∞ == \U0000221e")
 print(hex(ord("∞")), hex(ord("\u221e")), hex(ord(chr(0x221e))) )
 \end{CodeFrame*}
 
-\teacher{
-Warto skomentować że powyższy przykład demonstruje równoważność poszczególnych zapisów (drukują taki sam znak na konsoli, generują taki sam numer unicodowy).
-}
+Zwróć uwagę na równoważność poszczególnych zapisów – wypisują taki sam znak na konsoli, zwracają taki sam numer unicodowy.
 
 Niektóre znaki specjalne jak np. znak nowej linii, tabulator możemy wprowadzić z użyciem krótszych i łatwiejszych do zapamietania sekwencji niż opartych o ich numer. Dla znaku nowej linii jest to \python{\n}, a tabulatora \python{\t}.
 %  END: Konwersja znak - numer unicode

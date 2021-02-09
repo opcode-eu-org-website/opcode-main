@@ -148,9 +148,7 @@ int main() {
 
 Wskaźniki i rzutowanie typów pozwala patrzeć na dane w postaci poszczególnych bajtów.
 
-\begin{teacherOnly}
-Poniższy przykład pokazywać w 3 krokach - każdy kolejny printf(), prosząc słuchaczy aby zastanowili się jaki będzie wynik danego printf().
-\end{teacherOnly}
+\teacher{ Poniższy przykład pokazywać w 3 krokach - każdy kolejny printf(), prosząc słuchaczy aby zastanowili się jaki będzie wynik danego printf(). }
 
 \begin{CodeFrame*}[c]{}
 #include <inttypes.h>
@@ -185,11 +183,13 @@ int main() {
 }
 \end{CodeFrame*}
 
-Fakt, że różne komputery ten sam ciąg zero-jedynkowy mogą interpretować jako różne liczby (w zależności od architektury ,,big endian'' vs ,,little endian''), powoduje że przy wymianie danych między systemami konieczne jest ustalenie sposobu tej interpretacji (np. protokoły sieciowe takie jak IP używają ,,big endian'') lub zawarcie tej informacji w wymienianych danych (kodowania Unicode UTF-16 i UTF-32 zawierają na początku danych znacznik BOM).
+Kod ten w zależności od architektury procesora na którym będzie uruchomiony może wypisać inny wynik:
 
-\begin{teacherOnly}
+\begin{CodeFrame*}{}
+\end{CodeFrame*}
+
 \begin{minipage}[t]{0.38\textwidth}
-wynik na \emph{little endian} (np. x86):
+na \emph{little endian} (np. x86):
 \begin{Verbatim}
 A0: 1234 5678 9abc deff
 A1: 12 34 12 34
@@ -198,11 +198,12 @@ B0: 34 12 78 56
 \end{minipage}
 \hfill
 \begin{minipage}[t]{0.58\textwidth}
-wynik na \emph{big endian} (np. sparc) – zapis analogiczny do "ludzkiego" zapisu liczb:
+na \emph{big endian} (np. sparc) – zapis analogiczny do "ludzkiego" zapisu liczb:
 \begin{Verbatim}
 A0: 1234 5678 9abc deff
 A1: 12 34 12 34
 B0: 12 34 56 78
 \end{Verbatim}
 \end{minipage}
-\end{teacherOnly}
+
+Fakt, że różne komputery ten sam ciąg zero-jedynkowy mogą interpretować jako różne liczby (w zależności od architektury ,,big endian'' vs ,,little endian''), powoduje że przy wymianie danych między systemami konieczne jest ustalenie sposobu tej interpretacji (np. protokoły sieciowe takie jak IP używają ,,big endian'') lub zawarcie tej informacji w wymienianych danych (kodowania Unicode UTF-16 i UTF-32 zawierają na początku danych znacznik BOM).

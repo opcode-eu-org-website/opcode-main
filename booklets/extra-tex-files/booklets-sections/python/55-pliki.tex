@@ -97,8 +97,7 @@ Funkcja \python{select()} przyjmuje 3 listy „deskryptorów plików” (czyli t
 
 Funkcja \python{select()} kończy działanie gdy pojawią się jakiekolwiek dane (nie czeka na koniec danych – EOF). Zauważ, że do odczytu zastosowana została funkcja \python{os.read()} a nie metoda \python{fd.read()}, wynika to z faktu, iż \python{fd.read()} czeka na EOF lub podaną ilość bajtów, a \python{os.read()} wczytuje to co jest dostępne i ogranicza jedynie maksymalną ilość wczytywanych danych (resztę możemy doczytać kolejnym wywołaniem).
 
-\begin{teacherOnly}
-Można pokazać różnicę w zachowaniu poniższego kodu z os.read() i fd.read() dla różnej ilości wprowadzanych znaków – np. 1 i 5
+\begin{teacherOnly} Można pokazać różnicę w zachowaniu poniższego kodu z os.read() i fd.read() dla różnej ilości wprowadzanych znaków – np. 1 i 5
 \begin{Verbatim}
 import sys, os, select, time
 

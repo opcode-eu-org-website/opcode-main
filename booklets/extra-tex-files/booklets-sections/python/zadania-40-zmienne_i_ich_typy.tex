@@ -26,12 +26,14 @@
 	\insertZadanie{\currfilepath}{obiektowo_string}{}
 	\insertZadanie{\currfilepath}{licz_powtorzenia}{}
 	\insertZadanie{\currfilepath}{funkcja_jako_argument}{}
+	\insertZadanie{\currfilepath}{slownik_zamiast_ifelse}{}
 }
 
 \IfStrEq{\dbEntryID}{rozwiazania}{
 	\insertRozwiazanie{\currfilepath}{obiektowo_string}{}
 	\insertRozwiazanie{\currfilepath}{licz_powtorzenia}{}
 	\insertRozwiazanie{\currfilepath}{funkcja_jako_argument}{}
+	\insertRozwiazanie{\currfilepath}{slownik_zamiast_ifelse}{}
 }
 
 \dbEntryBegin{obiektowo_string}\if1\dbEntryCheckResults
@@ -116,4 +118,13 @@ def wykonaj(lista, funkcja):
 
 \noindent Zwróć uwagę że funkcję przekazujemy do zmiennej tak samo jak dowolny inny argument (zmienną).
 Użycie funkcji przechowywanej w zmiennej polega na wywołaniu tej zmiennej z nawiasami okrągłymi i ewentualnymi argumentami tej funkcji.
+\fi
+
+\dbEntryBegin{slownik_zamiast_ifelse}\if1\dbEntryCheckResults
+Zastanów się czy konstrukcję if/elif w funkcji \python{dzialanie()} z rozdziału \ref{Funkcje_jako_argumenty} można by zastąpić słownikiem, jak to ewentualnie zrobić i jakie mogłoby mieć to zalety bądź wady?
+\fi
+
+\dbEntryBegin{slownik_zamiast_ifelse-rozwiazanie}\if1\dbEntryCheckResults
+Możemy zdefiniować słownik, w którym kluczem jest nazwa działania a wartością funkcja je realizująca.
+Zaleta takiego podejścia jest łatwe rozszerzania takiego kodu o nowe działania (poprzez wstawienie kolejnej pary do słownika, co może dziać się w trakcie pracy programu).
 \fi

@@ -21,17 +21,6 @@
 % OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 % SOFTWARE.
 
-\begin{teacherOnly}
-	\begin{easylist}[itemize]
-	& co to jest sieć komputerowa? jak ona działa?
-	& jak działa internet?
-	& w jaki sposób dane są przesyłane z jednego komputera na drugi?
-	&& pakiety
-	& skąd wiedzą gdzie mają trafić?
-	&& adresy, przełączanie pakietów vs łączy
-	\end{easylist}
-\end{teacherOnly}
-
 % BEGIN: Sieci - intro
 \section{Podstawy TCP/IP}
 
@@ -67,8 +56,7 @@ W modelu TCP/IP wyróżnia się 4 warstwy:
 \noindent
 Z punktu widzenia modelu TCP/IP można powiedzieć o enkapsulacji danych kolejnych warstw w ramach warstwy niższej, czyli „surowe” dane (np. strona HTML) obudowywane są strukturą opisywaną przez warstwę aplikacji (np. nagłówkami HTTP), następnie całość ta umieszczana jest w polu danych pakietu warstwy transportowej (np. TCP), ten z kolei w polu danych pakietu IP (warstwy sieciowej), na koniec pakiet IP jest umieszczany w polu danych ramki warstwy dostępu do sieci (np. ramki ethernetowej). W ramach podróży przez kolejne sieci pakiet IP jest wyjmowany i wkładany w kolejne ramki warstwy dostępu do sieci, na ogół tylko z niewielkimi ingerencjami w zawartość tego pakietu (prawie zawsze nie dochodzącymi do pola danych pakietu TCP lub datagramu UDP, czyli nie wykraczającymi poza warstwę 4 OSI).
 
-\begin{teacherOnly}
-	Można porównać do  podróży listu różnymi środkami transportu:
+\begin{teacherOnly} Można porównać do podróży listu różnymi środkami transportu:
 	\begin{easylist}[itemize]
 		& list ma jakąś zawartość - dane które na ogół nie są sprawdzane po drodze
 		& koperta ma adres nadawcy i docelowy
@@ -82,24 +70,10 @@ Z punktu widzenia modelu TCP/IP można powiedzieć o enkapsulacji danych kolejny
 % BEGIN: sieci IP
 \subsection{Protokół IP}
 
-\begin{teacherOnly}
-	\begin{easylist}[itemize]
-		& struktura pakietu
-			&& pokazać i omówić dobry, kolorowy obrazek ilustrujący strukturę pakietu IPv4 i IPv6
-			&& nagłówek – dane
-			&& adresy
-		& \strong{danymi może być inny pakiet} -> struktura warstwowa
-			&& od nisko poziomowych (specyficznych dla danej fizycznej realizacji sieci)
-			&& poprzez warstwy sieciowe (,,uniwersalne'')
-			&& po wysokopoziomowe (aplikacyjne, specyficzne dla zastosowania)
-	\end{easylist}
-\end{teacherOnly}
-
 Protokół IP (Internet Protocol) odpowiedzialny jest przede wszystkim za sposób adresacji hostów oraz reguły komutacji pakietów (routing). Jest on wspomagany przez kolejny protokół z tej rodziny - ICMP (Internet Control Message Protocol), którego zadaniem jest przekazywanie informacji kontrolnych np. o nieosiągalności hosta docelowego, odrzuceniu przetwarzania pakietu ze względu na zbyt dużą liczbę skoków (gdy wartość pola TTL z nagłówka IP wyniesie zero) a także pingi (zarówno żądanie jak i odpowiedź).
-% END: sieci IP
 
 \inputSideBySideAsFigure
 	{Pakiet IPv4}{booklets-sections/network/ilustracje/10-ipv4.tex}
 	{Pakiet IPv6}{booklets-sections/network/ilustracje/10-ipv6.tex}
 	{Struktura pakietów IP}{ilustracja_pakiety_ip}
-
+% END: sieci IP

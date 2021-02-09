@@ -23,27 +23,6 @@
 
 \section{Ethernet}
 
-\begin{teacherOnly}
-	\begin{easylist}[itemize]
-	& chyba najpopularniejsza warstwa niższa dla IP
-	& MAC adresy
-	&& ARP i NDISC
-	&& co to znaczy wysyłanie pakietu do bramki obsługującej jakąś sieć (jaki adres ma pakiet)
-	& switche (wspomnieć o tym że kiedyś były też inne rozwiązania)
-	&& VLANy (tagowane i nie tagowane)
-	&& pętle i STP
-	&& switch softwerowy na linuxie
-	&& zarządzanie switchem z poziomu OS (pokazać Junos OS)
-	&&& wzmianka o BSD
-	&&&& bardziej liberalna licencja, dłuższy rodowód, ...
-	&&&& część rzeczy podobnie (shell, komendy posixowe)
-	&&&& część rzeczy inaczej (konfiguracja ...)
-	& mediakonwertery i WDM
-	& kable
-	& wifi i hostap
-	\end{easylist}
-\end{teacherOnly}
-
 % BEGIN: Warstwa sprzętowa
 Od strony sprzętowej sieć składa z:
 \begin{itemize}
@@ -56,7 +35,7 @@ W przypadku sieci w standardzie Ethernet stosowane są 48 bitowe adresy MAC (pie
 
 Sieć ethernetowa typowo posiada strukturę wielokrotnej gwiazdy (drzewa), w węzłach której stosowane są switche. Kierują one ramki do odpowiednich gałęzi na podstawie adresu docelowego i wpisów w tablicy adresów MAC, utworzonej w oparciu o źródłowe nadawców przechodzących przez dany switch ramek. W przypadku gdy adresu docelowego nie ma w tablicy ramka kierowana jest na wszystkie porty switcha z wyjątkiem tego na którym została odebrana. W taki sposób zawsze są też przesyłane ramki wysyłane na adres rozgłoszeniowy (bradcast).
 
-\begin{teacherOnly}
+\begin{teacherOnly} % prehistoria czyli hub'y
 Można wspomnieć że dawniej funkcję switchy pełniły (dzisiaj już nie spotykany) mostek (bridge) będący w zasadzie switchem o dwóch gniazdach.
 Natomiast do łączenia kabli wykorzystywany był (także już nie spotykany) hub (koncentrator) który zapewniał że sygnał nadawany przez dowolny z hostów do niego podłączonych był odbierany przez wszystkie inne (poza nim samym) oraz wzmacniał sygnał. Występował także regenerator (repeater) wzmacniający sygnał i umożliwiający przekroczenie ograniczenia 100m.
 

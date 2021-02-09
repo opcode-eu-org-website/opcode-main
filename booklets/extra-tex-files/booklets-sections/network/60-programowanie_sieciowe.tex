@@ -23,44 +23,6 @@
 
 \section{Programowanie usług sieciowych}
 
-\begin{teacherOnly}
-	Na początek (w wariancie zintegrowanym, na samym wykładzie pomijamy do zrobienia na ćwiczeniach):
-	\begin{easylist}[itemize]
-		& zabawa netcat-em (serwer, klient) + tcpdum do podsłuchiwania
-		& kilka słów więcej o:
-			&& HTTP (+ oglądanie WWW netcatem, pamiętać o -C w netcacie)
-			&& SMTP (+ sesja SMTP netcatem, pokazać łatwość fałszowania nagłówków)
-	\end{easylist}
-	
-	Następnie (jeżeli wcześniej nie było) \strong{krótkie} wprowadzenie systemowe:
-	\begin{easylist}[itemize]
-		& fork
-		& komunikacja międzyprocesowa
-			&& sygnały
-				&&& poopowiadać o kill
-					&&&& czy program może nie umrzeć?
-				&&& wiele różnych sygnałów ...
-			&& pamięć i semafory
-				&&& poopowiadać o problemie if a==1: a=0
-		& subprocess w pythonie
-		& multiprocessing i lock w pythonie
-	\end{easylist}\vspace{4pt}
-	
-	Opowiedzieć o funkcji \Verb#getaddrinfo#:
-	\begin{easylist}[itemize]
-		& \Verb#import socket#\\
-		  \Verb#socket.getaddrinfo("www.opcode.eu.org", "www")#
-		&& widzimy że to lista krotek
-		& \Verb#for x in socket.getaddrinfo("www.opcode.eu.org", "www"):#\\
-		  \Verb#   print(x[4])#
-		& jeżeli podamy numer portu:\\
-		  \Verb#socket.getaddrinfo("www.opcode.eu.org", "80")#
-		&& to dostaniemy różne typy gniazd sieciowych - TCP, UDP i "RAW" ...
-	\end{easylist}
-	Od tego przechodzimy płynnie do wysyłania po UDP.
-\end{teacherOnly}
-
-
 \subsection{wysyłanie danych po UDP}
 \begin{CodeFrame*}[python]{}
 import socket, sys
