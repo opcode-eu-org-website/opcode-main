@@ -46,6 +46,7 @@ cut -f5 -d: /etc/passwd | grep -v '^[ ,]*$'
 
 Inną bardzo przydatną komendą jest sed pozwala ona m.in na zastępowanie
 wyszukiwanego na podstawie wyrażenia regularnego tekstu innym:
+
 \begin{CodeFrame*}[bash]{}
 echo "aa bb cc bb dd bb ee" | sed -e 's@\([bc]\+\) \([bc]\+\)@X-\2-X@g'
 \end{CodeFrame*}

@@ -25,8 +25,6 @@
 
 \subsection{Podstawowe komendy}
 
-\teacher{Pokazać i omówić działanie komend wykonując je w terminalu na rzutniku – raczej użyć kilku dobrych przykładów niż omawiać szczegółowo poszczególne opcje}
-
 % BEGIN: Operacje na systemie plików
 \subsubsection{echo i znaki uogólniające}
 
@@ -50,23 +48,16 @@ Cudzysłów pojedynczy (w odróżnieniu od podwójnego) zabezpiecza także przed
 Listowanie plików jest operacją na tyle istotną i użyteczną że istnieje do tego dedykowane polecenie – \Verb$ls$. Pozwala ono na m.in. wypisywanie szczegółowych informacji o plikach, listowanie całej zawartości katalogu, sortowanie wyników itd.
 Należy jednak pamiętać że rozwijaniem znaków uogólniających (czyli zamianą napisu je zawierającego na listę plików) dla polecenia \Verb$ls$ zajmuje się powłoka (czyli np. \Verb$bash$) – tak samo jak dla polecenia \Verb$echo$ – gdyż sama komenda \Verb$ls$ nie rozumie znaków uogólniających.
 
-\begin{teacherOnly}
-Warto omówić następujące przykłady:
-\begin{Verbatim}
-# pliki z jednoznakową nazwą
-ls ?
-# pliki zaczynające się od znaku zapytania
-ls \?*
-# pliki nie zaczynające się od a
-ls [!a]*
-# pliki mające w nazwie literę b
-ls *b*
-# pliki mające w nazwie literę a lub b
-ls *[ab]*
-# pliki zaczynające się od liter a,b,c,d
-ls [a-d]*
-\end{Verbatim}
-\end{teacherOnly}
+Kilka przykładów:
+\begin{itemize}
+	\item pliki z jednoznakową nazwą \Verb{ls ?}
+	\item pliki zaczynające się od znaku zapytania: \Verb{ls \?*} lub  \Verb{ls '?'*}
+	\item pliki nie zaczynające się od a: \Verb{ls [!a]*}
+	\item pliki mające w nazwie literę b: \Verb{ls *b*}
+	\item pliki mające w nazwie literę a lub b: \Verb{ls *[ab]*}
+	\item pliki zaczynające się od liter a,b,c,d: \Verb{ls [a-d]*}
+	\item pliki ukryte (wliczając bieżący i nadrzędny katalog): \Verb{echo .*}
+\end{itemize}
 
 \subsubsection{listowanie i  wyszukiwanie plików}
 
@@ -104,7 +95,7 @@ ls [a-d]*
 			\texttt{-ctime [+|-]n} pliki które zostały utworzone \texttt{n}*24 godziny temu\\
 			\texttt{-cmin [+|-]n} pliki które zostały utworzone \texttt{n} minut temu\\
 			\texttt{-size [+|-]n[c|k|M|G]} pliki których rozmiar wynosi \texttt{n} (c - bajtów, k - kilobajtów, M - Megabajtów, G - gigabajtów)\\
-			\strong{\emph{w powyższych testach \texttt{+} oznacza więcej niż, \texttt{-} oznacza mniej niż, uwaga: porównywaniu podlegają liczby całkowite, np. +1 oznaczacza $>1$ w liczbach całkowitych tzn. $\ge2$}}\vspace{6pt}\\
+			\emph{w powyższych testach \texttt{+} oznacza więcej niż, \texttt{-} oznacza mniej niż, uwaga: porównywaniu podlegają liczby całkowite, np. +1 oznacza $>1$ w liczbach całkowitych tzn. $\ge2$}\vspace{6pt}\\
 			%
 			\texttt{-exec}\Verb@ polecenie \{\} \;@ dla każdego znalezionego pliku wykonaj \texttt{polecenie} podstawiając ścieżkę do tego pliku pod \Verb@\{\}@ (zastosowane odwrotne ukośniki służą zabezpieczeniu nawiasów klamrowych i średnika przed zinterpretowaniem ich przez powłokę)\\
 			\Verb@-execdir polecenie \{\} \;@, podobnie jak \texttt{-exec} tyle że polecenie zostanie uruchomione w katalogu w którym znajduje się wyszukany plik

@@ -96,10 +96,12 @@ Konstrukcja ta przekieruje wynik komendy \Verb{ls} uruchomionej z opcją \Verb{-
 
 Możemy także przekierować standardowe wyjście do pliku (przy pomocy~\Verb{>} lub~\Verb{>>}, gdy chcemy dopisywać do pliku) lub pobrać standardowe wejście z pliku (przy pomocy \Verb{<}).
 \Verb{2>} pozwala na przekierowanie standardowego wyjścia błędu do pliku.
+
 Jeżeli zachodzi potrzeba połączenia obu strumieni możemy użyć \Verb{2>&1} w celu przekierowania strumienia drugiego do pierwszego.
 Następnie możemy użyć ~\Verb{|} aby przekierować połączony strumień do następnej komendy.
 Jeżeli chcemy przekierować go do pliku połączenie strumieni powinno mieć miejsce po przekierowaniu pierwszego z nich do pliku, np.:
-\begin{Verbatim}
+\\* \\* \vspace{-2\baselineskip} % nopagebreak here !
+\begin{Verbatim}[]
 ls . NieIstniejącyPlik >log.txt 2>&1
 \end{Verbatim}
 Bash pozwala użyć \Verb{>&} i \Verb{|&}, które przekierowują oba strumienie odpowiednio do pliku lub standardowego wejścia innego polecenia, ale jest to rozszerzenie wykraczające poza standardową składnię sh.
