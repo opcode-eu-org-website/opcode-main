@@ -29,9 +29,20 @@
 	\insertZadanie{\currfilepath}{helloworld1}{}
 	\insertZadanie{\currfilepath}{helloworld2}{}
 	\insertZadanie{\currfilepath}{podnapis}{}
+	\insertZadanie{\currfilepath}{podnapis2}{}
 	\insertZadanie{\currfilepath}{podnapis_wskazniki}{}
-	\teacher{\insertRozwiazanie{\currfilepath}{podnapis_wskazniki}{}}
+	\insertZadanie{\currfilepath}{wypisz_mape}{}
 }
+
+\IfStrEq{\dbEntryID}{rozwiazania}{
+	\insertRozwiazanie{\currfilepath}{helloworld1}{}
+	\insertRozwiazanie{\currfilepath}{helloworld2}{}
+	\insertRozwiazanie{\currfilepath}{podnapis}{}
+	\insertRozwiazanie{\currfilepath}{podnapis2}{}
+	\insertRozwiazanie{\currfilepath}{podnapis_wskazniki}{}
+	\insertRozwiazanie{\currfilepath}{wypisz_mape}{}
+}
+
 
 \dbEntryBegin{zadania_c_cpp_intro}\if1\dbEntryCheckResults
 	Do kompilacji kodu C używamy standardowo \Verb#gcc -std=c99 plik.c# lub \Verb#clang -std=c99 plik.c#, a do C++ \Verb#g++ -std=c++11 plik.cpp# lub \Verb#clang++ -std=c++11 plik.cpp# (skompilowany program uruchamiamy poprzez \Verb#./a.out#).
@@ -39,14 +50,44 @@
 	Oczywiście możesz użyć innego standardu C lub C++, jednak prosimy o zaznaczenie tego w rozwiązaniu.
 \fi
 
-
 \dbEntryBegin{helloworld1}\if1\dbEntryCheckResults
 Napisz program wypisujący "Hello World".
 \fi
 
+\dbEntryBegin{helloworld1-rozwiazanie}\if1\dbEntryCheckResults
+\begin{minted}[frame=single]{c}
+#include <stdio.h>
+
+int main() {
+	printf("Hello World\n");
+}
+\end{minted}
+
+\noindent Zwróć uwagę na:
+\begin{itemize}
+\item włączenie odpowiedniego pliku nagłówkowego
+\item umieszczenie kodu wewnątrz funkcji main
+\end{itemize}
+\fi
+
+
 \dbEntryBegin{helloworld2}\if1\dbEntryCheckResults
 Zmodyfikuj program z zadania \ref{helloworld1} tak aby z użyciem pętli wypisywał ten napis 10 razy.
 \fi
+
+\dbEntryBegin{helloworld2-rozwiazanie}\if1\dbEntryCheckResults
+\begin{minted}[frame=single]{c}
+#include <stdio.h>
+
+int main() {
+	for (int i=0; i<10; ++i)
+		printf("Hello World\n");
+}
+\end{minted}
+
+\noindent Zwróć uwagę na użycie pętli :-)
+\fi
+
 
 \dbEntryBegin{podnapis}\if1\dbEntryCheckResults
 Napisz funkcję \Verb#wypisz#, która z użyciem pętli będzie wypisywała poszczególne znaki podanego napisu od wskazanej do wskazanej pozycji. Przyjmij że napis składa się tylko z znaków ASCII.
@@ -54,17 +95,111 @@ Napisz funkcję \Verb#wypisz#, która z użyciem pętli będzie wypisywała posz
 Wywołanie \Verb#wypisz("! Hello World !", 3, 6);# powinno spowodować wypisanie \Verb#ello#.
 \fi
 
+\dbEntryBegin{podnapis-rozwiazanie}\if1\dbEntryCheckResults
+\begin{minted}[frame=single]{c}
+#include <stdio.h>
+
+void wypisz(const char* n, int b, int e) {
+	for (int i=b; i<=e; ++i)
+		printf("%c", n[i]);
+	printf("\n");
+}
+
+int main(){
+	wypisz("! Hello World !", 3, 6);
+}
+\end{minted}
+
+\noindent Zwróć uwagę na:
+\begin{itemize}
+\item definicję i użycie funkcji przyjmującej argumenty
+\item iterownaie po elementach tablicy (napisu) i odwołanie się do i-tego elementu operatorem nawiasu kwadratowego
+\end{itemize}
+\fi
+
+
+\dbEntryBegin{podnapis2}\if1\dbEntryCheckResults
+Zmodyfikuj program z zadania \ref{podnapis2} tak aby funkcja, w przypadku gdy argument określający ostatni znak podnapisu do wypisania jest większy niż długość napisu, kończyła swoje działanie w momencie napotkania końca napisu.
+
+Wywołanie \Verb#wypisz("! Hello World !", 10, 116);# powinno spowodować wypisanie \Verb#rld !# i niczego więcej.
+\fi
+
+\dbEntryBegin{podnapis2-rozwiazanie}\if1\dbEntryCheckResults
+\begin{minted}[frame=single]{c}
+void wypisz(const char* n, int b, int e) {
+	for (int i=b; i<=e && n[i]; ++i)
+		printf("%c", n[i]);
+	printf("\n");
+}
+\end{minted}
+
+\noindent Zwróć uwagę na dodatkowy warunek w pętli sprawdzający czy aktualny znak nie ma wartości zero (czyli czy nie oznacza końca napisu) łączony operatorem logicznego and z warunkiem dotyczącym numeru znaku do wypisania.
+\fi
+
+
 \dbEntryBegin{podnapis_wskazniki}\if1\dbEntryCheckResults
-Zmodyfikuj program z zadania \ref{podnapis} tak aby funkcja korzystała z arytmetyki wskaźnikowej, zamiast iteracji po numerze znaku w napisie.
+Zmodyfikuj program z zadania \ref{podnapis2} tak aby funkcja korzystała z arytmetyki wskaźnikowej, zamiast iteracji po numerze znaku w napisie.
 \fi
 
 \dbEntryBegin{podnapis_wskazniki-rozwiazanie}\if1\dbEntryCheckResults
 \begin{minted}[frame=single]{c}
 void wypisz(char* n, int b, int e) {
 	char* end = n+e;
-	for (n=n+b; n<=end; ++n)
+	for (n=n+b; n<=end && *n; ++n)
 		printf("%c", *n);
 	printf("\n");
 }
 \end{minted}
+
+\noindent Zwróć uwagę na:
+\begin{itemize}
+\item zdefiniowanie zmiennej end, będącej wskaźnikiem na ostatni element podnapisu przed pętla
+\item operację inkrementacji wskaźnika (\Verb$++n$) przy każdym obiegu pętli
+\item odwołanie do elementu wskazywanego poprzez \Verb$*n$
+\end{itemize}
+\fi
+
+
+\dbEntryBegin{wypisz_mape}\if1\dbEntryCheckResults
+Napisz funkcję \Verb#wypiszMape# (szablon funkcji) która wypisuje mapę dowolnych typów. Na przykład dla wywołania:
+\begin{CodeFrame*}[cpp]{}
+std::map<std::string, float> a = { {"xy", 1.3}, {"qw", 16.3} };
+std::map<int, std::string> b = { {1, "a"}, {2, "b"} };
+wypiszMape(a);
+wypiszMape(b);
+\end{CodeFrame*}
+\vspace{-8pt}Program powinien wypisać:
+\vspace{-8pt}\begin{Verbatim}
+qw → 16.3
+xy → 1.3
+1 → a
+2 → b
+\end{Verbatim}
+\fi
+
+\dbEntryBegin{wypisz_mape-rozwiazanie}\if1\dbEntryCheckResults
+\begin{minted}[frame=single]{c}
+#include <iostream>
+#include <map>
+
+template <typename A, typename B> void wypiszMape(const std::map<A, B>& m) {
+	for (const auto& i : m) {
+		std::cout << i.first << " → " << i.second << "\n";
+	}
+}
+
+int main() {
+	std::map<std::string, float> a = { {"xy", 1.3}, {"qw", 16.3} };
+	std::map<int, std::string> b = { {1, "a"}, {2, "b"} };
+	wypiszMape(a);
+	wypiszMape(b);
+}
+\end{minted}
+
+\noindent Zwróć uwagę na:
+\begin{itemize}
+\item deklarację funkcji w postaci szablonu z dwoma parametrami - odpowiadającymi parametrom w szablonie jakim jest std::map
+\item użycie pętli for typu foreach iterującej po elementach otrzymanej mapy
+\item użycie stałych referencji zarówno w argumencie funkcji, jak i w iteracji po mapie - zapobiega to niepotrzebnemu kopiownaiu mapy i jej elementów
+\end{itemize}
 \fi

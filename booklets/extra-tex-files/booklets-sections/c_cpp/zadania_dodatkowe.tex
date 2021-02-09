@@ -23,7 +23,6 @@
 
 \IfStrEq{\dbEntryID}{}{
 	\section{Zadania dodatkowe}
-	\insertZadanie{\currfilepath}{wypisz_mape}{}
 	\insertZadanie{\currfilepath}{parsuj_klucz_wartosc_cpp}{}
 	\insertZadanie{\currfilepath}{podnapis_utf}{}
 	\insertZadanie{\currfilepath}{funkcja_niepodzielne_cpp}{}
@@ -31,23 +30,6 @@
 	\insertZadanie{\currfilepath}{licz_powtorzenia_cpp}{}
 }
 
-
-\dbEntryBegin{wypisz_mape}\if1\dbEntryCheckResults
-Napisz funkcję \Verb#wypiszMape# (szablon funkcji) która wypisuje mapę dowolnych typów. Na przykład dla wywołania:
-\begin{CodeFrame*}[cpp]{}
-std::map<std::string, float> a = { {"xy", 1.3}, {"qw", 16.3} };
-std::map<int, std::string> b = { {1, "a"}, {2, "b"} };
-wypiszMape(a);
-wypiszMape(b);
-\end{CodeFrame*}
-\vspace{-8pt}Program powinien wypisać:
-\vspace{-8pt}\begin{Verbatim}
-qw → 16.3
-xy → 1.3
-1 → a
-2 → b
-\end{Verbatim}
-\fi
 
 \dbEntryBegin{parsuj_klucz_wartosc_cpp}\if1\dbEntryCheckResults
 Napisz funkcję która konwertuje listę napisów postaci \Verb#klucz=wartosc# na mapę.

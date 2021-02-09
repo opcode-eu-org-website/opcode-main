@@ -144,7 +144,7 @@ int main() {
 }
 \end{CodeFrame*}
 
-\subsection{Kolejność bajtów}
+\subsection{Kolejność bajtów \zaawansowane{**}}
 
 Wskaźniki i rzutowanie typów pozwala patrzeć na dane w postaci poszczególnych bajtów.
 
@@ -185,10 +185,8 @@ int main() {
 
 Kod ten w zależności od architektury procesora na którym będzie uruchomiony może wypisać inny wynik:
 
-\begin{CodeFrame*}{}
-\end{CodeFrame*}
-
-\begin{minipage}[t]{0.38\textwidth}
+\vspace{3pt}
+\begin{minipage}[t]{0.33\textwidth}
 na \emph{little endian} (np. x86):
 \begin{Verbatim}
 A0: 1234 5678 9abc deff
@@ -197,13 +195,14 @@ B0: 34 12 78 56
 \end{Verbatim}
 \end{minipage}
 \hfill
-\begin{minipage}[t]{0.58\textwidth}
-na \emph{big endian} (np. sparc) – zapis analogiczny do "ludzkiego" zapisu liczb:
+\begin{minipage}[t]{0.63\textwidth}
+na \emph{big endian} (np. sparc) – zapis w "ludzkiej" kolejności:
 \begin{Verbatim}
 A0: 1234 5678 9abc deff
 A1: 12 34 12 34
 B0: 12 34 56 78
 \end{Verbatim}
 \end{minipage}
+\vspace{8pt}
 
 Fakt, że różne komputery ten sam ciąg zero-jedynkowy mogą interpretować jako różne liczby (w zależności od architektury ,,big endian'' vs ,,little endian''), powoduje że przy wymianie danych między systemami konieczne jest ustalenie sposobu tej interpretacji (np. protokoły sieciowe takie jak IP używają ,,big endian'') lub zawarcie tej informacji w wymienianych danych (kodowania Unicode UTF-16 i UTF-32 zawierają na początku danych znacznik BOM).
