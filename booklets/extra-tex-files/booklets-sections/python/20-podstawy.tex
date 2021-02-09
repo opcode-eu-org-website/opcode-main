@@ -91,7 +91,7 @@ kwadrat(2 + 3)
 \noindent
 Zwróć uwagę, iż wywołania funkcji w powyższym przykładzie nie są wcięte --- są poza blokiem funkcji.
 
-\begin{ProTip}{Polecenia wieloliniowe w konsoli interaktywnej 🤔}
+\begin{ProTip}{Polecenia wieloliniowe w konsoli interaktywnej \zaawansowane{*}}
 Możliwe jest wprowadzanie poleceń wieloliniowych w konsoli interaktywnej.
 W takim wypadku po wprowadzeniu pierwszej linii (rozpoczynającej blok, np. \python{def})
 nastąpi zmiana znaku zachęty na \Verb{...}, co oznacza tryb wprowadzania bloku poleceń.
@@ -120,7 +120,7 @@ print( a - 2, kwadrat(4) )
 \vspace{-13pt}
 
 %  BEGIN: Funkcje2
-\subsubsection{Argumenty domyślne i nazwane {\Symbola 🤔}}
+\subsubsection{Argumenty domyślne i nazwane \zaawansowane{*}}
 
 Możliwe jest podanie wartości domyślnych dla wybranych argumentów funkcji. Utworzy to z nich argumenty opcjonalne, które nie muszą być podawane przy wywołaniu funkcji.
 Argumenty z wartościami domyślnymi muszą występować w definicji funkcji po argumentach bez takich wartości.
@@ -139,7 +139,7 @@ print( potega(b = 3), potega(b = 1, a = 4) )
 8 4
 \end{CodeFrame}
 
-\subsubsection{Zasięg zmiennej {\Symbola 🤔}}
+\subsubsection{Zasięg zmiennej \zaawansowane{*}}
 
 W Pythonie wewnątrz funkcji widoczne są zmienne zdefiniowane poza nią, jednak aby móc modyfikować taką zmienną wewnątrz
 funkcji należy ją tam zadeklarować jako globalną przy pomocy słowa kluczowego \python{global}:
@@ -382,6 +382,7 @@ W ramach zarówno pętli for jak i while możemy użyć instrukcji:
 \end{itemize}
 
 Ich działanie może zobrazować poniższy kod:
+\\*
 \begin{CodeFrame}[python]{0.50\textwidth}
 for x in [1, 2, 3, 4, 5, 6]:
   print("start", x)

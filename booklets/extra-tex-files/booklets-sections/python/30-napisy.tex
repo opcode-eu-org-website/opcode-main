@@ -285,7 +285,7 @@ Niektóre znaki specjalne jak np. znak nowej linii, tabulator możemy wprowadzi�
 %  END: Konwersja znak - numer unicode
 
 %  BEGIN: Wyrażenia regularne 01
-\subsection{Wyrażenia regularne {\Symbola 🤔}}
+\subsection{Wyrażenia regularne \zaawansowane{*}}
 
 W przetwarzaniu napisów bardzo często stosowane są wyrażenia regularne służące do dopasowywania napisów do wzorca który opisują, wyszukiwaniu/zastępowaniu tego wzorca. Do typowej, podstawowej składni wyrażeń regularnych zalicza się m.in. następujące operatory:
 
@@ -309,12 +309,11 @@ $      - koniec napisu/linii
          albo wyrażenia podanego prawej stronie
 \end{Verbatim}
 
-\pagebreak[2]\noindent
+\noindent
 Python umożliwia korzystanie z wyrażeń regularnych za pomocą modułu \python{re}:
-
+\\*
 \begin{CodeFrame}[python]{0.57\textwidth}
 import re
-
 y = "aa bb cc bb ff bb ee"
 x = "aa bb cc dd ff gg ee"
 
@@ -329,15 +328,43 @@ if re.search(" ([a-z]{2}) .* \\1", y):
 
 if re.search(" ([a-z]{2}) .* \\1", x):
   print("x zawiera dwa razy to samo")
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+x zawiera d lub z
+y zawiera dwa razy to samo
+\end{CodeFrame}
+
+\noindent
+Funkcja search zwraca więcej informacji niż sam fakt pasowania lub nie pasowania:
+\\*
+\begin{CodeFrame}[python]{0.57\textwidth}
+import re
+x = "aa bb cc dd ff gg ee"
 
 # wypisanie dopasowania
 wynik = re.search("cc (xx)|(dd) ff", x)
 if wynik:
-  print( wynik.group(0) )
+  print( "dopasowano tekst:", wynik.group(0) )
+  print( "na pozycji:", wynik.span()[0] )
 
 wynik = re.search("cc (xx|dd) ff", x)
 if wynik:
-  print( wynik.group(0) )
+  print( "dopasowano tekst:", wynik.group(0) )
+  print( "na pozycji:", wynik.span()[0] )
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+dopasowano tekst: dd ff
+na pozycji: 9
+dopasowano tekst: cc dd ff
+na pozycji: 6
+\end{CodeFrame}
+
+\noindent
+Wyrażeń regularnych możemy używać także do operacji wyszukaj i zastąp pasujący fragment napisu:
+\\*
+\begin{CodeFrame}[python]{0.57\textwidth}
+import re
+y = "aa bb cc bb ff bb ee"
 
 # zastępowanie
 print (re.sub('[bc]+', "XX", y, 2))
@@ -349,10 +376,6 @@ print (re.sub('.*bb (.*) bb.*', "\\1", y))
 print (re.sub('.*?bb (.*) bb.*', "\\1", y))
 \end{CodeFrame}
 \begin{CodeFrame}{auto}
-x zawiera d lub z
-y zawiera dwa razy to samo
-dd ff
-cc dd ff
 aa XX XX bb ff bb ee
 aa XX XX XX ff XX ee
 aa X cc bb ff X ee

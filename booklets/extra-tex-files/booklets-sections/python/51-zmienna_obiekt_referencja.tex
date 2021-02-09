@@ -22,7 +22,7 @@
 % SOFTWARE.
 
 %  BEGIN: Zmienna, obiekt i referencja
-\subsection{Zmienna, obiekt i referencja {\Symbola 🤔}}
+\subsection{Zmienna, obiekt i referencja \zaawansowane{**}}
 
 W Pythonie każda zmienna jest nazwą wskazującą na jakiś obiekt w pamięci. Podobnie każdy element listy czy słownika wskazuje na jakiś obiekt\footnote{
 Zasadniczo wszystkie definiowane przez nas zmienne czy funkcje są elementem słownika związanego z danym kontekstem.
@@ -60,7 +60,7 @@ f1()
 \end{CodeFrame*}
 \end{teacherOnly}
 
-\subsubsection{Usuwanie i czas życia zmiennych {\Symbola 🤔}}
+\subsubsection{Usuwanie i czas życia zmiennych}
 
 Instrukcja \python{del}, której używaliśmy już do usuwania elementów z listy lub słownika może być wykorzystana także do usuwania innych zmiennych.
 Należy jednak pamiętać iż w Pythonie usunięcie zmiennej nie wiąże się z natychmiastowym zwolnieniem zajmowanej przez nią pamięci z kilku powodów:
@@ -69,7 +69,7 @@ Należy jednak pamiętać iż w Pythonie usunięcie zmiennej nie wiąże się z 
 \item to Python decyduje o tym kiedy zwalniać / ponownie użyć pamięć pozostałą po obiektach na które nie wskazuje już żadna nazwa
 \end{itemize}
 
-\subsubsection{Kopiowanie obiektów {\Symbola 🤔}}
+\subsubsection{Kopiowanie obiektów}
 
 Python w momencie przypisania wartości jednej zmiennej do innej nie tworzy kopii obiektu na który wskazuje zmienna, zamiast tego przypisuje referencję do istniejącego obiektu.
 Jest to szczególnie zauważalne w obiektach, które mogą być wewnętrznie modyfikowalne (takich jak listy czy słowniki)\footnote{
@@ -136,7 +136,7 @@ print(id(a), id(b))
 \end{CodeFrame*}
 \end{teacherOnly}
 
-\subsubsection{Dla jeszcze bardziej dociekliwych {\Symbola 🤔}}
+\subsubsection{Dla jeszcze bardziej dociekliwych \zaawansowane{***}}
 
 Osobom jeszcze bardziej dociekliwym w temacie wnętrzności Pythona możemy polecić lekturę artykułu omawiającego te zagadnienia \url{http://www.rwdev.eu/articles/objectthinking} oraz samodzielne eksperymenty.
 %  END: Zmienna, obiekt i referencja

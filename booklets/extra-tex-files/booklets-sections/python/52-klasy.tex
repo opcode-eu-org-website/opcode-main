@@ -22,9 +22,10 @@
 % SOFTWARE.
 
 %  BEGIN: Klasy i struktury
-\subsection{Klasy i struktury {\Symbola 🤔}}
+\subsection{Klasy i struktury \zaawansowane{*}}
 
 Inną metodą grupowania zmiennych i funkcji jest definiowanie własnych klas:
+\\*
 \begin{CodeFrame*}[python]{}
 class NazwaKlasy:
   # pola składowe
@@ -42,14 +43,16 @@ class NazwaKlasy:
     # i kolejny sposób na utworzenie pola składowego klasy
     self.b = 13 * x
 \end{CodeFrame*}
+
 Warto zauważyć jawny argument metod składowych klasy w postaci obiektu tej klasy. \teacher{(w C++ także występuje ale nie jest jawnie deklarowany, ani nie trzeba się nim jawnie posługiwać)}
 Możliwe jest także dziedziczenie po jednej lub kilku klasach bazowych, w tym celu definicje klasy rozpoczynamy:
+\\*
 \begin{CodeFrame*}[python]{}
 class NazwaKlasy(Bazowa1, Bazowa2):
 \end{CodeFrame*}
 
 Tworzenie obiektu klasy i używanie go:
-
+\\*
 \begin{CodeFrame}[python]{0.55\textwidth}
 k = NazwaKlasy()
 k.a = 67
@@ -60,7 +63,7 @@ k.wypisz()
 \end{CodeFrame}
 
 Obiekty można rozszerzać o nowe składowe i funkcje:
-
+\\*
 \begin{CodeFrame}[python]{0.55\textwidth}
 k.c = k.a + 10
 print(k.c)
@@ -69,7 +72,8 @@ print(k.c)
 77
 \end{CodeFrame}
 
-W ten sposób można też tworzyć całe struktury:\\
+W ten sposób można też tworzyć całe struktury:
+\\*
 \begin{CodeFrame}[python]{0.55\textwidth}
 class Pusta():
   pass
