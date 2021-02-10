@@ -22,15 +22,30 @@
 % SOFTWARE.
 
 \IfStrEq{\dbEntryID}{}{
+	\insertZadanie{\currfilepath}{ustaw_adres}{}
+	\insertZadanie{\currfilepath}{ustaw_route}{}
+	\insertZadanie{\currfilepath}{wlacz_forward}{}
 	\insertZadanie{\currfilepath}{serwer_trojkat}{}
 	\insertZadanie{\currfilepath}{udp_echo}{}
-	\insertZadanie{\currfilepath}{dos_echo1}{}
-	\insertZadanie{\currfilepath}{dos_echo2}{}
 }
 
 
+\dbEntryBegin{ustaw_adres}\if1\dbEntryCheckResults
+Napisz polecenie które ustawi adres ip \Verb#172.33.13.113# (maska sieci to \Verb#255.255.255.0#) na interfejsie \Verb#eth5#.
+\fi
+
+\dbEntryBegin{ustaw_route}\if1\dbEntryCheckResults
+Napisz polecenie które ustawi trasę routingową do sieci \Verb#10.13.0.0/16# przez bramkę o adresie ip \Verb#172.33.13.13#.
+\fi
+
+\dbEntryBegin{wlacz_forward}\if1\dbEntryCheckResults
+Napisz polecenia które włączą przekazywanie pakietów (routing) pomiędzy interfejsami \Verb#eth3# i \Verb#eth4#, ale nie zezwolą na przekazywanie pakietów innymi interfejsami (w tym pakietów inny interfejs $\leftrightarrow$ \Verb#eth3# / \Verb#eth4#).
+\\
+\textit{Wskazówka: skorzystaj z reguł filtracji pakietów}
+\fi
+
 \dbEntryBegin{serwer_trojkat}\if1\dbEntryCheckResults
-Napisz serwer TCP, który oczekuje że klient wyśle mu liczbę, w odpowiedzi na którą serwer odeśle do tego klienta trójkąt z gwiazdek odpowiedniej wielkości.
+Napisz (w Pythonie lub C/C++) serwer TCP, który oczekuje że klient wyśle mu liczbę, w odpowiedzi na którą serwer odeśle do tego klienta trójkąt z gwiazdek odpowiedniej wielkości.
 Na przykład dla żądania klienta w postaci "3" powinien to być:
 \begin{Verbatim}
 *
@@ -43,46 +58,5 @@ Na przykład dla żądania klienta w postaci "3" powinien to być:
 Powyżej znajdują się przykładowe kody wysyłający dane po UDP ("klient UDP") i odbierający dane po UDP ("serwer UDP")
 oraz kod serwera usługi "echo" (odsyłającej odebrane dane do nadawcy) w wariancie TCP, którą omawialiśmy na wykładzie.
 
-W oparciu o te informacje napisz program realizujący funkcję serwera echo z użyciem UDP.
-
-\emph{Jeżeli nie lubisz Pythona program może być w C lub C++.}
+W oparciu o te informacje napisz (w Pythonie lub C/C++) program realizujący funkcję serwera echo z użyciem UDP.
 \fi
-
-\teacher{Zadania \ref{dos_echo1} i \ref{dos_echo2} mozna zrobić jako wspólny dla całej grupy pokaz.}
-
-\dbEntryBegin{dos_echo1}\if1\dbEntryCheckResults
-Uruchom dwie instancje serwera echo korzystającego z protokołu UDP.
-
-Zastanów się co by się stało jeżeli jeden z tych serwerów dostałby pakiet pochodzący od drugiego z nich?
-
-Korzystając z pakietu \textit{scapy} oraz posiadając prawa root'a możemy przy pomocy Pythona wysyłać dowolnie spreparowane pakiety IP:
-
-\begin{CodeFrame*}[python]{}
-from scapy.all import IP, IPv6, UDP, send
-
-send(IPv6(src=sIP, dst=dIP) / UDP(sport=sPort, dport=dPort) / "ABC ... XYZ")
-# powyższa funkcja utworzy (a następnie wyśle):
-#  → pakiet IPv6 od sIP do dIP
-#    (adresy podajemy jako napisy),
-#  → w którym jest pakiet UDP z portem źródłowym sPort i docelowym dport
-#    (porty podajemy jako wartości numeryczne)
-#  → w którym są dane "ABC ... XYZ"
-
-# jeżeli zamiast IPv6() użyjemy IP() będziemy używać pakietu IPv4
-
-# możemy też zaimportować inne funkcjonalności z modułu scapy
-# (np. ICMP, TCP, ...) i używać ich do budowy naszych pakietów
-\end{CodeFrame*}
-
-Modyfikując powyższy kod spróbuj wysłać sfałszowany pakiet adresowany do jednego z serwerów, który jako adres nadawcy ma podany drugi z serwerów.
-
-\textit{Scapy nie jest elementem biblioteki standardowej pythona – konieczne może być zainstalowanie pakietu \texttt{python3-scapy} albo zainstalowanie go poprzez managera modułów pythonowoych „pip”: \texttt{pip3 install scapy-python3}.}
-\fi
-
-\dbEntryBegin{dos_echo2}\if1\dbEntryCheckResults
-Zobacz co się stanie jeżeli w sfałszowanym pakiecie podasz ten sam serwer jako nadawcę i odbiorcę.
-
-Usługa UDP-echo była kiedyś powszechnie stosowaną usługą diagnostyczną umożliwiająca testowanie połączenia sieciowego. Do tej pory ma nawet przyznany standardowy numer portu (7).
-Jak myślisz dlaczego usługa UDP-echo nie jest już powszechnie dostępną na każdym komputerze podłączonym do Internetu?
-\fi
-

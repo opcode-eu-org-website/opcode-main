@@ -33,22 +33,17 @@
 \dbEntryBegin{opeartory_bitowe}\if1\dbEntryCheckResults
   W programowaniu mikrokontrolerów często zachodzi potrzeba ustawienia pojedynczego bitu rejestru na 0 lub 1, albo zmiany jego wartości.
   Sprawdź (np. rozpisując ich działanie), które wyrażenie w rejestrze \Verb$rejestr$, na podstawie maski \Verb$maska$:
-  \begin{itemize}
-  \item Ustawia te bity na 1,
-  \item Ustawia te bity na 0,
-  \item Odwraca wartości tych bitów.
-  \end{itemize}
 
-  \begin{CodeFrame*}[c]{}
-    /* Wyrażenie 1 */
-    rejestr |= maska;
-
-    /* Wyrażenie 2 */
-    rejestr ^= maska;
-
-    /* Wyrażenie 3 */
-    rejestr &= ~maska;
-    \end{CodeFrame*}
+  \begin{CodeFrame}[c]{0.55\textwidth}
+    rejestr |= maska;  // <- Wyrażenie 1
+    rejestr ^= maska;  // <- Wyrażenie 2
+    rejestr &= ~maska; // <- Wyrażenie 3
+  \end{CodeFrame}
+  \noindent\begin{minipage}[t]{0.43\textwidth}\vspace{-3pt}\begin{itemize}
+    \item Ustawia te bity na 1,
+    \item Ustawia te bity na 0,
+    \item Odwraca wartości tych bitów.
+  \end{itemize}\end{minipage}\hfill
 \fi
 
 \dbEntryBegin{zadanie_maska_bitowa}\if1\dbEntryCheckResults
@@ -79,7 +74,5 @@ Napisz program, który za pomocą zaimplementowanej w ćwiczeniu UART funkcji we
 ****
 *****
 ******
-*******
-********
 \end{CodeFrame*}
 \fi

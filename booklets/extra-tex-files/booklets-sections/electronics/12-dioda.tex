@@ -24,19 +24,23 @@
 % BEGIN: Elektronika - Dioda
 \section{Dioda}
 
-Dioda idealna to element przewodzący prąd tylko w jednym kierunku. Rzeczywiste diody przewodzą prąd zdecydowanie chętniej w jednym kierunku niż w drugim (na ogół przewodzenie w kierunku zaporowym się pomija) ponadto charakteryzują je cechy zależne od technologi wykonania takie jak:
+\begin{wrapfigure}{r}{0.3\textwidth}
+  \vspace{-33pt}
+  \begin{center}
+    \includegraphics[width=0.25\textwidth]{img/elektronika/diody}
+  \end{center}
+  \vspace{-23pt}
+\end{wrapfigure}
+
+Dioda idealna to element przewodzący prąd tylko w jednym kierunku. Symbole najpopularniejszych typów diod pokazane zostały obok. Dioda jest elementem nieliniowym – spadek napięcia na przewodzącej diodzie nie spełnia prawa Ohma i jest prawie stały (niezależny od prądu).
+
+Rzeczywiste diody przewodzą prąd zdecydowanie chętniej w jednym kierunku niż w drugim (na ogół przewodzenie w kierunku zaporowym się pomija) ponadto charakteryzują je cechy zależne od technologi wykonania takie jak:
 \begin{itemize}
 \item spadek napięcia w kierunku przewodzenia (typowo dla diod krzemowych 0.6V - 0.7V, a dla diod Schottky’ego 0.3V)
 \item napięcie przebicia - napięcie, które przyłożone w kierunku zaporowym powoduje znaczące przewodzenie diody w tym kierunku - w większości przypadków parametr którego nie należy przekraczać, jednak wykorzystywane (i stanowiące ich parametr) w niektórych typach diod
 \item maksymalny prąd przewodzenia
 \item czas przełączania (związany głównie z pasożytniczą pojemnością złącza) - zdecydowanie krótszy (około 100 ps) w diodach Schottky’ego niż w diodach krzemowych,.
 \end{itemize}
-
-\begin{wrapfigure}{r}{0.3\textwidth}
-  \begin{center}
-    \includegraphics[width=0.25\textwidth]{img/elektronika/diody}
-  \end{center}
-\end{wrapfigure}
 
 \noindent
 Ponadto stosowane są m.in.:
@@ -66,6 +70,7 @@ Funkcję tą może pełnić nawet pojedyncza dioda – mamy wtedy do czynienia z
 Lepszym i częściej stosowanym rozwiązaniem jest prostownik pełnookresowy (dwupołówkowy). Najczęstszą jego realizacją jest tzw. mostek Graetza, czyli układ 4 diod połączonych w taki sposób iż dwie z nich zawsze (w każdym punkcie napięcia wejściowego) przewodzą – zobacz symulację \url{http://ln.opcode.eu.org/prost2}.
 Wadą takiego układu jest znaczny spadek napięcia na mostku, wynoszący dwukrotność spadku napięcia na pojedynczej diodzie.
 
+\subsubsection{trójfazowe \zaawansowane{**}}
 Istnieją również układy prostowników napięcia trójfazowego, charakteryzują się one m.in. niższymi tętnieniami napięcia wyjściowego – dla prostowników jednofazowych wacha się ono (pomijając spadki na diodach) od $0$ do $V_{LN}\sqrt{2}$, a dla pełnookresowego trójfazowego od $V_{LL}\sqrt{2}\sin{60}$ do $V_{LL}\sqrt{2}$ (gdzie $V_{LN}$ to napięcie skuteczne pomiędzy fazą a przewodem neutralnym, a $V_{LL} = V_{LN}\sqrt{3}$ to napięcie skuteczne międzyfazowe). Zobacz symulację: \url{http://ln.opcode.eu.org/prost3}.
 
 \subsection{dzielnik napięcia z diodą Zenera}
