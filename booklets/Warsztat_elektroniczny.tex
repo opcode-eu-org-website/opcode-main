@@ -31,7 +31,7 @@
 	Projekt ,,Matematyka dla Ciekawych Świata'',\\
 	Krzysztof Lasocki\\\normalsize\ttfamily <krz.lasocki@gmail.com>
 }
-\date  {2020-05-29}
+\date  {2021-02-11}
 
 \makeatletter\hypersetup{
 	pdftitle = {\@title}, pdfauthor = {\@author}
@@ -89,83 +89,12 @@ Omówimy obsługę multimetru oraz przetwornicy, a także podstawy lutowania i b
 
 Praktyczna zabawa z elektroniką wymaga posiadania przynajmniej minimalnego zaplecza sprzętowego.
 W jego skład powinno wejść co najmniej:
-	źródło zasilania (najlepiej z regulacją napięcia i ograniczenia prądowego),
 	uniwersalny miernik wielkości elektrycznych (multimetr),
+	źródło zasilania (najlepiej z regulacją napięcia i ograniczenia prądowego),
 	płytka prototypowa wraz z różnymi kabelkami i podstawowymi narzędziami (przynajmniej śrubokrętem),
 	moduł mikrokontrolera wraz z programatorem
 	oraz jakiś zestaw podstawowych elementów od których zaczniemy naszą zabawę.
 W tym rozdziale powiemy na co warto zwrócić uwagę przy tych zakupach oraz przedstawiami kilka godnych uwagi propozycji dostępnych na rynku.
-
-\subsection{Zasilacz}
-	Jednym z najważniejszych elementów zestawu służącego do zabawy elektroniką jest źródło zasilania.
-	Może nim być nawet zwykła bateria, jednak dla wygody i bezpieczeństwa podłączanych układów warto posiadać podstawowy zasilacz regulowany z regulowanym ograniczeniem prądowym.
-	Powinien on zapewniać co najmniej:
-	\begin{itemize}
-		\item regulację napięcia wyjściowego w zakresie od 2.5V do 7V
-		\item regulowane ograniczenie prądowe\footnote{
-			w przypadku próby pobrania większego prądu niż nastawiony zasilacz powinien
-			przejść z trybu stałego napięcia (CV) do trybu stałego prądu (CV)
-			i obniżyć podawane napięcie tak aby płynął nastawiony prąd.
-		} w zakresie od 20mA do 500mA
-		\item sygnalizacja trybu CV/CC (np. za pomocą diody LED)
-	\end{itemize}
-	Dla wygody jego używania warto aby był wyposażony także w:
-	\begin{itemize}
-		\item woltomierz pokazujący wartość napięcia wyjściowego
-		\item amperomierz pokazujący wartość prądu podawanego do obciążenia
-	\end{itemize}
-	
-	Poniżej kilka propozycji przetwornic do wyboru.
-	
-	\subsubsection{przetwornica DC/DC Step-Down XL4015}
-		\begin{center}
-			\includegraphics[height=3.3cm]{warsztat_elektroniczny/moduł_XL4015_1}
-		\end{center}
-		\begin{itemize}
-			\wada brak zabezpieczenia przed odwrotną polaryzacją zasilania wejściowego (zamianą plusa z minusem na wejściu)
-			\wada brak wskazań wartości napięcia i prądu
-			\info od 8PLN (moduł "czerwony"), od 10PLN (moduł "niebieski")
-			\uwaga należy zwrócić uwagę aby moduł posiadał dwa potencjomery - jeden do regulacji napięcia drugi prądu (występują moduły umożliwiające tylko regulację napięcia)
-		\end{itemize}
-	
-	\subsubsection{przetwornica DC/DC Step-Down XL4015 z woltomierzem i amperomierzem LED}
-		\begin{center}
-			\includegraphics[height=3.3cm]{warsztat_elektroniczny/moduł_XL4015_LED_1}
-			\hspace{0.5cm}
-			\includegraphics[height=3.3cm]{warsztat_elektroniczny/moduł_XL4015_LED_2}
-		\end{center}
-	
-		\begin{itemize}
-			\zaleta modularna konstrukcja (oparta na opisanym wcześniej module "czerwonym")
-			\wada brak zabezpieczenia przed odwrotną polaryzacją zasilania wejściowego (zamianą plusa z minusem na wejściu)
-			\wada mała dokładność pomiaru (wskazuje 0.01A gdy płynie 0.1A)
-			\wada brak możliwości (oficjalnie udokumentowanej) kalibracji pomiarów
-			\wada słaba czytelność wyświetlacza LED przy dobrym oświetleniu
-			\info od 30PLN
-		\end{itemize}
-		
-	\subsubsection{przetwornica DC/DC Step-Down XL4015 z woltomierzem i amperomierzem LCD}
-		\begin{center}
-			\includegraphics[height=3.3cm]{warsztat_elektroniczny/moduł_XL4015_LCD_1}
-			\hspace{0.5cm}
-			\includegraphics[height=3.3cm]{warsztat_elektroniczny/moduł_XL4015_LCD_2}
-			\hspace{0.5cm}
-			\includegraphics[height=3.3cm]{warsztat_elektroniczny/moduł_XL4015_LCD_3}
-		\end{center}
-		\begin{itemize}
-			\zaleta  zabezpieczenie przed odwrotną polaryzacją zasilania wejściowego (zamianą plusa z minusem na zaciskach wejściowych),
-				\textbf{uwaga:} dotyczy wersji pokazanej na zdjęciu, podobna wersja z dwoma dodatkowymi LEDami najprawdopodobniej nie posiada tego zabezpieczenia
-			\zaleta  dobra precyzja pomiaru (wskazuje 0.04A gdy płynie 0.03A)
-			\zaleta  możliwość łatwej kalibracji pomiarów
-			\wada niebezpieczne gniazdko USB (można podać na nie zbyt wysokie napięcia)
-			\info od 40PLN
-		\end{itemize}
-		
-	\subsubsection{elementy dodatkowe}
-	Do wybranej przetwornicy sugerujemy dokupienie gniazda DC 2.5/5.5 wraz z przewodem oraz baterii 9V (ze złączem i wtykiem DC 2.5/5.5) lub zasilacza wtyczkowego np. 12V z prądem większym niż 0.9A (z wtykiem DC 2.5/5.5). Pozwoli to na wygodne podłączanie i odłączanie zasilania od przetwornicy poprzez rozpięcie wtyku DC.
-	\begin{center}
-		\includegraphics[height=4.3cm]{warsztat_elektroniczny/przewody_zasilające}
-	\end{center}
 
 \subsection{Multimetr}
 	Najważniejszym przyrządem w naszym warsztacie elektronika jest uniwersalny miernik parametrów elektrycznych, zwany multimetrem.
@@ -247,6 +176,77 @@ W tym rozdziale powiemy na co warto zwrócić uwagę przy tych zakupach oraz prz
 			\info od 76PLN
 		\end{itemize}
 
+\subsection{Zasilacz}
+	Jednym z najważniejszych elementów zestawu służącego do zabawy elektroniką jest źródło zasilania.
+	Może nim być nawet zwykła bateria, jednak dla wygody i bezpieczeństwa podłączanych układów warto posiadać podstawowy zasilacz regulowany z regulowanym ograniczeniem prądowym.
+	Powinien on zapewniać co najmniej:
+	\begin{itemize}
+		\item regulację napięcia wyjściowego w zakresie od 2.5V do 7V
+		\item regulowane ograniczenie prądowe\footnote{
+			w przypadku próby pobrania większego prądu niż nastawiony zasilacz powinien
+			przejść z trybu stałego napięcia (CV) do trybu stałego prądu (CV)
+			i obniżyć podawane napięcie tak aby płynął nastawiony prąd.
+		} w zakresie od 20mA do 500mA
+		\item sygnalizacja trybu CV/CC (np. za pomocą diody LED)
+	\end{itemize}
+	Dla wygody jego używania warto aby był wyposażony także w:
+	\begin{itemize}
+		\item woltomierz pokazujący wartość napięcia wyjściowego
+		\item amperomierz pokazujący wartość prądu podawanego do obciążenia
+	\end{itemize}
+	
+	Poniżej kilka propozycji przetwornic do wyboru.
+	
+	\subsubsection{przetwornica DC/DC Step-Down XL4015}
+		\begin{center}
+			\includegraphics[height=3.3cm]{warsztat_elektroniczny/moduł_XL4015_1}
+		\end{center}
+		\begin{itemize}
+			\wada brak zabezpieczenia przed odwrotną polaryzacją zasilania wejściowego (zamianą plusa z minusem na wejściu)
+			\wada brak wskazań wartości napięcia i prądu
+			\info od 8PLN (moduł "czerwony"), od 10PLN (moduł "niebieski")
+			\uwaga należy zwrócić uwagę aby moduł posiadał dwa potencjomery - jeden do regulacji napięcia drugi prądu (występują moduły umożliwiające tylko regulację napięcia)
+		\end{itemize}
+	
+	\subsubsection{przetwornica DC/DC Step-Down XL4015 z woltomierzem i amperomierzem LED}
+		\begin{center}
+			\includegraphics[height=3.3cm]{warsztat_elektroniczny/moduł_XL4015_LED_1}
+			\hspace{0.5cm}
+			\includegraphics[height=3.3cm]{warsztat_elektroniczny/moduł_XL4015_LED_2}
+		\end{center}
+	
+		\begin{itemize}
+			\zaleta modularna konstrukcja (oparta na opisanym wcześniej module "czerwonym")
+			\wada brak zabezpieczenia przed odwrotną polaryzacją zasilania wejściowego (zamianą plusa z minusem na wejściu)
+			\wada mała dokładność pomiaru (wskazuje 0.01A gdy płynie 0.1A)
+			\wada brak możliwości (oficjalnie udokumentowanej) kalibracji pomiarów
+			\wada słaba czytelność wyświetlacza LED przy dobrym oświetleniu
+			\info od 30PLN
+		\end{itemize}
+		
+	\subsubsection{przetwornica DC/DC Step-Down XL4015 z woltomierzem i amperomierzem LCD}
+		\begin{center}
+			\includegraphics[height=3.3cm]{warsztat_elektroniczny/moduł_XL4015_LCD_1}
+			\hspace{0.5cm}
+			\includegraphics[height=3.3cm]{warsztat_elektroniczny/moduł_XL4015_LCD_2}
+			\hspace{0.5cm}
+			\includegraphics[height=3.3cm]{warsztat_elektroniczny/moduł_XL4015_LCD_3}
+		\end{center}
+		\begin{itemize}
+			\zaleta  zabezpieczenie przed odwrotną polaryzacją zasilania wejściowego (zamianą plusa z minusem na zaciskach wejściowych),
+				\textbf{uwaga:} dotyczy wersji pokazanej na zdjęciu, podobna wersja z dwoma dodatkowymi LEDami najprawdopodobniej nie posiada tego zabezpieczenia
+			\zaleta  dobra precyzja pomiaru (wskazuje 0.04A gdy płynie 0.03A)
+			\zaleta  możliwość łatwej kalibracji pomiarów
+			\wada niebezpieczne gniazdko USB (można podać na nie zbyt wysokie napięcia)
+			\info od 40PLN
+		\end{itemize}
+		
+	\subsubsection{elementy dodatkowe}
+	Do wybranej przetwornicy sugerujemy dokupienie gniazda DC 2.5/5.5 wraz z przewodem oraz baterii 9V (ze złączem i wtykiem DC 2.5/5.5) lub zasilacza wtyczkowego np. 12V z prądem większym niż 0.9A (z wtykiem DC 2.5/5.5). Pozwoli to na wygodne podłączanie i odłączanie zasilania od przetwornicy poprzez rozpięcie wtyku DC.
+	\begin{center}
+		\includegraphics[height=4.3cm]{warsztat_elektroniczny/przewody_zasilające}
+	\end{center}
+
 \subsection{Warsztat – płytka stykowa, przewody i śrubokręt}
 	Kolejnymi rzeczami w które warto się zaopatrzyć są elementy umożliwiają łatwe budowanie układów prototypowych:
 	\begin{itemize}
@@ -324,6 +324,7 @@ Będzie potrzebny też zestaw drobnych podzespołów elektronicznych:
 	
 	\item dioda prostownicza, około 10 sztuk
 	\item dioda świecąca, około 10 sztuk
+	\item dioda Zenera 3.3V, około 5 sztuk
 	\item tranzystor NPN (np. BC337) i PNP (np. BC327), po kilka sztuk
 	
 	\item układ logiczny z serii 4000 lub 7400: NAND (np. CD4011BE) lub NOR (np. CD4001BP)
@@ -743,35 +744,6 @@ Przy podłączaniu układu scalonego ważne jest aby nie pomylić numerów pinó
   W elektronice do wyrażania wymiarów stosuje się m.in. jednostkę \textbf{mil}\footnote{zwaną też \textit{thou}, od \textit{thousands of an inch}},
   równą 1/1000 cala. Rozstaw nóżek w obudowie DIP to 100 mili (= 2.54 mm). Taki sam jest również rozstaw otworków na płytce stykowej.
 \end{ProTip}
-
-
-\section{Zadania dodatkowe}
-
-\vspace{13pt}
-\begin{center}\includegraphics[width=0.6\textwidth]{img/elektronika/praca_domowa-szeregowe_rownolegle}\end{center}
-\vspace{-7pt}
-
-\begin{Zadanie}{}{}
-  Rezystory $R_1$ i $R_2$ połączone zostały szeregowo i podłączone do źródła napięcia U, tak jak pokazano na powyższym schemacie.
-  \begin{enumerate}[label=\alph*)]
-    \item Zapisz zależność (wzór) określający spadek napięcia na rezystorze $R_1$.
-    \item Zapisz zależność (wzór) określający sumaryczną moc, która wydzieli się na obu tych rezystorach.
-  \end{enumerate}
-\end{Zadanie}
-
-\begin{Zadanie}{}{}
-  Rezystory $R_3$ i $R_4$ połączone zostały równolegle i podłączone do źródła napięcia U, tak jak pokazano na powyższym schemacie.
-  \begin{enumerate}[label=\alph*)]
-    \item Zapisz zależność (wzór) określający prąd płynący przez rezystor $R_3$.
-    \item Zapisz zależność (wzór) określający łączną rezystancję obu rezystorów (czyli ich rezystancję zastępczą).
-  \end{enumerate}
-\end{Zadanie}
-
-\begin{Zadanie}{}{}
-  Znajdź dokumentację (kartę katalogową) do rejestru przesuwnego, który kupiłeś/aś (CD4094 lub 74HC595).
-  Odczytaj, jakie jest największe napięcie zasilania tego układu (\textit{supply voltage}, w sekcji
-  \textit{Absolute maximum ratings}), oraz do których pinów należy podłączać napięcie zasilania (w sekcji \textit{pin configuration}).
-\end{Zadanie}
 
 
 \copyrightFooter{
