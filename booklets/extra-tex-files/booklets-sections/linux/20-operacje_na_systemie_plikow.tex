@@ -47,10 +47,10 @@ Cudzysłów pojedynczy (w odróżnieniu od podwójnego) zabezpiecza także przed
 
 Listowanie plików jest operacją na tyle istotną i użyteczną że istnieje do tego dedykowane polecenie – \Verb$ls$. Pozwala ono na m.in. wypisywanie szczegółowych informacji o plikach, listowanie całej zawartości katalogu, sortowanie wyników itd.
 Należy jednak pamiętać że rozwijaniem znaków uogólniających (czyli zamianą napisu je zawierającego na listę plików) dla polecenia \Verb$ls$ zajmuje się powłoka (czyli np. \Verb$bash$) – tak samo jak dla polecenia \Verb$echo$ – gdyż sama komenda \Verb$ls$ nie rozumie znaków uogólniających.
-
+%
 Kilka przykładów:
 \begin{itemize}
-	\item pliki z jednoznakową nazwą \Verb{ls ?}
+	\item pliki z jednoznakową nazwą: \Verb{ls ?}
 	\item pliki zaczynające się od znaku zapytania: \Verb{ls \?*} lub  \Verb{ls '?'*}
 	\item pliki nie zaczynające się od a: \Verb{ls [!a]*}
 	\item pliki mające w nazwie literę b: \Verb{ls *b*}
