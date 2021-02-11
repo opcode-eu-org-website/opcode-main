@@ -39,9 +39,28 @@ Multiplekser analogowy (dwukierunkowy) działa na zasadzie przełącznika łącz
 
 
 % BEGIN: Elektronika - Typy transmisji
-\section{Typy transmisji}
+\section{Topologie i typy transmisji}
 
-Wyróżnić można typy transmisji:
+W zależności od układu fizycznych połączeń komunikujących się urządzeń wyróżnia się różne topologie sieci.
+Na schemacie poniżej przedstawione zostały główne topologie połączeń:
+
+\begin{itemize}
+\item \strong{magistrala} (linear bus) -- wszystkie urządzenia są podłączone do jednej linii (wspólnego medium transmisyjnego), okablowanie nie wyróżnia punktu centralnego
+\item \strong{łańcuch} (daisy chain) -- struktura okablowania podobna jak w magistrali, ale medium transmisyjne jest podzielone (połączenie n urządzeń składa się z n-1 łączy punkt-punkt pomiędzy urządzeniami)
+\item \strong{pierścień} (ring) -- topologia daisy chain w której końce są połączone, uodparnia to na pojedyncze uszkodzenie
+\item \strong{gwiazda} (star) -- wszystkie podłączenia biorą początek w węźle centralnym, w zależności od konstrukcji węzła centralnego może być realizowana w oparciu o współdzielone medium lub połączenia punkt-punkt
+\item \strong{krata} (mesh) -- każde urządzenie ma bezpośrednie połączenie punkt-punkt do każdego innego urządzenia (połączenie n urządzeń wymaga n(n-1)/2 połączeń punkt punkt)
+\end{itemize}
+
+\begin{center}
+    \includegraphics[width=0.7\textwidth]{img/elektronika/topologie}
+\end{center}
+
+Ponadto występują topologie mieszane złożone z opisanych powyżej: gwiazda wielokrotna (tzn. taka gdzie niektóre z węzłów stanowią punkty centralne kolejnych gwiazd), magistrala lub ring pomiędzy punktami centralnymi gwiazd, gwiazda w której w węzłach występują magistrale lub pierścienie, itd.
+
+\vspace{7pt}
+
+Wyróżnić można także typy transmisji:
 \begin{itemize}
 \item \strong{simplex} -- umożliwia tylko transmisję jednokierunkową
 \item \strong{half-duplex} -- umożliwia transmisję dwukierunkową, ale tylko w jedną stronę równocześnie
@@ -82,18 +101,29 @@ W zależności od konstrukcji dekodera adresu szyna adresowa może być równole
 
 Istnieje wiele zestandaryzowanych interfejsów zarówno szeregowych jak i równoległych, wśród najważniejszych należy wymienić:
 
+\begin{center} \includegraphics[width=0.47\textwidth]{img/elektronika/spi}    \includegraphics[width=0.47\textwidth]{img/elektronika/twi} \end{center}
+
 \subsection{SPI (Serial Peripheral Interface)}
     jest to szeregowa magistrala full-duplex działająca w układzie master-slave złożona z linii zegarowej (SCLK), nadawania przez mastera (MOSI), odbioru przez mastera (MISO) oraz linii służących do aktywacji urządzenia slave (SS / CS). 
+
+\begin{wrapfigure}{r}{0.48\textwidth} \begin{center} \vspace{-20pt} \includegraphics[width=0.43\textwidth]{img/elektronika/onewire} \vspace{-20pt} \end{center} \end{wrapfigure}
+
 \subsection{I2C (TWI)}
     jest to szeregowa magistrala half-duplex złożona z linii sygnałowej (SDA) i zegara (SCL) posiadająca zdefiniowany format ramki wraz z adresowaniem. Z wyjątkiem bitu startu i stopu stan linii danych może zmieniać się tylko przy niskim stanie linii zegarowej.
     Nadajniki są typu open-drain przez co realizowany jest iloczyn na drucie, co pozwala na wykrywanie kolizji (jeżeli dany nadajnik nie nadaje zera a linia jest w stanie zera to nadaje także ktoś inny). Pozwala to także na uzyskanie układów multimaster, pomimo iż typowo na magistrali takiej występuje tylko jeden układ master (nadający sygnał zegara i inicjujący transmisję). 
+
 \subsection{1 wire (one-wire)}
     jest to szeregowa magistrala half-duplex złożona z jedynie z linii sygnałowej (która może także służyć do zasilania urządzeń) posiadająca zdefiniowany format ramki wraz z adresowaniem. Standardowe nadawanie jest realizowane jako open-drain (wyjątkiem jest nadawanie tzw power-byte). 
+
 \subsection{USART}
     jest to uniwersalny synchroniczny i asynchroniczny nadajnik i odbiornik, umożliwia realizację szeregowej transmisji synchronicznej (zgodnie z zegarem) lub asynchronicznej (wykrywanie początku ramki na podstawie linii danych). Interfejs korzysta z rozdzielonych linii nadajnika i odbiornika (wyjście danych TxD oraz wejście danych RxD, co umożliwia realizację transmisji full-duplex) oraz może korzystać z dodatkowych sygnałów sterujących (wyjście RTS informujące o gotowości do odbioru oraz wejście CTS informacji o gotowości odbioru / zezwolenia na nadawanie). Niekiedy dostępne jest także wyjście załączenia nadajnika używane do pracy w trybie half-duplex (linie TxD i RxD połączone buforem trój-stanowym nadajnika).
 
+    \begin{center} \includegraphics[width=0.94\textwidth]{img/elektronika/uart1} \end{center}
     Interfejs ten najczęściej wykorzystywany jest w trybie asynchronicznym jako UART. W połączeniach UART zarówno nadajnik jak i odbiornik muszą mieć ustawione takie same parametry transmisji (szybkość, znaczenie 9 bitu (typowo bit parzystości, ale może także oznaczać np. pole adresowe), itp).
     Głównymi standardami elektrycznymi dla UART są: poziomy napięć układów elektronicznych używających tych portów (3.3V, 5V), RS-232 (w pełnym wariancie używa sygnałów kontroli przepływu, poziom logiczny 1 wynosi od -15V do -3V, a poziom logiczny 0 od +3V do +15V), RS-422 (transmisja różnicowa full-duplex pomiędzy dwoma urządzeniami) i RS-485 (transmisja różnicowa half-duplex w oparciu o szynę łączącą wiele urządzeń, kompatybilny elektrycznie z RS-422), możliwia jest też transmisja światłowodowa i bezprzewodowa.
+
+    \begin{center} \resizebox{0.87\textwidth}{!}{\includegraphics[trim={0 0 0 9cm},clip]{img/elektronika/uart2}} \end{center}
+    \begin{center} \resizebox{0.87\textwidth}{!}{\includegraphics[trim={0 6cm 0 0},clip]{img/elektronika/uart2}} \end{center}
 % END: Elektronika - Typy transmisji
 
 \begin{ProTip}[breakable]{Rezystory terminujące \zaawansowane{30}}

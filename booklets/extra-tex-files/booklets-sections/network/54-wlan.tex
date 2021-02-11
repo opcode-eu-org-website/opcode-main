@@ -1,0 +1,44 @@
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\subsection{Sieci bezprzewodowe}
+
+Linux może być także klientem sieci bezprzewodowych WiFi - do ich konfiguracji przydać mogą się następujące narzędzia:
+\begin{itemize}
+	\item \Verb#iwconfig# –
+		podstawowe operacje na interfejsie bezprzewodowym
+	\item \Verb#iwlist# –
+		listowanie "widocznych" sieci i informacji o nich
+	\item \Verb#wpa_supplicant# –
+		łączenie się z sieciami zabezpieczonymi WPA
+\end{itemize}
+
+\vspace{4pt}\noindent
+Linux może być nie tylko klientem takich sieci, ale pełnić w nich też funkcję access pointu, do tego zadania pomocne mogą być narzędzia takie jak:
+\begin{itemize}
+	\item \Verb#hostapd# –
+		uruchomienie access pointa na bazie linuxa i karty wifi
+	\item \Verb#dnsmasq# –
+		serwer DHCP oraz serwer maskujący DNS \\ (nie tylko dla sieci bezprzewodowych, ale często używany z hostapd)
+\end{itemize}
+oraz oczywiście odpowiednia konfiguracja routingu i przekazywania pakietów.
