@@ -78,7 +78,7 @@ kwadrat(2 + 3)
 \noindent
 Zwróć uwagę, iż wywołania funkcji w powyższym przykładzie nie są wcięte --- są poza blokiem funkcji.
 
-\begin{ProTip}{Polecenia wieloliniowe w konsoli interaktywnej \zaawansowane{*}}
+\begin{ProTip}{Polecenia wieloliniowe w konsoli interaktywnej \zaawansowane{10}}
 Możliwe jest wprowadzanie poleceń wieloliniowych w konsoli interaktywnej.
 W takim wypadku po wprowadzeniu pierwszej linii (rozpoczynającej blok, np. \python{def})
 nastąpi zmiana znaku zachęty na \Verb{...}, co oznacza tryb wprowadzania bloku poleceń.
@@ -86,7 +86,7 @@ Następnie wprowadzamy kolejne instrukcje wykonywane w ramach tego bloku (np. fu
 Wprowadzanie bloku kończymy pustą linią, po czym znak zachęty powróci do standardowego \Verb{>>>}.
 \end{ProTip}
 
-\begin{ProTip}{Dla znających C lub C++ (1/2)\zaawansowane{**}}
+\begin{ProTip}{Dla znających C lub C++ (1/2)\zaawansowane{20}}
 \begin{itemize}
 	\item kolejne instrukcje (zamiast średnika) kończy znak nowej linii
 	\item średnik na końcu instrukcji (linii) nie jest błędem składniowym (jest ignorowany)
@@ -115,7 +115,7 @@ print( a - 2, kwadrat(4) )
 \vspace{-13pt}
 
 %  BEGIN: Funkcje2
-\subsubsection{Argumenty domyślne i nazwane \zaawansowane{*}}
+\subsubsection{Argumenty domyślne i nazwane \zaawansowane{10}}
 
 Możliwe jest podanie wartości domyślnych dla wybranych argumentów funkcji. Utworzy to z nich argumenty opcjonalne, które nie muszą być podawane przy wywołaniu funkcji.
 Argumenty z wartościami domyślnymi muszą występować w definicji funkcji po argumentach bez takich wartości.
@@ -134,7 +134,7 @@ print( potega(b = 3), potega(b = 1, a = 4) )
 8 4
 \end{CodeFrame}
 
-\subsubsection{Zasięg zmiennej \zaawansowane{*}}
+\subsubsection{Zasięg zmiennej \zaawansowane{10}}
 
 W Pythonie wewnątrz funkcji widoczne są zmienne zdefiniowane poza nią, jednak aby móc modyfikować taką zmienną wewnątrz
 funkcji należy ją tam zadeklarować jako globalną przy pomocy słowa kluczowego \python{global}:
@@ -344,7 +344,7 @@ Zauważ, że dla x wynoszącego 0 spełnione są dwa warunki (pierwszy i środko
 \python{if}/\python{elif} wykonany zostanie jedynie kod związany z pierwszym pasującym warunkiem.
 %  END: Instrukcja warunkowa if
 
-\begin{ProTip}{Dla znających C lub C++ (2/2) \zaawansowane{**}}
+\begin{ProTip}{Dla znających C lub C++ (2/2) \zaawansowane{20}}
 \begin{itemize}
 	\item nie ma konstrukcji i++, czy też ++i, jest za to i += 1
 	\item warunek if'a w nawiasach nie jest błędem składniowym (ale po nawiasach musi być dwukropek)

@@ -92,7 +92,7 @@ Od tej pory możemy korzystać z tych zmiennych, np. do obliczenia wartości wyr
 
 \teacher{Pokazać, co się dzieje, jak odwołamy się do nieistniejącej zmiennej.\\Powiedzieć kilka słów na temat (czytania) komunikatów o błędach!}
 
-\subsubsection{Moduły i zaawansowany kalkulator \zaawansowane{*}}
+\subsubsection{Moduły i zaawansowany kalkulator \zaawansowane{10}}
 Python pozwala na wykonywanie bardziej zaawansowanych obliczeń.
 Możliwe jest m.in. obliczenia wartości wyrażeń logicznych, konwertowanie systemów liczbowych, obliczanie wartości funkcji trygonometrycznych.
 Duża część funkcji matematycznych w Pythonie zawarta jest w module ,,math'', który wymaga zaimportowania. Można to zrobić na przykład w sposób następujący:
@@ -111,7 +111,7 @@ jednak pisanie dłuższych fragmentów kodu w tej konsoli staje się już bardzo
 Drugą metodą korzystania z Pythona jest pisanie kodu programu (skryptu) w pliku tekstowym
 i uruchamianie tego kodu w konsoli.
 
-\begin{ProTip}{Moduły \zaawansowane{*}}
+\begin{ProTip}{Moduły \zaawansowane{10}}
 Nazwa pliku powinna być inna niż nazwy importowanych modułów, czyli jeżeli w kodzie mamy \Verb#import abc# to nasz plik nie powinien nazywać się \Verb#abc.py#,
 w przeciwnym razie zamiast wskazanego modułu Python będzie próbował zaimportować nasz plik.
 \end{ProTip}
@@ -190,7 +190,7 @@ Służą do tego tak zwane komentarze, które są ignorowane przez interpreter (
 W Pythonie podstawowym typem komentarza, jest komentarz jednoliniowy, rozpoczynający się od znaku \Verb{#} a kończący z końcem linii.
 \teacher{W przypadku zdziwienia dlaczego akurat \texttt{\#} jest używany do komentarzy można wspomnieć że jest to bardzo często stosowane i związane ze standardem linii służącą do określenia programu używanego do zinterpretowania pliku ze skryptem postaci np. \texttt{\#!/bin/bash}}
 
-\subsubsection{inne sposoby uruchamiania kodu z pliku \zaawansowane{**}}
+\subsubsection{inne sposoby uruchamiania kodu z pliku \zaawansowane{20}}
 
 Jeżeli do wywołania interpretera Pythona dodamy opcję \Verb{-i} (np. \Verb{python3 -i mojProgram.py})
 po wykonaniu kodu z podanego pliku uruchomi on konsolę interaktywną w której będą dostępne elementy (m.in. zmienne) zdefiniowane w podanym pliku.
@@ -199,7 +199,7 @@ Możliwe jest także włączenie kodu z pliku do aktualnie uruchomionego interpr
 (czyli z wykonaniem wszystkich instrukcji i późniejszą możliwością dostępu do zdefiniowanych tam elementów).
 Aby wczytać w ten sposób kod z pliku  \Verb{mojProgram.py} należy wykonać: \python{exec(open('mojProgram.py').read())}
 
-\subsubsection{ipython \zaawansowane{**}}
+\subsubsection{ipython \zaawansowane{20}}
 
 \Verb{ipython3} jest wygodniejszym w pracy interaktywnej interpreterem Pythona w wersji 3. Pozwala on m.in. na lepsze przewijanie i edytowanie poleceń wieloliniowych w historii.
 %  END: Wprowadzenie
