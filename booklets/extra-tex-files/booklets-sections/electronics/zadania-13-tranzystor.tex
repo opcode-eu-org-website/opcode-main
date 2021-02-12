@@ -48,9 +48,20 @@ Oszacuj wartość prądu płynącego przez R8 oraz wartość prądu płynącego 
 		\includegraphics[width=0.48\textwidth]{img/elektronika/zadania_teoretyczne-B}
 	\end{center}
 \fi
+\dbEntryBegin{prad_R8_R10-rozwiazanie}\if1\dbEntryCheckResults
+\textbf{R8:} Prąd bazy wynosi około 0.5mA, czyli tranzystor przewodzi.
+             Prąd kolektora "nastawiany" przez tranzystor (wynikający z prądu bazy), przy założeniu najsłabszego wzmocnienia wynosi 25mA (minimalne $h_{FE}$ tego tranzystora to około 50).
+             Prąd kolektora wynikający z wartości R8 to około 14mA, czyli znacznie mniejszy niż prąd "nastawiany" przez tranzystor.
+             Zatem tranzystor nie ogranicza prądu – praca w nasyceniu, prąd płynący przez R8 wynosi około 14mA.\\
+\textbf{R10:} Prąd bazy nie płynie (baza na potencjale wyższym niż emiter w PNP), czyli tranzystor przewodzi.
+              Zatem prąd płynący przez R10 wynosi około 0mA.
+\fi
 
 \dbEntryBegin{polmostek_H}\if1\dbEntryCheckResults
 Narysuj schemat układu półmostka H z zastosowaniem tranzystorów bipolarnych (NPN i PNP) jako elementów przełączających.
+\fi
+\dbEntryBegin{polmostek_H-rozwiazanie}\if1\dbEntryCheckResults
+\begin{center}\includegraphics[width=0.58\textwidth]{img/elektronika/zad-rozw-półmostek_bipolarne}\end{center}
 \fi
 
 

@@ -30,25 +30,58 @@
 	\insertZadanie{\currfilepath}{tcpdump}{}
 	\insertZadanie{\currfilepath}{http1}{}
 	\insertZadanie{\currfilepath}{http2}{}
+	\insertZadanie{\currfilepath}{ping_utf}{}
+}
+
+\IfStrEq{\dbEntryID}{rozwiazania}{
+	\insertRozwiazanie{\currfilepath}{czy_w_sieci}{}
+	\insertRozwiazanie{\currfilepath}{routing}{}
+	\insertRozwiazanie{\currfilepath}{ping1}{}
+	\insertRozwiazanie{\currfilepath}{traceroute1}{}
+	\insertRozwiazanie{\currfilepath}{dns1}{}
+	\insertRozwiazanie{\currfilepath}{tcpdump}{}
+	\insertRozwiazanie{\currfilepath}{http1}{}
+	\insertRozwiazanie{\currfilepath}{http2}{}
+	\insertRozwiazanie{\currfilepath}{ping_utf}{}
 }
 
 \dbEntryBegin{czy_w_sieci}\if1\dbEntryCheckResults
 Ustal czy adres \Verb$2001:db8:0:a17::123$ należy do sieci \Verb$2001:db8::/48$. Możesz posłużyć się narzędziami do obliczania zakresów sieci IP (np. \Verb#sipcalc#) lub obliczyć to ręcznie.
 \fi
 
+\dbEntryBegin{czy_w_sieci-rozwiazanie}\if1\dbEntryCheckResults
+tak --- zakres sieci 2001:06a0:0000:0000:0000:0000:0000:0000 - 2001:06a0:0000:003f:ffff:ffff:ffff:ffff
+\fi
+
+
 \dbEntryBegin{routing}\if1\dbEntryCheckResults
 Wynik polecenia \Verb#ip -6 r# pokazującego tablicę rotingową wygląda następująco:
 \begin{Verbatim}
-2001:db8:0:21::/64 dev eth  proto kernel  metric 256 
+2001:db8:0:21::/64 dev eth1  proto kernel  metric 256 
+2001:db8::/32 via 2001:db8:0:21::100 dev eth2  metric 1024 
 2001:db8:fff:21::/64 dev eth2  proto kernel  metric 256 
 2001:db8:abc:21::/64 via 2001:db8:fff:21::1 dev eth2  metric 1024 
-fe80::/64 dev eth  proto kernel  metric 256 
+fe80::/64 dev eth1  proto kernel  metric 256 
 fe80::/64 dev eth2  proto kernel  metric 256 
-default via 2001:db8:0:21::1 dev eth  metric 1024 
+default via 2001:db8:0:21::1 dev eth1  metric 1024 
 \end{Verbatim}
 
 Ustal gdzie zostanie skierowany pakiet adresowany do \Verb$2001:db8:abc:21:123::ff3$.
 \fi
+
+\dbEntryBegin{routing-rozwiazanie}\if1\dbEntryCheckResults
+Adres 2001:db8:abc:21:123::ff3 zawiera się w zakresie sieci następujących sieci występujących w tablicy routingu:
+\begin{itemize}
+	\item 2001:db8::/32
+	\item 2001:db8:abc:21::/64 
+	\item default (0::/0)
+\end{itemize}
+
+Najdłuższy prefix spośród tych sieci ma 2001:db8:abc:21::/64 (64 bity), zatem zostanie użyty wpis w tablicy routingowej dla tej sieci.
+
+W efekcie pakiet zostanie skierowany do routera 2001:db8:fff:21::1 poprzez interfejs eth2.
+\fi
+
 
 \dbEntryBegin{ping1}\if1\dbEntryCheckResults
 Korzystając z narzędzi służących do diagnozowania sieci sprawdź czy host \Verb#ciekawi.icm.edu.pl# jest dostępny.
@@ -59,20 +92,153 @@ Rozwiązaniem powinno opierać się o użycie polecenia \Verb#ping#, inne dział
 \end{teacherOnly}
 \fi
 
+\dbEntryBegin{ping1-rozwiazanie}\if1\dbEntryCheckResults
+\begin{Verbatim}
+$ ping -c4 ciekawi.icm.edu.pl
+PING www2.icm.edu.pl (213.135.59.55) 56(84) bytes of data.
+64 bytes from www2.icm.edu.pl (213.135.59.55): icmp_seq=1 ttl=60 time=3.91 ms
+64 bytes from www2.icm.edu.pl (213.135.59.55): icmp_seq=2 ttl=60 time=3.63 ms
+64 bytes from www2.icm.edu.pl (213.135.59.55): icmp_seq=3 ttl=60 time=2.94 ms
+64 bytes from www2.icm.edu.pl (213.135.59.55): icmp_seq=4 ttl=60 time=5.03 ms
+
+--- www2.icm.edu.pl ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 6ms
+rtt min/avg/max/mdev = 2.942/3.875/5.025/0.752 ms
+\end{Verbatim}
+
+Polecenie na standardowym wyjściu wypisuje m.in.:
+\begin{itemize}
+	\item odpytywany adres IP i wynik odwrotnego dns'u dla niego
+	\item ilość danych wysyłanych (może być użyteczne do testowania problemów z MTU)
+	\item dla każdego zapytania, które dostało odpowiedź:
+	\begin{itemize}
+		\item ilość przesłanych otrzymanych w pakiecie
+		\item serwer który odpowiedział (rev-dns i ip)
+		\item numer kolejny zapytania/odpowiedzi
+		\item TTL pakietu z odpowiedzią (wskazuje na ilość routerów przez które przeszedł pakiet)
+		\item czas potrzebny na uzyskanie odpowiedzi
+	\end{itemize}
+	\item podsumowujące statystyki związane z ilością zagubionych pakietów i czasami odpowiedzi
+\end{itemize}
+
+Zamiast informacji o poszczególnych odpowiedziach polecenie ping może nic nie wypisywać (brak odpowiedzi):
+\begin{Verbatim}
+$ ping -c 1 1.5.2.1
+PING 1.5.2.1 (1.5.2.1) 56(84) bytes of data.
+
+--- 1.5.2.1 ping statistics ---
+1 packets transmitted, 0 received, 100% packet loss, time 0ms
+\end{Verbatim}
+lub podawać komunikat błędu wraz z jego nadawcą (jeżeli taki został zwrócony):
+\begin{Verbatim}
+$ ping -c1 192.168.6.55
+PING 192.168.6.55 (192.168.6.55) 56(84) bytes of data.
+From 192.168.6.3 icmp_seq=1 Destination Host Unreachable
+
+--- 192.168.6.55 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms
+\end{Verbatim}
+
+Kod powrotu polecenie ping informuje o tym czy host jest osiągalny czy nie, dzięki czemu polecenie to może zostać uzyte np. w bash'owym warunku \Verb#if#:
+\begin{Verbatim}
+if ping -c 1 10.0.1.1 >& /dev/null; then
+	echo "10.0.1.1 jest dostępny"
+else
+	echo "10.0.1.1 nie jest dostępny"
+fi
+\end{Verbatim}
+\fi
+
+
 \dbEntryBegin{traceroute1}\if1\dbEntryCheckResults
 Korzystając z narzędzi służących do diagnozowania sieci ustal jaką trasą podróżują pakiety z Twojego komputera do \Verb#www.opcode.eu.org# oraz do \Verb#www.example.org#.
 Jakiego lub jakich poleceń użyłeś(aś) w tym celu? Co jeszcze mówi ich wynik? Co możesz powiedzieć porównując uzyskane trasy?
 \fi
+\dbEntryBegin{traceroute1-rozwiazanie}\if1\dbEntryCheckResults
+Należy skorzystać z polecenia \Verb#treacroute#, \Verb#tracepath#, \Verb#mtr# lub podobnych.
+
+Wynik polecenia host może wyglądać następująco (ale nie będzie nic dziwnego jeżeli otrzymasz inny – trasa routingowa zależy od miejsca z którego się łączysz, może też zmieniać się z czasem)
+\begin{Verbatim}
+traceroute  www.example.org
+traceroute to www.example.org (93.184.216.34), 30 hops max, 60 byte packets
+ 1  funbox.home (192.168.6.1)  0.570 ms  9.648 ms  9.624 ms
+ 2  192.0.0.1 (192.0.0.1)  7.981 ms  8.007 ms  8.082 ms
+ 3  195.117.0.225 (195.117.0.225)  8.120 ms  8.189 ms  8.223 ms
+ 4  poz-r1.tpnet.pl (194.204.175.94)  18.474 ms  18.512 ms  18.547 ms
+ 5  hbg-b1-link.telia.net (213.248.96.144)  23.234 ms  23.268 ms  23.304 ms
+ 6  hbg-bb4-link.telia.net (213.155.135.86)  110.655 ms hbg-bb3-link.telia.net (213.155.135.80)  104.215 ms hbg-bb4-link.telia.net (213.155.135.86)  104.056 ms
+ 7  * * ldn-bb4-link.telia.net (62.115.122.161)  101.809 ms
+ 8  * * *
+ 9  nyk-b6-link.telia.net (80.91.254.36)  106.471 ms nyk-b6-link.telia.net (62.115.125.63)  104.446 ms  104.562 ms
+10  edgecast-ic-317660-nyk-b5.c.telia.net (62.115.147.201)  109.616 ms  109.669 ms  112.148 ms
+11  152.195.69.131 (152.195.69.131)  106.924 ms 152.195.68.141 (152.195.68.141)  109.509 ms 152.195.69.139 (152.195.69.139)  106.711 ms
+12  93.184.216.34 (93.184.216.34)  103.418 ms  108.218 ms  106.420 ms
+13  93.184.216.34 (93.184.216.34)  106.454 ms  106.587 ms  110.858 ms
+\end{Verbatim}
+
+Podobnie jak w przypadku polecenia ping wypisywana jest informacja o odpytywanym adresie IP (i wynik odwrotnego dns'u dla niego), ilość wysyłanych danych.
+Wypisywane są kolejne routery (ip i rev-dns) wraz z czasami odpowiedzi (domyślnie traceroute na każdym poziomie robi 3 zapytania).
+Gwiazdki oznaczają brak odpowiedzi. Jeżeli od pewnego momentu występują same gwiazdki oznacza to że wraz z dalszym zwiększaniem TTL nie dostajemy już kolejnych komunikatów o jego przekroczeniu.
+	Może to wynikać z osiągnięcia hostu docelowego, który ma zablokowany testowany port bez wysyłania komunikatu o niedostępności portu lub błędu routera który nie przekazuje poprawnie komunikatów o zbyt małym TTL.
+\fi
+
+
 
 \dbEntryBegin{dns1}\if1\dbEntryCheckResults
 Ustal (wszystkie) adresy IPv4 i IPv6 serwera \Verb#www.bitbucket.org#.
 Zastanów się czemu może służyć to że niektóre nazwy domenowe rozwijają się na wiele różnych adresów IP.
 \fi
 
+\dbEntryBegin{dns1-rozwiazanie}\if1\dbEntryCheckResults
+Należy użyć na przykład polecenia \Verb#host www.bitbucket.org# lub poleceń \Verb#dig AAAA www.bitbucket.org# ; \Verb#dig A www.bitbucket.org#.
+
+Wynik polecenia host może wyglądać następująco (ale nie będzie nic dziwnego jeżeli otrzymasz inne adresy – dane w DNS ulegają zmianom, niekiedy nawet dynamicznie wprowadzanym).
+\begin{Verbatim}
+www.bitbucket.org is an alias for bitbucket.org.
+bitbucket.org has address 104.192.141.1
+bitbucket.org has IPv6 address 2406:da00:ff00::22c5:2ef4
+bitbucket.org has IPv6 address 2406:da00:ff00::6b17:d1f5
+bitbucket.org has IPv6 address 2406:da00:ff00::22e9:9f55
+bitbucket.org has IPv6 address 2406:da00:ff00::34cc:ea4a
+bitbucket.org mail is handled by 1 aspmx.l.google.com.
+bitbucket.org mail is handled by 5 alt1.aspmx.l.google.com.
+\end{Verbatim}
+Warto zauważyć że zostaliśmy poinformowani także o tym że www.bitbucket.org jest aliasem (CNAME) na bitbucket.org.
+
+Zwracanie wielu IP jest jednym ze sposobów rozkładania obciążenia i zapewnienia redundancji. Innymi rozwiązaniami jest udzielanie różnych odpowiedzi różnym kliemntom (tak robi np. www.google.com):
+\begin{Verbatim}
+$ host www.google.com
+www.google.com has address 172.217.20.164
+www.google.com has IPv6 address 2a00:1450:401b:802::2004
+\end{Verbatim}
+z innego hosta:
+\begin{Verbatim}
+$ host www.google.com
+www.google.com has address 216.58.206.4
+www.google.com has IPv6 address 2a00:1450:4001:821::2004
+\end{Verbatim}
+Jeszcze innym jest używanie mechanizmów routingowych takich jak anycast.
+\fi
+
+
 \dbEntryBegin{tcpdump}\if1\dbEntryCheckResults
 Korzystając z dwóch instancji programu \Verb#nc# (\Verb#netcat#) – jednej w roli serwera, drugiej w roli klienta prześlij między nimi jakieś dane.
 Użyj programu \Verb#tcpdump# (z odpowiednimi opcjami) aby podsłuchać komunikację sieciową między tymi programami i zobaczyć przesyłane dane.
 \fi
+
+\dbEntryBegin{tcpdump-rozwiazanie}\if1\dbEntryCheckResults
+Należy uruchomić w osobnych oknach terminala kolejno polecenia:
+\begin{enumerate}
+	\item \Verb#tcpdump -i lo -A port 5555# - podsłuchujemy komunikację używającą portu 5555
+	\item \Verb#nc -lp 5555# - uruchamiamy nasłuch na porcie 5555
+	\item \Verb#nc localhost 5555# - łączymy się na port 5555
+\end{enumerate}
+Dane  wpisywane w jednym z uruchomionych netcat'ów będą wypisywane w drugim i odwrotnie.
+Wszystkie te dane (wraz z informacjami zawartymi w nagłówkach IP i TCP) będą wyświetlane w okienku w którym działa tcpdump.
+
+Oczywiście możemy użyć innego numeru portu, itd.
+\fi
+
 
 \dbEntryBegin{http1}\if1\dbEntryCheckResults
 Korzystając bezpośrednio z poleceń protokołu HTTP i programu \Verb#nc# (\Verb#netcat#) lub \Verb#telnet#, pobierz i wyświetl kod strony \Verb#http://www.opcode.eu.org/#.
@@ -85,32 +251,86 @@ Korzystając bezpośrednio z poleceń protokołu HTTP i programu \Verb#nc# (\Ver
 }
 \fi
 
+\dbEntryBegin{http1-rozwiazanie}\if1\dbEntryCheckResults
+\begin{Verbatim}
+netcat www.opcode.eu.org 80
+GET / HTTP/1.1
+Host: www.opcode.eu.org
+
+HTTP/1.1 200 OK
+Server: nginx/1.14.2
+Date: Sun, 26 Apr 2020 09:12:09 GMT
+Content-Type: text/html; charset=utf-8
+Content-Length: 11490
+Last-Modified: Wed, 08 Apr 2020 17:36:32 GMT
+Connection: keep-alive
+ETag: "5e8e0ba0-2ce2"
+Accept-Ranges: bytes
+
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pl" lang="pl">
+<head>
+        <title>OpCode.eu.org - strona główna</title>
+\end{Verbatim}
+[...]
+
+\vspace{7pt}
+Jeżeli użyjemy innego nagłówka \Verb#Host:# w zapytaniu możemy dostać np. komunikat o przekierowaniu:
+\begin{Verbatim}
+netcat www.opcode.eu.org 80
+GET / HTTP/1.1
+Host: opcode.eu.org
+
+HTTP/1.1 301 Moved Permanently
+Server: nginx/1.14.2
+Date: Tue, 21 Apr 2020 17:58:44 GMT
+Content-Type: text/html
+Content-Length: 185
+Connection: keep-alive
+Location: http://www.opcode.eu.org/
+
+<html>
+<head><title>301 Moved Permanently</title></head>
+<body bgcolor="white">
+<center><h1>301 Moved Permanently</h1></center>
+<hr><center>nginx/1.14.2</center>
+</body>
+</html>
+\end{Verbatim}
+Przeglądarki WWW nie wyświetlają tych komunikatów tylko automatycznie przechodzą pod wskazany w nagłówku \Verb#Location:# adres.
+\fi
+
+
 \dbEntryBegin{http2}\if1\dbEntryCheckResults
 Zadanie \ref{http1} można rozwiązać przy pomocy netcat'a bez dodatkowych opcji, jednak jeżeli stroną do pobrania byłoby np. \Verb#http://www.icm.edu.pl# to należałoby skorzystać z opcji \Verb#-C# netcat'a (w przeciwnym razie serwer zwraca błąd 400 "Bad Request").
 Sprawdź co robi ta opcja i zastanów się dlaczego w przypadku niektórych serwerów jest konieczna a w przypadku innych nie? Co na ten temat mówi standard HTTP?
 \fi
 
-% dodatkowe
-
-\dbEntryBegin{skrypt_dostepnosc}\if1\dbEntryCheckResults
-Korzystając z standardowych narzędzi shellowych napisz skrypt który sprawdzi dostępność hosta \Verb#ciekawi.icm.edu.pl# i w przypadku jego niedostępności wypisze \Verb#niedostępny#, a w przypadku dostępności nie wypisze niczego.
-
-\textit{Informacja: skrypty tego typu, uruchamiane automatycznie co pewien czas np. przy pomocy cron'a często są wykorzystywane do wysłania powiadomień o niedostępności danej maszyny lub usługi lub podjęcia automatycznie jakiś działań.}
+\dbEntryBegin{http2-rozwiazanie}\if1\dbEntryCheckResults
+Wynika to z stosowania w większości protokołów sieciowych (w tym w HTTP) jako znaku linii sekwencji dwu bajtowej \Verb#\n\r# (nowa linia, powrót karetki).
+Serwer WWW obsługujący domenę opcode.eu.org postępuje według filozofii nakazującej liberalne podejście do danych otrzymywanych i restrykcyjne do generowanych przez siebie (wysyłanych) i poprawnie interpretuje formalnie błędne żądanie zawierające znaki nowej linii w postaci \Verb#\n#.
+Serwer obsługujący www.icm.edu.pl nie jest już tak liberalny i wymaga znaków nowej linii w postaci \Verb#\n\r#, dlatego do netcata musimy dodać opcję -C aby konwertował wprowadzone znaki nowej linii na taką postać przed wysłaniem.
 \fi
 
 \dbEntryBegin{ping_utf}\if1\dbEntryCheckResults
 Zobacz czy rozwiązanie zadania \ref{ping1} zadziała gdy użyjesz nazwy serwera zawierającej polskie znaki: \Verb#licealiści.icm.edu.pl#.
 Jak myślisz, dlaczego polskie znaki są tak rzadko używane w nazwach domenowych?
 \fi
+\dbEntryBegin{ping_utf-rozwiazanie}\if1\dbEntryCheckResults
+\begin{Verbatim}
+ping -c2 licealiści.icm.edu.pl
+PING www2.icm.edu.pl (213.135.59.55) 56(84) bytes of data.
+64 bytes from www2.icm.edu.pl (213.135.59.55): icmp_seq=1 ttl=60 time=4.20 ms
+64 bytes from www2.icm.edu.pl (213.135.59.55): icmp_seq=2 ttl=60 time=3.26 ms
 
-\dbEntryBegin{mail_smtp}\if1\dbEntryCheckResults
-Korzystając bezpośrednio z poleceń protokołu SMTP, programu \Verb#nc# (\Verb#netcat#) lub \Verb#telnet# i serwera \Verb#mail.opcode.eu.org# wyślij mail do \Verb#rrp@opcode.eu.org# w taki sposób aby:
-\begin{itemize}
-\item nadawca kopertowy był sfałszowany (domena w której znajduje się jego adres powinna istnieć, np. użyj \Verb#ciekawi.icm.edu.pl#)
-\item nadawca i odbiorca nagłówkowy był sfałszowany
-\end{itemize}
-Możesz poszaleć z adresami (zwłaszcza nagłówkowymi).
-Jeżeli nie popełnisz błędu mail trafi do prowadzących zajęcia, zatem jeżeli oczekujesz weryfikacji wykonania zadania to podpisz się w nim.
-Nie pisz też niczego czego nie chiałbyś aby Twój prowadzący przeczytał {\Symbola 😉}.
+--- www2.icm.edu.pl ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 2ms
+rtt min/avg/max/mdev = 3.260/3.732/4.204/0.472 ms
+\end{Verbatim}
+Jak widać działa. Standard kodowania dowolnych znaków Unicode, tak aby mogły być użyte w nazwach domenowych został opracowany w 2003 roku (Punycode, RFC3492), jest dość powszechnie zaimplementowany.
+Możemy użyć go także w pythonowej metodzie encode (np. \Verb#print( "żółw".encode("punycode") )#).
+
+Ciężko powiedzieć dlaczego (przynajmniej w Polsce) znaki z poza ASCII są tak rzadko stosowane w nazwach domenowych.
+
+\textit{Ciekawostka: kodowanie znaków nie ASCII w nazwie domenowej jest określone jednoznacznie, natomiast w dalszej części adresu URL niezbyt - zasadniczo zależy od konfiguracji serwera, ale standardem defacto jest tutaj UTF8).}
 \fi
-

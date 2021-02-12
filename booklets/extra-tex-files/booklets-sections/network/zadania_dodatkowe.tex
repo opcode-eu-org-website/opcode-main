@@ -21,6 +21,25 @@
 % OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 % SOFTWARE.
 
+\dbEntryBegin{skrypt_dostepnosc}\if1\dbEntryCheckResults
+Korzystając z standardowych narzędzi shellowych napisz skrypt który sprawdzi dostępność hosta \Verb#ciekawi.icm.edu.pl# i w przypadku jego niedostępności wypisze \Verb#niedostępny#, a w przypadku dostępności nie wypisze niczego.
+
+\textit{Informacja: skrypty tego typu, uruchamiane automatycznie co pewien czas np. przy pomocy cron'a często są wykorzystywane do wysłania powiadomień o niedostępności danej maszyny lub usługi lub podjęcia automatycznie jakiś działań.}
+\fi
+
+\dbEntryBegin{mail_smtp}\if1\dbEntryCheckResults
+Korzystając bezpośrednio z poleceń protokołu SMTP, programu \Verb#nc# (\Verb#netcat#) lub \Verb#telnet# i serwera \Verb#mail.opcode.eu.org# wyślij mail do \Verb#rrp@opcode.eu.org# w taki sposób aby:
+\begin{itemize}
+\item nadawca kopertowy był sfałszowany (domena w której znajduje się jego adres powinna istnieć, np. użyj \Verb#ciekawi.icm.edu.pl#)
+\item nadawca i odbiorca nagłówkowy był sfałszowany
+\end{itemize}
+Możesz poszaleć z adresami (zwłaszcza nagłówkowymi).
+Jeżeli nie popełnisz błędu mail trafi do prowadzących zajęcia, zatem jeżeli oczekujesz weryfikacji wykonania zadania to podpisz się w nim.
+Nie pisz też niczego czego nie chciałbyś aby Twój prowadzący przeczytał {\Symbola 😉}.
+\fi
+
+
+
 \dbEntryBegin{rfc1924}\if1\dbEntryCheckResults
 Zapoznaj się z RFC1924 i napisz program konwertujący adresy IPv6 pomiędzy notacją dwukropkową a notacją base-85 zgodną z tą specyfikacją.
 
@@ -64,8 +83,6 @@ Ustal trasę (urządzenie którym zostanie wysłany pakiet oraz jeżeli jest pot
 \dbEntryBegin{serwer_moj_ip}\if1\dbEntryCheckResults
 Napisz serwer UDP lub TCP (określ który wariant wybrałeś/wybrałaś), który na ciąg znaków \texttt{ip} wysłany przez klienta odeśle do niego informację o jego numerze IP.
 \fi
-
-
 
 
 

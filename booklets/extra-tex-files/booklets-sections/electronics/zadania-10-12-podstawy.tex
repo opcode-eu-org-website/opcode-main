@@ -54,22 +54,27 @@
 
 \dbEntryBegin{prad_R1}\if1\dbEntryCheckResults
 Oszacuj wartość prądu płynącego przez R1. Odpowiedź krótko uzasadnij.
-% img/elektronika/praca_domowa-A
+\fi
+\dbEntryBegin{prad_R1-rozwiazanie}\if1\dbEntryCheckResults
+Należy uwzględnić spadek napięcia na diodzie około 1.7V, w efekcie czego mamy napięcie na rezystorze 3.3V.
+Napięcie to wraz z wartością tego rezystora określa prąd płynący w obwodzie i wynoszący 3.3mA.
 \fi
 
 \dbEntryBegin{napiecie_T1}\if1\dbEntryCheckResults
 Podaj wartość napięcia (względem GND) w punkcie T1 w sytuacji gdy S1 jest wciśnięty (zwarty) oraz w sytuacji gdy jest rozwarty (nie przewodzi). Odpowiedź krótko uzasadnij.
-% img/elektronika/praca_domowa-A
+\fi
+\dbEntryBegin{napiecie_T1-rozwiazanie}\if1\dbEntryCheckResults
+Przycisk wciśnięty – punkt T1 połączony z masą, czyli napięcie w T1 wynosi 0V.\\
+Przycisk rozwarty – prąd nie płynie, spadek napięcia na rezystorze wynosi 0V (brak prądu), czyli napięcie w T1 wynosi 5V.
 \fi
 
 \dbEntryBegin{napiecie_T234}\if1\dbEntryCheckResults
 Podaj wartość napięcia (względem GND) w punkach T2, T3, T4. Odpowiedź krótko uzasadnij.
-% img/elektronika/praca_domowa-A
 \fi
-
-\dbEntryBegin{prad_R8_R10}\if1\dbEntryCheckResults
-Oszacuj wartość prądu płynącego przez R8 oraz wartość prądu płynącego przez R10. Odpowiedź krótko uzasadnij.
-% img/elektronika/praca_domowa-B
+\dbEntryBegin{napiecie_T234-rozwiazanie}\if1\dbEntryCheckResults
+T2 – typowy dzielnik rezystancyjny, napięcie w T2 wynosi 3V.\\
+T3 – dzielnik z diodą Zenera, dioda Zenera przewodzi, napięcie w T3 wynosi 3.3V.\\
+T4 – dzielnik z diodą Zenera, dioda Zenera nie przewodzi (przyłożone napięcie mniejsze od napięcia przebicia), napięcie w T4 wynosi 0V.
 \fi
 
 \dbEntryBegin{polaczenie_szeregowe}\if1\dbEntryCheckResults

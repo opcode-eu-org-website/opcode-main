@@ -23,7 +23,7 @@ device=RESISTOR
 T 60100 45100 5 10 1 1 90 0 1
 refdes=R8
 T 60600 45100 5 10 1 1 90 0 1
-value=220
+value=470
 }
 C 58200 44500 1 0 0 net-pwr-1.sym
 {

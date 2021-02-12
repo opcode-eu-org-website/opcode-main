@@ -35,7 +35,9 @@
 }
 
 \IfStrEq{\dbEntryID}{rozwiazania}{
-% 	\insertRozwiazanie{\currfilepath}{}{}
+	\insertRozwiazanie{\currfilepath}{napiecie_T5}{}
+	\insertRozwiazanie{\currfilepath}{hc574}{}
+	\insertRozwiazanie{\currfilepath}{hc595}{}
 }
 
 %
@@ -48,6 +50,13 @@ Podaj wartość napięcia (względem GND) w punkcie T5. Przyjmujemy iż użyte b
 		\includegraphics[width=0.48\textwidth]{img/elektronika/zadania_teoretyczne-C}
 	\end{center}
 \fi
+\dbEntryBegin{napiecie_T5-rozwiazanie}\if1\dbEntryCheckResults
+Analizujemy stany logiczne kolejnych bramek:\\
+	\textbf{U1:} 0V and 5V => 0V\\
+	\textbf{U2:} not (0V or 0V) => 5V\\
+	\textbf{U3:} 5V xor 5V => 0V
+Zatem w T5 mamy stan niski, czyli 0V.
+\fi
 
 \dbEntryBegin{dane_rejestru}\if1\dbEntryCheckResults
   Znajdź dokumentację (kartę katalogową) do rejestru przesuwnego, który kupiłeś/aś (CD4094 lub 74HC595).
@@ -58,9 +67,21 @@ Podaj wartość napięcia (względem GND) w punkcie T5. Przyjmujemy iż użyte b
 \dbEntryBegin{hc574}\if1\dbEntryCheckResults
 Zapoznaj się z dokumentacją układu 74HC574 i opisz sposób jego użycia (wraz z sposobem sterowania) jako modułu podłączonego do 8 bitowej magistrali równoległej w roli układu wejściowego oraz w roli układu wyjściowego.
 \fi
+\dbEntryBegin{hc574-rozwiazanie}\if1\dbEntryCheckResults
+74HC574 to 8bitowy rejestr z wyjściem trójstanowym.\\
+Użycie jako układ \textbf{wejściowy}: peryferium steruje sygnałami D0...D7 i sygnałem CP (CLK), do szyny danych podłączone wyjścia Q0...Q7,
+	dekoder adresu wraz z sygnałami sterującymi szyny steruje wejściem OE celem wystawienia danych z rejestru na szynę przy dokonywaniu odczytu z niej przez urządzenie nadrzędne.\\
+Użycie jako układ \textbf{wyjściowy}: peryferium używa wyjść Q0...Q7 (np. do podłączenia kontrolek LED), OE w stanie niskim (wyjścia aktywne), D0...D7 podłączone do szyny danych,
+	dekoder adresu wraz z sygnałami sterującymi szyny steruje wejściem CP (CLK) celem dokonania zapisu z szyny do rejestru przy wykonywaniu takiej operacji na magistrali przez urządzenie nadrzędne.
+\fi
 
 \dbEntryBegin{hc595}\if1\dbEntryCheckResults
 Zapoznaj się z dokumentacją układu 74HC595 i opisz sposób jego użycia (wraz z sposobem sterowania) w roli układu wyjściowego podłączonego do magistrali szeregowej.
+\fi
+\dbEntryBegin{hc595-rozwiazanie}\if1\dbEntryCheckResults
+74HC574 to 8bitowy rejestr z wejściem szeregowym i wyjściem równoległym wyposażonym w rejestr wyjściowy z wyjściami 3 stanowe.\\
+Układ nadrzędny (magistrala) steruje sygnałami DS (dane szeregowe), SHCP (zegar danych szeregowych) oraz STCP (zerag buforu wyjściowego) w sposób opisany w rozdziale poświęconym magistrali szeregowej.
+Wyjścia układu podłączone do peryferium (np. kontrolek LED). Wejście OE w stanie niskim (wyjścia zawsze aktywne). Wejście MR w stanie wysokim (reset nie aktywny).
 \fi
 
 

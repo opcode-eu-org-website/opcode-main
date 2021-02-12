@@ -29,20 +29,55 @@
 	\insertZadanie{\currfilepath}{udp_echo}{}
 }
 
+\IfStrEq{\dbEntryID}{rozwiazania}{
+	\insertRozwiazanie{\currfilepath}{ustaw_adres}{}
+	\insertRozwiazanie{\currfilepath}{ustaw_route}{}
+	\insertRozwiazanie{\currfilepath}{wlacz_forward}{}
+	\insertRozwiazanie{\currfilepath}{serwer_trojkat}{}
+	\insertRozwiazanie{\currfilepath}{udp_echo}{}
+}
+
 
 \dbEntryBegin{ustaw_adres}\if1\dbEntryCheckResults
 Napisz polecenie które ustawi adres ip \Verb#172.33.13.113# (maska sieci to \Verb#255.255.255.0#) na interfejsie \Verb#eth5#.
 \fi
 
+\dbEntryBegin{ustaw_adres-rozwiazanie}\if1\dbEntryCheckResults
+\begin{Verbatim}
+ip addr add 172.33.13.113/24 dev eth5
+\end{Verbatim}
+\fi
+
+
 \dbEntryBegin{ustaw_route}\if1\dbEntryCheckResults
 Napisz polecenie które ustawi trasę routingową do sieci \Verb#10.13.0.0/16# przez bramkę o adresie ip \Verb#172.33.13.13#.
 \fi
+
+\dbEntryBegin{ustaw_route-rozwiazanie}\if1\dbEntryCheckResults
+\begin{Verbatim}
+ip route add 10.13.0.0/16 via 172.33.13.13
+\end{Verbatim}
+\fi
+
 
 \dbEntryBegin{wlacz_forward}\if1\dbEntryCheckResults
 Napisz polecenia które włączą przekazywanie pakietów (routing) pomiędzy interfejsami \Verb#eth3# i \Verb#eth4#, ale nie zezwolą na przekazywanie pakietów innymi interfejsami (w tym pakietów inny interfejs $\leftrightarrow$ \Verb#eth3# / \Verb#eth4#).
 \\
 \textit{Wskazówka: skorzystaj z reguł filtracji pakietów}
 \fi
+
+\dbEntryBegin{wlacz_forward-rozwiazanie}\if1\dbEntryCheckResults
+\begin{Verbatim}
+for f in /proc/sys/net/ipv*/conf/*/forwarding; do echo 1 > $f; done
+
+nft add table ip filter
+nft add chain ip filter FORWARD '{ type filter hook forward priority 0; }'
+nft add rule  ip filter FORWARD iifname "eth3" oifname "eth4" accept
+nft add rule  ip filter FORWARD iifname "eth4" oifname "eth3" accept
+nft add rule  ip filter FORWARD reject
+\end{Verbatim}
+\fi
+
 
 \dbEntryBegin{serwer_trojkat}\if1\dbEntryCheckResults
 Napisz (w Pythonie lub C/C++) serwer TCP, który oczekuje że klient wyśle mu liczbę, w odpowiedzi na którą serwer odeśle do tego klienta trójkąt z gwiazdek odpowiedniej wielkości.
@@ -54,9 +89,132 @@ Na przykład dla żądania klienta w postaci "3" powinien to być:
 \end{Verbatim}
 \fi
 
+\dbEntryBegin{serwer_trojkat-rozwiazanie}\if1\dbEntryCheckResults
+\begin{Verbatim}
+import socket, select, signal, sys, os
+
+MAX_CHILD = 5
+QUERY_SIZE = 3
+TIMEOUT = 13
+BUF_SIZE = 4096
+
+if len(sys.argv) != 2:
+    print("USAGE: " + sys.argv[0] + " listenPort", file=sys.stderr)
+    exit(1);
+
+# obsługa sygnału o zakończeniu potomka
+childNum = 0
+def onChildEnd(s, f):
+    print("odebrano sygnał o śmierci potomka")
+    global childNum
+    childNum -= 1
+    os.waitpid(-1, os.WNOHANG);
+signal.signal(signal.SIGCHLD, onChildEnd)
+
+# utworzenie gniazd sieciowych ... SOCK_STREAM oznacza TCP
+sfd_v4 = socket.socket(socket.AF_INET,  socket.SOCK_STREAM)
+sfd_v6 = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
+
+# ustawienie opcji gniazda ... IPV6_V6ONLY=1 wyłącza korzystanie
+# z tego samego socketu dla IPv4 i IPv6
+sfd_v6.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_V6ONLY, 1)
+
+# przypisanie adresów ...
+# '0.0.0.0' oznacza dowolny adres IPv4 (czyli to samo co INADDR_ANY)
+# '::' oznacza dowolny adres IPv6 (czyli to samo co in6addr_any)
+sfd_v4.bind(('0.0.0.0', int(sys.argv[1])))
+sfd_v6.bind(('::',      int(sys.argv[1])))
+
+# określenie gniazd jako używanych do odbioru połączeń przychodzących
+# (długość kolejki połączeń ustawiona na wartość QUERY_SIZE)
+sfd_v4.listen(QUERY_SIZE)
+sfd_v6.listen(QUERY_SIZE)
+
+# czekanie na połączenia z użyciem select() w nieskończonej pętli
+while True:
+    sfd, _, _ = select.select([sfd_v4, sfd_v6], [], [])
+    for fd in sfd:
+        #  odebranie połączenia
+        sfd_c, sAddr = fd.accept()
+        
+        # weryfikacja ilości potomków
+        if childNum >= MAX_CHILD:
+            print("za dużo potomków - odrzucam połączenie od:", sAddr);
+            sfd_c.send("Internal Server Error\r\n".encode())
+            sfd_c.close()
+            break
+        
+        # aby móc obsługiwać wiele połączeń rozgałęziamy proces
+        pid = os.fork()
+        if pid > 0:
+            # rodzic - zwiększamy licznik potomków
+            childNum += 1
+        else:
+            # potomek - obsługa danego połączenia
+            print("połączenie od:", sAddr)
+            while True:
+                # czekanie na dane z timeout'em
+                # aby zabezpieczyć się przed atakiem DoS
+                rd, _, _ = select.select([sfd_c], [], [], TIMEOUT)
+                if sfd_c in rd:
+                    data = sfd_c.recv(BUF_SIZE)
+                    if data:
+                        print("odebrano od", sAddr, ":", data.decode());
+\end{Verbatim}
+\begin{minted}[frame=none]{python}
+                        # zamist odsyłać odebrane dane poprzez sfd_c.send(data)
+                        try:
+                            liczba = int(data.decode())
+                        except:
+                            liczba = 0
+                        if liczba < 2 or liczba > 10:
+                            sfd_c.send("Błędne polecenie – podaj liczbę >=2 i <=10.\n".encode())
+                        else:
+                            trojkat = ""
+                            for i in range(1, liczba+1):
+                                trojkat += "*"*i+"\n"
+                            sfd_c.send(trojkat.encode())
+                        # generujemy na ich podstawie trójkąt i go odsyłamy używając sfd_c.send
+\end{minted}
+\begin{Verbatim}
+                    else:
+                        print("koniec połączenia od:", sAddr)
+                        break
+                else:
+                    print("timeout połączenia od:", sAddr)
+                    break
+            # zamykanie połączenia
+            sfd_c.shutdown(socket.SHUT_RDWR)
+            sfd_c.close()
+            sys.exit()
+\end{Verbatim}
+Kolorowaniem kodu wyróżniono zmianę w stosunku co do przykładowego kodu ze skryptu.
+\fi
+
+
 \dbEntryBegin{udp_echo}\if1\dbEntryCheckResults
 Powyżej znajdują się przykładowe kody wysyłający dane po UDP ("klient UDP") i odbierający dane po UDP ("serwer UDP")
 oraz kod serwera usługi "echo" (odsyłającej odebrane dane do nadawcy) w wariancie TCP, którą omawialiśmy na wykładzie.
 
 W oparciu o te informacje napisz (w Pythonie lub C/C++) program realizujący funkcję serwera echo z użyciem UDP.
 \fi
+
+\dbEntryBegin{udp_echo-rozwiazanie}\if1\dbEntryCheckResults
+\begin{minted}[frame=none]{python}
+import socket, sys
+
+if len(sys.argv) != 2:
+    print("USAGE: " + sys.argv[0] + " listenPort", file=sys.stderr)
+    exit(1);
+
+sfd = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
+sfd.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_V6ONLY, 0)
+sfd.bind(('::', int(sys.argv[1])))
+
+while True:
+    data, sAddr, = sfd.recvfrom(4096)
+    print("odebrano od", sAddr, ":", data.decode());
+    sfd.sendto(data, sAddr)
+\end{minted}
+\fi
+

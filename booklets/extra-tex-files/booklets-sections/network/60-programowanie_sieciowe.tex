@@ -187,7 +187,7 @@ while True:
             print("za dużo potomków - odrzucam połączenie od:", sAddr);
             sfd_c.send("Internal Server Error\r\n".encode())
             sfd_c.close()
-            return
+            break
         
         # aby móc obsługiwać wiele połączeń rozgałęziamy proces
         pid = os.fork()
