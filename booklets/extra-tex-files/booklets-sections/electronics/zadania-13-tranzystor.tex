@@ -1,0 +1,110 @@
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\IfStrEq{\dbEntryID}{}{
+	\insertZadanie{\currfilepath}{prad_R8_R10}{}
+	\insertZadanie{\currfilepath}{polmostek_H}{}
+}
+
+\IfStrEq{\dbEntryID}{praktyczne}{
+	\insertZadanie{\currfilepath}{zbuduj_klucz_npn1}{}
+	\insertZadanie{\currfilepath}{zbuduj_klucz_npn2}{}
+	\insertZadanie{\currfilepath}{zbuduj_stabilizator_zener2}{}
+}
+
+\IfStrEq{\dbEntryID}{rozwiazania}{
+	\insertRozwiazanie{\currfilepath}{prad_R8_R10}{}
+	\insertRozwiazanie{\currfilepath}{polmostek_H}{}
+}
+
+
+%
+% zadania teoretyczne
+%
+
+\dbEntryBegin{prad_R8_R10}\if1\dbEntryCheckResults
+Oszacuj wartość prądu płynącego przez R8 oraz wartość prądu płynącego przez R10. Odpowiedź krótko uzasadnij.
+	\begin{center}
+		\includegraphics[width=0.48\textwidth]{img/elektronika/zadania_teoretyczne-B}
+	\end{center}
+\fi
+
+\dbEntryBegin{polmostek_H}\if1\dbEntryCheckResults
+Narysuj schemat układu półmostka H z zastosowaniem tranzystorów bipolarnych (NPN i PNP) jako elementów przełączających.
+\fi
+
+
+%
+% zadania praktyczne
+%
+
+\dbEntryBegin{zbuduj_klucz_npn1}\if1\dbEntryCheckResults
+\noindent\begin{minipage}[b]{0.6\textwidth}
+Zastanów się co przedstawia układ przedstawiony na schemacie obok. Skonstruuj go i zobacz jak działa.
+
+Czy przez obciążenie (rezystor \textit{LOAD} o wartości 1k) płynie prąd gdy rezystor \textit{Rb} poprzez przełącznik \textit{S1} podłączony jest do napięcia zasilającego, a czy płynie gdy podłączony jest do masy?
+
+Zmierz wartość prądu płynącego przez \textit{Rb} i płynącego przez \textit{LOAD} w obu wypadkach. Zastanów się do czego może być użyty taki układ?
+
+\textit{Wskazówka: Zamiast użyć przełącznika możesz po prostu przełączać kabelek na płytce stykowej.}
+\end{minipage}
+\hfill
+\begin{minipage}[b]{0.35\textwidth}
+\includegraphics[width=\textwidth]{img/elektronika/zad-npn1}
+\end{minipage}
+\fi
+
+
+\dbEntryBegin{zbuduj_klucz_npn2}\if1\dbEntryCheckResults
+\noindent\begin{minipage}[b]{0.5\textwidth}
+Zmodyfikuj układ z zadania \ref{zbuduj_klucz_npn1} aby wyglądał jak na schemacie obok (obecnie S1 przełącza pomiędzy napięciem z dzielnika R1/R2 oraz stanem niepodłączonym).
+
+Oblicz ile powinno wynosić napięcie wyjściowe z dzielnika R1/R2? Czy rzeczywiste napięcie zgadza się z tym co obliczyłeś?
+
+Wykonaj ponownie pomiary prądu płynącego przez \textit{Rb} i płynącego przez \textit{LOAD} w obu stanach S1.
+Jak wprowadzone zmiany wpłyneły na zachowanie układu?
+\end{minipage}
+\hfill
+\begin{minipage}[b]{0.45\textwidth}
+\includegraphics[width=\textwidth]{img/elektronika/zad-npn2}
+\end{minipage}
+\fi
+
+
+\dbEntryBegin{zbuduj_stabilizator_zener2}\if1\dbEntryCheckResults
+\noindent\begin{minipage}[b]{0.7\textwidth}
+Zbuduj układ stabilizacji napięcia w oparciu o diodę Zenera i tranzystor przedstawiony na schemacie obok.
+
+Zastanów się nad sposobem działania tego układu – w tym celu dokonaj pomiarów napięcia wyjściowego oraz napięcia na bazie tranzystora w zależności od napięcia wejściowego.
+
+Zobacz jak na napięcie wyjściowe wpływa wielkość obciążenia symulowanego przez R2 (pamiętaj aby nie ustawiać zbyt małej rezystancji, bo przekroczysz maksymalny prąd dozwolony dla użytego tranzystora).
+
+W czym ukłąd ten jest lepszy od układu z zadania \ref{zbuduj_stabilizator_zener1}? Zastanów się dlaczego.
+\end{minipage}
+\hfill
+\begin{minipage}[b]{0.25\textwidth}
+\includegraphics[width=\textwidth]{img/elektronika/zad-stabilizator_zener2}
+\end{minipage}
+\fi
+
+

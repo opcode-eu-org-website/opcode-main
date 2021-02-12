@@ -47,8 +47,8 @@ installDependencies:
 
 all:
 	$(MAKE) buildAll
-	[ "$(MAINDIR)" = "$(PWD)" ] && (cd booklets    && $(MAKE) -f ../Makefile buildAll) || true
-	[ "$(MAINDIR)" = "$(PWD)" ] && (cd LaTeX-demos && $(MAKE) -f ../Makefile buildAll) || true
+	@ [ "$(MAINDIR)" = "$(PWD)" ] && (cd booklets    && $(MAKE) -f ../Makefile buildAll) || true
+	@ [ "$(MAINDIR)" = "$(PWD)" ] && (cd LaTeX-demos && $(MAKE) -f ../Makefile buildAll) || true
 
 serve:
 	cd $(OUTDIR) && python3 -m http.server

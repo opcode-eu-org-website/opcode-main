@@ -1,0 +1,149 @@
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\IfStrEq{\dbEntryID}{}{
+	\begin{center}
+		\includegraphics[width=0.55\textwidth]{img/elektronika/zadania_teoretyczne-szeregowe_rownolegle}
+	\end{center}
+	\insertZadanie{\currfilepath}{polaczenie_szeregowe}{}
+	\insertZadanie{\currfilepath}{polaczenie_rownolegle}{}
+	\begin{center}
+		\includegraphics[width=0.75\textwidth]{img/elektronika/zadania_teoretyczne-A}
+	\end{center}
+	\insertZadanie{\currfilepath}{prad_R1}{}
+	\insertZadanie{\currfilepath}{napiecie_T1}{}
+	\insertZadanie{\currfilepath}{napiecie_T234}{}
+}
+
+\IfStrEq{\dbEntryID}{praktyczne}{
+	\insertZadanie{\currfilepath}{zbuduj_ladowanie_kondensatora}{}
+	\insertZadanie{\currfilepath}{zbuduj_spadek_napiecia_na_led}{}
+	\insertZadanie{\currfilepath}{zbuduj_stabilizator_zener1}{}
+}
+
+\IfStrEq{\dbEntryID}{rozwiazania}{
+	\insertRozwiazanie{\currfilepath}{prad_R1}{}
+	\insertRozwiazanie{\currfilepath}{napiecie_T1}{}
+	\insertRozwiazanie{\currfilepath}{napiecie_T234}{}
+}
+
+
+%
+% zadania teoretyczne
+%
+
+\dbEntryBegin{prad_R1}\if1\dbEntryCheckResults
+Oszacuj wartość prądu płynącego przez R1. Odpowiedź krótko uzasadnij.
+% img/elektronika/praca_domowa-A
+\fi
+
+\dbEntryBegin{napiecie_T1}\if1\dbEntryCheckResults
+Podaj wartość napięcia (względem GND) w punkcie T1 w sytuacji gdy S1 jest wciśnięty (zwarty) oraz w sytuacji gdy jest rozwarty (nie przewodzi). Odpowiedź krótko uzasadnij.
+% img/elektronika/praca_domowa-A
+\fi
+
+\dbEntryBegin{napiecie_T234}\if1\dbEntryCheckResults
+Podaj wartość napięcia (względem GND) w punkach T2, T3, T4. Odpowiedź krótko uzasadnij.
+% img/elektronika/praca_domowa-A
+\fi
+
+\dbEntryBegin{prad_R8_R10}\if1\dbEntryCheckResults
+Oszacuj wartość prądu płynącego przez R8 oraz wartość prądu płynącego przez R10. Odpowiedź krótko uzasadnij.
+% img/elektronika/praca_domowa-B
+\fi
+
+\dbEntryBegin{polaczenie_szeregowe}\if1\dbEntryCheckResults
+  Rezystory $R_1$ i $R_2$ połączone zostały szeregowo i podłączone do źródła napięcia U, tak jak pokazano na powyższym schemacie.
+  \begin{enumerate}[label=\alph*)]
+    \item Zapisz zależność (wzór) określający spadek napięcia na rezystorze $R_1$.
+    \item Zapisz zależność (wzór) określający sumaryczną moc, która wydzieli się na obu tych rezystorach.
+  \end{enumerate}
+\fi
+
+\dbEntryBegin{polaczenie_rownolegle}\if1\dbEntryCheckResults
+  Rezystory $R_3$ i $R_4$ połączone zostały równolegle i podłączone do źródła napięcia U, tak jak pokazano na powyższym schemacie.
+  \begin{enumerate}[label=\alph*)]
+    \item Zapisz zależność (wzór) określający prąd płynący przez rezystor $R_3$.
+    \item Zapisz zależność (wzór) określający łączną rezystancję obu rezystorów (czyli ich rezystancję zastępczą).
+  \end{enumerate}
+\fi
+
+%
+% zadania praktyczne
+%
+
+\dbEntryBegin{zbuduj_ladowanie_kondensatora}\if1\dbEntryCheckResults
+\noindent\begin{minipage}[b]{0.55\textwidth}
+Zbuduj układ przedstawiony na schemacie i zaobserwuj zmianę napięcia na kondensatorze w momencie załączania, wyłączania zasilania.
+
+\vspace{13pt}
+
+Zobacz jak zmieni się działanie układu gdy zmienisz wartości elementów (np. wartość rezystora R2).
+
+\ifdefined\ladowanieKondensatoraWartosci\vspace{13pt}\ladowanieKondensatoraWartosci\fi
+\end{minipage}
+\hfill
+\begin{minipage}[b]{0.4\textwidth}
+\includegraphics[width=\textwidth]{img/elektronika/zad-kondensator}
+\end{minipage}
+\fi
+
+
+\dbEntryBegin{zbuduj_spadek_napiecia_na_led}\if1\dbEntryCheckResults
+\noindent\begin{minipage}[b]{0.7\textwidth}
+Zbuduj układ przedstawiony na schemacie i zaobserwować że dla różnych napięć wejściowych (z zakresu 5-13V) na diodzie świecącej występuje stały spadek napięcia.
+Zaobserwuj że zmianie ulega wartość prądu płynącego w takim obwodzie oraz że wynika ona z napięcia odłożonego na rezystorze i wartości jego rezystancji.
+\end{minipage}
+\hfill
+\begin{minipage}[b]{0.25\textwidth}
+\includegraphics[width=\textwidth]{img/elektronika/zad-led}\vspace{0.5cm}
+\end{minipage}
+
+\hfill \rule{0.8\textwidth}{.3pt}\hfill 
+
+\noindent\begin{minipage}[b]{0.27\textwidth}
+\includegraphics[width=\textwidth]{img/elektronika/zad-led_2}
+\end{minipage}
+\hfill
+\begin{minipage}[b]{0.6\textwidth}
+Jeżeli nie posiadasz regulowanego źródła napięcia możesz w jego roli użyć dzielnik z rezystorem nastawnym, tak jak pokazano na schemacie po lewej.
+\vspace{1.3cm}
+\end{minipage}
+\hfill 
+\fi
+
+
+\dbEntryBegin{zbuduj_stabilizator_zener1}\if1\dbEntryCheckResults
+\noindent\begin{minipage}[b]{0.77\textwidth}
+Zbuduj układ stabilizacji napięcia w oparciu o diodę Zenera przedstawiony na schemacie obok.
+
+Zastanów się nad sposobem działania tego układu – w tym celu dokonaj pomiarów napięcia wyjściowego w zależności od napięcia wejściowego.
+
+Zobacz jak na napięcie wyjściowe wpływa wielkość obciążenia symulowanego przez R2.
+\vspace{13pt}
+\end{minipage}
+\hfill
+\begin{minipage}[b]{0.17\textwidth}
+\includegraphics[width=\textwidth]{img/elektronika/zad-stabilizator_zener1}
+\end{minipage}
+\fi

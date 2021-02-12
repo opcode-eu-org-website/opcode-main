@@ -1,0 +1,56 @@
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+% bierne i dioda
+
+\dbEntryBegin{zadanie_cewka_i_dioda}\if1\dbEntryCheckResults
+Wróć do symulacji związanej z cewką \url{http://ln.opcode.eu.org/cewka} i spróbuj dodać diodę równolegle do cewki taki sposób aby wyeliminować powstawanie przepięć.
+Zobacz też że dodanie diody równolegle z elementem przełączającym nie pozwala na rozwiązanie problemu.
+\fi
+
+\dbEntryBegin{zadanie_mostek}\if1\dbEntryCheckResults
+\noindent\begin{minipage}[b]{0.6\textwidth}
+Zbuduj układ przedstawiony na schemacie (nazywany mostkiem Gretza) i zauważ że polaryzacja wyjścia (podłączonego do woltomierza) jest niezależna od polaryzacji wejścia (czyli od tego czy biegun dodatni będzie przyłączony do in1 czy in2, a ujemny odpowiednio in2 lub in1).
+\end{minipage}
+\hfill
+\begin{minipage}[b]{0.35\textwidth}
+\includegraphics[width=\textwidth]{img/elektronika/zad-mostek}
+\end{minipage}
+\fi
+
+% cyfrowe
+
+\dbEntryBegin{zadanie_zidentyfikuj_uklad}\if1\dbEntryCheckResults
+\noindent\begin{minipage}[t]{\textwidth}
+	\noindent\parbox[b]{0.7\textwidth}{
+		Otrzymałeś układ logiczny w obudowie DIP14, o układzie wyprowadzeń pokazanym na rysunku obok\footnote{
+			Warto zauważyć że sposób numerowania pinów jest standardowy dla danego typu obudowy, natomiast funkcje poszczególnych pinów różnią się w zależności od danego układu i są opisywane w jego dokumentacji).
+		}.
+		Nóżki numer 10 i 9 są wejściami pewnej bramki logicznej, której wyjście jest na nóżce numer 8. Sporządź tablicę prawdy dla tej bramki i zidentyfikuj co to za bramka.
+		\vspace{0.25cm}
+	}\hfill\parbox[b]{0.25\textwidth}{
+		\includegraphics[height=0.22\textwidth,angle=90,origin=c]{img/elektronika/DIP14-zadanie}
+		\vspace{-0.5cm}
+	}
+\end{minipage}
+\fi

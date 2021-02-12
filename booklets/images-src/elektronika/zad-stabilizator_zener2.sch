@@ -4,7 +4,7 @@ C 32200 51900 1 0 0 net-gnd-1.sym
 C 31300 54200 1 0 0 net-pwr-1.sym
 {
 T 31500 54550 5 9 1 1 0 5 1
-value=12V
+value=9V
 }
 C 30400 53300 1 90 0 resistor-2.sym
 {
@@ -15,7 +15,7 @@ N 30300 53300 30300 53100 4
 C 30100 54200 1 0 0 net-pwr-1.sym
 {
 T 30300 54550 5 9 1 1 0 5 1
-value=12V
+value=9V
 }
 C 30200 51900 1 0 0 net-gnd-1.sym
 C 30500 52200 1 90 0 diode-zener-1.sym
