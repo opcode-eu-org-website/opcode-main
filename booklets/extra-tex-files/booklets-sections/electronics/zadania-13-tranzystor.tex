@@ -22,19 +22,20 @@
 % SOFTWARE.
 
 \IfStrEq{\dbEntryID}{}{
+	\ifdefined\noExtraInfoMode\else
+		\subsection{Tranzystory}
+	\fi
 	\insertZadanie{\currfilepath}{prad_R8_R10}{}
 	\insertZadanie{\currfilepath}{polmostek_H}{}
 }
 
 \IfStrEq{\dbEntryID}{praktyczne}{
+	\ifdefined\noExtraInfoMode\else
+		\subsection{Tranzystory}
+	\fi
 	\insertZadanie{\currfilepath}{zbuduj_klucz_npn1}{}
 	\insertZadanie{\currfilepath}{zbuduj_klucz_npn2}{}
 	\insertZadanie{\currfilepath}{zbuduj_stabilizator_zener2}{}
-}
-
-\IfStrEq{\dbEntryID}{rozwiazania}{
-	\insertRozwiazanie{\currfilepath}{prad_R8_R10}{}
-	\insertRozwiazanie{\currfilepath}{polmostek_H}{}
 }
 
 

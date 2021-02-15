@@ -22,29 +22,31 @@
 % SOFTWARE.
 
 \IfStrEq{\dbEntryID}{}{
-	\begin{center}
-		\includegraphics[width=0.55\textwidth]{img/elektronika/zadania_teoretyczne-szeregowe_rownolegle}
-	\end{center}
+	\ifdefined\noExtraInfoMode\else
+		\subsection{Elementy bierne i dioda}
+		\begin{center}
+			\includegraphics[width=0.55\textwidth]{img/elektronika/zadania_teoretyczne-szeregowe_rownolegle}
+		\end{center}
+	\fi
 	\insertZadanie{\currfilepath}{polaczenie_szeregowe}{}
 	\insertZadanie{\currfilepath}{polaczenie_rownolegle}{}
-	\begin{center}
-		\includegraphics[width=0.75\textwidth]{img/elektronika/zadania_teoretyczne-A}
-	\end{center}
+	\ifdefined\noExtraInfoMode\else
+		\begin{center}
+			\includegraphics[width=0.75\textwidth]{img/elektronika/zadania_teoretyczne-A}
+		\end{center}
+	\fi
 	\insertZadanie{\currfilepath}{prad_R1}{}
 	\insertZadanie{\currfilepath}{napiecie_T1}{}
 	\insertZadanie{\currfilepath}{napiecie_T234}{}
 }
 
 \IfStrEq{\dbEntryID}{praktyczne}{
+	\ifdefined\noExtraInfoMode\else
+		\subsection{Elementy bierne i dioda}
+	\fi
 	\insertZadanie{\currfilepath}{zbuduj_ladowanie_kondensatora}{}
 	\insertZadanie{\currfilepath}{zbuduj_spadek_napiecia_na_led}{}
 	\insertZadanie{\currfilepath}{zbuduj_stabilizator_zener1}{}
-}
-
-\IfStrEq{\dbEntryID}{rozwiazania}{
-	\insertRozwiazanie{\currfilepath}{prad_R1}{}
-	\insertRozwiazanie{\currfilepath}{napiecie_T1}{}
-	\insertRozwiazanie{\currfilepath}{napiecie_T234}{}
 }
 
 
@@ -84,6 +86,10 @@ T4 – dzielnik z diodą Zenera, dioda Zenera nie przewodzi (przyłożone napię
     \item Zapisz zależność (wzór) określający sumaryczną moc, która wydzieli się na obu tych rezystorach.
   \end{enumerate}
 \fi
+\dbEntryBegin{polaczenie_szeregowe-rozwiazanie}\if1\dbEntryCheckResults
+$$I = I_{R_1} = I_{R_2} = \frac{U}{R_1 + R_2}  \quad\qquad  U_{R_1} = I · R_1 = U · \frac{R_1}{R_1 + R_2}$$
+$$P = U·I = \frac{U^2}{R_1 + R_2}$$
+\fi
 
 \dbEntryBegin{polaczenie_rownolegle}\if1\dbEntryCheckResults
   Rezystory $R_3$ i $R_4$ połączone zostały równolegle i podłączone do źródła napięcia U, tak jak pokazano na powyższym schemacie.
@@ -91,6 +97,10 @@ T4 – dzielnik z diodą Zenera, dioda Zenera nie przewodzi (przyłożone napię
     \item Zapisz zależność (wzór) określający prąd płynący przez rezystor $R_3$.
     \item Zapisz zależność (wzór) określający łączną rezystancję obu rezystorów (czyli ich rezystancję zastępczą).
   \end{enumerate}
+\fi
+\dbEntryBegin{polaczenie_rownolegle-rozwiazanie}\if1\dbEntryCheckResults
+$$U = U_{R_3} = U_{R_4}  \quad\qquad  I_{R_3} = \frac{U}{R_3}$$
+$$R_c = \frac{1}{1/R_3 + 1/R_4}$$
 \fi
 
 %

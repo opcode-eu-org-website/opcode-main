@@ -26,12 +26,8 @@
 	\insertZadanie{\currfilepath}{awk_last}{}
 }
 
-\IfStrEq{\dbEntryID}{rozwiazania}{
-	\insertRozwiazanie{\currfilepath}{passwd_warunek_na_uid_awk}{}
-	\insertRozwiazanie{\currfilepath}{awk_last}{}
-}
 
-% napisy z uzyciem awk i/lub programowanie w bash
+% napisy z uzyciem awk
 
 \dbEntryBegin{passwd_warunek_na_uid_awk}\if1\dbEntryCheckResults
 Korzystając z AWK wyświetl z /etc/passwd linie w których UID (3 pole) ma warość >= 1000.
@@ -64,19 +60,4 @@ last | awk '/^wtmp begins/ {next} $1 !="" {x[$1]++} END{for (u in x) print u, x[
 \item zliczanie wystąpień nazwy użytkownika w tablicy x (indeksowanej tymi nazwami)
 \item zastosowanie bloku END do wypisania zawartości tablicy, której używaliśmy do zliczania użytkowników
 \end{itemize}
-\fi
-
-
-% DODATKOWE
-
-\dbEntryBegin{passwd_warunek_na_uid_noawk}\if1\dbEntryCheckResults
-Wyświetl z /etc/passwd linie w których UID (3 pole) ma warość >= 1000 nie korzystając z AWK.
-Jeżeli masz pomysł przedstaw więcej niż jedno rozwiązanie.
-\fi
-
-\dbEntryBegin{rekurecyjne_wyszukaj_i_zastap}\if1\dbEntryCheckResults
-Napisz funkcję która przyjmuje dwa argumenty - napis wyszukiwany i napis go zastępujący oraz dokonuje rekurencyjnego wyszukania i zamiany tych napisów w wszystkich plikach w bieżącym katalogu.
-
-\textit{Wskazówka 1: polecenie \texttt{sed} z opcją \texttt{-i} i wskazaniem pliku modyfikuje zawartości tego pliku stosownie do poleceń wydanych sed'owi}\\
-\textit{Wskazówka 2: dla uproszczenia możesz przyjąć że napisy te składają się jedynie z liter i cyfr.}
 \fi

@@ -23,19 +23,14 @@
 % SOFTWARE.
 
 \IfStrEq{\dbEntryID}{}{
-	\subsection{konstrukcje składniowe}
+	\ifdefined\noExtraInfoMode\else
+		\subsection{konstrukcje składniowe}
+	\fi
 	
 	\insertZadanie{\currfilepath}{funkcja_suma2}{}
 	\insertZadanie{\currfilepath}{suma_poteg}{}
 	\insertZadanie{\currfilepath}{funkcja_znak}{}
 	\insertZadanie{\currfilepath}{suma_poteg2}{}
-}
-
-\IfStrEq{\dbEntryID}{rozwiazania}{
-	\insertRozwiazanie{\currfilepath}{funkcja_suma2}{}
-	\insertRozwiazanie{\currfilepath}{suma_poteg}{}
-	\insertRozwiazanie{\currfilepath}{funkcja_znak}{}
-	\insertRozwiazanie{\currfilepath}{suma_poteg2}{}
 }
 
 

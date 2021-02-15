@@ -27,12 +27,6 @@
 	\insertZadanie{\currfilepath}{zapis_do_pliku}{}
 }
 
-\IfStrEq{\dbEntryID}{rozwiazania}{
-	\insertRozwiazanie{\currfilepath}{zadanie_select}{}
-	\insertRozwiazanie{\currfilepath}{zadanie_fork}{}
-	\insertRozwiazanie{\currfilepath}{zapis_do_pliku}{}
-}
-
 
 \dbEntryBegin{zadanie_select}\if1\dbEntryCheckResults
 Napisz funkcję, który wczytuje dane z standardowego wejścia. Funkcja powinna przyjmować jeden argument określający maksymalny czas oczekiwania na kolejną porcję danych.

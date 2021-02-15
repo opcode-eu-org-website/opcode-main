@@ -29,16 +29,7 @@
 	\insertZadanie{\currfilepath}{findetc2}{}
 }
 
-\IfStrEq{\dbEntryID}{rozwiazania}{
-	\insertRozwiazanie{\currfilepath}{vim}{}
-	\insertRozwiazanie{\currfilepath}{lsetc}{}
-	\insertRozwiazanie{\currfilepath}{findetc}{}
-	\insertRozwiazanie{\currfilepath}{linki_symboliczne}{}
-	\insertRozwiazanie{\currfilepath}{findetc2}{}
-}
 
-
-% BEGIN: system plikow - zadania
 \dbEntryBegin{vim}\if1\dbEntryCheckResults
 Przy pomocy edytora \textit{vim} otwórz plik \Verb#/etc/passwd# i zastąp wszystkie wystąpienia \Verb#bin# przez \Verb#XYZ#. Nie zapisuj pliku.
 \fi
@@ -174,15 +165,3 @@ find /etc -mtime -2 -exec ls -ld \{\} \;
       ale nie możemy umieścić klamerek i średnika w jednym napisie (np. \verb{find -mtime -2 -exec ls -ld '{\} ;'}).
 \end{itemize}
 \fi
-% END: system plikow - zadania
-
-
-% BEGIN: zadania - ssh
-\dbEntryBegin{sshls}\if1\dbEntryCheckResults
-Wylistuj zawartość /etc/ z wskazanej maszyny zdalnej.
-\fi
-
-\dbEntryBegin{remote_copy}\if1\dbEntryCheckResults
-Skopiuj plik /etc/hostname z wskazanej maszyny zdalnej do /tmp/hostname.
-\fi
-% END: zadania - ssh

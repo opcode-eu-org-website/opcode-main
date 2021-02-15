@@ -33,17 +33,6 @@
 	\insertZadanie{\currfilepath}{ping_utf}{}
 }
 
-\IfStrEq{\dbEntryID}{rozwiazania}{
-	\insertRozwiazanie{\currfilepath}{czy_w_sieci}{}
-	\insertRozwiazanie{\currfilepath}{routing}{}
-	\insertRozwiazanie{\currfilepath}{ping1}{}
-	\insertRozwiazanie{\currfilepath}{traceroute1}{}
-	\insertRozwiazanie{\currfilepath}{dns1}{}
-	\insertRozwiazanie{\currfilepath}{tcpdump}{}
-	\insertRozwiazanie{\currfilepath}{http1}{}
-	\insertRozwiazanie{\currfilepath}{http2}{}
-	\insertRozwiazanie{\currfilepath}{ping_utf}{}
-}
 
 \dbEntryBegin{czy_w_sieci}\if1\dbEntryCheckResults
 Ustal czy adres \Verb$2001:db8:0:a17::123$ należy do sieci \Verb$2001:db8::/48$. Możesz posłużyć się narzędziami do obliczania zakresów sieci IP (np. \Verb#sipcalc#) lub obliczyć to ręcznie.

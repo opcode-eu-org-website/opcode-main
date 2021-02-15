@@ -27,7 +27,7 @@
 	Projekt ,,Matematyka dla Ciekawych Świata'',\\
 	Robert Ryszard Paciorek\\\normalsize\ttfamily <rrp@opcode.eu.org>
 }
-\date  {2021-02-11}
+\date  {2021-02-13}
 
 \makeatletter\hypersetup{
 	pdftitle = {\@title}, pdfauthor = {\@author}
@@ -42,22 +42,11 @@
 \input{booklets-sections/linux/20-operacje_na_systemie_plikow.tex}
 \input{booklets-sections/linux/22-struktura_katalogów.tex}
 
-\setcounter{subsection}{0} % \subsection{zadania}
-\input{booklets-sections/linux/zadania-10_20.tex}
-
 \section{Praca zdalna}
 \input{booklets-sections/linux/12-ssh.tex}
 \input{booklets-sections/linux/21-kopiowanie_zdalne.tex}
 
-\setcounter{subsection}{0} % \subsection{zadania}
-\insertZadanie{booklets-sections/linux/zadania-10_20.tex}{sshls}{}
-\insertZadanie{booklets-sections/linux/zadania-10_20.tex}{remote_copy}{}
-
 \input{booklets-sections/linux/30-operacje_na_plikach.tex}
-
-\setcounter{subsection}{0} % \subsection{zadania}
-\input{booklets-sections/linux/zadania-30.tex}
-\insertZadanie{booklets-sections/linux/zadania-30.tex}{ls_nazwy_cd}{}
 
 \input{booklets-sections/linux/40-użytkownicy_uprawnienia_procesy.tex}
 \input{booklets-sections/linux/50-system_operacyjny.tex}
@@ -70,13 +59,13 @@
 \section{Literatura dodatkowa \zaawansowane{10}}
 \input{booklets-sections/linux/literatura.tex}
 
-\section{Zadania dodatkowe}
-\dbEntryInsert{booklets-sections/linux/zadania_dodatkowe.tex}{zadania_komendy}
-
 \section{Literatura dodatkowa}
  Więcej informacji o podstawach działania w systematach ,,unixowych'' oraz pełniejsza lista poleceń zamieszczona została pod adresem \url{http://vip.opcode.eu.org/#Systemy_unix-owate}.
 
-\rozwiazania
+\section{Zadania}
+\input{booklets-sections/linux/zadania-10_20.tex}
+\input{booklets-sections/linux/zadania-30.tex}
+
 
 \copyrightFooter{
 	© Matematyka dla Ciekawych Świata, 2017-2021.\\

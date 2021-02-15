@@ -23,25 +23,22 @@
 % SOFTWARE.
 
 \IfStrEq{\dbEntryID}{}{
-	\subsection{napisy}
+	\ifdefined\noExtraInfoMode\else
+		\subsection{napisy}
+	\fi
 	
 	\insertZadanie{\currfilepath}{funkcja_wspak}{}
 	\insertZadanie{\currfilepath}{funkcja_wyiksuj}{}
 	\insertZadanie{\currfilepath}{dekodowanie_utf8_w_base64}{}
 	
-	\subsection{wyrażenia regularne}
+	\ifdefined\noExtraInfoMode\else
+		\subsection{wyrażenia regularne}
+	\fi
 	
 	\insertZadanie{\currfilepath}{regex_czy_slowo}{}
 	\insertZadanie{\currfilepath}{regex_czy_liczba}{}
 }
 
-\IfStrEq{\dbEntryID}{rozwiazania}{
-	\insertRozwiazanie{\currfilepath}{funkcja_wspak}{}
-	\insertRozwiazanie{\currfilepath}{funkcja_wyiksuj}{}
-	\insertRozwiazanie{\currfilepath}{dekodowanie_utf8_w_base64}{}
-	\insertRozwiazanie{\currfilepath}{regex_czy_slowo}{}
-	\insertRozwiazanie{\currfilepath}{regex_czy_liczba}{}
-}
 
 %
 % napisy
@@ -54,6 +51,12 @@ alA
 am
 atok
 \end{Verbatim}
+
+\textit{
+	Wskazówka: Po elementach listy znajdującej się w zmiennej możemy iterować pętlą \texttt{for},
+	tak jak robiliśmy to po literach napisu, czy po elementach listy liczb zapisanej bezpośrednio w konstrukcji pętli
+	(spróbuj \python{for x in lista:}).
+}
 \fi
 
 \dbEntryBegin{funkcja_wspak-rozwiazanie}\if1\dbEntryCheckResults
@@ -73,7 +76,7 @@ def wskap(lista):
   for slowo in lista:
     print(slowo[::-1])
 \end{minted}
-które korzysta z odwrócenia napisu przy pomocy pobrania wszystkich jego elemntów z krokiem -1 poprzez \python{slowo[::-1]}
+które korzysta z odwrócenia napisu przy pomocy pobrania wszystkich jego elementów z krokiem -1 poprzez \python{slowo[::-1]}
 \fi
 
 
@@ -123,7 +126,7 @@ def wyiksuj(napis):
 \noindent Zwróć uwagę że:
 \begin{itemize}
 \item iterowanie po elementach napisu (znakach) z użyciem pętli \python{for}
-\item zastosowanie konstrukcji \python{a in b} do sprawdzenia czy element a (w tym wypadku znak) należy do kolekcji b (w tym wypadku napisu, ale mogał by to być także np. lista znaków)
+\item zastosowanie konstrukcji \python{a in b} do sprawdzenia czy element a (w tym wypadku znak) należy do kolekcji b (w tym wypadku napisu, ale mogła by to być także np. lista znaków)
 \item zastosowanie metod \python{isupper()} i \python{islower()} w drugim wariancie rozwiązania, podobne porównanie dla znaków ASCI można łatwo wykonać w oparciu o wartość numerycznego kodu tego znaku
 \item zwięzłość rozwiązania z użyciem wyrażeń regularnych
 \end{itemize}
@@ -149,7 +152,7 @@ Zakodowany tekst to: \textcolor{red}{Python jest fajny {\Symbola 😎}}
 \noindent Zwróć uwagę że:
 \begin{itemize}
 \item zdejmowanie kolejnych kodowań w kolejnych krokach procedury – w odwrotnej kolejności niż były nakładane
-\item funckcja \python{codecs.decode} wymaga jako danych wejściowych ciągu bajtowego, i taki ciąg zrwaca
+\item funkcja \python{codecs.decode} wymaga jako danych wejściowych ciągu bajtowego, i taki ciąg zwraca
 \item metoda \python{decode} ciągu bajtowego zwraca napis powstały przez zdekodowanie tego ciągu z użyciem utf-8
 \end{itemize}
 \fi

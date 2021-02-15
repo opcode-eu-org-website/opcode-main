@@ -23,7 +23,9 @@
 % SOFTWARE.
 
 \IfStrEq{\dbEntryID}{}{
-	\section{Zadania}
+	\ifdefined\noExtraInfoMode\else
+		\section{Zadania}
+	\fi
 	\insertZadanie{\currfilepath}{miganie_wolniej}{}
 	\insertZadanie{\currfilepath}{wewnetrzny_pullup}{}
 	\insertZadanie{\currfilepath}{przycisk_na_innym_pinie}{}

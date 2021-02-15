@@ -27,14 +27,8 @@
 	\insertZadanie{\currfilepath}{wlacz_forward}{}
 	\insertZadanie{\currfilepath}{serwer_trojkat}{}
 	\insertZadanie{\currfilepath}{udp_echo}{}
-}
-
-\IfStrEq{\dbEntryID}{rozwiazania}{
-	\insertRozwiazanie{\currfilepath}{ustaw_adres}{}
-	\insertRozwiazanie{\currfilepath}{ustaw_route}{}
-	\insertRozwiazanie{\currfilepath}{wlacz_forward}{}
-	\insertRozwiazanie{\currfilepath}{serwer_trojkat}{}
-	\insertRozwiazanie{\currfilepath}{udp_echo}{}
+	\insertZadanie{\currfilepath}{dos_echo1}{}
+	\insertZadanie{\currfilepath}{dos_echo2}{}
 }
 
 
@@ -218,3 +212,53 @@ while True:
 \end{minted}
 \fi
 
+
+\dbEntryBegin{dos_echo1}\if1\dbEntryCheckResults
+Uruchom dwie instancje serwera echo korzystającego z protokołu UDP.
+
+Zastanów się co by się stało jeżeli jeden z tych serwerów dostałby pakiet pochodzący od drugiego z nich?
+
+Korzystając z pakietu \textit{scapy} oraz posiadając prawa root'a możemy przy pomocy Pythona wysyłać dowolnie spreparowane pakiety IP:
+
+\begin{CodeFrame*}[python]{}
+from scapy.all import IP, IPv6, UDP, send
+
+send(IPv6(src=sIP, dst=dIP) / UDP(sport=sPort, dport=dPort) / "ABC ... XYZ")
+# powyższa funkcja utworzy (a następnie wyśle):
+#  → pakiet IPv6 od sIP do dIP
+#    (adresy podajemy jako napisy),
+#  → w którym jest pakiet UDP z portem źródłowym sPort i docelowym dport
+#    (porty podajemy jako wartości numeryczne)
+#  → w którym są dane "ABC ... XYZ"
+
+# jeżeli zamiast IPv6() użyjemy IP() będziemy używać pakietu IPv4
+
+# możemy też zaimportować inne funkcjonalności z modułu scapy
+# (np. ICMP, TCP, ...) i używać ich do budowy naszych pakietów
+\end{CodeFrame*}
+
+Modyfikując powyższy kod spróbuj wysłać sfałszowany pakiet adresowany do jednego z serwerów, który jako adres nadawcy ma podany drugi z serwerów.
+
+\textit{Scapy nie jest elementem biblioteki standardowej pythona – konieczne może być zainstalowanie pakietu \texttt{python3-scapy} albo zainstalowanie go poprzez managera modułów pythonowoych „pip”: \texttt{pip3 install scapy-python3}.}
+\fi
+\dbEntryBegin{dos_echo1-rozwiazanie}\if1\dbEntryCheckResults
+Potrzebne będą trzy okna terminala. W dwóch uruchamiamy napisaną przez nas echo usługę UDP, na przykład: \Verb#python3 echo.py 9999# i \Verb#python3 echo.py 8888#.
+W trzecim uruchamiamy z prawami root'a następujący kod:
+
+\begin{CodeFrame*}[python]{}
+import sys
+from scapy.all import IP, IPv6, UDP, send
+
+send(IPv6(src="::1", dst="::1") / UDP(sport=8888, dport=9999) / "ABC ... XYZ")
+\end{CodeFrame*}
+\fi
+
+\dbEntryBegin{dos_echo2}\if1\dbEntryCheckResults
+Zobacz co się stanie jeżeli w sfałszowanym pakiecie podasz ten sam serwer jako nadawcę i odbiorcę.
+
+Usługa UDP-echo była kiedyś powszechnie stosowaną usługą diagnostyczną umożliwiająca testowanie połączenia sieciowego. Do tej pory ma nawet przyznany standardowy numer portu (7).
+Jak myślisz dlaczego usługa UDP-echo nie jest już powszechnie dostępną na każdym komputerze podłączonym do Internetu?
+\fi
+\dbEntryBegin{dos_echo1-rozwiazanie}\if1\dbEntryCheckResults
+Po prostu sprawdź ... a się przekonasz że „auto-DoS” też jest możliwy.
+\fi
