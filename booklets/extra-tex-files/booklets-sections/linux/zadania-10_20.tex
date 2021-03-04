@@ -43,11 +43,11 @@ Przy pomocy edytora \textit{vim} otwórz plik \Verb#/etc/passwd# i zastąp wszys
 \noindent Zwróć uwagę że:
 \begin{itemize}
 \item Plik do otwarcia wskazujemy w linii poleceń przy pomocy ścieżki bezwzględnej zaczynającej się od \Verb{/}.
-      Zamiast tego możnaby także otworzyć plik po uruchomieniu edytora lub użyć ścieżki względnej.
+      Zamiast tego można by także otworzyć plik po uruchomieniu edytora lub użyć ścieżki względnej.
       Użycie ścieżki bezwzględnej zapewnia niezależność tej komendy od katalogu roboczego w którym zostanie wykonana.
 \item Do zamiany i zamknięcia edytora używane są polecenia linii poleceń vim'a uruchamianej przy pomocy dwukropka (\Verb{:}) i dlatego są one poprzedzane dwukropkiem.
-      Jest to inny zbiór komend niż komendy wprowadzane bezpośrednio (takie jak np. \Verb{dd} kasują bierzącą linię).
-      Ta linia poleceń też ma swoją historią.
+      Jest to inny zbiór komend niż komendy wprowadzane bezpośrednio (takie jak np. \Verb{dd} kasujące bieżącą linię).
+      Ta linia poleceń też ma swoją historię.
 \item Edytor opuszczamy z użyciem \Verb{:q!}, dodanie wykrzyknika jest potrzebne żeby zamknąć edytor bez zapisywania zmian.
 \end{itemize}
 \fi
@@ -72,13 +72,13 @@ ls -d /etc/?as* /etc/?ap*
 \noindent Zwróć uwagę że:
 \begin{itemize}
 \item Polecenie \Verb{ls} listuje wszystkie podane w linii poleceń argumenty oddzielane spacjami.
-\item Jeżeli argumenty te zawierają znaki uogulniające powłoki to każdy taki argument zostanie zastapiony przez powłoke listą pasujących plików lub zostanie przekazany w formie nie zmienionej jeżeli nie ma pasujacych plików. Ma to kilka konsekwencji:
+\item Jeżeli argumenty te zawierają znaki uogulniające powłoki to każdy taki argument zostanie zastapiony przez powłokę listą pasujących plików, lub zostanie przekazany w formie niezmienionej jeżeli nie ma pasujacych plików. Ma to kilka konsekwencji:
 	\begin{itemize}
 	\item W wyniku dopasowania nazw do polecenia ls moga zostać przekazane ścieżki do katalogów, dla których ls domyślnie listuje ich zawartość.
 	      Tutaj tego nie chemy i dlatego używamy opcji \Verb{-d}
-	\item W pierwszym wariancie wszystkie pliki opisaliśmy pojedynczym wyrażeniem uogulniającym basha, a w drugim podaliśmy dwa argumenty.
+	\item W pierwszym wariancie wszystkie pliki opisaliśmy pojedynczym wyrażeniem uogólniającym basha, a w drugim podaliśmy dwa argumenty.
 	      Polecenia te są prawie równoważne - wypiszą te ścieżki.
-	      Jednak w przypadku braku dopsaowań do jednego z wariantów (np. braku plików z trzecią literą p) – drugie polecenie wypisałoby dodatkowo komunikat o braku dopasowania do jednego z podanych argumentów (np. do \Verb{/etc/?ap*}). Wynika to z tego iż przy barku dopsowania do tegoa rgumentu bash przekazałbygo w formie niezmienionej do polecenia \Verb{ls}.
+	      Jednak w przypadku braku dopsaowań do jednego z wariantów (np. braku plików z trzecią literą p) – drugie polecenie wypisałoby dodatkowo komunikat o braku dopasowania do jednego z podanych argumentów (np. do \Verb{/etc/?ap*}). Wynika to z tego iż przy braku dopsowania do tego argumentu bash przekazałby go w formie niezmienionej do polecenia \Verb{ls}.
 	\end{itemize}
 \end{itemize}
 \fi
@@ -99,7 +99,7 @@ lub
 find /etc -mtime -2
 \end{CodeFrame*}
 
-jeżeli nie uważamy katalogów za pliki to możemy dodać stosowny warunek
+jeżeli nie uważamy katalogów za pliki, to możemy dodać stosowny warunek
 
 \begin{CodeFrame*}[bash]{}
 find -mtime -2 -type f
@@ -140,10 +140,10 @@ ln -s ../etc/passwd ll2
 \noindent Zwróć uwagę że:
 \begin{itemize}
 \item Pierwszy wariant możemy wykonać także będąc w \Verb{/tmp}
-\item W przypadku podawania w ln ścieżki względnej (\Verb{ln -s ../etc/passwd ll2}) należy pamiętać iż zostanie ona literalnie zapisana w tworzonym linku.
+\item W przypadku podawania w \Verb{ln} ścieżki względnej (\Verb{ln -s ../etc/passwd ll2}) należy pamiętać iż zostanie ona literalnie zapisana w tworzonym linku.
 	\begin{itemize}
-	\item W związku z tym musi to być poprawna ścieżka z katalogu docelowego a nie z bieżącego katalogu roboczego.
-	\item Np. będąc w \Verb{/usr/local/bin/} ścieżka wzglęna do \Verb{/etc/passwd} to \Verb{../../../etc/passwd}, ale gdy będąc w tamtym katalogu chemy utworzyć plik \Verb{/tmp/llX} linkujący ścieżką względną do \Verb{/etc/passwd} wykonamy polecenie \Verb{ln -s ../etc/passwd /tmp/llX}, bo ścieżka względem \Verb{/tmp} ma postać \Verb{ln -s ../etc/passwd}.
+	\item W związku z tym musi to być poprawna ścieżka z katalogu docelowego, a nie z bieżącego katalogu roboczego.
+	\item Np. będąc w \Verb{/usr/local/bin/} ścieżka względna do \Verb{/etc/passwd} to \Verb{../../../etc/passwd}, ale gdy będąc w tamtym katalogu chemy utworzyć plik \Verb{/tmp/llX} linkujący ścieżką względną do \Verb{/etc/passwd} wykonamy polecenie \Verb{ln -s ../etc/passwd /tmp/llX}, bo ścieżka względem \Verb{/tmp} ma postać \Verb{ln -s ../etc/passwd}.
 	\end{itemize}
 \end{itemize}
 \fi
@@ -160,7 +160,7 @@ find /etc -mtime -2 -exec ls -ld \{\} \;
 \noindent Zwróć uwagę że:
 \begin{itemize}
 \item Wykorzystanie warunku \Verb{-exec}, który dodatkowo wyłącza standardowy output find'a
-\item Zabezpieczenie klamerek (nie zawsze wymagane) i średnika (praktycznie zawsze wymagane) oraz spację pomiędzy klamerkami a średnikiem.
+\item Zabezpieczamy klamerki (nie zawsze wymagane) i średnik (praktycznie zawsze wymagane) oraz spację pomiędzy klamerkami a średnikiem.
       Możemy je zabezpieczyć także cudzysłowami: \verb{find /etc -mtime -2 -exec ls -ld '{}' ';'},
       ale nie możemy umieścić klamerek i średnika w jednym napisie (np. \verb{find -mtime -2 -exec ls -ld '{\} ;'}).
 \end{itemize}
