@@ -36,7 +36,7 @@ Przy pomocy edytora \textit{vim} otwórz plik \Verb#/etc/passwd# i zastąp wszys
 \dbEntryBegin{vim-rozwiazanie}\if1\dbEntryCheckResults
 \begin{enumerate}
 \item Uruchomić edytor za pomocą polecenia \Verb{vim /etc/passwd}.
-\item W uruchomionym edytorze należy wydać polecenie \Verb{:%s@false@FALSE@g}, które spowoduje zastąpienie wszystkich wystąpień \Verb{false} przez \Verb{FALSE}.
+\item W uruchomionym edytorze należy wydać polecenie \Verb{:%s@bin@XYZ@g}, które spowoduje zastąpienie wszystkich wystąpień \Verb{bin} przez \Verb{XYZ}.
 \item Edytor należy opuścić bez zapisywania zmian przy pomocy polecenia \Verb{:q!}
 \end{enumerate}
 
@@ -72,13 +72,13 @@ ls -d /etc/?as* /etc/?ap*
 \noindent Zwróć uwagę że:
 \begin{itemize}
 \item Polecenie \Verb{ls} listuje wszystkie podane w linii poleceń argumenty oddzielane spacjami.
-\item Jeżeli argumenty te zawierają znaki uogulniające powłoki to każdy taki argument zostanie zastapiony przez powłokę listą pasujących plików, lub zostanie przekazany w formie niezmienionej jeżeli nie ma pasujacych plików. Ma to kilka konsekwencji:
+\item Jeżeli argumenty te zawierają znaki uogólniające powłoki to każdy taki argument zostanie zastapiony przez powłokę listą pasujących plików, lub zostanie przekazany w formie niezmienionej jeżeli nie ma pasujacych plików. Ma to kilka konsekwencji:
 	\begin{itemize}
-	\item W wyniku dopasowania nazw do polecenia ls moga zostać przekazane ścieżki do katalogów, dla których ls domyślnie listuje ich zawartość.
-	      Tutaj tego nie chemy i dlatego używamy opcji \Verb{-d}
+	\item W wyniku dopasowania nazw do polecenia ls mogą zostać przekazane ścieżki do katalogów, dla których ls domyślnie listuje ich zawartość.
+	      Tutaj tego nie chcemy i dlatego używamy opcji \Verb{-d}
 	\item W pierwszym wariancie wszystkie pliki opisaliśmy pojedynczym wyrażeniem uogólniającym basha, a w drugim podaliśmy dwa argumenty.
 	      Polecenia te są prawie równoważne - wypiszą te ścieżki.
-	      Jednak w przypadku braku dopsaowań do jednego z wariantów (np. braku plików z trzecią literą p) – drugie polecenie wypisałoby dodatkowo komunikat o braku dopasowania do jednego z podanych argumentów (np. do \Verb{/etc/?ap*}). Wynika to z tego iż przy braku dopsowania do tego argumentu bash przekazałby go w formie niezmienionej do polecenia \Verb{ls}.
+	      Jednak w przypadku braku dopasowań do jednego z wariantów (np. braku plików z trzecią literą p) – drugie polecenie wypisałoby dodatkowo komunikat o braku dopasowania do jednego z podanych argumentów (np. do \Verb{/etc/?ap*}). Wynika to z tego iż przy braku dopsowania do tego argumentu bash przekazałby go w formie niezmienionej do polecenia \Verb{ls}.
 	\end{itemize}
 \end{itemize}
 \fi

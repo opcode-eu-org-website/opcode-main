@@ -170,7 +170,7 @@ Napisz funkcję która sprawdzi z użyciem wyrażeń regularnych czy dany napis 
 \begin{CodeFrame*}[python]{}
 import re
 def spr(x):
-  if re.match("[^ ]*$", x):
+  if re.search("^[^ ]*$", x):
     print(x, "jest słowem")
   else:
     print(x, "NIE jest słowem")
@@ -189,7 +189,7 @@ Napisz funkcję która sprawdzi z użyciem wyrażeń regularnych czy dany napis 
 \begin{CodeFrame*}[python]{}
 import re
 def spr(x):
-  if re.match("[+-]?[0-9.]+$", x):
+  if re.search("^[+-]?[0-9]+(.[0-9]+)?$", x):
     print(x, "jest liczbą")
   else:
     print(x, "NIE jest liczbą")
