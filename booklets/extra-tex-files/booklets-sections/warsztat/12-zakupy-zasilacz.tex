@@ -1,0 +1,94 @@
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\subsection{Zasilacz}
+
+Jednym z najważniejszych elementów zestawu służącego do zabawy elektroniką jest źródło zasilania.
+Może nim być nawet zwykła bateria, jednak dla wygody i bezpieczeństwa podłączanych układów warto posiadać podstawowy zasilacz regulowany z regulowanym ograniczeniem prądowym.
+Powinien on zapewniać co najmniej:
+\begin{itemize}
+	\item regulację napięcia wyjściowego w zakresie od 2.5V do 7V
+	\item regulowane ograniczenie prądowe\footnote{
+		w przypadku próby pobrania większego prądu niż nastawiony zasilacz powinien
+		przejść z trybu stałego napięcia (CV) do trybu stałego prądu (CV)
+		i obniżyć podawane napięcie tak aby płynął nastawiony prąd.
+	} w zakresie od 20mA do 500mA
+	\item sygnalizacja trybu CV/CC (np. za pomocą diody LED)
+\end{itemize}
+Dla wygody jego używania warto aby był wyposażony także w:
+\begin{itemize}
+	\item woltomierz pokazujący wartość napięcia wyjściowego
+	\item amperomierz pokazujący wartość prądu podawanego do obciążenia
+\end{itemize}
+
+Poniżej kilka propozycji przetwornic do wyboru.
+
+\subsubsection{przetwornica DC/DC Step-Down XL4015}
+	\begin{center}
+		\includegraphics[height=3.3cm]{warsztat_elektroniczny/moduł_XL4015_1}
+	\end{center}
+	\begin{itemize}
+		\wada brak zabezpieczenia przed odwrotną polaryzacją zasilania wejściowego (zamianą plusa z minusem na wejściu)
+		\wada brak wskazań wartości napięcia i prądu
+		\info od 8PLN (moduł "czerwony"), od 10PLN (moduł "niebieski")
+		\uwaga należy zwrócić uwagę aby moduł posiadał dwa potencjomery - jeden do regulacji napięcia drugi prądu (występują moduły umożliwiające tylko regulację napięcia)
+	\end{itemize}
+
+\subsubsection{przetwornica DC/DC Step-Down XL4015 z woltomierzem i amperomierzem LED}
+	\begin{center}
+		\includegraphics[height=3.3cm]{warsztat_elektroniczny/moduł_XL4015_LED_1}
+		\hspace{0.5cm}
+		\includegraphics[height=3.3cm]{warsztat_elektroniczny/moduł_XL4015_LED_2}
+	\end{center}
+
+	\begin{itemize}
+		\zaleta modularna konstrukcja (oparta na opisanym wcześniej module "czerwonym")
+		\wada brak zabezpieczenia przed odwrotną polaryzacją zasilania wejściowego (zamianą plusa z minusem na wejściu)
+		\wada mała dokładność pomiaru (wskazuje 0.01A gdy płynie 0.1A)
+		\wada brak możliwości (oficjalnie udokumentowanej) kalibracji pomiarów
+		\wada słaba czytelność wyświetlacza LED przy dobrym oświetleniu
+		\info od 30PLN
+	\end{itemize}
+	
+\subsubsection{przetwornica DC/DC Step-Down XL4015 z woltomierzem i amperomierzem LCD}
+	\begin{center}
+		\includegraphics[height=3.3cm]{warsztat_elektroniczny/moduł_XL4015_LCD_1}
+		\hspace{0.5cm}
+		\includegraphics[height=3.3cm]{warsztat_elektroniczny/moduł_XL4015_LCD_2}
+		\hspace{0.5cm}
+		\includegraphics[height=3.3cm]{warsztat_elektroniczny/moduł_XL4015_LCD_3}
+	\end{center}
+	\begin{itemize}
+		\zaleta  zabezpieczenie przed odwrotną polaryzacją zasilania wejściowego (zamianą plusa z minusem na zaciskach wejściowych),
+			\textbf{uwaga:} dotyczy wersji pokazanej na zdjęciu, podobna wersja z dwoma dodatkowymi LEDami najprawdopodobniej nie posiada tego zabezpieczenia
+		\zaleta  dobra precyzja pomiaru (wskazuje 0.04A gdy płynie 0.03A)
+		\zaleta  możliwość łatwej kalibracji pomiarów
+		\wada niebezpieczne gniazdko USB (można podać na nie zbyt wysokie napięcia)
+		\info od 40PLN
+	\end{itemize}
+	
+\subsubsection{elementy dodatkowe}
+Do wybranej przetwornicy sugerujemy dokupienie gniazda DC 2.5/5.5 wraz z przewodem oraz baterii 9V (ze złączem i wtykiem DC 2.5/5.5) lub zasilacza wtyczkowego np. 12V z prądem większym niż 0.9A (z wtykiem DC 2.5/5.5). Pozwoli to na wygodne podłączanie i odłączanie zasilania od przetwornicy poprzez rozpięcie wtyku DC.
+\begin{center}
+	\includegraphics[height=4.3cm]{warsztat_elektroniczny/przewody_zasilające}
+\end{center}

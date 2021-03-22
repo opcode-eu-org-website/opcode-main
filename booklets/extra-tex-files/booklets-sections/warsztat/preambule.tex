@@ -1,0 +1,61 @@
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% Copyright (c) 2020 Krzysztof Lasocki <krz.lasocki@gmail.com>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\newtcolorbox{Ramka}[1][]{
+	colback=white,
+	colbacktitle=white,
+	coltitle=black,
+	colframe=white!50!black,
+	fontupper=\small,
+	enhanced,
+	before skip=13pt plus 2pt,
+	#1
+}
+
+% Symbol DC
+\newcommand{\mathdirectcurrent}{\mathrel{\mathpalette\mathdirectcurrentinner\relax}}
+\newcommand{\mathdirectcurrentinner}[2]{%
+  \settowidth{\dimen0}{$#1=$}%
+  \vbox to .85ex {\offinterlineskip
+    \hbox to \dimen0{\hss\leaders\hrule\hskip.85\dimen0\hss}
+    \vskip.35ex
+    \hbox to \dimen0{\hss
+      \leaders\hrule\hskip.17\dimen0
+      \hskip.17\dimen0
+      \leaders\hrule\hskip.17\dimen0
+      \hskip.17\dimen0
+      \leaders\hrule\hskip.17\dimen0
+    \hss}
+    \vfill
+  }%
+}
+% symbol diody
+\newcommand\esymbol[1]{\tikz[circuit ee IEC] \draw (0,0) -- (.1,0) node [#1,anchor=west,name=s] {} (s.east) -- +(.1,0);}
+
+\newcommand{\textdirectcurrent}{\mathdirectcurrentinner{\textstyle}{}}
+
+\newcommand\zaleta{\item[\textbf{\ttfamily +}]}
+\newcommand\wada{\item[\textbf{\ttfamily -}]}
+\newcommand\info{\item[\textbf{\ttfamily *}]}
+\newcommand\uwaga{\item[\textbf{\ttfamily !}]}

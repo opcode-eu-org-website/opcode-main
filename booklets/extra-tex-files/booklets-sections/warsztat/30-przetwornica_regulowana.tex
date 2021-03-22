@@ -1,0 +1,106 @@
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% Copyright (c) 2020 Krzysztof Lasocki <krz.lasocki@gmail.com>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\section{Przetwornica zasilająca}
+
+Przetwornica z regulacją napięcia i ograniczenia prądowego będzie pełniła funkcję (stosunkowo taniego i przenośnego) zasilacza laboratoryjnego.
+
+\subsection{Uruchomienie}
+\subsubsection{Zasilanie przetwornicy}
+
+\begin{wrapfigure}{r}{0.35\textwidth}
+  \begin{center}
+    \vspace{-40pt}
+    \includegraphics[width=0.33\textwidth]{warsztat_elektroniczny/przewody_zasilające.jpg}
+    \vspace{-40pt}
+  \end{center}
+\end{wrapfigure}
+
+
+Nasza przetwornica może być zasilona z baterii 9V lub zasilacza wtyczkowego 12V DC.
+Zarówno gniazdo baterii jak i zasilacz może być wyposażone we wtyk DC 2.5/5.5 lub 2.1/5.5 (taki jak widoczny na zdjęciu obok) lub bezpośrednio wyprowadzone przewodu.
+W przypadku zastosowania wtyku DC będzie możliwe łatwe odłączanie zasilania od przetwornicy. Jednak konieczne jest wtedy użycie także odpowiedniego gniazda DC.
+
+\begin{ProTip}{\normalfont{\strong{Uwaga}}}
+  \textbf{Niektóre przetwornice nie są odporne na niepoprawną polaryzację wejścia. Odwrotne podłączenie napięcia do wejścia takiej przetwornicy doprowadzi do jej zniszczenia. Dlatego odłącz przetwornicę od kabli zasilających zanim sprawdzisz ich polaryzację.}
+\end{ProTip}
+
+\vspace{13pt}\noindent
+Niezależnie od tego, czy do zasilania przetwornicy używamy baterii, czy zasilacza wtyczkowego, musimy~\textbf{sprawdzić
+  polaryzację przewodów, które będziemy podłączać do przetwornicy}. 
+\\
+
+\noindent W tym celu:
+\begin{itemize}
+	\item \textbf{odłączamy przewody zasilające od przetwornicy}.
+	\item wkładamy wtyk DC do gniazda DC zasilacza.
+	\item włączamy multimetr i nastawiamy go na pomiar napięcia stałego (DC) w zakresie do 20V.
+	\item dbając o to, aby przewody zasilające nie zetknęły się ze sobą (aby uniknąć zwarcia) podłączamy zasilanie, czyli wkładamy zasilacz wtyczkowy do gniazdka lub podłączamy baterię do złącza baterii.
+	\item dokonujemy pomiaru napięcia na przewodach zasilających, podłączając czerwoną sondę (dodatnią) do czerwonego przewodu, a masę (czarną sondę) do czarnego przewodu.
+        \item Multimetr powinien wskazać dodatnie napięcie. Jeżeli wskazuje ujemne, to znaczy, że polaryzacja naszego przewodu~zasilającego jest odwrotna. W takiej sytuacji \textbf{czerwony} przewód od zasilacza (lub baterii) jest \textbf{ujemny} a \textbf{czarny} jest \textbf{dodatni}. Jeśli multimetr wskazuje napięcie dodatnie, oznacza to, że kolory przewodów są zgodne z polaryzacją. 
+	\item zapisujemy jaki kolor przewodu odpowiada masie, a jaki biegunowi dodatniemu.
+	\item \textbf{wyłączamy zasilanie} – wyjmujemy wtyk DC z gniazdka DC, odłączamy baterię od złącza lub wyjmujemy zasilacz wtyczkowy z gniazdka.
+\end{itemize}
+Teraz możemy przykręcić przewody zasilające do naszej przetwornicy. Należy zwrócić szczególną uwagę aby podłączyć je do zacisków wejściowych (oznaczonych jako \texttt{IN}) z zachowaniem ustalonej przez nas polaryzacji:
+\begin{itemize}
+	\item przewód na którym mieliśmy masę (biegun ujemny) podłączamy do IN- / GND
+	\item przewód na którym mieliśmy biegun dodatni podłączamy do IN+
+\end{itemize}
+
+\begin{wrapfigure}{r}{0.4\textwidth}
+  \begin{center}
+    \vspace{-30pt}
+    \includegraphics[width=0.4\textwidth]{warsztat_elektroniczny/moduł_XL4015_LCD_2.jpg}
+    \vspace{-50pt}
+  \end{center}
+\end{wrapfigure}
+
+\subsubsection{Regulacja przetwornicy}
+
+W celu sprawdzenia działania przetwornicy:
+\begin{itemize}
+	\item do wyjścia przetwornicy podłączamy multimetr nastawiony na zakres pomiaru napięcia stałego (DC) do 20V.
+	\item włączamy zasilanie przetwornicy – wkładamy wtyk DC do gniazdka DC, podłączamy baterię od złącza lub wkładamy zasilacz wtyczkowy z gniazdka.
+	\item multimetr wyświetla napięcie na wyjściu przetwornicy. Jeżeli nasza przetwornica posiada wbudowany woltomierz to wskazania obu przyrządów powinny być podobne (mogą się różnić o ułamkowe części wolta).
+\end{itemize}
+\vspace*{\baselineskip}
+
+
+Przetwornica posiada dwa potencjometry – jeden służy do regulacji napięcia, a drugi do regulacji ograniczenia prądowego. Zazwyczaj są podpisane, ale jeżeli nie są, to możemy łatwo ustalić, który za co odpowiada.
+W tym celu, przy pomocy odpowiedniego wkrętaka, obróć śrubkę regulacyjną potencjometru od napięcia i zobacz jak wpływa to na napięcie wyjściowe.
+
+Nastaw napięcie wyjściowe na 5V. Drugi potencjometr odpowiedzialny jest za regulację prądu. Ustaw go w okolicy wartości minimalnej:
+\begin{itemize}
+	\item pokręć nim aż do oporu lub kliknięcia w tę samą stronę, która odpowiadała za zmniejszanie napięcia w potencjometrze od regulacji napięcia.
+	\item zrób pół obrotu w przeciwną stronę.
+\end{itemize}
+Następnie:
+\begin{itemize}
+	\item odłącz multimetr od wyjścia przetwornicy, nastaw na pomiar prądu do 10A lub 20A i podłącz sondy do odpowiednich gniazd w mierniku.
+	\item przytknij na krótko (około 1 – 2 sekund) sondy do zacisków wyjściowych i zaobserwuj wskazanie multimetru.
+\end{itemize}
+Jeżeli wskazanie było duże (około ampera lub kilku) obrócić potencjometr odpowiedzialny za regulację prądu w przeciwnym kierunku i ponów procedurę pomiaru.
+Jeżeli było ono poniżej 0.2A przestaw multimetr na zakres 200mA, przełóż sondy do odpowiednich gniazd i ponownie wykonaj pomiar.
+
+Nastaw ograniczenie prądowe na około 40mA.

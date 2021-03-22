@@ -1,0 +1,203 @@
+% Copyright (c) 2018-2019 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\section{Systemem kontroli wersji}
+
+Podstawowym zadaniem systemów kontroli wersji jest przechowywanie historii zmian w plikach (np. źródłach jakiegoś projektu, plikach konfiguracyjnych, itp) oraz umożliwianie śledzenia tych zmian (porównywanie wersji, uzyskiwanie informacji o autorach i datach zmian, itd).
+
+W systemach rozproszonych wszystkie kopie repozytoriów są równoprawne (zawierają pełną historię, do każdego z nich mogą być commitowane zmiany, itd), w systemach scentralizowanych występuje pojedynczy serwer do którego commitowane są zmiany i z którego są one pobierane (także operacje związane z historią odwołują się do serwera, a nie lokalnej kopii).
+
+Najpopularniejszymi systemami kontroli wersji są: systemy rozproszone Git (polecenie \Verb{git}), Mercurial (polecenie \Verb{hg}) i Bazaar (polecenie \Verb{bzr}) oraz scentralizowany system kontroli wersji Subversion (polecenie \Verb{svn}). Nadal można spotkać używane repozytoria \Verb{cvs}.
+
+\subsection{Git}
+
+\subsubsection{Inicjalizacja repozytorium}
+
+Mamy dwie podstawowe metody utworzenia repozytorium na którym będziemy pracowali:
+\begin{itemize}
+	\item utworzenie nowego, pustego repozytorium: \Verb{git init}
+	\item pobranie repozytorium z zewnętrznego źródła \Verb{git clone adres}
+\end{itemize}
+Adres repozytorium może być m.in. postaci: \Verb{https://[login@]serwer/sciezka/} lub\\ \Verb{ssh://login@serwer/sciezka/}.
+
+\subsubsection{Kopia robocza i poczekalnia}
+
+\begin{itemize}
+	\item aktualizacja kopii roboczej: \Verb{git checkout [opcje] [sciezka]}\\
+		szczególnie przydatne jest wywołanie \Verb{git checkout -f .} umożliwiająca odrzucenie
+		istniejących zmian w kopii roboczej (reset kopii roboczej do stanu repozytorium)
+	
+	\vspace{6pt}
+	
+	\item dodawanie plików/zmian (do poczekalni): \Verb{git add sciezka}
+	\item usuwanie zmian (z poczekalni): \Verb{git reset HEAD sciezka}
+	\item usuwanie pliku: \Verb{git rm sciezka}\\
+		(jest to równoważne z \Verb{rm sciezka && git add sciezka})
+	\item zmiana nazwy (położenia) pliku: \Verb{git mv staraSciezka nowaSciezka}\\
+		(jest to równoważne z \Verb{git rm staraSciezka; git add nowaSciezka})
+	
+	\vspace{6pt}
+	
+	\item podgląd zmian kopii roboczej i poczekalni: \Verb{git status}\\
+		(aby ignorować jakieś niedodane do repozytorium pliki katalogi należy skorzystać z pliku \Verb{.gitignore})
+	\item różnica kopii roboczej do poczekalni: \Verb{git diff [sciezka]}
+	\item różnica kopii roboczej do wskazanej rewizji: \Verb{git diff rewizja [sciezka]}
+	\item różnica poczekalni do ostatniej / wskazanej rewizji: \Verb{git diff [rewizja] --cached [sciezka]}
+	
+	\vspace{6pt}
+	
+	\item zatwierdzanie zmian z poczekalni (tworzenie rewizji): \Verb{git commit [opcje] [sciezka]}, przydatne opcje:\\
+		\Verb{-a} powoduje automatyczne dodanie zmian w śledzonych plikach\\
+		\Verb{-m "OPIS"} pozwala na podanie opisu zmian z linii poleceń\\
+		\Verb{--amend} pozwala na poprawienie ostatniego commitu
+\end{itemize}
+
+\subsubsection{Historia zmian}
+
+\begin{itemize}
+	\item przeglądanie historii zmian: \Verb{git log [opcje] [sciezka]}, przydatne opcje:\\
+		\Verb{-p} pokazuje w logu zmian diff pomiędzy rewizjami\\
+		\Verb{--name-status} pokazuje nazwy i status (dodanie, usunięcie, modyfikacja) zmienianych plików\\
+		\Verb{--graph} pokazuje wykres gałęzi
+	\item listowanie pliku z danej rewizji: \Verb{git show rewizja:sciezka}
+	\item listowanie struktury repozytorium z danej rewizji: \Verb{git ls-tree rewizja}
+\end{itemize}
+
+\subsubsection{Gałęzie}
+
+\begin{itemize}
+	\item tworzenie nowej gałęzi: \Verb{git branch nazwa}
+	\item scalanie wskazanej gałęzi do aktualnej:\Verb{git merge [zasob_zdalny] nazwa}
+	
+	\vspace{6pt}
+	
+	\item utworzenie gałęzi po stronie zdalnej: \Verb{git push --set-upstream origin nazwa}
+	\item pobranie / aktualizacja informacji (m.in.) o zdalnych gałęziach: \Verb{git fetch}
+	\item listowanie gałęzi: \Verb{git branch -av}
+	
+	\vspace{6pt}
+	
+	\item przełączanie się pomiędzy gałęziami (zmiany w kopii roboczej nie zostanę utracone, w przypadku konfliktu przed przełączeniem będzie konieczność ich zaakceptowania lub odrzucenia):\\ \Verb{git checkout nazwa}
+\end{itemize}
+
+\subsubsection{Zasoby zdalne}
+
+\begin{itemize}
+	\item listowanie zasobów zdalnych: \Verb{git remote -v}
+	\item dodawanie nowego zasobu zdalnego: \Verb{git remote add nazwa URL}
+	
+	\vspace{6pt}
+	
+	\item wysyłanie zmian do (wskazanego) zasobu zdalnego: \Verb{git push [nazwa]}
+	\item pobieranie zmian z (wskazanego) zasobu zdalnego: \Verb{git pull [nazwa]}
+\end{itemize}
+
+\subsection{Zadania}
+
+\begin{Zadanie}{}{git_init}
+\begin{enumerate}
+\item utwórz katalog \Verb#repo1# zawierający dwa pliki tekstowe z dowolną zawartością (różną)
+\item utwórz w tym katalogu repozytorium git i sprawdź jego stan (status)
+\item dodaj do niego wszystkie pliki z tego katalogu i sprawdź stan repozytorium
+\item zakomituj zmiany i sprawdź stan repozytorium
+\end{enumerate}
+\end{Zadanie}
+
+\begin{Zadanie}{}{git_modyfikacja}
+Działając w \Verb#repo1# utworzonym w zadaniu \ref{git_init}
+\begin{enumerate}
+\item zmodyfikuj zawartość jednego z plików
+\item sprawdź stan repozytorium
+\item zmodyfikuj zawartość drugiego z plików
+\item wyświetl różnicę pomiędzy zawartośią kopii roboczej a zawartością repozytorium
+\item wyświetl tę różnicę tylko dla jednego z plików
+\item zakomituj zmiany
+\item wyświetl historię zmian w repozytorium
+\end{enumerate}
+\end{Zadanie}
+
+\begin{Zadanie}{}{git_clone}
+Sklonuj repozytorium \Verb#repo1# jako \Verb#repo2#
+\end{Zadanie}
+
+\begin{Zadanie}{}{git_rm}
+Działając w \Verb#repo2# utworzonym w zadaniu \ref{git_clone}
+\begin{enumerate}
+\item usuń z repozytorium jeden z plików tekstowych
+\item zmień nazwę drugiego z plików tekstowych
+\item sprawdź stan repozytorium
+\item zakomituj zmiany
+\item wyświetl historię zmian w repozytorium, z pokazaniem informacji o nazwach zmienianych plików
+\end{enumerate}
+\end{Zadanie}
+
+\begin{Zadanie}{}{git_pull1}
+Zaktualizuj stan \Verb#repo1#, tak aby odzwierciedlał zmiany dokonane w \Verb#repo2#
+\end{Zadanie}
+
+\begin{Zadanie}{}{git_merge}
+\begin{enumerate}
+\item zmodyfikuj plik tekstowy zarówno w \Verb#repo1#, jak i w \Verb#repo2# (w różny - sprzeczny sposób)
+\item zakomituj zmiany w \Verb#repo1# i w \Verb#repo1#
+\item spróbuj zaktualizować stan \Verb#repo1#, tak aby odzwierciedlał zmiany dokonane w \Verb#repo2#
+\item sprawdź stan repozytorium
+\item rozwiąż konflikt
+\item sprawdź stan repozytorium
+\item wyświetl historię zmian pokazującą wykres gałęzi w których były dokonywane zmiany
+\item spróbuj zaktualizować stan \Verb#repo2#, tak aby odzwierciedlał zmiany dokonane w \Verb#repo1#
+\end{enumerate}
+\end{Zadanie}
+
+\begin{Zadanie}{}{git_checkout}
+\begin{enumerate}
+\item przywrócić stan kopii roboczej do stanu repozytorium z przed zadania \ref{git_merge}
+\item sprawdź stan repozytorium
+\item wyświetl zawartość pliku modyfikowanego w zadaniu \ref{git_merge}
+\item powróć do normalnego stanu repozytorium
+\item sprawdź stan repozytorium
+\end{enumerate}
+\end{Zadanie}
+
+\begin{Zadanie}{}{git_show}
+Wyświetl zawartość pliku modyfikowanego w \ref{git_merge} przed dokonaniem tych modyfikacji bez przełączania kopii roboczej na ówczesny stan repozytorium.
+\end{Zadanie}
+
+\begin{Zadanie}{}{git_diff}
+Wyświetl różnicę stanu obecnego pliku modyfikowanego w \ref{git_merge} i stanu przed dokonaniem tych modyfikacji
+\end{Zadanie}
+
+\begin{Zadanie}{}{git_branch}
+\begin{enumerate}
+\item utwórz nowy branch w \Verb#repo1# o nazwie \Verb#test# i przełącz się na niego
+\item zmodyfikuj plik tekstowy w ramach tego brancha i zakomituj zmiany
+\item wyświetl informacje na temat branchy
+\item wróć do domyślnej gałęzi "master" i wyświetl zawartość modyfikowanego pliku oraz stan repozytorium
+\end{enumerate}
+\end{Zadanie}
+
+\begin{Zadanie}{}{git_pull2}
+\begin{enumerate}
+\item zaciągnij zmiany dokonane w zadaniu \ref{git_branch} z \Verb#repo1# do \Verb#repo2# tak aby znalazły się one w brachu o nazwie test
+\item wyświetl stan repozytorium, informacje na temat branchy oraz dwa najnowsze wpisy z historii repozytorium
+\end{enumerate}
+\end{Zadanie}
+

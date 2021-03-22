@@ -1,4 +1,5 @@
-% Copyright (c) 2018-2019 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
 % 
 % MIT License
 % 
@@ -20,35 +21,20 @@
 % OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 % SOFTWARE.
 
-\ifdefined\inputOnlyContent\else
-\documentclass{pdfBooklets}
+\subsection{Podzespoły elektroniczne}
 
-\title{Narzędzia deweloperskie: git, make i cmake, pip i virtualenv}
-\author{%
-	Robert Ryszard Paciorek\\\normalsize\ttfamily <rrp@opcode.eu.org>
-}
-\date  {2020-07-13}
-
-\makeatletter\hypersetup{
-	pdftitle = {\@title}, pdfauthor = {\@author}
-}\makeatother
-
-
-\begin{document}
-
-\maketitle
-\fi
-
-\input{booklets-sections/tools/systemy_kontroli_wersji.tex}
-\input{booklets-sections/tools/systemy_automatyzacji_kompilacji.tex}
-\input{booklets-sections/tools/python.tex}
-
-\ifdefined\inputOnlyContent\else
-\rozwiazania
-
-\copyrightFooter{
-	© Robert Paciorek, 2015-2020.\\
-	Kopiowanie, modyfikowanie i redystrybucja dozwolone pod warunkiem zachowania informacji o autorach.
-}
-\end{document}
-\fi
+Będzie potrzebny też zestaw drobnych podzespołów elektronicznych:
+\begin{itemize}
+	\item rezystory 1kΩ i 22kΩ, po około 10 sztuk
+	\item potencjometr / rezystor nastwany 5kΩ, który da się włożyć w płytkę stykową, najlepiej wieloobrotowy, 1-2 sztuki
+	\item kondensator elektrolityczny 100uF, kilka sztuk
+	
+	\item dioda prostownicza, około 10 sztuk
+	\item dioda świecąca, około 10 sztuk
+	\item dioda Zenera 3.3V, około 5 sztuk
+	\item tranzystor NPN (np. BC337) i PNP (np. BC327), po kilka sztuk
+	
+	\item układ logiczny z serii 4000 lub 7400: NAND (np. CD4011BE) lub NOR (np. CD4001BP)
+	\item rejestr przesuwny z serii 4000 lub 7400 (np. CD4094 lub 74HC595)
+	\item rejestr pz interfejsem I2C (np. PCF8574A lub MCP23008)
+\end{itemize}

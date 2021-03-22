@@ -1,4 +1,5 @@
-% Copyright (c) 2018-2019 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
 % 
 % MIT License
 % 
@@ -20,35 +21,9 @@
 % OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 % SOFTWARE.
 
-\ifdefined\inputOnlyContent\else
-\documentclass{pdfBooklets}
+\subsection{Inne}
+Jeżeli kupiony moduł STM32 nie ma przylutowanych pinów po bokach (a na ogół nie ma), będzie potrzebna także lutownica z cyną i kalafonią. Koszt od 16PLN.
 
-\title{Narzędzia deweloperskie: git, make i cmake, pip i virtualenv}
-\author{%
-	Robert Ryszard Paciorek\\\normalsize\ttfamily <rrp@opcode.eu.org>
-}
-\date  {2020-07-13}
+Przydać mogą się także małe obcążki boczne, szczypce, czy też jakiś nożyk.
 
-\makeatletter\hypersetup{
-	pdftitle = {\@title}, pdfauthor = {\@author}
-}\makeatother
-
-
-\begin{document}
-
-\maketitle
-\fi
-
-\input{booklets-sections/tools/systemy_kontroli_wersji.tex}
-\input{booklets-sections/tools/systemy_automatyzacji_kompilacji.tex}
-\input{booklets-sections/tools/python.tex}
-
-\ifdefined\inputOnlyContent\else
-\rozwiazania
-
-\copyrightFooter{
-	© Robert Paciorek, 2015-2020.\\
-	Kopiowanie, modyfikowanie i redystrybucja dozwolone pod warunkiem zachowania informacji o autorach.
-}
-\end{document}
-\fi
+Oczywiście do programowania mikrokotrolera będzie potrzebny także działający komputer z portem USB i system Linux (da się na innych systemach operacyjnych, ale to na Linuxie będzie oparte nasze środowisko do tworzenia programów dla STM32), jednak zakładamy że jakiś już masz {\Symbola 😄}.
