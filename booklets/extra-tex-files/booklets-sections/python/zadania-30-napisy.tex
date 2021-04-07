@@ -177,8 +177,8 @@ def spr(x):
 \end{CodeFrame*}
 
 Zadanie polega przede wszystkim na wymyśleniu odpowiedniego wyrażenia regularnego.
-Ze względu że funkcja \python{match} dopasowuje zawsze od początku napisu (ale nie wymaga dojścia do końca napisu) nasze wyrażenie musi konczyć się dolarem,
-aby wyrażenie było dopasowywane do całości sprawdzanego napisu.
+Ze względu że funkcja \python{search} dopasowuje dowolny fragment napisu (wymaga aby napis zawierał fragment opisany podanym wyrażeniem regularnym),
+	to nasze wyrażenie musi rozpoczynać się od \Verb#^# konczyć się \Verb#$#, aby wyrażenie było dopasowywane do całości sprawdzanego napisu.
 Zastosowane wyrażenie wymaga aby napis nie zawierał spacji - wtedy uznajemy go za słowo.
 \fi
 

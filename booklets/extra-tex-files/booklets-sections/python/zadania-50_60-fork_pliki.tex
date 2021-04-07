@@ -64,7 +64,7 @@ czytaj(13)
 
 
 \dbEntryBegin{zadanie_fork}\if1\dbEntryCheckResults
-Napisz program który utworzy 1 potomka, rodzić powinien wypisać PID potomka i swój. Natomiast potomek powinien utworzyć kolejny proces w którym zostanie uruchomiona komenda \Verb#ps -Af# w taki sposób aby potomek odebrał do zmiennej jej standardowe wyjście i wypisał je na ekran.
+Napisz program który utworzy 1 potomka, rodzić powinien wypisać PID potomka i swój. Natomiast potomek powinien utworzyć kolejny proces w którym zostanie uruchomiona komenda \Verb#ps -f# w taki sposób aby potomek odebrał do zmiennej jej standardowe wyjście i wypisał je na ekran.
 \fi
 
 \dbEntryBegin{zadanie_fork-rozwiazanie}\if1\dbEntryCheckResults
@@ -74,7 +74,7 @@ import os, subprocess
 pid = os.fork()
 
 if pid == 0:
-   res = subprocess.run(["ps", "-Af"], stdout=subprocess.PIPE)
+   res = subprocess.run(["ps", "-f"], stdout=subprocess.PIPE)
    print("Standardowe wyjście z komendy to: " + res.stdout.decode())
 else:
   print("Mój PID to ", os.getpid(), "PID mojego potomka to:", pid)
