@@ -58,7 +58,7 @@ Napisz warunek, który sprawdzi czy \Verb{/tmp/abc} istnieje i jest katalogiem.
 \fi
 \dbEntryBegin{warunek_istnienie_pliku-rozwiazanie}\if1\dbEntryCheckResults
 \begin{CodeFrame*}[bash]{}
-if [ -d /tmp/abc ]; then echo "jest katalogiem"; else echo "nie";
+if [ -d /tmp/abc ]; then echo "jest katalogiem"; else echo "nie"; fi
 \end{CodeFrame*}
 
 lub krócej:
@@ -113,6 +113,18 @@ koty() {
 	esac
 }
 \end{CodeFrame*}
+
+\begin{CodeFrame*}[bash]{}
+koty() {
+ if [ $1 -eq 1 ]; then
+  echo "Ala ma kota"
+ elif [ $1 -lt 5 ]; then   # możnaby też elif [ $1 -eq 2 -o $1 -eq 3 -o $1 -eq 4 ]; then
+  echo "Ala ma $1 koty"
+ else
+  echo "Ala ma $1 kotów"
+ fi
+}
+\end{CodeFrame*}
 \fi
 
 
@@ -146,7 +158,8 @@ Jeżeli masz pomysł przedstaw więcej niż jedno rozwiązanie.
 \dbEntryBegin{passwd_warunek_na_uid_noawk-rozwiazanie}\if1\dbEntryCheckResults
 
 \begin{CodeFrame*}[bash]{}
-while read l; do x=$(echo $l| cut -f3 -d:);
+while read l; do
+	x=$(echo $l| cut -f3 -d:);
 	[ $x -ge 1000 ] && echo $l;
 done < /etc/passwd
 \end{CodeFrame*}
@@ -155,6 +168,14 @@ done < /etc/passwd
 IFS=":"; while read p1 p2 p3 pX; do
 	if [ $p3 -ge 1000 ]; then echo "$p1:$p2:$p3:$pX"; fi
 done < /etc/passwd; unset IFS
+\end{CodeFrame*}
+
+\begin{CodeFrame*}[bash]{}
+# używając cut i paste tworzymy plik złozony z pole 3 tabulator cała linia
+cut -f3 -d: /etc/passwd | paste /dev/stdin /etc/passwd | while read uid linia; do
+	# następnie czytamy go w petli while-read jako dwa pola (przed i po tabulatorze)
+	[ $uid -ge 1000 ] && echo $linia;
+done
 \end{CodeFrame*}
 
 \begin{CodeFrame*}[bash]{}

@@ -104,6 +104,22 @@ Aby wprowadzić tranzystor MOSFET w stan przewodzenia należy podać $U_{GS} \gg
 Zobacz symulację pokazującą pracę tranzystorów MOSFET w trybie klucza: \url{http://ln.opcode.eu.org/mosfet}.
 Zauważ podobieństwo w sterowaniu do trnzystorów NPN i PNP (N-MOSFET przewodzi gdy potencjał bramki odpowiednio wyższy od drenu, P-MOSFET gdy odpowiednio niższy, obciążenie N-MOSFET włączane analogicznie jak NPN, a P-MOSFET jak PNP),
 	zauważ różnice (bramka jest izolowanie, nie płynie nią prąd\footnote{z pominięciem prądu związanego z przeładowaniem pojemności (pasożytniczego kondensatora)}, nie ma zatem potrzeby używania tam rezystora).
+
+\begin{ProTip}{Wzory na wartość prądu drenu \zaawansowane{30}}
+Podobnie jak dla tranzystorów bipolarnych maksymalny prąd drenu jaki tranzystor MOSFET chce przepuścić przy danych parametrach określony jest odpowiednimi wzorami.
+Jest to jednak bardziej skomplikowane niż w przypadku tranzystorów bipolarnych i wyróżnia się tutaj dwa zakresy pracy:
+\begin{itemize}
+\item dla $U_{DS} < U_{DS (sat)}$ prąd ten przybliża się zależnością:
+$$ I_D \approx \beta \left( (U_{GS} - U_{GS (th)}) U_{DS} - \frac{U_{DS}^2}{2} \right) $$
+\item dla $U_{DS} ≥ U_{DS (sat)}$ prąd ten przybliża się zależnością:
+$$ I_D \approx \frac{\beta}{2} (U_{GS} - U_{GS (th)})^2 $$
+\end{itemize}
+gdzie $U_{DS (sat)}$ na ogół przybliża się w nastepujący sposób: $U_{DS (sat)} \approx U_{GS} - U_{GS (th)}$, natomiast $U_{GS (th)}$ i $\beta$ są parametrami tranzystora.
+
+W dokumentacji poszczególnych modeli tranzystorów jest to często obrazowane w postaci charakterystyki wyjściowej (zbioru tych charakterystyk dla różnych wartości napięcia polaryzującego bramkę) takiej jak poniżej:
+
+\begin{center}\includegraphics[width=0.83\textwidth]{img/elektronika/mosfet_wykres}\end{center}
+\end{ProTip}
 % END: Elektronika - Tranzystory
 
 \clearpage

@@ -437,10 +437,10 @@ if [ \$# -ne 2 ]; then
         exit
 fi
 
-DEV=\$1
+MNTDEV=\$1
 MNT=\$2
 
-mount \$DEV \$MNT
+mount \$MNTDEV \$MNT
 mount -t proc  proc  \$MNT/proc
 mount -t sysfs sysfs \$MNT/sys
 mount -o rbind /dev  \$MNT/dev

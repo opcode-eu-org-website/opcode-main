@@ -5,7 +5,7 @@
 	\begin{document}
 \fi
 
-\begin{tikzpicture}[semithick]
+\begin{tikzpicture}[semithick, node distance=0.3cm]
 	\tikzstyle{base}  =[draw, minimum width=2.5cm, anchor = north west, outer sep = 0pt, align=center]
 	\tikzstyle{header}=[base, minimum height = 1.3cm]
 	\tikzstyle{data}  =[base, minimum height = 1.7cm]
@@ -25,6 +25,9 @@
 	
 	\node[anchor = north west, outer sep = 0pt, minimum height=2.5cm, minimum width=1cm, xshift=14cm, yshift=-1.5cm, align=center]   (Lx)  {\ldots\\\ldots\\\ldots};
 	
+	\node[xshift=-0.35cm] (L2_info) [below = of L2_DATA]     {warstwy „niższe”};
+	\node[xshift=-0.35cm] (L3_info) [below = of L3_DATA]     {→  →};
+	\node[xshift=-0.35cm] (L4_info) [below = of L4_DATA]     {warstwy „wyższe”};
 	
 	\draw[dotted] (L2_DATA.north east) -- (L3.north east);
 	\draw[dotted] (L2_DATA.south east) -- (L3.north west);
