@@ -27,7 +27,6 @@
 	\insertZadanie{\currfilepath}{opeartory_bitowe}{}
 	\insertZadanie{\currfilepath}{zadanie_maska_bitowa}{}
 	\insertZadanie{\currfilepath}{ustawienie_bitow}{}
-	\insertZadanie{\currfilepath}{trojkat_via_uart}{}
 }
 
 \dbEntryBegin{opeartory_bitowe}\if1\dbEntryCheckResults
@@ -52,7 +51,7 @@
 \fi
 
 \dbEntryBegin{ustawienie_bitow}\if1\dbEntryCheckResults
-  Napisz wyrażenia, które, nie znając poprzedniej wartości 8-bitowego rejestru \Verb$XYZZY$, wykona operacje:
+  Napisz wyrażenia, które nie znając poprzedniej wartości 8-bitowego rejestru \Verb$XYZZY$, wykona operacje:
   \begin{enumerate}
   \item Ustawi jego drugi najmłodszy bit jako 1
   \item Ustawi jego piąty najmłodszy bit jako 0
@@ -62,10 +61,9 @@
   \textit{Wskazówka: Możesz wygenerować maskę z ustawionym bitem n za przesuwając jedynkę o n miejsc w lewo: \Verb$(1<<n)$}
 \fi
 
-\dbEntryBegin{trojkat_via_uart}\if1\dbEntryCheckResults
+\dbEntryBegin{trojkat_via_uart_simple}\if1\dbEntryCheckResults
 % Tutaj chodzi o użycie printf-a, putchar-a lub uart_send_blocking
-Napisz program, który za pomocą zaimplementowanej w ćwiczeniu UART funkcji wejścia/wyjścia wypisze na UART
-``trójkąt z gwiazdek'' jak poniżej
+Napisz program, który za pomocą zaimplementowanej w ćwiczeniu UART funkcji wejścia/wyjścia wypisze na UART ``trójkąt z gwiazdek'' jak poniżej
 
 \begin{CodeFrame*}[text]{}
 *
