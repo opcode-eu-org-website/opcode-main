@@ -33,6 +33,12 @@ Kod przykładów znajduje się w \hyperref[repo]{repozytorium}. Można je sklono
   git clone https://bitbucket.org/OpCode-eu-org/stm32-examples.git
 \end{CodeFrame*}
 
-Repozytorium zawiera link symboliczny \Verb$libopencm3$ wskazujący na \Verb$../libopencm3-master$.
-Pliki wspomagające kompilację przykładów zakładają że w tym miejscu znajdą katalog z (skompilowaną wcześniej) biblioteką \Verb$libopencm3$.
-Jeżeli bibliotekę tę masz w innej lokalizacji zastąp ten link wskazującym na poprawną lokalizację katalogu z skompilowaną biblioteką.
+Po sklonowaniu repozytorium w jego katalogu głównym należy utworzyć link o nazwie \Verb$libopencm3$ do katalogu w którym znajduje się (skompilowana wcześniej) biblioteka:
+
+\begin{CodeFrame*}[bash]{}
+  cd stm32-examples
+  ln -s SCIEŻKA/DO/libopencm3 libopencm3
+\end{CodeFrame*}
+
+Jeżeli nie masz jeszcze pobranej i skompilowanej biblioteki \Verb$libopencm3$, to zamiast tworzyć link możesz umieścić tutaj katalog z tą biblioteką.
+Ważne jest zachowanie nazwy i umieszczenie go w głównym katalogu repozytorium z przykładami, gdyż pliki wspomagające kompilację przykładów zakładają że w tym miejscu znajdą katalog z tą biblioteką.
