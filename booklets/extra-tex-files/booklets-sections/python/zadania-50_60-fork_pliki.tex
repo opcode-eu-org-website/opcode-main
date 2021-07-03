@@ -22,6 +22,10 @@
 % SOFTWARE.
 
 \IfStrEq{\dbEntryID}{}{
+	\ifdefined\noExtraInfoMode\else
+		\subsection{fork i pliki}
+	\fi
+	
 	\insertZadanie{\currfilepath}{zadanie_select}{}
 	\insertZadanie{\currfilepath}{zadanie_fork}{}
 	\insertZadanie{\currfilepath}{zapis_do_pliku}{}

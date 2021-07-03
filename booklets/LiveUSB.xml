@@ -17,7 +17,7 @@
 		<a href="LiveUSB.pdf"><img src="lib/pdfFile.svg" alt="Pobierz jako PDF" title="Pobierz jako PDF"/></a>
 	</p>
 </div>
-<p id="updateInfo">(aktualizacja: 2020-06-05)</p>
+<p id="updateInfo">(aktualizacja: 2021-06-08)</p>
 
 <section>
 <p>Live USB możemy bardzo prosto utworzyć instalując system z użyciem debootastrapa i uzupełniając go w chroocie o jądro, gruba i potrzebne nam narzędzia.</p>

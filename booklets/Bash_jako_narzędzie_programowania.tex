@@ -27,7 +27,7 @@
 	Projekt ,,Matematyka dla Ciekawych Świata'',\\
 	Robert Ryszard Paciorek\\\normalsize\ttfamily <rrp@opcode.eu.org>
 }
-\date  {2021-02-13}
+\date  {2021-07-01}
 
 \makeatletter\hypersetup{
 	pdftitle = {\@title}, pdfauthor = {\@author}
@@ -48,10 +48,10 @@
 \section{Więcej bash'a}
 	\input{booklets-sections/linux/65-bash-zaawansowany.tex}
 
-\section{Zadania}
-\input{booklets-sections/linux/zadania-60-bash.tex}
-\input{booklets-sections/linux/zadania-60-napisy.tex}
-
+\Zadania[booklets-sections/linux/zadania-00-intro.tex]{
+	booklets-sections/linux/zadania-60-napisy.tex,
+	booklets-sections/linux/zadania-60-bash.tex,
+}
 
 \copyrightFooter{
 	© Matematyka dla Ciekawych Świata, 2017-2021.\\

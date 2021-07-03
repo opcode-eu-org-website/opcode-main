@@ -22,6 +22,9 @@
 % SOFTWARE.
 
 \IfStrEq{\dbEntryID}{}{
+	\ifdefined\noExtraInfoMode\else
+		\subsection{Układy cyfrowe}
+	\fi
 	\insertZadanie{\currfilepath}{napiecie_T5}{}
 	\insertZadanie{\currfilepath}{dane_rejestru}{}
 	\insertZadanie{\currfilepath}{hc574}{}
@@ -29,6 +32,9 @@
 }
 
 \IfStrEq{\dbEntryID}{praktyczne}{
+	\ifdefined\noExtraInfoMode\else
+		\subsection{Układy cyfrowe}
+	\fi
 	\insertZadanie{\currfilepath}{zbuduj_przerzutnik_z_bramek}{}
 	\insertZadanie{\currfilepath}{zbuduj_rejestr_przesuwny}{}
 	\insertZadanie{\currfilepath}{zbuduj_bramka_z_tranzystorow}{}

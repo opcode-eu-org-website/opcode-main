@@ -27,7 +27,7 @@
 	Projekt ,,Matematyka dla Ciekawych Świata'',\\
 	Robert Ryszard Paciorek\\\normalsize\ttfamily <rrp@opcode.eu.org>
 }
-\date  {2021-02-13}
+\date  {2021-07-01}
 
 \makeatletter\hypersetup{
 	pdftitle = {\@title}, pdfauthor = {\@author}
@@ -40,12 +40,12 @@
 \section{Wprowadzenie}
 \input{booklets-sections/python/00-intro.tex}
 \input{booklets-sections/python/10-konsola_interaktywna.tex}
-\student{\clearpage}
+\clearpage
 \input{booklets-sections/python/20-podstawy.tex}
-\student{\clearpage}
+\clearpage
 \input{booklets-sections/python/30-napisy.tex}
 
-\student{\clearpage}
+\clearpage
 \section{Zmienne i ich typy}
 \input{booklets-sections/python/40-typy_zmiennych.tex}
 \input{booklets-sections/python/41-listy.tex}
@@ -69,15 +69,13 @@
 \section{Literatura dodatkowa \zaawansowane{20}}
 \input{booklets-sections/python/literatura.tex}
 
-\student{\clearpage}
-\section{Zadania}
-
-\input{booklets-sections/python/zadania-00-intro.tex}
-\input{booklets-sections/python/zadania-20-podstawy.tex}
-\input{booklets-sections/python/zadania-30-napisy.tex}
-\subsection{Zmienne i ich typy}
-\input{booklets-sections/python/zadania-40-zmienne_i_ich_typy.tex}
-\input{booklets-sections/python/zadania-50_60-fork_pliki.tex}
+\clearpage
+\Zadania[booklets-sections/python/zadania-00-intro.tex]{
+	booklets-sections/python/zadania-20-podstawy.tex,
+	booklets-sections/python/zadania-30-napisy.tex,
+	booklets-sections/python/zadania-40-zmienne_i_ich_typy.tex,
+	booklets-sections/python/zadania-50_60-fork_pliki.tex,
+}
 
 \copyrightFooter{
 	© Matematyka dla Ciekawych Świata, 2016-2021.\\

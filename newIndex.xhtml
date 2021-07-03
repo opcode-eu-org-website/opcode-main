@@ -5,30 +5,33 @@
 	
 	<link rel="stylesheet" href="lib/index.css" type="text/css" />
 	<style>
-		#vademecum {
-			max-width: 600px; grid-area: 1 / 8 / span 1 / span 6;
-		}
 		#linux {
 			max-width: 700px; grid-area: 1 / 1 / span 2 / span 7;
 		}
-		#programowanie {
-			max-width: 620px; grid-area: 5 / 7 / span 2 / span 7; justify-self: right;
+		#vademecum {
+			max-width: 600px; grid-area: 1 / 8 / span 1 / span 6;
+		}
+		#game {
+			width: 260px; grid-area: 2 / 8 / span 1 / span 3; justify-self: right;
+		}
+		#blog {
+			/*width: 220px; grid-area: 2 / 11 / span 1 / span 3;*/
+			width: 220px; grid-area: 2 / 9 / span 1 / span 4;
+		}
+		#lpes {
+			min-width: 500px; grid-area: 3 / 8 / span 1 / span 6;
 		}
 		#elektronika {
 			max-width: 560px; grid-area: 3 / 1 / span 4 / span 7;
 		}
-		#game {
-			width: 220px; grid-area: 2 / 9 / span 3 / span 2;
-		}
-		#blog {
-			/*width: 220px; grid-area: 2 / 11 / span 3 / span 3;*/
-			width: 220px; grid-area: 2 / 10 / span 3 / span 3;
-		}
-		#latex {
-			max-width: 580px; grid-area: 7 / 7 / span 2 / span 7; justify-self: right;
+		#programowanie {
+			max-width: 620px; grid-area: 5 / 7 / span 3 / span 7; justify-self: right;
 		}
 		#misc {
 			max-width: 610px; grid-area: 7 / 1 / span 2 / span 7; justify-self: center;
+		}
+		#latex {
+			max-width: 580px; grid-area: 8 / 7 / span 2 / span 7; justify-self: right;
 		}
 
 		@media all and (max-width: 1333px) {
@@ -36,15 +39,17 @@
 				grid-template-columns: repeat(8, 100px);
 			}
 			#vademecum {
-				/*max-width: 600px; grid-area: 1 / 2 / span 1 / span 6;*/
-				max-width: 600px; grid-area: 1 / 1 / span 1 / span 6;
-			}
-			#game {
-				width: 280px; grid-area: 2 / 1 / span 1 / span 4; justify-self: center;
+				max-width: 600px; grid-area: 1 / 1 / span 1 / span 6;;
 			}
 			#blog {
-				/*width: 280px; grid-area: 2 / 5 / span 1 / span 3; justify-self: center;*/
 				width: 220px; grid-area: 1 / 7 / span 1 / span 2; justify-self: right;
+			}
+			#lpes {
+				/*min-width: 400px; width: 450px; grid-area: 2 / 1 / span 1 / span 5;*/
+				min-width: 400px; width: 450px; grid-area: 2 / 2 / span 1 / span 6;
+			}
+			#game {
+				width: 260px; grid-area: 2 / 7 / span 1 / span 2; justify-self: right;
 			}
 			#linux {
 				max-width: 800px; grid-area: 3 / 1 / span 1 / span 8;
@@ -56,10 +61,10 @@
 				max-width: 380px; grid-area: 4 / 1 / span 1 / span 4;
 			}
 			#latex {
-				width: 380px; grid-area: 6 / 5 / span 1 / span 4; justify-self: center;
+				width: 380px; grid-area: 6 / 1 / span 1 / span 4;
 			}
 			#misc {
-				max-width: 380px; grid-area: 5 / 1 / span 2 / span 4;
+				max-width: 380px; grid-area: 5 / 5 / span 2 / span 4;
 			}
 		}
 
@@ -73,23 +78,32 @@
 			#blog {
 				max-width: 100%; grid-area: 2 / 1 / span 1 / span 1; justify-self: center;
 			}
-			#game {
-				max-width: 100%; grid-area: 3 / 1 / span 1 / span 1; justify-self: center;
-			}
 			#linux {
-				max-width: 100%; grid-area: 4 / 1 / span 1 / span 1;
+				max-width: 100%; grid-area: 3 / 1 / span 1 / span 1;
 			}
 			#programowanie {
-				max-width: 100%; grid-area: 5 / 1 / span 1 / span 1;
+				max-width: 100%; grid-area: 4 / 1 / span 1 / span 1;
 			}
 			#elektronika {
+				max-width: 100%; grid-area: 5 / 1 / span 1 / span 1;
+			}
+			#lpes {
 				max-width: 100%; grid-area: 6 / 1 / span 1 / span 1;
 			}
 			#latex {
 				width: 100%; grid-area: 7 / 1 / span 1 / span 1; justify-self: center;
 			}
+			#game {
+				max-width: 100%; grid-area: 8 / 1 / span 1 / span 1; justify-self: center;
+			}
 			#misc {
-				max-width: 100%; grid-area: 8 / 1 / span 1 / span 1;
+				max-width: 100%; grid-area: 9 / 1 / span 1 / span 1;
+			}
+			h1 {
+				font-size:48px;
+			}
+			body {
+				min-width: 500px;
 			}
 		}
 	</style>
@@ -112,6 +126,18 @@
 			<a href="http://vip.opcode.eu.org/vademecum.pdf"><img src="lib/pdfFile.svg" alt="dokument PDF" title="dokument PDF"/></a>
 		</span>
 	</p>
+</div>
+
+<div class="section" id="lpes">
+	<a href="http://ciekawi.icm.edu.pl/lpes/">
+		<h3>Linux i Python w Elektronicznej Sieci</h3>
+	<p>
+		<span class="txt" style="max-width: 300px;">Kurs informatyki praktycznej realizowany w ramach projektu Matematyka dla Ciekawych Świata, oparty o materiały z tego serwisu.</span>
+		<span class="img">
+			<span class="img"><img src="lib/webSite.svg" alt="serwis WWW" title="serwis WWW"/></span>
+		</span>
+	</p>
+	</a>
 </div>
 
 
