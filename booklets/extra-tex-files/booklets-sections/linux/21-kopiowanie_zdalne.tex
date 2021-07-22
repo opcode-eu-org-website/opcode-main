@@ -23,7 +23,7 @@
 
 % BEGIN: zdalne kopiowanie
 \subsection{zdalne kopiowanie}
-Najprostszą metą kopiowania plików pomiędzy różnymi systemami jest wykorzystanie do tego ssh, typowo robi się to na jeden z 3 sposobów:
+Najprostszą metą kopiowania plików pomiędzy różnymi systemami jest wykorzystanie do tego ssh, typowo robi się to na jeden z kilku sposobów:
 \begin{itemize}
 	\item poleceniem
 		\texttt{scp [opcje] źródło1 [źródło2 [...]] cel}
@@ -48,6 +48,12 @@ Najprostszą metą kopiowania plików pomiędzy różnymi systemami jest wykorzy
 			\texttt{--progress} pokazuje postęp kopiowania\\
 			\texttt{--exclude="wzorzec"} pomija (w kopiowaniu i kasowaniu) pliki pasujące do wzorzec (wzorzec może zawierać znaki uogólniające powłoki)
 			\texttt{-n} symuluje pracę (pokazuje co zostałoby skopiowane, ale nie kopiuje)
+	\item stosując
+		\texttt{sshfs [opcje] host:scieżka}
+		, który
+		montuje zdalny system plików z użyciem FUSE (filesystem in userspace) oraz SSH, do ważniejszych opcji należy zaliczyć:\\
+			\texttt{-p port} określa inny niż domyślny port serwera SSH\\
+			\texttt{-o workaround=rename}, który zapewnia poprawne \texttt{mv} na istniejący plik
 	\item złożonego polecenia opartego na przekierowaniu wyjścia jakiejś komendy do ssh, które uruchamia po zdalnej stronie proces odbierający te dane na swoim standardowym wejściu, np.:
 		\begin{itemize}
 			\item \Verb{tar -czf - ścieżka1 [ścieżka2 [...]] | ssh [user@]host 'cat > plik.tgz'}\\

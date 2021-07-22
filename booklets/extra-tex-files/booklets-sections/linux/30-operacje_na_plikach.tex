@@ -104,6 +104,8 @@ W efekcie \Verb#grep '^.\?$'# to to samo co \Verb#grep -E '^.?$'#, a \Verb#grep 
 			\texttt{-r} rekursywnie przetwarzaj podane katalogi\\
 			\texttt{-u} wypisuje różnice w formacie "unified"\\
 			\texttt{-c} wypisuje różnice w formacie "context"
+	\item \Verb{vimdiff ścieżka1 ścieżka2}
+		porównuje pliki wyświetlając je jeden obok drugiego (podobnie jak \texttt{diff} z opcją \texttt{-y}), pozwalając jednak na edycję tych plików
 	\item \Verb{patch}
 	stosuje plik łaty (wynik diff'a) w celu zmodyfikowania plików, typowo:\\
 		\texttt{patch -pn < plik.diff} co powoduje zastosowanie zmian opisanych w plik.diff na plikach w bieżącym katalogu,
