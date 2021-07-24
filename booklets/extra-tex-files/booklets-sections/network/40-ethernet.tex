@@ -43,12 +43,30 @@ Najprostszy hub to w zasadzie drabinka oporników zapewniająca że po pełnym o
 Można obyć się nawet bez żadnego huba, a jedynie z wykorzystaniem zwykłego trójnika (tutaj komputery wpięte w gniazdka trójnika się nie widzą - widzą tylko ten po drugiej stronie, a w komunikacji dużą rolę odgrywa protokół CSMA/CD).
 \end{teacherOnly}
 
+W przewodowych sieciach Ethernet wykrywaniem zajętości medium transmisyjnego oraz wykrywaniem kolizji zajmuje się protokół CSMA/CD (Carrier Sense Multiple Access with Collision Detection - wielodostęp z rozpoznawaniem stanu kanału oraz wykrywaniem kolizji). Przed rozpoczęciem nadawania stacja musi sprawdzić czy medium jest wolne, jeżeli tak może zacząć nadawać, jeżeli dwie stacje zaczną nadawać równocześnie zostaje to wykryte, obie przerywają nadawanie i wznawiają po losowym czasie. Jednak ze względu na stosowanie głównie połączeń punkt-punkt full-duplex (osobne przewody do nadawania i osobne do odbioru), co ogranicza tzw. domenę kolizji do pojedynczego hosta, protokół ten nie odgrywa obecnie szczególnie istotnej roli.
+
+\subsection{Ramka}
+
+\begin{figure}[h!]
+	\begin{center}\hspace{-4.0cm}\begin{adjustbox}{scale=0.64}
+		\inputFileContent{booklets-sections/network/ilustracje/40-ethernet.tex}
+	\end{adjustbox}\end{center}\vspace{-0.5cm}
+\end{figure}
+
+Przyglądając się przedstawionej ramce ethernetowej warto zauważyć iż długość przesyłanych w niej danych musi zawierać się w zakresie od 46 do 1500 bajtów.
+Ograniczenia te wynikają ze specyfikacji elektrycznej ethernetu i protokołu CSMA/CD.
+Dolne ograniczenie łatwo jest wyeliminować dopełniając pole dane jakimiś wartościami. Jednak górne ogranicza nam maksymalną długość pakietu IP przesyłanego taką ramką, wyznaczając wartość MTU (Maximum Transmission Unit).
+W różnych sieciach L2, wartość MTU może być różna. Nawet w Ethernecie istnieje możliwość zwiększenia MTU dla danej sieci (jeżeli sprzęt w tej sieci wspierają większe ramki – \textit{jumbo frames}), jak również zmniejszenia MTU na danym interfejsie (np. gdy ruch z niego będzie przesyłany dalej łączem o mniejszym MTU).
+
+Problem niedopasowania pakietu IP do MTU można rozwiązać na dwa sposoby – nie generować pakietów większych niż najmniejsze MTU na trasie (mechanizm detekcji MTU) lub dzielić większe pakiety na mniejsze w trakcie przesyłu (mechanizm fragmentacji)  . Można się spotkać z obydwoma tymi podejściami, aczkolwiek raczej unika się fragmentacji pakietów.
+
+\subsection{VLANy, bonding, ...}
+
 Ethernet pozwala na wirtualne podzielenie pojedynczej sieci lokalnej na wiele niezależnych (nie komunikujących się ze sobą w warstwie ethernetu) sieci, nazywanych VLAN. Działanie tego mechanizmu opiera się na zastosowaniu zarządzalnych switchy, które programowo mogą być dzielone na części zapewniające separację ruchu poszczególnych VLANów. Ponadto wybrane porty takiego switcha mogą być przypisane do różnych części (celem udostępnienia do innego switcha lub hosta kilku sieci wirtualnych), w takim przypadku do ramek ethernetowych wysyłanych tym portem dodawana jest informacja do którego VLANu należą (dwu bajtowy numer), a w przypadku ramek otrzymywanych na podstawie tego numeru odbywa się ich kierowanie do odpowiedniej "części" przełącznika (mówimy o VLANach tagowanych). Możliwe jest aby jeden wybrany VLAN na takim porcie był nie tagowany (do jego ramek nie będzie dodawany numer, a otrzymywane pakiety bez numeru będą kierowane do niego.
 
 Ethernet pozwala również na grupowanie kilku portów w jeden port wirtualny (tzw port trunking / bonding) celem zwiększenia przepustowości lub niezawodności łącza. A dzięki zastosowaniu w różnych typach sieci ethernet tego samego formatu ramki możliwe jest też stosunkowo proste zmienianie medium transmisyjnego (np. z kabla miedzianego na światłowód) z użyciem media-konwerterów.
-
-W przewodowych sieciach Ethernet wykrywaniem zajętości medium transmisyjnego oraz wykrywaniem kolizji zajmuje się protokół CSMA/CD (Carrier Sense Multiple Access with Collision Detection - wielodostęp z rozpoznawaniem stanu kanału oraz wykrywaniem kolizji). Przed rozpoczęciem nadawania stacja musi sprawdzić czy medium jest wolne, jeżeli tak może zacząć nadawać, jeżeli dwie stacje zaczną nadawać równocześnie zostaje to wykryte, obie przerywają nadawanie i wznawiają po losowym czasie. Jednak ze względu na stosowanie głównie połączeń punkt-punkt full-duplex (osobne przewody do nadawania i osobne do odbioru), co ogranicza tzw. domenę kolizji do pojedynczego hosta, protokół ten nie odgrywa obecnie szczególnie istotnej roli.
 % END: Warstwa sprzętowa
+
 
 \subsection{Kable}
 

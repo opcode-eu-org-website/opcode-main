@@ -17,7 +17,7 @@
 		<a href="SystemBoot.pdf"><img src="lib/pdfFile.svg" alt="Pobierz jako PDF" title="Pobierz jako PDF"/></a>
 	</p>
 </div>
-<p id="updateInfo">(aktualizacja: 2019-04-17)</p>
+<p id="updateInfo">(aktualizacja: 2021-07-24)</p>
 
 <section>
 <h2>GRUB</h2>
@@ -211,12 +211,47 @@ L+ /var/log   -    -    -    -  /run/log
 </pre>
 
 	<section>
+	<h4>/etc/rc.local</h4>
+	<p>Systemd typowo od pewnego momentu zaczął ignorować plik <code>/etc/rc.local</code>.
+		Możliwość wykonania poleceń przy starcie z użyciem takiego mechanizmu bywa wygodna, zatem jeżeli chcemy móc z niego nadal korzystać to możemy dodać stosowną usługę przetwarzającą wpisy z tego pliku.
+		W tym celu tworzymy plik <code>/etc/rc.local</code>, nadajemy mu prawo wykonywalności (<code>chmod +x /etc/rc.local</code>) oraz tworzymy plik <code>/etc/systemd/system/rc-local.service</code> z zawartością:
+	</p>
+<pre>
+[Unit]
+Description=/etc/rc.local
+ConditionPathExists=/etc/rc.local
+
+[Service]
+Type=forking
+ExecStart=/etc/rc.local start
+TimeoutSec=0
+StandardOutput=tty
+RemainAfterExit=yes
+SysVStartPriority=99
+
+[Install]
+WantedBy=multi-user.target
+</pre>
+	<p>Następnie aktywujemy tak utworzoną usługę z użyciem <code>systemctl enable rc-local</code></p>
+	</section>
+	
+	<section>
+	<h4>systemd a usługi w chroot</h4>
+	<p>Przy klasycznym init nie było problemów z uruchamianiem usług działających w chroot – wystarczyło jedynie napisać skrypt odpalający w chroocie odpowiednie skrypty z <code>/etc/init.d</code>.
+		W przypadku systemd kwestia ta się komplikuje, start usługi oparty jest na komunikacji z daemonem systemd, a ten nie jest (a często nie chcemy żeby był) dostępny w łatwy sposób z wnętrza chroot'a.
+		Możemy jednak nakazać głównemu daemonowi uruchomienie danej usługi w danym chroocie – służy do tego opcja <code>RootDirectory=</code> w pliku konfigurującym daną usługę.
+	</p>
+	<p>Możemy także używać <code>systemd-nspawn</code> pozwalającego na tworzenie/uruchamianie środowisk chroot'owych z użyciem systemd.</p>
+	</section>
+	
+	<section>
 	<h4>Więcej informacji</h4>
 	<ul>
 		<li><a href="https://wiki.archlinux.org/index.php/Systemd">Systemd @ wiki.archlinux.org</a></li>
 		<li><a href="https://medium.com/@johannes_gehrs/getting-started-with-systemd-on-debian-jessie-e024758ca63d">Getting Started With systemd on Debian Jessie</a></li>
 		<li><a href="https://www.digitalocean.com/community/tutorials/how-to-use-systemctl-to-manage-systemd-services-and-units">How To Use Systemctl to Manage Systemd Services and Units</a></li>
 		<li><a href="https://ask.fedoraproject.org/en/question/44938/can-systemd-replace-monit/">Can systemd replace monit?</a></li>
+		<li><a href="http://0pointer.de/blog/projects/changing-roots">systemd for Administrators, Part VI – Changing Roots</a></li>
 	</ul>
 	</section>
 </section>
@@ -269,6 +304,14 @@ Można także utworzyć plik <code>/etc/udev/rules.d/80-net-names</code> przypis
 
 <p>Zazwyczj całkiem dobrym miejscem na umieszczanie swoich wpisów jest <code>/etc/udev/udev.rules</code>. Na koniec wspomnę że udev'owi nie zawsze udaje się ładować wszystko autmagicznie i np. aby mieć <code>/dev/lp0</code> należy załadować (np. przez <code>/etc/modules</code>) moduł <code>lp</code>. Podobnie warto tam dopisać <code>ipv6</code>. Podobną rolę jak wpisy udev mogą pełnić w niektórych przypadkach parametry modułów określające z jakim numerem ma występować urządzenie (tak jest np. w modułach v4l) - możemy je podać w konfiguracji modprobe. Z kolei nieskuteczną drogą jest określanie numerów urządzeń poprzez wpisy alias w konfiguracji modprobe.</p>
 </section>
+
+<section>
+<h2>Zobacz także</h2>
+<ul>
+	<li><a href="http://localhost:8000/2021/07/24/bootowanie_pxe.html">Bootowanie przez sieć (PXE)</a></li>
+</ul>
+</section>
+
 
 <section>
 <h2>Licencja</h2>

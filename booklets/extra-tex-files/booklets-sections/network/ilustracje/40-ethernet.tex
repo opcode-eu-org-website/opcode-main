@@ -1,0 +1,90 @@
+\ifdefined\inputOnlyContent\else
+	\documentclass[tikz]{standalone}
+	\usepackage{tikzPackets}
+	\InputIfFileExists{booklets-sections/network/preambule.tex}{}{}
+	\begin{document}
+\fi
+
+\begin{minipage}[t]{45\packetsBitWidth}\hspace{-0.5\packetsBitWidth}\begin{tikzpicture}[semithick]
+	\packetsInit
+	\packetsBitWidth=6mm
+	\tikzstyle{protocolsField}=[protocolsFieldBase, draw, minimum height = 1.5cm, align=center]
+	\tikzstyle{info}=[protocolsFieldBase, draw, minimum height = 0.5cm, font=\footnotesize]
+	
+	\packetsPrintBitScale{21}
+		\node [bitScaleInfo, minimum width = 6\packetsBitWidth] (bitScaleInfo_22) [] at (bitScaleInfo_21.north east) {\packetsPrintBitNumber{....}};
+		\draw[thin] (bitScaleInfo_22.south west) |- (bitScaleInfo_22.north west);
+		
+		\foreach \n[remember=\n as \lastn (initially 22)] in {23,...,39} {
+			\node [bitScaleInfo] (bitScaleInfo_\n) [] at (bitScaleInfo_\lastn.north east) { };
+			\draw[thin] (bitScaleInfo_\n.south west) |- (bitScaleInfo_\n.north west);
+		}
+	
+	
+	\packetsPutField{8}{Preambuła + SFD}
+	\packetsPutField{6}{Adres docelowy}
+	\packetsPutField{6}{Adres źródłowy}
+	\packetsPutField{2}{Typ}
+	\packetsPutField{6}{Zawartość}
+	\packetsPutField{4}{Suma\\Kontrolna}
+	\packetsPutField{12}{Przerwa międzypakietowa}
+	\packetsNextLine
+	
+	\packetsPutField[info]{8}{64}
+	\packetsPutField[info]{6}{48}
+	\packetsPutField[info]{6}{48}
+	\packetsPutField[info]{2}{16}
+	\packetsPutField[info]{6}{46·8 – 1500·8}
+	\packetsPutField[info]{4}{32}
+	\packetsPutField[info]{12}{96}
+	\packetsEndLine{długość\\(bity)}
+	
+	\packetsPutField[protocolsFieldBase, minimum height = 0.5cm]{8}{}
+	\packetsPutField[info]{24}{ramka L2}
+	
+	\packetsNextLine
+	\packetsPutField[protocolsFieldBase, align=left]{1}{
+		\\\vspace{-10pt}\\
+		Preambuła wraz z SFD (start frame delimiter) i przerwa międzypakietowa są transmitowane na kablu (są elementem ramki L1),\\
+			ale nie wchodzą w skład ramki L2.
+		\\\vspace{-7pt}\\
+		Typ identyfikuje zawartość przenoszoną w pakiecie (gdy ≥ 0x600) lub określa długość pakietu.\\
+		Jeżeli wynosi 0x8100 to ramka należy do tagowanego VLANu i ma postać:
+		\\\vspace{-13pt}\\
+	}
+	\packetsNextLine
+	
+	\packetsPutField{8}{Preambuła + SFD}
+	\packetsPutField{6}{Adres docelowy}
+	\packetsPutField{6}{Adres źródłowy}
+	\packetsPutField{2}{\footnotesize 0x81\\\footnotesize 0x00}
+	\packetsPutField{2}{Tag}
+	\packetsPutField{2}{Typ}
+	\packetsPutField{6}{Zawartość}
+	\packetsPutField{4}{Suma\\Kontrolna}
+	\packetsPutField{12}{Przerwa międzypakietowa}
+	\packetsNextLine
+	
+	\packetsPutField[info]{8}{64}
+	\packetsPutField[info]{6}{48}
+	\packetsPutField[info]{6}{48}
+	\packetsPutField[info]{2}{16}
+	\packetsPutField[info]{2}{16}
+	\packetsPutField[info]{2}{16}
+	\packetsPutField[info]{6}{46·8 – 1500·8}
+	\packetsPutField[info]{4}{32}
+	\packetsPutField[info]{12}{96}
+	\packetsEndLine{długość\\(bity)}
+	
+	\packetsNextLine
+	\packetsPutField[protocolsFieldBase, align=left]{1}{
+		\\\vspace{-7pt}\\
+		Gdzie Typ identyfikuje właściwą zawartość przenoszoną w pakiecie (gdy ≥ 0x600) lub określa długość pakietu.\\
+		Natomiast Tag zawiera m.in. 12 bitowy numer VLANu 802.1q\\
+		W analogiczny sposób mogą zostać dodane kolejne tagi używane w standardzie IEEE 802.1ad.
+	}
+	\packetsNextLine
+	
+\end{tikzpicture}\end{minipage}
+
+\ifdefined\inputOnlyContent\else\end{document}\fi
