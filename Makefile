@@ -79,6 +79,12 @@ protect-submodules:
 	git submodule | awk '! /extra-tex-files/ {print $$2}' | while read sm; do git config --local "submodule.$$sm.ignore" all; done
 
 #
+# extra dependencies
+#
+
+OutDir: $(OUTDIR)/lib/htmlFile-Blog.svg  $(OUTDIR)/lib/webSite-OldOpCode.svg
+
+#
 # include core makefile from TextUtils
 #
 
