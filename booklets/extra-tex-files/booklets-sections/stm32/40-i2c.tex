@@ -107,28 +107,34 @@ zdefiniować. Nasza biblioteka oraz skrypty linkera oczekują, że będzie nazyw
 
 \begin{CodeFrame*}[c]{}
 void i2c2_ev_isr(void){
-  
-  uint32_t sr1, sr2;
+  uint16_t sr1, sr2;
+
   sr1 = I2C_SR1(I2C2);
+  printf("I2C ISR: sr1=0x%04x slavebyte=%d\n", sr1, slavebyte); // for demonstration / debug only
 
   // Address matched (Slave)
   if (sr1 & I2C_SR1_ADDR){
-    //Clear the ADDR sequence by reading SR2.
+    // Clear the ADDR sequence by reading SR2.
     sr2 = I2C_SR2(I2C2);
-    (void) sr2;	
+    (void) sr2;
   }
 
-  //Master write request
-  else if(sr1 & I2C_SR1_RxNE){
+  // Write request from master
+  if (sr1 & I2C_SR1_RxNE){
     slavebyte = I2C_DR(I2C2);
-    slavebyte *= 2;
-    I2C_CR1(I2C2) = I2C_CR1(I2C2);
+    printf("I2C ISR: received %d\n", slavebyte); // for demonstration / debug only
+    slavebyte *= 2; // slave logic is multiply by 2 ;)
   }
-  
-  //Master read request
+
+  // Read request from master
   if ((sr1 & I2C_SR1_TxE)){
     I2C_DR(I2C2) = slavebyte;
-    I2C_CR1(I2C2) |= I2C_CR1_STOP;
+  }
+
+  // Stop sequence detected (Slave)
+  if (sr1 & I2C_SR1_STOPF){
+    // Clear by write I2C_CR1
+    I2C_CR1(I2C2) = I2C_CR1(I2C2);
   }
 }
 \end{CodeFrame*}
@@ -150,12 +156,8 @@ interfejsów.
 W przypadku interfejsu $I^2C$ trzeba odczytać i/lub zapisać pewne rejestry po większości operacji na szynie.
 \end{ProTip}
 
-Jeśli poprzednia instrukcja warunkowa się nie wykonała, procedura sprawdza, czy w przypadku żądania odczytu przez mastera, rejestr danych (DR) nie jest pusty (ustawiony bit \Verb$I2C_SR1_RxNE$
-w SR1, \textit{Rx Not Empty}). Jeśli tak jest, to znaczy że odebrano bajt z szyny danych (od mastera). Należy wtedy wczytać ten bajt z DR oraz dokonać zapisu do rejestru
-CR2. Wykonuje to linijka \Verb$I2C_CR1(I2C2) = I2C_CR1(I2C2)$. Mimo braku jej sensu z punktu widzenia programu, należy pamiętać, że makra rejestrów
-definiują je jako \texttt{volatile}, więc nie zostanie ona usunięta w procesie optymalizacji kodu, a kompilator wygeneruje kod zapisujący wartość
-do CR2.\footnote{tutaj podobnie, interfejs czeka na tę operację i trzyma linię SCL w stanie niskim aż do jej wystąpienia, brak tej linijki spowoduje
-  zawieszenie szyny}
+Następnie procedura sprawdza, czy rejestr danych (DR) nie jest pusty (ustawiony bit \Verb$I2C_SR1_RxNE$ w SR1, \textit{Rx Not Empty}).
+Jeśli tak jest, to znaczy że odebrano bajt z szyny danych (od mastera). Należy wtedy wczytać ten bajt z DR
 
 Tutaj także wykonujemy operację którą realizuje slave. W tym przypadku jest nią pomnożenie odebranego bajtu razy 2 i zachowanie go w pamięci.
 
@@ -163,7 +165,19 @@ Jeśli master wyśle żądanie odczytu ze slave'a, po otrzymaniu adresu, w SR1 u
 o tym, że takie żądanie nastąpiło a rejestr danych do wysłania jest pusty. Wtedy zapisanie bajtu danych do DR spowoduje wysłanie tych danych na szynę
 do mastera. W naszym przypadku daną do wysłania jest poprzednio zachowana i pomnożona wartość.
 
-Należy potem zasygnalizować interfejsowi gotowość do wysłania danych, zapisując CR1\footnote{tak samo tutaj interfejs oczekuje tego zapisu do rejestru i będzie wymuszał stan niski na SCL dopóki taki zapis nie nastąpi. }.\\
+Jeżeli master wykona na szynie sekwencję stopu, co jest to sygnalizowane ustawieniem bitu \Verb$I2C_SR1_STOPF$ w SR1,
+to należy potwierdzić jej odebranie poprzez dokonanie zapisu do rejestru CR1.
+Wykonuje to linijka \Verb$I2C_CR1(I2C2) = I2C_CR1(I2C2)$.
+Mimo braku jej sensu z punktu widzenia programu, należy pamiętać, że makra rejestrów definiują je jako \texttt{volatile},
+więc nie zostanie ona usunięta w procesie optymalizacji kodu, a kompilator wygeneruje kod zapisujący wartość do CR1.\footnote{
+	Jeżeli tego nie zrobimy procesor będzie ciągle generować przerwanie obsługi I2C z ustawionym bitem \Verb$I2C_SR1_STOPF$ w SR1 i nasz program zawiesi się.
+}
+
+\begin{ProTip}{\normalfont{\strong{Uwaga}}}
+Procedura dodatkowo wypisuje na porcie szeregowym informację o tym że została wywołana i jakie dane odebrała.
+Ogólnie nie należy stosować tak powolnych operacji jak nasza funkcja printf w procedurach obsługi przerwań, gdyż może to prowadzić do ich niewłaściwego działania.
+Wypisywanie zostało tutaj wprowadzone wyłącznie w celach demonstracyjnych i może (a nawet powinno) być usunięte przed jakimkolwiek poważniejszym użyciem tego kodu.
+\end{ProTip}
 
 Oprogramowanie interfejsu mastera jest mniej skomplikowane, ponieważ odbywa się w zwykłej funkcji. Poniżej funkcja zapisu bajtu do slave'a (jako
 argument pobiera interfejs oraz wartość bajtu):
@@ -179,7 +193,6 @@ void i2c_send_write(uint32_t peryf, uint8_t dane){
   //Czekaj na wysłanie adresu
   while (!(I2C_SR1(peryf) & I2C_SR1_ADDR));
   (void) I2C_SR2(peryf); //Wyczyść EV6
-
   
   i2c_send_data(peryf, dane);
 
@@ -222,7 +235,7 @@ uint8_t i2c_send_read(uint32_t peryf){
   while (!(I2C_SR1(peryf) & I2C_SR1_ADDR));
   (void) I2C_SR2(peryf); //Wyczyść EV6
 
-  //Czekaj aż otrzymasz 1 bit danych
+  //Czekaj aż otrzymasz 1 bajt danych
   while (!(I2C_SR1(peryf) & I2C_SR1_RxNE));
   dane = i2c_get_data(peryf);
   
