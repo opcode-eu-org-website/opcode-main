@@ -13,5 +13,6 @@ $(OUTDIR)/Wprowadzenie_do_programowania_w_Pythonie.pdf:      $(SECTIONS)/python/
 $(OUTDIR)/Podstawy_programowania_mikrokontrolerów_STM32.pdf: $(SECTIONS)/stm32/*        $(call img4tex_from_src,stm32/*)        extra-tex-files/stm32-examples/*/*
 $(OUTDIR)/Warsztat_elektroniczny.pdf:                        $(SECTIONS)/warsztat/*                                             extra-tex-files/warsztat_elektroniczny/*
 $(OUTDIR)/Narzędzia_deweloperskie.pdf:                       $(SECTIONS)/tools/*
+$(OUTDIR)/Podstawy_elektryki.pdf:                            $(SECTIONS)/elektryka/*    $(call img4tex_from_src,elektryka/*.s*)
 
 endif

@@ -1,0 +1,128 @@
+% Copyright (c) 2011-2021 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\section{Układy zasilania}
+
+\subsection{Związek z potencjałem ziemi (układy sieci - IT, TT, TN)}
+
+Wyróżnia się kilka \href{https://en.wikipedia.org/wiki/Earthing_system}{układów sieci zasilającej}. Poszczególne układy posiadają kilku literowe oznaczenia w których:
+\begin{itemize}
+	\item pierwsza litera (\strong{I} lub \strong{T}) oznacza relację punktu neutralnego transformatora i potencjału ziemi:
+	\begin{itemize}
+		\item \strong{I} – punkt neutralny transformatora izolowany od ziemi (lub połączony poprzez dużą impedancję)
+		\begin{itemize}
+			\item uzwojenie wtórne transformatora może nie posiadać punktu neutralnego (np. może być połączone w trójkąt)
+			\item przewód neutralny nie musi (ale może) występować w instalacji
+			\item nie da się odróżnić przewodu neutralnego od pojedynczego przewodu fazowego – w obu wypadkach potencjał względem ziemi jest nieustalony
+			\item znaczenie mają jedynie napięcia pomiędzy przewodami fazowymi oraz fazowymi i neutralnym (jeżeli występuje)
+		\end{itemize}
+		\item \strong{T} – punkt neutralny transformatora połączony z ziemią
+		\begin{itemize}
+			\item uzwojenie wtórne transformatora musi posiadać punkt neutralny (typowo jest uzwojeniem typu gwiazda)
+			\item przewód neutralny ma potencjał równy potencjałowi ziemi, zatem inne napięcia odnoszą się także do potencjału ziemi (np. w przewodzie fazowym jest 230V względem Ziemi)
+		\end{itemize}
+	\end{itemize}
+	\item druga litera (\strong{T} lub \strong{N}) oznacza sposób połączenia części normalnie nieprzewodzących z potencjałem ziemi:
+		\item \strong{T} – połączenie za pomocą lokalnego uziomu lub uziomu grupowego (obejmującego kilka odbiorników) nie połączonego z uziomem punktu neutralnego transformatora
+		\item \strong{N} – połączenie poprzez uziom punktu neutralnego transformatora, w tym wypadku występują kolejne oznaczenia informujące w jaki sposób realizowane jest to połączenie:
+		\begin{itemize}
+			\item \strong{S} - przy pomocy osobnego przewodu ochronnego PE dochodzącego do stacji transformatorowej
+			\item \strong{C} - przy pomocy wspólnego przewodu ochronnego i neutralnego PEN\footnote{\label{PEN}Przewód PEN powinien mieć przekrój minimum 10mm$^2$ Cu lub 16mm$^2$ Al}$^,$\footnote{Układ nie jest dopuszczony do stosowania w budynkach na terenie Polski.}
+			\item \strong{C-S} - na części trasy (od stacji transformatorowej do punktu rozdziału PEN\footnoteref{PEN}, np. w złączu lub rozdzielni głównej\footnote{Punkt taki powinien być uziemiony.})
+			w postaci wspólnego przewodu ochronnego i neutralnego PEN, dalej w postaci osobnego przewodu ochronnego PE
+		\end{itemize}
+\end{itemize}
+%
+Wyróżnia się układy:
+\begin{itemize}
+	\item \strong{IT} – punkt neutralny transformatora izlowoany lub nie wystepuje, uziemienia urządzeń łączone lokalnie do ziemi
+	\item \strong{TT} – punkt neutralny transformatora połączony z ziemią, uziemienia urządzeń łączone lokalnie do ziemi
+	\item \strong{TN} – punkt neutralny transformatora połączony z ziemią, uziemienia urządzeń łączone do uziemienia punktu neutralnego transformatora, przy pomocy:
+	\begin{itemize}
+		\item przewodu PE  – układ \strong{TN-S}
+		\item przewodu PEN – układ \strong{TN-C}
+		\item przewodu PEN (bliżej transformatora) i PE (bliżej odbiornika) – układ \strong{TN-C-S}
+	\end{itemize}
+\end{itemize}
+
+\subsubsection{układ IT}
+\begin{itemize}
+	\item Dzięki izolowaniu wszystkich przewodów roboczych od potencjału ziemi pierwsze zwarcie doziemne\footnote{bez względu na to czy przewodu fazowego czy neutralnego} w tym układzie związane jest z przepływem niskiego prądu zwarciowego.
+	\begin{itemize}
+		\item Wartość prądu takiego zwarcia zależy od wielkości sieci (wielkości pojemności sieć-ziemia) i często jest rzędu kilku mA, czyli może nie spowodować nawet zadziałania RCD.
+		\item Napięcie które po takim zwarciu będzie występować pomiędzy pozostałymi przewodami a ziemią zależy od tego czy zwarciu uległ przewód neutralny czy fazowy
+			(bo ziemia zaczyna pełnić jego funkcje, czyli możemy mieć np. napięcie międzyfazowe między ziemią a dowolną z nie zwartych faz).
+		\item Można powiedzieć że w momencie wystąpienia pierwszego zwarcia doziemnego układ przechodzi w układ TT (przy czym impedancja uziemienia "punktu neutralnego", powstała na skutek zwarcia, jest nieznanej jakości).
+	\end{itemize}
+	\item Układ może być (i często jest) stosowany:
+	\begin{itemize}
+		\item w celu zwiększenia niezawodności (np. na salach operacyjnych) - pierwsze zwarcie jest sygnalizowane, ale nie powoduje wyłączenia; układ uzyskiwany z lokalnego trafo separacyjnego 1:1 zasilanego z „normalnej” sieci TN
+		\item w celu zwiększenia bezpieczeństwa (przeciw iskrzeniu, np. w kopalniach) - prąd pierwszego zwarcia jest niewielki, więc zmniejsza ryzyko powstania iskry; pierwsze zwarcie powoduje automatyczne wyłączenie obwodu
+		\item w przypadkach gdzie „trudno znaleźć ziemię” w celu uziemienia punktu neutralnego (np. na statkach)
+	\end{itemize}
+	\item Układ pozwala na rezygnację z przewodu neutralnego (i stosowanie wyłącznie napięć międzyfazowych, ale nie jest to wymogiem\footnote{
+			Rezygnacja z przewodu neutralnego i stosowanie tylko napięć międzyfazowych eliminuje także problem przerwania przewodu neutralnego skutkującego ryzykiem pojawienia się napięcia międzyfazowego na odbiornikach jednofazowych.
+		}.
+	\item Układ ten wymaga stosowania zabezpieczeń dwupolowych (dla odbiorów zasilanych faza-neutralny lub faza-faza).
+	\item W układzie powinny być stosowane układy sygnalizujące wystąpienie pierwszego zwarcia doziemnego / układy kontroli stanu izolacji.
+	\item Główną wadą takiego układu jest gorsza (wyższa) niż w TN (a często także niż w TT) impedancja pętli podwójnego zwarcia doziemnego, co może prowadzić do braku odpowiednio szybkiego wyłączenia takiego zwarcia.
+\end{itemize}
+
+\subsection{prąd zwarcia}
+
+\begin{center}\includegraphics{img/elektryka/prad_zwarciowy}\end{center}
+
+Przy projektowaniu instalacji i doborze zabezpieczeń istotna rolę odgrywa prąd zwarcia.
+Oblicza się go w oparciu o dane transformatora i parametry linii przesyłowych (grubość i materiał kabli, co przekłada się na ich rezystancję) zgodnie z poniższymi zasadami:
+
+\begin{itemize}
+	\item dane do obliczeń – parametry transformatora:
+	\begin{itemize}
+		\item prąd nominalny $I_n$, czyli prąd uzwojenia wtórego przy nominalnym obciążeniu transformatora
+		\item nominalne napięcie strony pierwotnej $U_P$ oraz strony wtórnej $U_n$
+		\item napięcie zwarcia $U_k$, czyli napięcie na uzwojeniu pierwotnym powodujące przepływ nominalnego prądu na zwartym uzwojeniu wtórnym,
+			typowo podane w postaci $U_k{\rm [\%]}$, czyli wyrażone jako procent nominalnego napięcia uzwojenia pierwotnego:
+				$$U_k{\rm [\%]}=\frac{U_p}{U_k}$$
+	\end{itemize}
+	\item prąd zwarcia $I_{k1}$ na zaciskach transformatora (czyli w w obwodzie zamykanym przez S1) obliczamy w oparciu o parametry T1:
+		$$I_{k1} = \frac{I_n}{U_k[\%]}$$
+	\item rezystancję wewnętrzną $R_w$ transformatora obliczamy w oparciu o napięcie nominalne strony wtórnej $U_n$ i prąd $I_{k1}$:
+		$$R_w = \frac{U_n}{I_{k1}} = \frac{U_n \cdot U_k{\rm [\%]}}{I_n}$$
+	\item dzięki temu możemy obliczyć prąd zwarcia instalacji:
+		$$I_{k2} = \frac{U_n}{Rw + Ri} = \frac{U_n}{U_n \cdot U_k[\%]/I_n + R_i}$$
+\end{itemize}
+
+\noindent\strong{Przykład:}
+\begin{itemize}
+	\item trafo na 400V ($U_n=400{\rm ~V}$) o mocy 1.2MW ($I_n=1800{\rm ~A}$) i napięciu zwarcia $U_k{\rm [\%]}=6\%$
+	\item szyna Cu o przekroju $800{\rm ~mm^2}$ i długości 1m ($R_i = 0.00004545~\Omega$)
+	\item zatem $I_{k2} = 400 / (400 \cdot 0.06/1800 + 0.00004545) = 29.898{\rm ~kA}$
+\end{itemize}
+\vspace{8pt}
+
+Jest to prosty sposób obliczania spodziewanego prądu zwarcia.
+Obliczenia w projekcie powinny zawsze uwzględniać wszystkie czynniki i być wykonywane zgodnie z normami.
+Autor nie ponosi odpowiedzialności za skutki błędnego zastosowania tego schematu obliczeń.
+
+Po wykonaniu instalacji (oraz okresowo) dokonuje się pomiarów impedancji pętli zwarcia, które mają na celu ustalenie rzeczywistego (minimalnego) prądu zwarcia.
+Jest on istotny ze względu na skuteczność zadziałania zabezpieczeń nadprądowych.
+Konieczność wykonania pomiarów a nie tylko oparcia się na obliczeniu wynika m.in. z faktu iż mogły pojawić się w instalacji nieprzewidziane rezystancje (np. niedokręcony zacisk śrubowy).

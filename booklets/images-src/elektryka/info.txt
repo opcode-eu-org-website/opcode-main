@@ -1,0 +1,11 @@
+DIN-rail-dimensions.svg
+	Markus Kuhn as Public Domain
+	https://commons.wikimedia.org/wiki/File:DIN-rail-dimensions.svg
+
+Server_rack_rail_dimensions.svg
+	Sakurambo as Public Domain
+	https://commons.wikimedia.org/wiki/File:Server_rack_rail_dimensions.svg
+	(edited – removed inch hole dimmension, reduced to 3U)
+
+*.sch
+	Robert Paciorek on MIT

@@ -1,0 +1,98 @@
+% Copyright (c) 2021 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\section{Silniki}
+
+Silnik jest urządzeniem do zamiany energii elektrycznej na energię mechaniczną (prawie zawsze) ruchu obrotowego (który potem może być zamieniany na inne postaci ruchu).
+W konstrukcji mechanicznej silnika wyróżnia się:
+\begin{itemize}
+	\item \strong{wirnik} – element obracający się
+	\item \strong{stojan} – element pozostający nieruchomo wewnątrz którego obraca się wirnik
+\end{itemize}
+
+Możliwe konstrukcje silników wielofazowych rozważaliśmy już przy omawianiu zagadnienia prądu wielofazowego, w oparciu o obracanie magnesu trwałego przy pomocy układu cewek zasilanych z poszczególnych faz.
+Pośrednio (przy rozważaniu układu podzielonej fazy) przyjrzeliśmy się nawet możliwości konstrukcji silnika jednofazowego – nie udało nam się.
+Model ten dość dobrze oddaje koncepcję budowy rzeczywistych silników elektrycznych.
+I w każdym typie silnika konieczne jest zapewnienie co najmniej dwóch faz, aby móc uzyskać wirujące (a nie tylko zmienne – jak przy jednej fazie) pole magnetyczne.
+
+Dlatego też najprostszym koncepcyjnie silnikiem jest silnik trójfazowy prądu przemiennego z magnesami stałymi w wirniku i elektromagnesami w stojanie, czyli właśnie taki jak rozważaliśmy przy prądzie trójfazowym.
+Zamiast magnesów trwałych na wirniku mogą być umieszczone elektromagnesy zasilane prądem stałym (doprowadzonym poprzez szczotki).
+Silniki tego typu określa się mianem \strong{silników synchronicznych} gdyż ich prędkość obrotowa jest równa prędkości wirowania pola magnetycznego.
+
+Wadą takich silników jest trudność w ich rozruchu – taki silnik (podłączony bezpośrednio do sieci elektrycznej) nie zacznie się obracać.
+Spowodowane to jest tym iż pole magnetyczne w stojanie będzie zmieniało się zbyt szybko, aby pokonać bezwładność mechaniczną wirnika i wprawić go w ruch.
+
+Stosowane jest kilka mechanizmów na rozruch takiego silnika (np. rozruch jako silnika asynchronicznego, co wyklucza stosowanie magnesów trwałych na wirniku).
+Współcześnie do rozruchu tego typu silników wykorzystywane są elektroniczne przemienniki częstotliwości (falowniki),
+	które pozwalają na uruchomienie takiego silnika przy wolno zmiennym polu magnetycznym stojana, jak również na płynne sterowanie prędkością obrotową silnika.
+
+\subsection{silniki indukcyjne (asynchroniczne AC)}
+
+Główna różnica w stosunku co do silnika synchronicznego polega na wykonaniu wirnika – znajdują się na nim uzwojenia w których (za sprawą zmiennego pola magnetycznego stojana) indukowany jest prąd (dlatego \textit{silnik indukcyjny}).
+Jego przepływ powoduje powstanie pola magnetycznego wirnika (przekształcenie wirnika w magnes), dzięki czemu zaczyna się obracać.
+Aby proces indukcji mógł zachodzić wirnik musi obracać się wolniej niż wirowanie pola magnetycznego stojana (czyli wolniej niż wynikałoby z częstotliwości zasilania, dlatego \textit{silnik asynchroniczny}).
+Wirnik często wykonywany jest w postaci klatki (stanowiącej od razu jego uzwojenie), dlatego większość silników tego typu to \strong{silniki klatkowe}.
+
+\noindent Więcej informacji: \url{https://www.youtube.com/watch?v=59HBoIXzX_c}
+
+\subsection{silniki jednofazowe AC}
+
+Jak się przekonaliśmy silnik z jedną fazą nie działa – jedna faza daje zmienne pole, ale one nie rotuje (nie determinuje kierunku obrotu, nie powoduje rozpoczęcia obrotu).
+Dlatego w silnikach jednofazowych prądu przemiennego wytwarzana jest druga faza z użyciem kondensatora (który jak wiemy wprowadza przesunięcie fazowe prądu).
+Koncepcyjnie są to silniki takie jak omawiane przy prądzie dwufazowym, wykonywane najczęściej jako asynchroniczne (klatkowe).
+
+\noindent Więcej informacji: \url{https://www.youtube.com/watch?v=jNWlWzFzHi4}
+
+\subsection{silniki prądu stałego (DC)}
+
+W klasycznym silniku prądu stałego wirowanie pola magnetycznego uzyskuje się poprzez komutację mechaniczną.
+W rozwiązaniu takim w stojanie znajdują się magnesy trwałe, a na wirniku uzwojenia.
+Komutator zmienia biegunowość uzwojeń wirnik tak aby obracał się on względem stojana.
+
+\noindent Więcej informacji: \url{https://www.youtube.com/watch?v=GQatiB-JHdI}
+
+\subsection{bezszczotkowe silniki prądu stałego (BLDC)}
+
+W silniku BLDC mamy nieruchome elektromagnesy (w stojanie) i magnes trwały na wirniku (czyli tak jak w silniku synchronicznym z magnesami trwałymi).
+Sterownik silnika, będący elektroniczną formą komutatora, zasila kolejno cewki poszczególnych „faz” co powoduje ruch wirnika przyciąganego/odpychanego przez odpowiednie elektromagnesy (analogicznie jak w wspomnianym silnku AC).
+Główna różnica polega na napięciu zasilania oraz kształcie sygnałów podawanych na cewki – w silniku BLDC będzie on na ogół przypominał prostokąt a nie sinus.
+
+\subsection{silniki krokowe}
+
+Sa to silniki bardzo zbliżone do BLDC – również mamy elektromagnesy w stojanie i magnesy trwałe na wirniku.
+Główna różnica polega w zastosowaniu i sposobie sterowania.
+Sterując BLDC zależy nam na prędkości obrotowej, a sterując silnikiem krokowym zależy nam na wykonaniu określonej liczby kroków.
+Często będą występować też różnice konstrukcyjne – w ilości faz, cewek w stojanie, biegunów na wirniku, itd.
+W silnikach krokowych z każdą fazą działania silnika następuje tylko niewielkie (często stanowiące niewielki ułamek pełnego obrotu) obrócenie wirnika.
+Z każdym impulsem sterującym silnik wykonuje taki jeden krok.
+Sposób wysterowania sprawia także że silnik taki ma duży moment trzymający (kosztem energochłonności).
+
+\noindent Więcej informacji: \url{https://www.youtube.com/watch?v=09Mpkjcr0bo}
+
+\subsection{podsumowanie}
+
+Warto zauważyć upowszechnianie się elektronicznych systemów sterowania silnikami.
+Falowniki pozwalają na łatwe stosowanie silików trójfazowych w obwodach jednofazowych oraz pozwalają także na stosowanie silników synchronicznych z magnesami trwałymi, łatwe kontrolowanie prędkości obrotowej silników AC.
+Należy jednak zwrócić uwagę na podobieństwa w działaniu przestawionych typów silników elektrycznych (np. BLDC do synchronicznego AC z magnesami stałymi sterowanego przez falownik).
+
+W przedstawionych tutaj opisach zostały prawie całkowicie pominięte zagadnienia związane z mechaniczną konstrukcją silników,
+	a także rozwiązaniami takimi jak np. umieszczenie więcej niż dwóch biegunów na wirniku (np. 4 w kolejności NSNS), co oczywiście wpływa też na układ elektromagnesów zasilanych z poszczególnych faz.

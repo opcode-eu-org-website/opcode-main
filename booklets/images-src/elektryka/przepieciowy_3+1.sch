@@ -1,0 +1,94 @@
+v 20130925 2
+C 53200 44200 1 0 0 overvoltage_protection_devices-2.sym
+{
+T 53742 44680 5 10 0 1 90 6 1
+value=B
+}
+N 52300 44500 52300 44400 4
+N 51100 44400 53500 44400 4
+N 53500 44400 53500 46000 4
+N 53500 45600 53800 45600 4
+N 53800 45600 53800 45400 4
+N 53100 44500 53100 44400 4
+N 52700 44500 52700 44400 4
+N 53800 44500 53800 44100 4
+C 53700 43800 1 0 0 net-gnd-1.sym
+{
+T 53900 44000 5 5 0 1 180 6 1
+value=GND
+T 53900 43800 5 8 1 1 180 6 1
+value=PE
+}
+C 52200 46700 1 270 0 terminal-end_line.sym
+{
+T 52325 46450 5 10 1 1 0 3 1
+refdes=L1
+T 53000 46590 5 10 0 0 270 0 1
+footprint=connector(1, 1, silkmark=external)
+}
+N 52300 46000 52300 45400 4
+C 52600 46700 1 270 0 terminal-end_line.sym
+{
+T 53400 46590 5 10 0 0 270 0 1
+footprint=connector(1, 1, silkmark=external)
+T 52725 46450 5 10 1 1 0 3 1
+refdes=L2
+}
+N 52700 46000 52700 45400 4
+C 53000 46700 1 270 0 terminal-end_line.sym
+{
+T 53800 46590 5 10 0 0 270 0 1
+footprint=connector(1, 1, silkmark=external)
+T 53125 46450 5 10 1 1 0 3 1
+refdes=L3
+}
+N 53100 46000 53100 45400 4
+C 53400 46700 1 270 0 terminal-end_line.sym
+{
+T 54200 46590 5 10 0 0 270 0 1
+footprint=connector(1, 1, silkmark=external)
+T 53525 46450 5 10 1 1 0 3 1
+refdes=N
+}
+C 51700 45700 1 180 0 overvoltage_protection_devices-3.sym
+{
+T 51158 45220 5 10 0 1 270 6 1
+value=B
+}
+C 52100 45700 1 180 0 overvoltage_protection_devices-3.sym
+{
+T 51558 45220 5 10 0 1 270 6 1
+value=B
+}
+C 52500 45700 1 180 0 overvoltage_protection_devices-3.sym
+{
+T 51958 45220 5 10 0 1 270 6 1
+value=B
+}
+N 51100 44500 51100 44400 4
+N 51900 44500 51900 44400 4
+N 51500 44500 51500 44400 4
+C 51700 44200 1 0 0 overvoltage_protection_devices-2.sym
+{
+T 52242 44680 5 10 0 1 90 6 1
+value=B
+}
+C 52100 44200 1 0 0 overvoltage_protection_devices-2.sym
+{
+T 52642 44680 5 10 0 1 90 6 1
+value=B
+}
+C 52500 44200 1 0 0 overvoltage_protection_devices-2.sym
+{
+T 53042 44680 5 10 0 1 90 6 1
+value=B
+}
+N 51900 45400 51900 45500 4
+N 51900 45500 53100 45500 4
+N 51500 45400 51500 45600 4
+N 51500 45600 53100 45600 4
+N 51100 45400 51100 45700 4
+N 51100 45700 53100 45700 4
+T 52300 44100 9 10 1 0 0 5 2
+ochronnik typu 1+2
+  w układzie „3+1”

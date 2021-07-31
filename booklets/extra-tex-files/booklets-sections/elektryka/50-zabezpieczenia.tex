@@ -1,0 +1,170 @@
+% Copyright (c) 2021 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\section{Zabezpieczenia}
+
+W instalacjach elektrycznych stosuje się różnego rodzaju zabezpieczenia. Generalnie można je podzielić na kilka typów – zabezpieczenia przed:
+\begin{itemize}
+	\item przepływem zbyt dużego prądu (wyłączniki nadprądowe, przeciążeniowe, bezpieczniki topikowe, ...)
+	\item ucieczką prądu z instalacji (wyłączniki różnicowoprądowe, kontrolery stanu izolacji, ...)
+	\item iskrzeniem
+	\item przepięciami / pikami napięcia powyżej wartości znamionowej (ochronniki przepięciowe w postaci iskrowników, warystorów, ...)
+\end{itemize}
+
+\subsection{bezpiecznik topikowy}
+
+Podstawowym rodzajem zabezpieczenia jest \href{https://pl.wikipedia.org/wiki/Bezpiecznik_topikowy}{bezpiecznik topikowy}, którego głównym elementem jest przewodzący prąd topik.
+W skutek przewodzenia prądu nagrzewa się on, a jeżeli przewodzony prąd jest zbyt duży (z powodu przeciążenia lub zwarcia) ulega przepaleniu.
+W bezpiecznikach takich znajdować się może także piasek lub inna substancja / mechanizm (np. w postaci emitera gazu), których celem jest przyspieszenie gaszenia łuku elektrycznego powstałego po przepaleniu topika.
+
+\subsection{wyłącznik nadprądowy}
+
+\href{https://pl.wikipedia.org/wiki/Wyłącznik_instalacyjny}{Wyłącznik nadprądowy}\footnote{
+	W tym miejscu warto wspomnieć o rozróżnieniu pomiędzy wyłącznikiem (ma zdolność wyłączania prądów zwarciowych), rozłącznikiem (ma zdolność wyłączania prądów roboczych) i odłącznikiem (może być otwierany/zamykany jedynie w stanie bezprądowym). Związane to jest z ich budową mechaniczną i zdolnością gaszenia łuku.
+} pełni w instalacji taką samą funkcję jak bezpiecznik – zabezpiecza przed zbyt dużym prądem.
+Typowo składa się z dwóch członów zabudowanych w pojedynczym aparacie – zwarciowego (elektromagnetycznego, działającego natychmiastowo przy prądzie kilka-kilkanaście razy przekraczającym wartość nominalną) oraz termicznego (którego prędkość zadziałania zależy od wielkości przeciążenia). Można się spotkać z konstrukcjami w których (ze względu na pożądaną charakterystykę działania) występuje tylko jeden z tych członów.
+
+\subsection{wyłącznik różnicowoprądowy (RCD, RCCB, GFI, GFCI, ALCI, LCDI)}
+
+Wyłącznik różnicowoprądowy jest urządzeniem reagującym na różnicę w wartości prądu wpływająceo i wypływającego przewodami roboczymi (fazowe i neutralny\footnote{Jeżeli występuje.}).
+Wystąpienie takiej różnicy oznacza iż prąd ucieka z instalacji inną drogą – wystąpiło połączenie z potencjałem ziemi.\footnote{
+	Wyłącznik różnicowoprądowy wykrywa i reaguje jedynie na wypływ prądu do ziemi.
+	Oznacza to że RCD nie zareaguje jeżeli osoba izolowana od ziemi podłączy się pomiędzy przewód fazowy a neutralny chroniony przez taki wyłącznik – nie ma wtedy różnicy w prądzie wpływającym i wypływającym
+}.
+Jeżeli jest to połączenie o małej rezystancji (powodujące przepływ prądu znacznie większego niż nominalny) mamy do czynienia z zwarciem, na które zareaguje także wyłącznik nadprądowy (bądź inny bezpiecznik).
+Jeżeli jednak rezystancja jest większa (więc płynący prąd jest niewielki) zareaguje jedynie wyłącznik różnicowoprądowy.
+
+Wyróżnia się kilka typów wyłączników różnicowoprądowych, określających typy prądu różnicowego (nie mylić z prądem roboczym płynącym przez wyłącznik) na które reaguje dany aparat:
+\begin{itemize}
+	\item \strong{AC} – jedynie prąd przemienny sinusoidalny 
+	\item \strong{A}  – prąd przemienny sinusoidalny, prąd sinusoidalny wyprostowany jednopołówkowo i impulsowy
+	\item \strong{B}  – jak typ A oraz dodatkowo: prąd stały, prądy wyższej częstotliwości oraz kombinacje prądu przemiennego i stałego\footnote{
+		Typowo posiada dwa przekładniki detekcyjne – taki jak w typie A oraz osobny dla prądów stałych, działanie przekładnika dla prądu stałego zależne jest od obecności napięcia zasilania}
+\end{itemize}
+
+Wyłączniki różnicowoprądowe mogą być wykonane:
+\begin{itemize}
+	\item z wyzwalaniem bezpośrednim – energia potrzebna a do inicjalizacji wyzwolenia (czyli energia potrzebna do zwolnienia sprężyny) uzyskiwana jest z przekładnika Ferrantiego
+	\item z wyzwalaniem elektronicznym – informacja o wartości prądu różnicowego z przekładnika jest wzmacniana elektronicznie celem wytworzenia impulsu wyzwalającego (np. aktywującego cewkę wybijakową)\footnote{
+		Wyłącznik taki (w odróżnieniu od wyłącznika z wyzwalaniem bezpośrednim) wymaga dwóch biegunów zasilania do poprawnej pracy i nie jest dopuszczony do stosowania przez przepisy europejskie,
+		jest za to powszechnie stosowanym rozwiązaniem w USA i Kanadzie.
+	}
+\end{itemize}
+Więcej informacji: \url{https://bezel.com.pl/2018/08/01/budowa-i-zasada-dzialania/}
+
+Wyłączniki różnicowoprądowe często integrowane są z wyłącznikiem nadprądowym w jedno urządzenie.
+Określane są wtedy jako \textit{RCBO} lub (w USA) \textit{GFCI breaker}.
+
+\subsection{zabezpieczenia ziemiozwarciowe}
+
+Zabezpieczenia przed zwarciami doziemnymi w sieciach SN\footnote{Sieci SN są typowo budowane w układzie IT, czyli zwarcie pojedynczej fazy z ziemią nie powoduje przepływu dużego prądu i zadziałania zabezpieczeń nadprądowych.} oparte są na tej samej zasadzie działania co RCD – mierzony jest z użyciem przekładnika Ferrantiego prąd upływu i po przekroczeniu zadanej wartości następuje wyłączenie obwodu.
+
+Zabezpieczenia ziemiozwarciowe (dla odpowiednio dużych prądów doziemnych) mogą być też realizowane na zasadzie obliczania prądu różnicowego w oparciu o pomiar prądów roboczych przez elektroniczny układ zabezpieczeń lub pomiar prądu w uziomie za pomocą przekładnika. % np. Micrologic 6.0 A
+
+\subsection{urządzenia kontroli stanu izolacji w sieci IT (UKSI, IMD)}
+
+Wyłączniki różnicowoprądowe w układzie IT (zależnie od czułości wyłącznika i prądu doziemnego charakterystycznego dla danej sieci IT) mogą reagować na pierwsze bądź drugie zwarcie doziemne\footnote{
+	W przypadku drugiego także gdy któreś z nich ma miejsce przez znaczną impedancję. Na podwójne zwarcie o małej impedancji zareaguje także zabezpieczenie nadprądowe.
+	RCD może jednak nie zareagować na podwójne zwarcie gdy oba zwarcia mają zbliżoną impedancję i znajdują się za RCD.
+}.
+Jednak zamiast wysokoczułych RCD w układzie tym na ogół stosowany jest system monitorowania stanu izolacji, którego zadaniem jest sygnalizowanie pierwszego zwarcia doziemnego (lub natychmiastowe wyłączanie zasilania w takiej sytuacji).
+
+Działanie sytemu kontroli stanu izolacji opiera się na wprowadzaniu pomiędzy obwód a ziemię napięcia testowego i pomiarze płynącego w związku z nim prądu.\footnote{
+	Dawniej była stosowna metoda pomiaru napięć pomiędzy przewodami roboczymi i ziemią. Nie pozwala ona jednak na wykrywanie uszkodzeń symetrycznych i w związku z tym nie jest zgodna z obecnymi wymaganiami dla systemów IMD.
+}
+Znajomość tych wartości pozwala na obliczenie wartości rezystancji izolacji\footnote{
+	Należy zauważyć że pomiar ten odbywa się przy napięciu roboczym instalacji, a nie (jak pomiary okresowe) przy napięciu znacznie wyższym.
+}.
+Proste systemy korzystają po prostu z napięcia stałego (co jest problematyczne w sieciach AC/DC i DC), bardziej zaawansowane systemy używają bardziej złożonych impulsów pomiarowych.
+
+Ze względu na charakter takiego pomiaru może być tylko jedno urządzenie go realizującego na całą połączoną galwanicznie sieć IT
+	– prąd pomiarowy rozchodzi się po całej sieci i podłączenie kilku urządzeń IMD skutkowałoby ich wzajemnym zagłuszaniem się.
+Celem ustalenia na którym z obwodów wystąpiło pogorszenie stanu izolacji (czy też pierwsze zwarcie doziemne) układ taki rozbudowuje się o układ lokalizacji zwarcia doziemnego IFL
+	wykorzystuje on przepływ prądu będący efektem działania IMD, przy czym pomiar wartości tego prądu wykonywany jest dla każdego odpływu niezależnie\footnote{
+		Dokładniej jest to pomiar różnicowy tego prądu na wszystkich przewodach roboczych tego odpływu (jak w RCD), inaczej mogłyby być fałszywe wskazania związane z przepływem prądu testowego przez instalację do miejsca uszkodzenia
+	}.
+Obwód mający obniżoną rezystancję na jednym (lub kilku) przewodach będzie charakteryzował się tym że prąd pomiarowy w nim „ginie”
+	– więcej go różnica sumy prądów wpływających wszystkimi przewodami będzie różna od sumy prądów wypływających, gdyż część tego prądu odpływa do ziemi pomijając przekładnik (przez miejsce uszkodzenia).
+
+\vspace{7pt}\noindent
+Więcej informacji:
+\begin{itemize}
+	\item \href{https://www.youtube.com/watch?v=fs5UW-PUpLE}{Urządzenia do kontroli stanu izolacji w sieciach IT (video)}
+	\item \href{https://elektroenergetyka.pl/upload/file/2020/04/wiatr_kwiecien_2020.pdf}{Ochrona przeciwporażeniowa w sieci o układzie zasilania IT}
+	\item \href{https://www.promac.com.pl/wp-content/uploads/2018/11/Kontrola-izolacji-lokalizacja-IT.pdf}{Kontrola stanu izolacji i lokalizacja doziemień w sieciach nieuziemionych (układ IT)}
+	\item \href{https://www.repostechnik.pl/wp-content/uploads/2017/05/HIG-IFL1_PL.pdf}{Kontrola stanów izolowanych układów z pomocą przekaźników kontroli stanu izolacji HIG – lokalizacja miejsca doziemienia}
+	\item \href{https://www.studiecd.dk/cahiers_techniques/The_IT_system_earthing_in_LV.pdf}{The IT earthing system (unearthed neutral) in LV}
+\end{itemize}
+
+\subsection{układy detekcji łuku elektrycznego (AFCI)}
+
+Zabezpieczenia AFCI pozwalają na wykrywanie łuku elektrycznego (iskrzenia), które towarzyszy wielu rodzajom uszkodzeń instalacji elektrycznych,
+	a (jeżeli ma miejsce w torze normalnego przepływ prądu – np. na połączeniu dwóch fragmentów przewodu fazowego) nie jest wykrywane przez inne rodzaje zabezpieczeń.
+Detekcja odbywa się w oparciu o wykrywanie zakłóceń, które takie iskrzenie wprowadza do sieci elektrycznej.
+
+Zabezpieczenia te często są zintegrowane z członem różnicowoprądowym i/lub nadprądowym.
+
+\subsection{zabezpieczenia przepięciowe (SPD)}
+
+Przepięcie jest to wzrost napięcia powyżej wartości znamionowej. Przyczyną takiego wzrostu mogą być m.in. wyładowania atmosferyczne, rozłączanie obwodów zawierających cewki (np. silnki, transformatory).
+Zabezpieczenia przepięciowe służą do ograniczania wartości napięcia i najczęściej realizowane są w postaci iskierników i warystorów.
+
+Ochronniki przepięciowe muszą być stopniowane\footnote{
+	Zasadniczo jako jedyne z omawianych.
+	Stopniowanie nadprądowych czy RCD jest możliwe, ale nie jest niezbędne do ich działania
+		– zabezpieczenie nadprądowe np. 1A może być podłączone bez żadnych wcześniejszych zabezpieczeń do transformatora o prądzie nominalnym np. 2.5kA, wystarczy że będzie posiadać odpowiednią zdolność zwarciową.
+} i konieczne jest zachowanie wymaganych odległości pomiędzy kolejnymi stopniami zabezpieczeń lub stosowanie specjalnych układów ją symulujących.
+Wyróżnia się następujące stopnie (typy) ochrony przepięciowej:
+\begin{itemize}
+	\item \strong{typ 1} (klasa I, dawniej B)   – ochrona przed bezpośrednimi lub bliskimi trafieniami piorunów;
+		głównym parametrem jest szczytowa wartość prądu udarowego $I_{imp}$ (najczęściej o kształcie 10/350 µs) symulującego działanie pioruna;
+		montaż w pobliżu wejścia instalacji do obiektu (w rozdzielnicy głównej)
+	\item \strong{typ 2} (klasa II, dawniej C)  – ochrona przed odległymi trafieniami piorunów i przepięciami łączeniowymi;
+		głównym parametrem jest szczytowa wartość prądu wyładowczego o kształcie 8/20 µs (może być podawana jako $I_n$ – wytrzymywany bez uszkodzenia wielokrotnie lub $I_{max}$ – maksymalny wytrzymywany bez uszkodzenia co najmniej jednokrotnie)
+		montaż typowo w rozdzielnicach dystrybucyjnych
+	\item \strong{typ 3} (klasa III, dawniej D) – ochrona wrażliwych urządzeń;
+		głównymi parametrami są napięcie obwodu otwartego generatora $U_{oc}$ (1.2/50 µs);
+		montaż typowo w gnieździe zasilającym (lub bliskiej mu rozdzielnicy)
+\end{itemize}
+Bardzo isotnym parametrem ograniczników jest poziom ochrony oznaczany jako $U_p$. Określa on maksymalną wartość przepięcia, która może wystąpić (przy poprawnym funkcjonowaniu ochronika).
+Typowo elementy instalacji dopuszczają maksymalny poziom przepięcia rzędu 4kV, sprzęt AGD 2.5kV, a sprzęt elektroniczny 1.5kV.
+Generalnie im wyższe wartości $I_{imp}$, $I_n$, $U_{oc}$ i niższe $U_p$ ochronnika tym lepiej.
+
+\begin{wrapfigure}{r}{0.4\textwidth}
+\includegraphics[width=0.35\textwidth]{img/elektryka/przepieciowy_3+1}
+\end{wrapfigure}
+
+Dostępne są także ochronniki kombinowane typu 1+2 oraz ochronniki z zintegrowanym elementem koordynującym pozwalającym bezpośrednio za nimi umieszczać ochronnik o wyższym typie.
+
+Na schemacie obok został przedstawiony ochronnik typu 1+2 wykonany w układzie „3+1”, w którym ochronniki warystorowe i iskiernikowe znajdują się pomiędzy przewodami fazowymi a neutralnym, a pomiędzy przewodem neutralnym a PE znajduje się jedynie ochronnik iskiernikowy sumujący, którego zadaniem jest odprowadzić prąd udarowy z przewodu N do uziemienia.
+Układ taki ma kilka zalet w porównaniu z (klasycznym) „4+0”.
+Główną z nich jest umieszczenie ochronników równolegle z odbiornikami (pomiędzy fazami / fazą a neutralnym) i uniezależnienie poziomu ochrony odbiornika od napięcia na ochronniku N-PE.
+Układ może być stosowany w systemach TN\footnote{Warto zaznaczyć że przy TN-C lub TN-C-S gdy rozdział następuje w tym samym miejscu co instalacja ochronnika nie za bardzo jest sens stosowania iskiernika między N a PE – i tak są metalicznie zwarte tuż obok.}, TT oraz IT.
+
+\vspace{7pt}\noindent
+Więcej informacji:
+\begin{itemize}
+	\item \href{https://rst.pl/ograniczniki-typu-i-ograniczniki-kombinowane-klasyfikacja-urzadzen/}{Klasyfikacja ograniczników przepięć – ograniczniki Typu i ograniczniki kombinowane}
+	\item \href{https://www.dehn.pl/sites/default/files/uploads/dehn/DEHN-PL/druki/wp350_poradnik_dla_producentow_rozdzielnic.pdf}{Dobór i stosowanie SPD}
+	\item \href{https://www.moeller.pl/Documentation/Katalogi/Katalog_EATON_opp_2010_PL.pdf}{Katlog „EATON” zawierający omówienie zagadnień ochrony przepięciowej}
+	\item \href{https://www.dehn.pl/sites/default/files/uploads/dehn/pdf/blitzplaner/bpl2015/lpg_2015_e_complete.pdf}{Lightning protection guide}
+\end{itemize}
