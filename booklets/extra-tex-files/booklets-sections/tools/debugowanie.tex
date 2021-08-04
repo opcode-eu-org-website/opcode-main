@@ -1,0 +1,85 @@
+% Copyright (c) 2013-2021 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\section{Debugowanie}
+
+\subsection{gdb}
+
+GNU Debugger (\Verb$gdb$) jest narzędziem służącym do podglądania działania innego programu.
+Umożliwia ustawianie pułapek (powodujących przerwanie wykonywania na wywołaniu określonej funkcji, uruchamianie programu linia po linii, podgląd wartości zmiennych, ... .
+Umożliwia także sprawdzenie co program robił gdy się wywalił (na podstawie pliku core).
+Jest to narzędzie programistyczne, które niewątpliwie warto poznać, gdyż znacznie ułatwia poprawianie błędów w programach.
+
+Dla skorzystania z części możliwości konieczne jest wkompilowanie informacji debugerowych w program (np. \Verb$gcc$ z opcją \Verb$-g$).
+Program uruchamiany jest przez wywołanie gdb, zazwyczaj z jedną lub dwiema opcjami - plikiem wykonywalny oraz (ewentualnie) plikiem core. Do najistotniejszych poleceń należy:
+
+\begin{itemize}
+	\item\Verb$break plik:linia$ - ustawienie breakpointa na wskazanej linii
+	\item\Verb$break nazwa_funkcji$ - ustawiające breakpointa na daną funkcję
+	\item\Verb$rbreak fragment_nazwy_funkcji$ - ustawiające breakpointa na podstawie wyrażenia regularnego (np. fragmentu nazwy funkcji)
+	\item\Verb$info breakpoint$ - lista ustawionych breakpointow
+	\item\Verb$watch wyrazenie$ - zatrzymanie gdy wartość wyrażenia ulegnie zmianie
+\vspace{6pt}
+	\item\Verb$run$ - uruchamiające program (zatrzymuje się na pierwszej napotkanej pułapce)
+	\item\Verb$continue$ - powoduje kontynuację programu do następnej pułapki
+	\item\Verb$step$ - powoduje wykonanie kolejnej linii programu, z wchodzeniem w kod funkcji
+	\item\Verb$next$ - powoduje wykonanie kolejnej linii programu, bez wchodzenia w kod funkcji
+	\item\Verb$stepi$ / \Verb$nexti$ - jak \Verb$step$ / \Verb$next$, tyle że nie operuje na liniach a instrukcjach
+	\item\Verb$finish$ - powoduje dokończenie bieżącej funkcji i zatrzymanie się
+\vspace{6pt}
+	\item\Verb$print zmienna$ - wypisanie wartości zmiennej zmiennej/wyrażenia (do elementów składowych odwołujemy się jak w C++)
+	\item\Verb$display zmienna$ - automatyczne wypisanie wartości zmiennej wyrażenia przy każdym zatrzymaniu (breakpoincie), odwołanie przez \Verb$undisplay numer$
+	\item\Verb$ptype zmienna$ - wypisanie informacji o typie zmiennej (m.in. elementy składowe struktury)
+	\item\Verb$info local$ - podgląd zmiennych lokalnych
+	\item\Verb$info args$ - podgląd argumentów funkcji
+	\item\Verb$backtrace$ - wypisanie historii stosu wywołań funkcji
+	\item\Verb$backtrace num$ - wypisanie historii stosu wywołań funkcji, wypisuje num pozycji (gdy num mniejsze od 0 to początkowych, gdy większe to końcowych)
+\vspace{6pt}
+	\item\Verb$set zmienna=wartosc$ - ustawia wartość zmiennej na podaną
+	\item\Verb$call funkcja(argumenty)$ - wywołuje podaną funkcję z podanymi argumentami
+\vspace{6pt}
+	\item\Verb$help$ wyświetlające pomoc "on-line"
+	\item\Verb$list funkcja$ - wyświetlenie kodu funkcji
+	\item\Verb$list linia1,linia2$ - wyświetlenie kodu programu od linii do linii we aktualnym pliku
+	\item\Verb$list plik:linia1,plik:linia2$ - wyświetlenie kodu programu od linii do linii
+	\item\Verb$quit$ kończące pracę gdb
+\end{itemize}
+
+Oczywiście to tylko niewielka część wszystkich poleceń gdb, polecam zapoznać się z poszczególnymi grupami poleceń opisywanymi przez \Verb$help$.
+
+Uruchamianie poprzez GDB przydaje się także przy debugowaniu problemów typu "segmentation fault" – po zatrzymaniu programu z powodu takiego błędu możemy wydać w gdb polecenie "backtrace" aby zobaczyć w której funkcji wystąpił problem.
+
+\subsection{analiza plików binarnych}
+
+\subsubsection{biblioteki .so i .a}
+
+Przy problemach z linkowaniem przydatne może być wyświetlenie symboli które zawiera konkretna biblioteka. Możemy to zrobić poleceniami:
+
+\begin{Verbatim}
+# listowanie symboli w pliku .so:
+	nm -g       PLIK.so
+	nm -gC      PLIK.so  # for C++ libs
+	readelf -Ws PLIK.so  # for ELF libs
+
+# listowanie symboli w pliku .a:
+	nm          PLIK.a
+\end{Verbatim}

@@ -1,4 +1,4 @@
-% Copyright (c) 2018-2019 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% Copyright (c) 2018-2021 Robert Ryszard Paciorek <rrp@opcode.eu.org>
 % 
 % MIT License
 % 
@@ -23,11 +23,11 @@
 \ifdefined\inputOnlyContent\else
 \documentclass{pdfBooklets}
 
-\title{Narzędzia deweloperskie: git, make i cmake, pip i virtualenv}
+\title{Narzędzia deweloperskie: git, make i cmake, gdb, pip i virtualenv}
 \author{%
 	Robert Ryszard Paciorek\\\normalsize\ttfamily <rrp@opcode.eu.org>
 }
-\date  {2020-07-13}
+\date  {2021-08-04}
 
 \makeatletter\hypersetup{
 	pdftitle = {\@title}, pdfauthor = {\@author}
@@ -41,13 +41,14 @@
 
 \input{booklets-sections/tools/systemy_kontroli_wersji.tex}
 \input{booklets-sections/tools/systemy_automatyzacji_kompilacji.tex}
+\input{booklets-sections/tools/debugowanie.tex}
 \input{booklets-sections/tools/python.tex}
 
 \ifdefined\inputOnlyContent\else
 \rozwiazania
 
 \copyrightFooter{
-	© Robert Paciorek, 2015-2020.\\
+	© Robert Paciorek, 2015-2021.\\
 	Kopiowanie, modyfikowanie i redystrybucja dozwolone pod warunkiem zachowania informacji o autorach.
 }
 \end{document}
