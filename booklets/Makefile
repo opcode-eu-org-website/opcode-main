@@ -14,5 +14,6 @@ $(OUTDIR)/Podstawy_programowania_mikrokontrolerów_STM32.pdf: $(SECTIONS)/stm32/
 $(OUTDIR)/Warsztat_elektroniczny.pdf:                        $(SECTIONS)/warsztat/*                                             extra-tex-files/warsztat_elektroniczny/*
 $(OUTDIR)/Narzędzia_deweloperskie.pdf:                       $(SECTIONS)/tools/*
 $(OUTDIR)/Podstawy_elektryki.pdf:                            $(SECTIONS)/elektryka/*    $(call img4tex_from_src,elektryka/*.s*)
+$(OUTDIR)/Elektronika2.pdf:                   $(SECTIONS)/electronics/*  $(call img4tex_from_src,elektronika2/*)
 
 endif
