@@ -1,0 +1,72 @@
+% Copyright (c) 2021 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\ifdefined\mysection
+	\def\useExternalSection{TRUE}
+\else
+	\newcommand\mysection[1]{\section{#1}}
+\fi
+
+\mysection{Linux na komputerach jednopłytkowych}
+
+Typowo instalacja Linuxa dla komputerka jednopłytkowego typu *Pi lub podobnego sprowadza się do nagrania pobranego obrazu systemu (Raspbian dla Raspberry Pi, Armbian dla prawie całej reszty) na kartę SD z użyciem np. polecenia \Verb$dd$.
+Możliwe są także inne metody przygotowania obrazu, np. z użyciem \Verb$qemu-debootstrap$ pozwalające na dostosowanie tworzonego obrazu\footnote{Taką metoda tworzenia lekkiego obrazu dla Raspberry Pi opisałem trochę szerzej na \url{http://blog.opcode.eu.org/2020/05/15/rpi-debootstrap.html}.}.
+
+\vspace{7pt}
+
+Główną różnicą w stosunku co do systemu na komputerach stacjonarnych i laptopach jest proces startu – nie mamy tutaj doczynienia z BIOSem i GRUBem.
+Zamiast tego mikrokontroler znajdujący się na płytce posiada wbudowany jakiś bootloader, który typowo potrafi załadować kolejny bootloader z karty SD i przekazać do niego sterowanie.
+
+W przypadku Raspberry ten pierwszy etap bootloadera na karcie SD znajduje się w pliku (identyfikowanym nazwą na partycji typu FAT) \Verb$bootcode.bin$,
+	a kolejny to \Verb$start.elf$ (korzystający z plików \Verb$config.txt$, \Verb$cmdline.txt$ i \Verb$kernel.img$).
+
+W przypadku większości innych płytek wykorzystywany jest bootloader \textit{U-Boot} wgrywany na kartę SD (poza systemem plików na niej umieszczonym).
+Rozwiązanie trochę przypominające to z czym mamy do czynienia w komputerach typu PC.
+Bootowanie jednak na ogół nie rozpoczyna się od początku karty SD (MBR), a od określonego miejsca na tej karcie (np. 8kiB dla sunxi), gdzie umieszczany jest \textit{U-Boot SPL}.
+Zajmuje się on m.in. inicjalizacją pamięci i przekazuje sterowanie do właściwego kodu \textit{U-Boot} znajdującego się w dalszej części karty SD (także poza jakąkolwiek partycją – typowo na 40kiB karty SD, pomiędzy MBR a pierwszą partycją).
+Dopiero ten kod ładuje pliki konfiguracyjne i obrazy jądra z odpowiedniej partycji na karcie SD.\footnote{Więcej na temat bootowania można dowiedzieć się np. z \url{https://linux-sunxi.org/Bootable_SD_card}.}
+
+\vspace{7pt}
+
+Po załadowaniu jądra wykorzystywany jest typowy systemd\footnote{Więcej informacji na \url{http://www.opcode.eu.org/SystemBoot.xhtml\#systemd}} znany z „Linuxa” na komputerach PC, który możemy zastąpić nawet zwykłym skryptem sh.
+Po uruchomieniu otrzymujemy typowy system typu Debian GNU/Linux, konfigurowany przy pomocy standardowych wpisów w \Verb$/etc$, \Verb$/proc$ oraz typowych narzędzi (jak np. \Verb$systemctl$, \Verb$ip$, \Verb$apt$).
+Różnicą jest dostęp do pinów GPIO mikrokontrolera oraz peryferiów na nich dostępnych.
+
+Za mapowanie poszczególnych peryferiów na piny GPIO (czyli za to czy na danym pinie mamy np. UART-TX, I2C-SDA czy zwykłe GPIO) odpowiada w Linuxie mechanizm \textit{Device Tree}.
+Systemy takie jak Raspbian czy Armbian dostarczają zestawy plików DTB aktywujących odpowiednie mapowania i celem uzyskania odpowiedniego peryferium należy je aktywować w konfiguracji startowej (\Verb$/boot/config.txt$ w Raspbianie, \Verb$/boot/armbianEnv.txt$ w Armbianie).
+Na przykład:
+\begin{Verbatim}
+dtparam=i2c_arm=on
+dtoverlay=i2c-bcm2708
+\end{Verbatim}
+dopisany do \Verb$/boot/config.txt$ aktywuje interfejs I2C na starszych płytkach \textit{Raspberry Pi}. Natomiast dodanie \Verb$i2c0$ do linijki \Verb$overlays=$ w \Verb$/boot/armbianEnv.txt$ aktywuje I2C na pinach 3 i 5 (PA12, PA11) na \textit{Orange Pi Zero}.
+Do aktywacji odpowiednich DTB w Armbianie można użyć polecenia \Verb$armbian_config$, następnie wejść w \Verb$System$ i \Verb$Hardware$, gdzie można aktywować / dezaktywować takie mapowania.
+Więcej informacji na temat \textit{Device Tree overlays}: \url{https://docs.armbian.com/User-Guide_Allwinner_overlays/}.
+
+Kombinacje niektórych modeli Orange Pi z niektórymi switchami mają problemy z mechanizmem autonegocjacji prędkości łącza ethernetowego.
+Rozwiązaniem jest wymuszenie prędkości 100Mbit/s po obu stronach lub (jeżeli nie mamy możliwości konfigurowania switcha) ustawienie na OrangePi prędkości 10Mbit/s poleceniem: \Verb$ethtool -s eth0 speed 10 duplex full autoneg off$.
+
+\ifdefined\useExternalSection
+	\let\useExternalSection\undefined
+\else
+	\let\mysection\undefined
+\fi

@@ -1,4 +1,4 @@
-% Copyright (c) 2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% Copyright (c) 2020-2021 Robert Ryszard Paciorek <rrp@opcode.eu.org>
 % 
 % MIT License
 % 
@@ -25,9 +25,10 @@
 \title{Programowanie mikrokontrolerów STM32}
 \author{%
 	Projekt ,,Matematyka dla Ciekawych Świata'',\\
-	Krzysztof Lasocki\\\normalsize\ttfamily <krz.lasocki@gmail.com>
+	Krzysztof Lasocki \normalsize\ttfamily <krz.lasocki@gmail.com>,\\
+	Robert Ryszard Paciorek \normalsize\ttfamily <rrp@opcode.eu.org>
 }
-\date  {2021-07-28}
+\date  {2021-08-09}
 
 \makeatletter\hypersetup{
 	pdftitle = {\@title}, pdfauthor = {\@author}
@@ -51,6 +52,22 @@
 	\insertZadanie{booklets-sections/stm32/zadania.tex}{adc_volty2}{}
 \input{booklets-sections/stm32/40-i2c.tex}
 	\insertZadanie{booklets-sections/stm32/zadania.tex}{zmiana_i2c}{}
+
+\section{Komunikacja z Linuxem \zaawansowane{10}}
+\newcommand\mysection[1]{\subsection{#1}}
+\newcommand\mysubsection[1]{\subsubsection{#1}}
+
+\input{booklets-sections/sbc/i2c-on-linux.tex}
+
+\renewcommand\mysection[1]{\begin{ProTip}[breakable]{#1}}
+\input{booklets-sections/sbc/linux-on-sbc.tex}
+\end{ProTip}
+
+\renewcommand\mysection[1]{\subsection{#1}}
+\input{booklets-sections/sbc/uart-modbus.tex}
+
+\subsubsection{Modbus w STM32}
+Przykładową implementację Modbus RTU dla STM32 można znaleźć pod adresem: \url{https://github.com/opcode-eu-org-libs/STM32-ModbusRTU}.
 
 \section{Wykład wideo}
 \input{booklets-sections/stm32/wykład-video-1.tex}

@@ -1,0 +1,67 @@
+% Copyright (c) 2021 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\ifdefined\mysection
+	\def\useExternalSection{TRUE}
+\else
+	\newcommand\mysection[1]{\section{#1}}
+	\newcommand\mysubsection[1]{\subsection{#1}}
+\fi
+
+\mysection{I$^2$C w komputerach}
+
+Magistrala ta jest powszechnie używana w komputerach stacjonarnych i laptopach, jednak trudno w nich dostać się do odpowiednich połączeń.
+Z magistrali tej bez problemów możemy korzystać także w komputerach jednopłytkowych typu Pi (gdzie znajduje się na złączu GPIO) obsługiwanych z poziomu Linuxa.
+
+Linux dostarcza narzędzi do obsługi magistrali I$^2$C - zarówno z linii poleceń jak i z poziomu kodu źródłowego własnego programu.
+
+\mysubsection{narzędzia linii poleceń}
+
+Narzędzia linii poleceń dostarczane są przez pakiet \textit{i2c-tools}. Podstawowe dwa polecenia służą do odczytu i zapisu wskazanego rejestru urządzenia I2C:
+\begin{itemize}
+	\item \Verb$i2cget szynai2c adres_ukladu adres_rejestru$ – odczytuje rejestr o adresie \Verb$adres_rejestru$, z układu I2C o adresie \Verb$adres_ukladu$ znajdującego się na wskazanej magistrali I2C (\Verb$szynai2c$)
+	\item \Verb$i2cset szynai2c adres_ukladu adres_rejestru wartosc$ – zapisuje podaną wartość do określonego rejestru układu I2C
+\end{itemize}
+Pakiet dostarcza także inne polecenia, z których należy wspomnieć o:
+\begin{itemize}
+	\item \Verb$i2cdetect -l$ – listuje magistrale I2C
+	\item \Verb$i2cdetect szynai2c$ – listuje urządzenia na wskazanej magistrali I2C
+	\item \Verb$i2cdump szynai2c adres_ukladu$ – listuje rejestry wskazanego układu I2C
+\end{itemize}
+
+\strong{Uwaga:} Użycie tych poleceń może być niebezpieczne, zwłaszcza gdy nie wiemy jakie układy znajdują się na danej magistrali I2C.
+Związane jest to z tym iż odczyt rejestru o danym numerze wiąże się z operacją zapisu do układu I2C, a taka (przez układ nie obsługujący adresowania rejestrowego) może być zinterpretowana jako zwykły zapis do układu.
+Dlatego odradzamy eksperymentowanie z tymi polecenia w laptopach i komputerach stacjonarnych.
+
+
+\mysubsection{kod C}
+
+Przykładowy kod C/C++ demonstrujący użycie komunikacji I2C znajduje się na \url{http://vip.opcode.eu.org/#komunikacja_I2C}.
+Warto zwrócić uwagę na wspomniany wyżej sposób wskazywania adresu rejestru, który będziemy czytać przez dokonanie zapisu do układu.
+Co może być problematyczne dla układów nie obsługujących takiego adresowania.
+
+\ifdefined\useExternalSection
+	\let\useExternalSection\undefined
+\else
+	\let\mysection\undefined
+	\let\mysubsection\undefined
+\fi

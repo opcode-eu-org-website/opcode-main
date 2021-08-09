@@ -1,0 +1,82 @@
+% Copyright (c) 2021 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\ifdefined\mysection
+	\def\useExternalSection{TRUE}
+\else
+	\newcommand\mysection[1]{\section{#1}}
+	\newcommand\mysubsection[1]{\subsection{#1}}
+\fi
+
+\mysection{UART}
+
+\mysubsection{I$^2$C vs UART}
+
+I$^2$C jest bardzo popularną magistralą "lokalną" używaną do połączenia CPU z układami peryferyjnymi (którymi mogą być np. także inne mikrokontrolery).
+Ma ona ograniczony zasięg – typowo kilkanaście / kilkadziesiąt cm, raczej nie spotyka się kilkumetrowych rozwiązań.
+Na większych odległościach tego typu funkcje pełni UART\footnote{którego używaliśmy już m.in. do programowania mikrokontrolera STM32 i do wypisywania wiadomości "diagnostycznych" przez STM32},
+	najczęściej w wariancie RS485, pozwalającego na łączenie do 32 urządzeń na jednej linii.
+W odróżnieniu od I2C sam UART nie określa żadnego sposobu adresacji i wykorzystywane są do tego inne protokoły, których powyżej UART/RS485 jest naprawdę bardzo dużo.
+Chyba najpopularniejszym jest Modbus RTU.
+
+
+\mysubsection{Modbus – adresacja i identyfikacja ramki}
+
+Modbus jest otwartym, prostym protokołem komunikacyjnym występującym w kilku odmianach – RTU, ASCII, TCP.
+Dwie pierwsze wykorzystują łącze szeregowe typu UART, trzecia używa pakietów IP/TCP.
+
+\noindent
+Protokół Modbus:
+\begin{enumerate}
+	\item jest protokołem master-slave, czyli jest wyraźnie określone, które urządzenie inicjalizuje transmisję, a które jedynie odpowiada na otrzymane żądania
+	\item zapewnia adresację urządzeń (8 bitowy adres, zakres 1–247)
+	\item określa sposób dostępu do danych w urządzeniu (określany 8 bitowym kodem funkcji) i adresację tych danych (16 bitowy adres rejestru / wejścia binarnego / ...)
+	\item określa sposób identyfikacji początku i końca ramki
+\end{enumerate}
+
+Ten ostatni punkt jest szczególnie istotny przy przesyłaniu danych z użyciem łącza typu UART, gdzie identyfikowany jest tylko początek/koniec bajtu, ale nie ma określonego sposobu identyfikacji początku/końca grupy bajtów którą jest np. ramka jakiegoś protokołu.
+\vspace{7pt}
+\\
+Modbus ASCII liczby reprezentujące adresy, kody funkcji i dane zapisuje w postaci tekstowej (jako liczby szesnastkowe), więc do identyfikacji początku i końca ramki mogą posłużyć inne niż (0-9A-F) znaki ASCII – początek ramki oznacza dwukropek (\Verb$:$), a koniec ciąg \Verb$\r\n$.
+\vspace{3pt}
+\\
+Modbus RTU\footnote{którego obsługa jest wymagana przez standard dla urządzeń zgodnych z Modbus i jest on dużo popularniejszy niż wariant ASCII} przesyła te wartości liczbowe binarnie (czyli po prostu w postaci danej liczby), zatem nie ma tutaj żadnej wolnej wartości, którą można by użyć jako znacznik początku / końca ramki. W tym przypadku służą do tego zależności czasowe:
+\begin{itemize}
+	\item odstęp pomiędzy bajtami w ramce nie może przekroczyć 1.5 czasu trwania transmisji jednego bajtu
+	\item odstęp pomiędzy ramkami musi wynosić przynajmniej 3.5 czasu trwania transmisji jednego bajtu
+\end{itemize}
+
+\noindent
+Pełną specyfikację protokołu można znaleźć na \url{https://modbus.org/specs.php}.
+
+\mysubsection{Modbus w Linuxie}
+
+Obsługę protokołu Modbus RTU po stronie Linuxa może zapewnić program \Verb$mbpoll$ pozwalający zarówno na odczyt (modbusowe funkcje 1, 2, 3 i 4) jak i zapis (modbusowe funkcje 5 i 6) danych z/do urządzenia modbus TCP lub RTU.
+
+Jeżeli ten zestaw funkcjonalności jest dla nas niewystarczający lub po prostu potrzebujemy zintegrować obsługę \textit{Modbus} z naszym kodem programu możemy użyć bezpośrednio biblioteki \textit{libmodbus} (na której bazuje \textit{mbpoll}).
+
+\ifdefined\useExternalSection
+	\let\useExternalSection\undefined
+\else
+	\let\mysection\undefined
+	\let\mysubsection\undefined
+\fi
