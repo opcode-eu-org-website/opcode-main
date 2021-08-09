@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pl" lang="pl">
+<head>
+	<title>Podstawy VHDL</title>
+	
+	<link rel="stylesheet" href="lib/base.css" type="text/css" />
+	<link rel="stylesheet" href="lib/menu.css" type="text/css" />
+	<link rel="stylesheet" href="lib/highlight.css" type="text/css" />
+</head><body>
+
+<h1>Podstawy VHDL</h1>
+
+<div id="page_menu">
+	<ul id="toc"><li>Spis treści</li></ul>
+	<p id="menu_extra">
+		<a href="http://www.opcode.eu.org/"><img src="lib/opcode.svg" alt="OpCode WWW site" title="Strona należy do serwisu OpCode.eu.org"/></a>
+		<a href="Podstawy_VHDL.pdf"><img src="lib/pdfFile.svg" alt="Pobierz jako PDF" title="Pobierz jako PDF"/></a>
+	</p>
+</div>
+<p id="updateInfo">(aktualizacja: 2021-08-09)</p>
+
+<section>
+<p><a href="https://pl.wikipedia.org/wiki/VHDL">VHDL</a> jest jednym z najpopularniejszych <a href="https://pl.wikipedia.org/wiki/Hardware Description Language">języków opis sprzętu</a>. Służy do opisu (na różnych poziomach abstrakcji) cyfrowego układu elektronicznego, celem symulacji jego działania oraz automatycznej syntezy rzeczywistego układu (w postaci schematu złożonego z układów dyskretnych, projektu układu scalonego, czy też wsadu do układów programowalnych <a href="https://pl.wikipedia.org/wiki/FPGA">FPGA</a> itp). Najbardziej abstrakcyjne poziomy opisu mają problemy z syntezowalnością, dlatego jeżeli myślimy o wykorzystaniu VHDL do syntezy najbezpieczniej jest operować poziomem przesłań między-rejestrowych (<a href="https://en.wikipedia.org/wiki/Register-transfer level">register transfer level</a>). Ponadto należy się stosować do pewnych szablonów tak aby narzędzia syntezy bezproblemowo interpretowały kod. Istnieją także HDL dla układów analogowych oraz kilka innych języków HDL dla układów cyfrowych (np. <a href="https://pl.wikipedia.org/wiki/Verilog">Verilog</a>, <a href="https://pl.wikipedia.org/wiki/AHDL">AHDL</a>).</p>
+
+<p>Trochę innym podejściem jest <a href="https://pl.wikipedia.org/wiki/SystemC">SystemC</a>, będący w istocie biblioteką dla C++ umożliwiającą opisywanie (i symulowanie tak zbudowanych systemów) sprzętu w ramach kodu C++. Kod taki może być automatycznie konwertowany na VHDL i z niego może być dokonywana synteza.</p>
+</section>
+
+<section>
+	<h2>własny pakiet</h2>
+	<p>Tworzenie własnego pakietu, deklaracje funkcji i procedur, konwersja pomiędzy liczbami całkowitymi a wektorami bitów:</p>
+	<insertSourceCode file="code-src/vhdl/moj_pakiet.vhdl" />
+</section>
+
+<section>
+	<h2>multiplekser na kilka sposobów</h2>
+	<p>Deklaracja prostego komponentu na przykładzie multipleksera, korzystanie z parametrów ogólnych, kierunki portów:</p>
+	<insertSourceCode file="code-src/vhdl/multiplexer.vhdl" />
+	
+	<p>Wykorzystanie utworzonej jednostki w tworzeniu innej, zaprezentowanie rożnych instrukcji wyboru (innych pomysłów na multiplekser):</p>
+	<insertSourceCode file="code-src/vhdl/multiplexer_3to1.vhdl" />
+</section>
+
+<section>
+	<h2>oczekiwanie, logika, pętle</h2>
+	<p>Operacje logiczne, oczekiwanie (procesy z wait), zmienne, operacje matematyczne, pętle:</p>
+	<insertSourceCode file="code-src/vhdl/nor.vhdl" />
+</section>
+
+<section>
+	<h2>użycie elementów i testbench</h2>
+	<section>
+		<h3>testbench</h3>
+		<p>Przykład pisania testbench'ów, uwagi na temat syntezowalności, używanie literałów, wygodne wstawianie komponentu:</p>
+		<insertSourceCode file="code-src/vhdl/tester.vhdl" />
+	</section>
+	<section>
+		<h3>analiza elaboracja i uruchomienie</h3>
+		<p>Proces uruchomienia symulacji z kodu VHDL składa się z kilku etapów. Celem jego łatwiejszego przeprowadzenia wykorzystać można make z następującym plikiem Makefile:</p>
+		<insertSourceCode file="code-src/vhdl/Makefile" type="make" />
+	</section>
+</section>
+
+
+<section>
+	<h2>pamięć</h2>
+	<section>
+		<h3>przerzutnik, zatrzask</h3>
+		<p>Podstawowy element pamiętający:</p>
+		<insertSourceCode file="code-src/vhdl/przerzutnik.vhdl" />
+	</section>
+	
+	<section>
+		<h3>rejestr przesuwny (i składanie z wielu komponentów)</h3>
+		<p>Budowa rejestru przesuwnego w oparciu o proces oraz w oparciu o łączenie przerzutników – pokazuje wybieranie pod-zestawu bitów z wektora bitowego oraz wykorzystanie generate-for oraz generate-if do złożenia wielu jednakowych pod-komponentów w większą całość:</p>
+		<insertSourceCode file="code-src/vhdl/rejestr_przesuwny.vhdl" />
+	</section>
+</section>
+
+<section>
+	<h2>automat</h2>
+	<p>Przykład jawnej konstrukcji automatu:</p>
+	<insertSourceCode file="code-src/vhdl/automat.vhdl" />
+</section>
+
+<section>
+	<h2>kody źródłowe</h2>
+	<p>Wszystkie kody źródłowe pokazywane w tym artykule dostępne są także do pobrania w postaci <a href="Podstawy_VHDL.tgz">archiwum tar/gzip</a>.</p>
+</section>
+
+
+<section>
+<h2>licencja</h2>
+<pre class="no-highlight hljs">
+<b>Copyright (c) 2009-2021, Robert Ryszard Paciorek &lt;rrp@opcode.eu.org&gt;</b>
+
+To jest wolny i otwarty dokument/oprogramowanie. Redystrybucja, użytkowanie
+i/lub modyfikacja SĄ DOZWOLONE na warunkach licencji MIT.
+
+This is free and open document/software. Redistribution, use and/or modify
+ARE PERMITTED under the terms of the MIT license.
+
+
+<b>The MIT License:</b>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+</pre>
+</section>
+
+</body>
+</html>
