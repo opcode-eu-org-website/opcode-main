@@ -28,10 +28,13 @@
 			max-width: 520px; grid-area: 5 / 8 / span 3 / span 7; justify-self: center;
 		}
 		#misc {
-			max-width: 610px; grid-area: 7 / 1 / span 3 / span 7; justify-self: center;
+			max-width: 610px; grid-area: 7 / 1 / span 2 / span 7; justify-self: center;
 		}
 		#latex {
 			max-width: 580px; grid-area: 8 / 7 / span 2 / span 7; justify-self: right;
+		}
+		#search {
+			width: 290px; grid-area: 9 / 1 / span 1 / span 7; justify-self: center;
 		}
 
 		@media all and (max-width: 1333px) {
@@ -61,10 +64,13 @@
 				max-width: 380px; grid-area: 4 / 1 / span 2 / span 4;
 			}
 			#latex {
-				width: 380px; grid-area: 6 / 1 / span 1 / span 4;
+				width: 380px; grid-area: 6 / 1 / span 2 / span 4;
 			}
 			#misc {
 				max-width: 380px; grid-area: 5 / 5 / span 2 / span 4;
+			}
+			#search {
+				width: 290px; grid-area: 7 / 5 / span 1 / span 4; justify-self: center;
 			}
 		}
 
@@ -98,6 +104,9 @@
 			}
 			#misc {
 				max-width: 100%; grid-area: 9 / 1 / span 1 / span 1;
+			}
+			#search {
+				width: 290px; grid-area: 10 / 1 / span 1 / span 1; justify-self: center;
 			}
 			h1 {
 				font-size:48px;
@@ -424,6 +433,34 @@
 			</a>
 		</li>
 	</ul>
+</div>
+
+<div class="section" id="search">
+	<h3>Szukaj</h3>
+	<form xmlns="http://www.w3.org/1999/xhtml" method="get" action="http://www.google.pl/search" style="text-align:center; margin:7pt;">
+		<script type="text/javascript">//<![CDATA[
+			function onSetLang(element) {
+				var childs = element.parentNode.children;
+				for (i = 0; i < childs.length; i++)
+					if(childs[i].name == "lr" && childs[i].value != element.value)
+						childs[i].checked = false;
+			}
+		//]]></script>
+		<input type="hidden" name="num" value="30" />
+		<input type="hidden" name="ie" value="utf-8" />
+		<input type="hidden" name="oe" value="utf-8" />
+		<p style="margin:2pt;">
+			<input type="text" name="q" maxlength="1024" style="width:130pt;" />  
+			<input type="submit" title="szukaj" value="🔍" />
+		</p>
+		<p style="font-size:small; margin:2pt;">
+			<input type="checkbox" name="lr" value="lang_pl" onchange="onSetLang(this);" /> <label for="lr">po polskim</label>  
+			<input type="checkbox" name="lr" value="lang_en" onchange="onSetLang(this);" /> <label for="lr">po angielsku</label>
+		</p>
+		<p style="font-size:small; margin:2pt;">
+			<input type="checkbox" name="as_q" value="site:opcode.eu.org" checked="checked" /> <label for="as_q">tylko opcode.eu.org</label>
+		</p>
+	</form>
 </div>
 
 </div></div></div>
