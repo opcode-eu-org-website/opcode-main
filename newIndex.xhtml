@@ -11,30 +11,26 @@
 		#vademecum {
 			max-width: 600px; grid-area: 1 / 8 / span 1 / span 6;
 		}
-		#game {
-			width: 260px; grid-area: 2 / 8 / span 1 / span 3; justify-self: right;
+		#search {
+			width: 260px; grid-area: 2 / 11 / span 1 / span 3; justify-self: left;
 		}
 		#blog {
-			/*width: 220px; grid-area: 2 / 11 / span 1 / span 3;*/
-			width: 220px; grid-area: 2 / 9 / span 1 / span 4;
+			width: 220px; grid-area: 2 / 8 / span 1 / span 3; justify-self: center;
 		}
 		#lpes {
-			min-width: 450px; grid-area: 3 / 8 / span 1 / span 6;
+			min-width: 450px; grid-area: 3 / 7 / span 1 / span 7;
 		}
 		#elektronika {
-			max-width: 560px; grid-area: 3 / 1 / span 4 / span 7;
+			max-width: 560px; grid-area: 3 / 1 / span 3 / span 6;
 		}
 		#programowanie {
-			max-width: 520px; grid-area: 5 / 8 / span 3 / span 7; justify-self: center;
-		}
-		#misc {
-			max-width: 610px; grid-area: 7 / 1 / span 2 / span 7; justify-self: center;
+			max-width: 620px; grid-area: 4 / 7 / span 3 / span 8; justify-self: center;
 		}
 		#latex {
-			max-width: 580px; grid-area: 8 / 7 / span 2 / span 7; justify-self: right;
+			max-width: 400px; grid-area: 6 / 1 / span 3 / span 5; justify-self: center;
 		}
-		#search {
-			width: 290px; grid-area: 9 / 1 / span 1 / span 7; justify-self: center;
+		#misc {
+			max-width: 710px; grid-area: 7 / 6 / span 2 / span 8; justify-self: center;
 		}
 
 		@media all and (max-width: 1333px) {
@@ -48,10 +44,9 @@
 				width: 220px; grid-area: 1 / 7 / span 1 / span 2; justify-self: right;
 			}
 			#lpes {
-				/*min-width: 400px; width: 450px; grid-area: 2 / 1 / span 1 / span 5;*/
-				min-width: 400px; width: 450px; grid-area: 2 / 2 / span 1 / span 6;
+				min-width: 400px; width: 450px; grid-area: 2 / 1 / span 1 / span 5;
 			}
-			#game {
+			#search {
 				width: 260px; grid-area: 2 / 7 / span 1 / span 2; justify-self: right;
 			}
 			#linux {
@@ -67,10 +62,7 @@
 				width: 380px; grid-area: 6 / 1 / span 2 / span 4;
 			}
 			#misc {
-				max-width: 380px; grid-area: 5 / 5 / span 2 / span 4;
-			}
-			#search {
-				width: 290px; grid-area: 7 / 5 / span 1 / span 4; justify-self: center;
+				max-width: 380px; grid-area: 5 / 5 / span 3 / span 4;
 			}
 		}
 
@@ -99,14 +91,11 @@
 			#latex {
 				width: 100%; grid-area: 7 / 1 / span 1 / span 1; justify-self: center;
 			}
-			#game {
+			#search {
 				max-width: 100%; grid-area: 8 / 1 / span 1 / span 1; justify-self: center;
 			}
 			#misc {
 				max-width: 100%; grid-area: 9 / 1 / span 1 / span 1;
-			}
-			#search {
-				width: 290px; grid-area: 10 / 1 / span 1 / span 1; justify-self: center;
 			}
 			h1 {
 				font-size:48px;
@@ -220,21 +209,27 @@
 			</a>
 		</li>
 		<li>
+			<a href="Narzędzia_deweloperskie.pdf">
+				<div class="txt">Narzędzia <br /> deweloperskie</div>
+				<div class="img"><img src="lib/pdfFile.svg" alt="dokument PDF" title="dokument PDF"/></div>
+			</a>
+		</li>
+		<li>
 			<a href="Podstawy_C.pdf">
 				<div class="txt">Podstawy <br /> C i C++</div>
 				<div class="img"><img src="lib/pdfFile.svg" alt="dokument PDF" title="dokument PDF"/></div>
 			</a>
 		</li>
 		<li>
-			<a href="http://old.opcode.eu.org/programing/c_cpp/">
+			<a href="https://bitbucket.org/OpCode-eu-org/c_cpp-examples/">
 				<div class="txt">Mini kurs <br /> C i C++</div>
-				<div class="img"><img src="lib/webSite-OldOpCode.svg" alt="artykuł w starej wersji serwisu OpCode" title="artykuł w starej wersji serwisu OpCode"/></div>
+				<div class="img"><img src="lib/gitRepo.svg" alt="repozytorium GIT" title="repozytorium GIT"/></div>
 			</a>
 		</li>
 		<li>
-			<a href="Narzędzia_deweloperskie.pdf">
-				<div class="txt">Narzędzia <br /> deweloperskie</div>
-				<div class="img"><img src="lib/pdfFile.svg" alt="dokument PDF" title="dokument PDF"/></div>
+			<a href="https://bitbucket.org/OpCode-eu-org/avr-examples">
+				<div class="txt">Przykłady <br /> dla AVR</div>
+				<div class="img"><img src="lib/gitRepo.svg" alt="repozytorium GIT" title="repozytorium GIT"/></div>
 			</a>
 		</li>
 		<li>
@@ -386,13 +381,6 @@
 	<h3>Różności</h3>
 	<ul>
 		<li>
-			<a href="http://old.opcode.eu.org/">
-				<!--<div class="txt">Pozostałości starej <br /> wersji serwisu OpCode</div>-->
-				<div class="txt">Stara wersja <br /> serwisu OpCode</div>
-				<div class="img"><img src="lib/webSite-OldOpCode.svg" alt="serwis WWW" title="serwis WWW"/></div>
-			</a>
-		</li>
-		<li>
 			<a href="Blender.xhtml">
 				<div class="txt">Wprowadzenie <br /> do Blendera</div>
 				<div class="img"><img src="lib/htmlFile.svg" alt="dokument (X)HTML" title="dokument (X)HTML"/></div>
@@ -411,6 +399,12 @@
 			<a href="Podstawy_elektryki.pdf">
 				<div class="txt">Podstawy <br /> elektryki</div>
 				<div class="img"><img src="lib/pdfFile.svg" alt="dokument PDF" title="dokument PDF"/></div>
+			</a>
+		</li>
+		<li>
+			<a href="https://bitbucket.org/OpCode-eu-org/accesscontrol/">
+				<div class="txt">System Kontroli <br /> Dostępu na OrangePi</div>
+				<div class="img"><img src="lib/gitRepo.svg" alt="repozytorium GIT" title="repozytorium GIT"/></div>
 			</a>
 		</li>
 		<li>
@@ -450,15 +444,15 @@
 		<input type="hidden" name="ie" value="utf-8" />
 		<input type="hidden" name="oe" value="utf-8" />
 		<p style="margin:2pt;">
-			<input type="text" name="q" maxlength="1024" style="width:130pt;" />  
+			<input type="text" name="q" maxlength="1024" style="width:110pt;" />  
 			<input type="submit" title="szukaj" value="🔍" />
 		</p>
 		<p style="font-size:small; margin:2pt;">
-			<input type="checkbox" name="lr" value="lang_pl" onchange="onSetLang(this);" /> <label for="lr">po polskim</label>  
-			<input type="checkbox" name="lr" value="lang_en" onchange="onSetLang(this);" /> <label for="lr">po angielsku</label>
+			<input type="checkbox" name="lr" id="lang_pl" value="lang_pl" onchange="onSetLang(this);" /> <label for="lang_pl">po polsku</label>  
+			<input type="checkbox" name="lr" id="lang_en" value="lang_en" onchange="onSetLang(this);" /> <label for="lang_en">po angielsku</label>
 		</p>
 		<p style="font-size:small; margin:2pt;">
-			<input type="checkbox" name="as_q" value="site:opcode.eu.org" checked="checked" /> <label for="as_q">tylko opcode.eu.org</label>
+			<input type="checkbox" name="as_q" id="q_site" value="site:opcode.eu.org" checked="checked" /> <label for="q_site">tylko opcode.eu.org</label>
 		</p>
 	</form>
 </div>
