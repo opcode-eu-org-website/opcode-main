@@ -44,7 +44,7 @@ ls | while read f; do echo "<a href=\"$f\">$f</a>"; done
 
 \noindent Zwróć uwagę że:
 \begin{itemize}
-\item rozwiązania te różnią się jedynie sposobem uzyskania listy plików ald której mają wypisać linki
+\item rozwiązania te różnią się jedynie sposobem uzyskania listy plików dla której mają wypisać linki
 \item pętla for w każdym obiegu podstawia pod f kolejny element z listy nazw dopasowanych do gwiazdki (czyli wszystkich plików nieukrytych)
 \item pętla while listę plików dostaje na standardowe wejście (jeden plik na linię) i wczytuje każdą kolejną linię (czyli kolejną nazwę pliku) stosując komendę read – jest to bardzo standardowe rozwiązanie do przetwarzania standardowego wejścia linia po linii
 \item w obu wypadkach używamy takiego echo z napisem w podwójnych cudzysłowach (aby móc umieścić w nim zmienną), cudzysłowa które mają być wypisane zabezpieczamy odwrotnym ukośnikiem
