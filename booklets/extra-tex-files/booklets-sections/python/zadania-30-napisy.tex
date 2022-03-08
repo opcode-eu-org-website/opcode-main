@@ -92,26 +92,30 @@ Np. dla napisu \Verb{'Python 3.6.1 (default, Dec 2015, 13:05:11)'} funkcja powin
 def wyiksuj(napis):
   duzy_alfabet = 'AĄBCĆDEĘFGHIJKLŁMNŃOÓPRSŚTUWYZŹŻ'
   maly_alfabet = 'aąbcćdeęfghijklłmnńoóprsśtuwyzźż'
+  wynik = ''
   for c in napis:
     if c in duzy_alfabet:
-      print('X', end = '')
+      wynik += 'X'
     elif c in maly_alfabet:
-      print('x', end = '')
+      wynik += 'x'
     else:
-      print(c, end = '')
+      wynik += c
+  return wynik
 \end{CodeFrame*}
 
 inne rozwiązanie:
 
 \begin{CodeFrame*}[python]{}
 def wyiksuj(napis):
+  wynik = ''
   for c in napis:
     if c.isupper():
-      print('X', end = '')
+      wynik += 'X'
     elif c.islower():
-      print('x', end = '')
+      wynik += 'x'
     else:
-      print(c, end = '')
+      wynik += c
+  return wynik
 \end{CodeFrame*}
 
 jeszcze inne rozwiązanie (w tej formie obsługuje tylko litery ASCII, ale aktualna wersja zadania to dopuszcza):
@@ -189,7 +193,7 @@ Napisz funkcję która sprawdzi z użyciem wyrażeń regularnych czy dany napis 
 \begin{CodeFrame*}[python]{}
 import re
 def spr(x):
-  if re.search("^[+-]?[0-9]+(.[0-9]+)?$", x):
+  if re.search("^[+-]?[0-9]+([.][0-9]+)?$", x):
     print(x, "jest liczbą")
   else:
     print(x, "NIE jest liczbą")
