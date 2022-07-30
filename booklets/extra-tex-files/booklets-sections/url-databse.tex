@@ -1,0 +1,120 @@
+% Copyright (c) 2021 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2021 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\ExplSyntaxOn %enable LaTeX3 syntax
+\prop_if_exist:NTF \l_video_urls {} {\prop_new:N \l_video_urls} % create property list (key-value map)
+\ProvideDocumentCommand{\AddURL}{m m}{%
+	\prop_put:Nnn \l_video_urls {#1} {#2}%
+}
+\ProvideExpandableDocumentCommand{\URLRaw}{m}{
+	\prop_item:Nn \l_video_urls {#1}
+}
+\ProvideExpandableDocumentCommand{\URLCheck}{m}{
+	\prop_if_in:NnTF \l_video_urls {#1} {} {
+		\msg_new:nnn {videodatabase} {error-message} {No~"#1"~in~"l_video_urls"~property~list.}
+		\msg_error:nn {videodatabase} {error-message}
+	}
+}
+\ExplSyntaxOff
+
+\ProvideDocumentCommand{\URL}{m}{%
+	\URLCheck{#1}\url{\URLRaw{#1}}%
+}
+\ProvideDocumentCommand{\LinkVerbose}{m}{%
+	\URLCheck{#1}\emph{#1} – \url{\URLRaw{#1}}%
+}
+\ProvideDocumentCommand{\LinkNice}{m}{%
+	\URLCheck{#1}\href{\URLRaw{#1}}{#1}%
+}
+
+
+% unix
+
+\AddURL{Podstawy pracy w terminalu}{https://www.youtube.com/watch?v=IQpU7xZhpbY}
+\AddURL{Edytor vi i vim}{https://www.youtube.com/watch?v=ItKu1cNSttw}
+\AddURL{Listowanie i wyszukiwanie plików}{https://www.youtube.com/watch?v=hAXAKlNASPo}
+\AddURL{Kopiowanie, przenoszenie, usuwanie plików}{https://www.youtube.com/watch?v=BL-IRlDKeZ8}
+\AddURL{Struktura drzewa katalogów}{https://www.youtube.com/watch?v=xIROSkRqCJ0}
+
+\AddURL{Operacje na plikach (tekstowych)}{https://www.youtube.com/watch?v=Xb2vz2sELj4}
+\AddURL{Język AWK}{https://www.youtube.com/watch?v=9Q2qMbT9r-o}
+\AddURL{Praca na systemach zdalnych}{https://www.youtube.com/watch?v=E6a0PsXl5Sc}
+\AddURL{Użytkownicy uprawnienia i procesy}{https://www.youtube.com/watch?v=4AtQOXwu5RU}
+
+\AddURL{Wprowadzenie do programowania w bash'u}{https://www.youtube.com/watch?v=uJO42tK8EeE}
+\AddURL{Pętle, warunki i funkcje w bash'u}{https://www.youtube.com/watch?v=yf6e43ldGtg}
+\AddURL{Bash: obsługa napisów, eval i podsumowanie}{https://www.youtube.com/watch?v=GB7muE86q5E}
+\AddURL{Wprowadzenie do systemów operacyjnych}{https://www.youtube.com/watch?v=640nRcQjcCM}
+
+% python
+
+\AddURL{Python: wprowadzenie}{https://www.youtube.com/watch?v=Nhb4WX_9Tgc}
+\AddURL{Python: funkcje}{https://www.youtube.com/watch?v=uHBzNSWTGMA}
+\AddURL{Python: pętle i warunki}{https://www.youtube.com/watch?v=d1igYsEZymM}
+\AddURL{Python: napisy}{https://www.youtube.com/watch?v=A0ZtouykAjI}
+\AddURL{Python: wyrażenia regularne}{https://www.youtube.com/watch?v=OklkE9T8ur8}
+\AddURL{Python: listy}{https://www.youtube.com/watch?v=vpMGkToxf_I}
+
+\AddURL{Python: typy i referencje}{https://www.youtube.com/watch?v=LiMPlG0X9e0}
+\AddURL{Python: operacje bitowe i wyjątki}{https://www.youtube.com/watch?v=fU3FwceTIM0}
+\AddURL{Python: słowniki i klasy}{https://www.youtube.com/watch?v=K0XdD6aygwo}
+\AddURL{Python: pliki i czekanie na dane}{https://www.youtube.com/watch?v=OhMh5yYZgBg}
+\AddURL{Python: procesy potomne (fork i exec)}{https://www.youtube.com/watch?v=Zy_T9lhhPCw}
+\AddURL{Python: biblioteki (xml, json, sql, ...)}{https://www.youtube.com/watch?v=kcHf4l66QbA}
+
+% c i c++
+
+\AddURL{Podstawy C}{https://www.youtube.com/watch?v=em2tCLn1Oqk}
+\AddURL{Funkcje, struktury i tablice w C}{https://www.youtube.com/watch?v=Whb0zJCSGXY}
+\AddURL{Wskaźniki w C}{https://www.youtube.com/watch?v=xTkpu2FIC1w}
+\AddURL{Kilka słów o C++}{https://www.youtube.com/watch?v=7KCIEqpYmd4}
+
+% elektronika
+
+\AddURL{Podstawy elektroniki}{https://www.youtube.com/watch?v=ZQUW3XoEeKE}
+\AddURL{Rezystor i kondensator}{https://www.youtube.com/watch?v=LSh2h3QopfY}
+\AddURL{Cewka}{https://www.youtube.com/watch?v=Ge31zYeuPAY}
+\AddURL{Dioda}{https://www.youtube.com/watch?v=zW2Dw0fM_ac}
+\AddURL{Tranzystory}{https://www.youtube.com/watch?v=ASZo6TRA7kI}
+
+\AddURL{Bramki logiczne}{https://www.youtube.com/watch?v=JUj_Fjq9oTE}
+\AddURL{Zatrzaski, przerzutniki i rejestry}{https://www.youtube.com/watch?v=7sLXh-yCk-I}
+\AddURL{Transmisja danych}{https://www.youtube.com/watch?v=u4gMoXsaYeQ}
+\AddURL{Układy programowalne}{https://www.youtube.com/watch?v=m2Uw9w0AitQ}
+\AddURL{Mikrokontrolery STM32}{https://www.youtube.com/watch?v=HqbVQxKoNUk}
+
+\AddURL{Układy programowalne}{https://www.youtube.com/watch?v=m2Uw9w0AitQ}
+\AddURL{Mikrokontrolery STM32}{https://www.youtube.com/watch?v=HqbVQxKoNUk}
+
+% sieci
+
+\AddURL{Podstawy sieci komputerowych}{https://www.youtube.com/watch?v=sGf55rvUYS8}
+\AddURL{Internet Protocol}{https://www.youtube.com/watch?v=IUSEjW7VDcE}
+\AddURL{Adresacja i routing IP}{https://www.youtube.com/watch?v=TFQK4MO1yxw}
+\AddURL{TCP, UDP, ICMP i DNS}{https://www.youtube.com/watch?v=XklU-nIStSc}
+\AddURL{Usługi sieciowe i tunele}{https://www.youtube.com/watch?v=zm9sWrIN2yg}
+
+\AddURL{Ethernet}{https://www.youtube.com/watch?v=e_jTgLC_xxg}
+\AddURL{Standardy sieciowe}{https://www.youtube.com/watch?v=PLDs5G5Ftlw}
+\AddURL{Konfiguracja sieci}{https://www.youtube.com/watch?v=4HaY4T09IxI}
+\AddURL{Programowanie usług sieciowych}{https://www.youtube.com/watch?v=DsdME7_Rd8k}
