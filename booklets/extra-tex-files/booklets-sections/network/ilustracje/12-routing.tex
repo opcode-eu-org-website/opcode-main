@@ -7,11 +7,13 @@
 
 
 \providecommand{\addrouter}[5][]{
+	%\StrCount{#4}{,}[lastnnn]
 	\node[router, #1]  (#2_0) {\bfseries #3};
-	\foreach \txt[remember=\n as \lastn (initially 0), count=\n from 1] in {#4} {
+	\foreach \txt [remember=\n as \lastn (initially 0), count=\n from 1] in {#4} {
 		\node[riface] (#2_\n) [] at (#2_\lastn.south west) {eth\n: \txt};
+		\xdef\lastnn{\n}
 	}
-	\node[rtable] (#2_TABLE)  [] at (#2_\lastn.south west) {#5};
+	\node[rtable] (#2_TABLE)  [] at (#2_\lastnn.south west) {#5};
 }
 
 \providecommand{\addhost}[5][]{
