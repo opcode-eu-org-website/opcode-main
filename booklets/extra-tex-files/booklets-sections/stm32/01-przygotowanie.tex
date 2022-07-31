@@ -25,6 +25,8 @@ cd libopencm3
 make
 \end{CodeFrame*}
 
+Pamiętaj o ustawieniu ścież
+
 \subsection{Połączenie mikrokontrolera}
 Aby móc uruchomić nasz kod na mikrokontrolerze, musimy podłączyć go do komputera w celu wgrywania na niego skompilowanych programów.
 STM32 można programować na wiele sposobów, my będziemy używać do tego interfejsu UART\footnote{Inne z nich to SWD oraz JTAG}.\\
@@ -39,17 +41,15 @@ Za pomocą pasujących kabelków podłącz następujące piny przejściówki do 
 \item 5V do 5V mikrokontrolera
 \end{itemize}
 
-Za pomocą obcążków lub pęsety przełóż górną (patrząc na mikrokontroler tak aby port USB był po lewej) zworkę na
-pozycję ``1''.
+Za pomocą obcążków lub pęsety przełóż górną (patrząc na mikrokontroler tak aby port USB był po lewej) zworkę na pozycję ``1''.
 
-Sprawdź wszystkie połączenia i podłącz przejściówkę do portu USB komputera. Na mikrokontrolerze powinna zaświecić się tylko czerwona dioda
-\texttt{PWR}
+Sprawdź wszystkie połączenia i podłącz przejściówkę do portu USB komputera. Na mikrokontrolerze powinna zaświecić się tylko czerwona dioda \texttt{PWR}
 
-Możesz sprawdzić połączenie z mikrokontrolerem używając \Verb$stm32flash$ do obliczenia sumy kontrolnej pamięci mikrokontrolera.
+Możesz sprawdzić połączenie z mikrokontrolerem używając \Verb$stm32flash$ do wyświetlenia informacji na temat podłączonego mikrokontrolera.
 Jeżeli polecenie poniżej nie zgłosi błędów, oznacza to, że wszystko działa poprawnie.
 
 \begin{CodeFrame*}[bash]{}
-stm32flash -C /dev/ttyUSB0
+stm32flash /dev/ttyUSB0
 \end{CodeFrame*}
 
 Tak przygotowany mikrokontroler jest gotowy do pracy.

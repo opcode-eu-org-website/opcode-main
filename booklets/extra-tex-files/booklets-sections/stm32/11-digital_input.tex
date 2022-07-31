@@ -56,7 +56,7 @@ Podobnie jak pin C13, pin A0 też należy skofigurować\footnotemark. Ustawiamy 
 \footnotetext{Wejście pływające (\textit{Input, Input floating}) jest domyślną kofiguracją wejścia. To wywołanie
   funkcji nic nie zmienia, ale umieściliśmy je tutaj w ramach przykładu.
   Jeżeli chcielibyśmy ustawić wewnętrzne podciąganie to zamiast \Verb$GPIO_CNF_INPUT_FLOAT$ należałoby podać \Verb$GPIO_CNF_INPUT_PULL_UPDOWN$
-  i ustawić pin w stanie wysokim lub niskim (w zależności czy chcemy podciągać do stanu wysokiego czy do masy) przy pomocy \Verb$gpio_set$ lub \Verb$gpio_clear$.
+  i ustawić pin w stanie wysokim lub niskim (w zależności czy chcemy podciągać do stanu wysokiego czy do masy) przy pomocy odpowiednich wywołań funkcji \Verb$gpio_set$ lub \Verb$gpio_clear$.
 }
 
 Same w sobie, wejścia pływające nie mają niczego, co mogło by wymusić na nich stabilny stan logiczny. Zjawiska indukcji

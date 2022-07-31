@@ -27,13 +27,13 @@ popularnej, dostępnej i prostej płytki ``Blue Pill''. Programy będą pisane w
 C z pomocą biblioteki \Verb$libopencm3$ (\url{https://github.com/libopencm3/libopencm3}).
 Każde z ćwiczeń to oddzielny program, więc jego kod znajduje się w oddzielnym katalogu.
 
-Kod przykładów znajduje się w \hyperref[repo]{repozytorium}. Można je sklonować do podkatalogu za pomocą:
+Kod przykładów znajduje się w repozytorium git. Można je sklonować do podkatalogu za pomocą:
 
 \begin{CodeFrame*}[bash]{}
   git clone https://bitbucket.org/OpCode-eu-org/stm32-examples.git
 \end{CodeFrame*}
 
-Po sklonowaniu repozytorium w jego katalogu głównym należy utworzyć link o nazwie \Verb$libopencm3$ do katalogu w którym znajduje się (skompilowana wcześniej) biblioteka:
+Po sklonowaniu repozytorium w jego katalogu głównym należy utworzyć link o nazwie \Verb$libopencm3$ wskazujący na katalog w którym znajduje się (skompilowana wcześniej) biblioteka:
 
 \begin{CodeFrame*}[bash]{}
   cd stm32-examples
@@ -42,3 +42,17 @@ Po sklonowaniu repozytorium w jego katalogu głównym należy utworzyć link o n
 
 Jeżeli nie masz jeszcze pobranej i skompilowanej biblioteki \Verb$libopencm3$, to zamiast tworzyć link możesz umieścić tutaj katalog z tą biblioteką.
 Ważne jest zachowanie nazwy i umieszczenie go w głównym katalogu repozytorium z przykładami, gdyż pliki wspomagające kompilację przykładów zakładają że w tym miejscu znajdą katalog z tą biblioteką.
+
+\begin{ProTip}{\normalfont{\strong{Ważne}}}
+Każdy z przykładowych programów znajduje się w swoim własnym katalogu. Katalog taki zawiera wszystkie pliki źródłowe programu, plik \Verb#Makefile# i będzie też zawierać pliki tymczasowe i wynikowe powstałe w wyniku kompilacji.
+Do kompilacji i wgrywanie programów do mikrokontrolera będziemy korzystać z narzędzia \Verb$make$, które z odpowiednimi argumentami należy wywołać w katalogu danego przykładu. Typowo będzimey używać 3 wywołań programu \Verb$make$:
+\begin{itemize}
+\item \Verb$make$ – skompiluje i zlinkuje z potrzebnymi fragmentami biblioteki nasz program
+\item \Verb$make install$ – skompiluje i zlinkuje z potrzebnymi fragmentami biblioteki nasz program oraz wgra go do mikrokontrolera
+\item \Verb$make run$ – uruchomi program znajdujący się w mikrokontrolerze po jego restarcie (jest to szybsze i bardziej przyjazne dla pamięci mikrokontrolera niż używanie \Verb$make install$ z tym samym kodem)
+\end{itemize}
+
+\vspace{5mm}
+
+Make jest narzędziem automatyzującym proces kompilacji oprogramowania, wykorzystującym pliki \Verb#Makefile#. Więcej na jego temat można znaleźć w skrypcie \href{http://www.opcode.eu.org/Narzędzia\_deweloperskie.pdf}{narzędzia deweloperskie}. Pomimo iż nasze programy są małe to używamy go aby ułatwić sobie kompilację kodu dla mikrokontrolera - poprzez zastosowanie odpowiedniego kompilatora (który wygeneruje kod dla procesora ARM, a nie dla x86 pod kontrolą którego działa), przekazanie do niego opcji ustawiających jaki mikrokontroler używamy oraz dolinkowanie odpowiednich bibliotek.
+\end{ProTip}

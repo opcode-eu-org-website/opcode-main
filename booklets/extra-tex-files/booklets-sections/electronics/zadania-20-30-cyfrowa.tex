@@ -92,6 +92,8 @@ Wyjścia układu podłączone do peryferium (np. kontrolek LED). Wejście OE w s
 \dbEntryBegin{zbuduj_przerzutnik_z_bramek}\if1\dbEntryCheckResults
 \noindent\begin{minipage}[b]{0.6\textwidth}
 Na schemacie przedstawiono dwubramkową budowę przerzutnika RS w wariancie z wejściami nie zanegowanymi (zastosowanie bramek NAND w miejsce NOR spowodujwe zanegowanie wejść). Zbuduj taki układ i sprawdź jego działanie.
+
+\strong{Nie demontuj układu - będzie przydatny w zadaniu \ref{zbuduj_rejestr_przesuwny}!}
 \end{minipage}
 \hfill
 \begin{minipage}[b]{0.35\textwidth}
@@ -108,11 +110,12 @@ Zapisz do rejestru i ustaw na wyjściach taką wartość aby świeciły się dwi
 \item zegara wyjść (STROBE), determinującego chwilę przepisania danych z rejestru przesuwnego do rejestru wyjściowego
 \end{itemize}
 
-\textit{Wskazówka: zapoznaj się z dokumentacją posiadanego układu, ustal nazewnictwo używane do określania poszczególnych sygnałów (może się różnić nawet w zależności od producenta układu) oraz numery nóżek układu z nimi związane (mogą się różnić w zależności od modelu / wariantu obudowy).}
+\textit{Wskazówka 1: zapoznaj się z dokumentacją posiadanego układu, ustal nazewnictwo używane do określania poszczególnych sygnałów (może się różnić nawet w zależności od producenta układu) oraz numery nóżek układu z nimi związane (mogą się różnić w zależności od modelu / wariantu obudowy).}
+\textit{Wskazówka 2: do podawania sygnału zegtara danych użyj wyjścia układu zbudowanego w zadaniu \ref{zbuduj_przerzutnik_z_bramek}}
 \fi
 
 \dbEntryBegin{zbuduj_bramka_z_tranzystorow}\if1\dbEntryCheckResults
-Spróbuj zbudować własną bramkę logiczną w oparciu o tranzystory NPN i PNP. Pamiętaj że w odróżnieniu od pokazanych na powyższym schemacie tranzystorów NMOS i PMOS wymagane jest stosowanie rezystora na bramce.
+Spróbuj zbudować własną bramkę logiczną w oparciu o tranzystory NPN i PNP. Pamiętaj że w odróżnieniu od przypadku pokazanego na schemacie (w treści skryptu), gdzie zastosowane były tranzystory NMOS i PMOS, w przypadku użycia tranzystorów bipolarnych wymagane jest stosowanie rezystora na bramce.
 
-\textit{Wskazówka: zacznij od zbudowania bramki NOT, gdyż ona jest najprostsza – to po prostu półmostek H.}
+\textit{Wskazówka: zacznij od zbudowania bramki NOT, gdyż ona jest najprostsza – to po prostu półmostek H. Później, po sprawdzeniu działania, możesz skomplikować układ - przerobić go na NAND lub NOR.}
 \fi

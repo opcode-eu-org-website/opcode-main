@@ -247,7 +247,7 @@ Pierwszy argument jest liczbą całkowita typu \cpp{int} i określa ilość elem
 #include <stdio.h>
 
 int main(int argc, char* argv[]) {
-	for (int i=0; i=argc; ++i)
+	for (int i=0; i<argc; ++i)
 		printf("element %d to: %s\n", i, argv[i]);
 	
 	return argc - 2; // kod powrotu uzależniamy od ilości argumentów

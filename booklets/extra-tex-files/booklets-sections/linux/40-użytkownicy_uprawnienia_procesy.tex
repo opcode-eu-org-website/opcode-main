@@ -101,11 +101,11 @@ Wiele sygnałów może zostać przechwyconych i obsłużonych (zignorowanych) pr
 \end{ProTip}
 
 \begin{ProTip}[breakable]{Ctrl+C / Ctrl+Z / Ctrl+D}
-\textbf{Ctrl+C} wysyła sygnał SIGINT do procesu zajmującego terminal na którym został on wprowadzony. Sygnał ten jest prośbą o zakończenie procesu, którą proces może uszanować lub nie (np. może całkiem zignorować lub poprosić o potwierdzenie). Jest on podobny do SIGTERM, jednak jest innym sygnałem i może być inaczej obsłużony (np. w SIGTERM nie ma większego sensu pytać o potwierdzenie).
+\strong{Ctrl+C} wysyła sygnał SIGINT do procesu zajmującego terminal na którym został on wprowadzony. Sygnał ten jest prośbą o zakończenie procesu, którą proces może uszanować lub nie (np. może całkiem zignorować lub poprosić o potwierdzenie). Jest on podobny do SIGTERM, jednak jest innym sygnałem i może być inaczej obsłużony (np. w SIGTERM nie ma większego sensu pytać o potwierdzenie).
 
-\vspace{6pt}\textbf{Ctrl+Z} wysyła sygnał SIGTSTP do procesu zajmującego terminal na którym został on wprowadzony. Sygnał ten jest prośbą o wstrzymanie procesu i oddanie terminala, prośba ta może być zignorowana przez proces. Proces przerwany w ten sposób może być wznowiony poleceniem \Verb#fg# (które wznowi go jako pierwszoplanowy – okupujący terminal) lub \Verb#bg# (które wznowi go jako jako proces w tle – oddając terminal, przodkowi który go posiadał wcześniej).
+\vspace{6pt}\strong{Ctrl+Z} wysyła sygnał SIGTSTP do procesu zajmującego terminal na którym został on wprowadzony. Sygnał ten jest prośbą o wstrzymanie procesu i oddanie terminala, prośba ta może być zignorowana przez proces. Proces przerwany w ten sposób może być wznowiony poleceniem \Verb#fg# (które wznowi go jako pierwszoplanowy – okupujący terminal) lub \Verb#bg# (które wznowi go jako jako proces w tle – oddając terminal, przodkowi który go posiadał wcześniej).
 
-\vspace{6pt}\textbf{Ctrl+D} nie wysyła żadnego sygnału, działa tylko gdy proces czyta dane z terminala (podłączonego zazwyczaj do jego standardowego wejścia). Wysyła on do terminala znak EOT (End-of-Transmission), w efekcie czego:
+\vspace{6pt}\strong{Ctrl+D} nie wysyła żadnego sygnału, działa tylko gdy proces czyta dane z terminala (podłączonego zazwyczaj do jego standardowego wejścia). Wysyła on do terminala znak EOT (End-of-Transmission), w efekcie czego:
 \begin{itemize}
 	\item (jeżeli bufor wejściowy jest niepusty) terminal wypycha bufor wejściowy do programu (tak jak po wprowadzeniu nowej linii), albo
 	\item (jeżeli nie ma znaków w buforze) terminal zamyka strumień wprowadzanych danych do programu
@@ -115,7 +115,7 @@ Zamknięcie strumienia wejściowego na ogół prowadzi także do zakończenia dz
 \end{ProTip}
 
 \begin{ProTip}[breakable]{Ctrl+S / Ctrl+Q}
-\textbf{Ctrl+S} wstrzymuje przewijanie (odświeżanie) terminala, aby wznowić należy użyć \textbf{Ctrl+Q}.
+\strong{Ctrl+S} wstrzymuje przewijanie (odświeżanie) terminala, aby wznowić należy użyć \strong{Ctrl+Q}.
 \end{ProTip}
 % END: Użytkownicy, uprawnienia i procesy
 

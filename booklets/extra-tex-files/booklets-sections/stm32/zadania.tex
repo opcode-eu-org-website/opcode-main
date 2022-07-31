@@ -30,10 +30,11 @@
 	\insertZadanie{\currfilepath}{wewnetrzny_pullup}{}
 	\insertZadanie{\currfilepath}{przycisk_na_innym_pinie}{}
 	\insertZadanie{\currfilepath}{przycisk_jako_przelacznik}{}
-	\insertZadanie{\currfilepath}{adc_volty}{}
-	\insertZadanie{\currfilepath}{adc_volty2}{}
+	\insertZadanie{\currfilepath}{przycisk_jako_przelacznik2}{}
 	\insertZadanie{\currfilepath}{trojkat_via_uart}{}
 	\insertZadanie{\currfilepath}{trojkat_via_uart2}{}
+	\insertZadanie{\currfilepath}{adc_volty}{}
+	\insertZadanie{\currfilepath}{adc_volty2}{}
 	\insertZadanie{\currfilepath}{zmiana_i2c}{}
 	\insertZadanie{\currfilepath}{i2c_rejestr}{}
 }
@@ -53,9 +54,12 @@
 \fi
 
 \dbEntryBegin{przycisk_jako_przelacznik}\if1\dbEntryCheckResults
-  Zmodyfikuj program \Verb$11_di$ tak, aby dioda zapalała się tylko, gdy stan logiczny wejścia się zmienia.\\
-  \textit{Wskazówka: co zawiera zmienna \texttt{\Verb$stan_a$} tuż przed załadowaniem jej nowym stanem? Pamiętaj
-  o stanach nieustalonych.}
+  Zmodyfikuj program \Verb$11_di$ tak, aby przycisk działał jak przełącznik - tzn. jedno naciśnięcie włącza diodę, kolejne ją wyłącza, kolejne znowu włącza, itd.\\
+  \textit{Wskazówka: co zawiera zmienna \texttt{\Verb$stan_a$} tuż przed załadowaniem jej nowym stanem?}
+\fi
+
+\dbEntryBegin{przycisk_jako_przelacznik2}\if1\dbEntryCheckResults
+  Poeksperymentuj z kodem z zadania \ref{przycisk_jako_przelacznik} modyfikując wartość opóźnienia w pętli głównej. Co się dzieje gdy wartość ta jest zbyt mała? Co jest przyczyną takiego zachowania?
 \fi
 
 \dbEntryBegin{adc_volty}\if1\dbEntryCheckResults
@@ -69,7 +73,7 @@ Zmodyfikuj rozwiązanie zadania \ref{adc_volty} tak aby wypisywało wynik w V, b
 \fi
 
 \dbEntryBegin{trojkat_via_uart}\if1\dbEntryCheckResults
-Zmodyfikuj program \Verb$21_uart_receiver$ tak aby odbierał poprzez port szeregowy liczbę w zakresie od 2 do 9 i odpowiadał na nią trójkątem z gwiazdek odpowiedniej wielkości.
+Zmodyfikuj program \Verb$21_uart_receiver$ tak aby odbierał poprzez port szeregowy liczbę w zakresie od 1 do 9 i odpowiadał na nią trójkątem z gwiazdek odpowiedniej wielkości.
 Na przykład gdy otrzyma "3" powinien to być:
 \begin{Verbatim}
 *
@@ -79,13 +83,14 @@ Na przykład gdy otrzyma "3" powinien to być:
 \fi
 
 \dbEntryBegin{trojkat_via_uart2}\if1\dbEntryCheckResults
-Zmodyfikuj rozwiązanie zadania \ref{adc_volty} tak aby obsługiwać liczby wielocyfrowe (możemy ograniczyć się np. do dwucyfrowych).
+Zmodyfikuj rozwiązanie zadania \ref{trojkat_via_uart} tak aby obsługiwać liczby wielocyfrowe (możemy ograniczyć się np. do dwucyfrowych).
 Odczyt liczby powinien kończyć w momencie wczytania znaku nowej linii. Wtedy też powinno następować generowanie trójkąta z gwiazdek.\\
-\textit{Wskazówka: zrwóć uwagę na kodowanie nowej linii - \Verb$'\n'$ vs \Verb$'\r\n'$ vs \Verb$'\n\r'$, etc}
+\textit{Wskazówka 1: wartość pierwszej cyfry przechowuj w zmiennej globalnej do czasu otrzymania kolejnej cyfry} \\
+\textit{Wskazówka 2: zwróć uwagę na kodowanie nowej linii - \Verb$'\n'$ vs \Verb$'\r\n'$ vs \Verb$'\n\r'$, etc}
 \fi
 
 \dbEntryBegin{zmiana_i2c}\if1\dbEntryCheckResults
-Zmień funkcję realizującą logikę slave'a w przykładowym kodzie I2C (\Verb$40_i2c$) tak, aby zamiast mnożyć otrzymaną liczbę przez 2, dodawał do niej jakąś (dowolną) stałą.
+Zmień funkcję realizującą logikę slave'a w przykładowym kodzie I2C (\Verb$40_i2c$) tak, aby zamiast mnożyć otrzymaną liczbę przez 2, dodawał do niej jakąś (dowolną - ustaloną przez programistę) stałą.
 \fi
 
 \dbEntryBegin{i2c_rejestr}\if1\dbEntryCheckResults
