@@ -24,19 +24,11 @@
 \IfStrEq{\dbEntryID}{}{
 	\ifdefined\noExtraInfoMode\else
 		\subsection{Elementy bierne i dioda}
-		\begin{center}
-			\includegraphics[width=0.55\textwidth]{img/elektronika/zadania_teoretyczne-szeregowe_rownolegle}
-		\end{center}
 	\fi
 	\insertZadanie{\currfilepath}{polaczenie_szeregowe}{}
 	\insertZadanie{\currfilepath}{polaczenie_rownolegle}{}
-	\ifdefined\noExtraInfoMode\else
-		\begin{center}
-			\includegraphics[width=0.75\textwidth]{img/elektronika/zadania_teoretyczne-A}
-		\end{center}
-	\fi
-	\insertZadanie{\currfilepath}{prad_R1}{}
-	\insertZadanie{\currfilepath}{napiecie_T1}{}
+	\insertZadanie{\currfilepath}{prad_dioda}{}
+	\insertZadanie{\currfilepath}{napiecie_pullup}{}
 	\insertZadanie{\currfilepath}{napiecie_T234}{}
 }
 
@@ -54,23 +46,36 @@
 % zadania teoretyczne
 %
 
-\dbEntryBegin{prad_R1}\if1\dbEntryCheckResults
-Oszacuj wartość prądu płynącego przez R1. Odpowiedź krótko uzasadnij.
+\dbEntryBegin{prad_dioda}\if1\dbEntryCheckResults
+\begin{minipage}[c]{0.64\textwidth}
+	Oszacuj wartość prądu płynącego przez R1. Odpowiedź krótko uzasadnij.
+\end{minipage}
+\hfill
+\begin{minipage}[c]{0.32\textwidth}
+	\includegraphics[width=\textwidth]{img/elektronika/zadania_teoretyczne-dioda}
+\end{minipage}
 \fi
-\dbEntryBegin{prad_R1-rozwiazanie}\if1\dbEntryCheckResults
+\dbEntryBegin{prad_dioda-rozwiazanie}\if1\dbEntryCheckResults
 Należy uwzględnić spadek napięcia na diodzie około 1.7V, w efekcie czego mamy napięcie na rezystorze 3.3V.
 Napięcie to wraz z wartością tego rezystora określa prąd płynący w obwodzie i wynoszący 3.3mA.
 \fi
 
-\dbEntryBegin{napiecie_T1}\if1\dbEntryCheckResults
-Podaj wartość napięcia (względem GND) w punkcie T1 w sytuacji gdy S1 jest wciśnięty (zwarty) oraz w sytuacji gdy jest rozwarty (nie przewodzi). Odpowiedź krótko uzasadnij.
+\dbEntryBegin{napiecie_pullup}\if1\dbEntryCheckResults
+\begin{minipage}[c]{0.64\textwidth}
+	Podaj wartość napięcia (względem GND) w punkcie T1 w sytuacji gdy S1 jest wciśnięty (zwarty) oraz w sytuacji gdy jest rozwarty (nie przewodzi). Odpowiedź krótko uzasadnij.
+\end{minipage}
+\hfill
+\begin{minipage}[c]{0.32\textwidth}
+	\includegraphics[width=\textwidth]{img/elektronika/zadania_teoretyczne-pullup}
+\end{minipage}
 \fi
-\dbEntryBegin{napiecie_T1-rozwiazanie}\if1\dbEntryCheckResults
+\dbEntryBegin{napiecie_pullup-rozwiazanie}\if1\dbEntryCheckResults
 Przycisk wciśnięty – punkt T1 połączony z masą, czyli napięcie w T1 wynosi 0V.\\
 Przycisk rozwarty – prąd nie płynie, spadek napięcia na rezystorze wynosi 0V (brak prądu), czyli napięcie w T1 wynosi 5V.
 \fi
 
 \dbEntryBegin{napiecie_T234}\if1\dbEntryCheckResults
+\begin{center} \includegraphics[width=0.55\textwidth]{img/elektronika/zadania_teoretyczne-dzielnik}\vspace{-6mm} \end{center}
 Podaj wartość napięcia (względem GND) w punkach T2, T3, T4. Odpowiedź krótko uzasadnij.
 \fi
 \dbEntryBegin{napiecie_T234-rozwiazanie}\if1\dbEntryCheckResults
@@ -80,11 +85,17 @@ T4 – dzielnik z diodą Zenera, dioda Zenera nie przewodzi (przyłożone napię
 \fi
 
 \dbEntryBegin{polaczenie_szeregowe}\if1\dbEntryCheckResults
+\begin{minipage}[b]{0.64\textwidth}
   Rezystory $R_1$ i $R_2$ połączone zostały szeregowo i podłączone do źródła napięcia U, tak jak pokazano na powyższym schemacie.
   \begin{enumerate}[label=\alph*)]
     \item Zapisz zależność (wzór) określający spadek napięcia na rezystorze $R_1$.
     \item Zapisz zależność (wzór) określający sumaryczną moc, która wydzieli się na obu tych rezystorach.
   \end{enumerate}
+\end{minipage}
+\hfill
+\begin{minipage}[b]{0.32\textwidth}
+	\includegraphics[width=\textwidth]{img/elektronika/zadania_teoretyczne-szeregowe}
+\end{minipage}
 \fi
 \dbEntryBegin{polaczenie_szeregowe-rozwiazanie}\if1\dbEntryCheckResults
 $$I = I_{R_1} = I_{R_2} = \frac{U}{R_1 + R_2}  \quad\qquad  U_{R_1} = I · R_1 = U · \frac{R_1}{R_1 + R_2}$$
@@ -92,11 +103,17 @@ $$P = U·I = \frac{U^2}{R_1 + R_2}$$
 \fi
 
 \dbEntryBegin{polaczenie_rownolegle}\if1\dbEntryCheckResults
+\begin{minipage}[b]{0.71\textwidth}
   Rezystory $R_3$ i $R_4$ połączone zostały równolegle i podłączone do źródła napięcia U, tak jak pokazano na powyższym schemacie.
   \begin{enumerate}[label=\alph*)]
     \item Zapisz zależność (wzór) określający prąd płynący przez rezystor $R_3$.
     \item Zapisz zależność (wzór) określający łączną rezystancję obu rezystorów (czyli ich rezystancję zastępczą).
   \end{enumerate}
+\end{minipage}
+\hfill
+\begin{minipage}[b]{0.28\textwidth}
+	\includegraphics[width=\textwidth]{img/elektronika/zadania_teoretyczne-rownolegle}
+\end{minipage}
 \fi
 \dbEntryBegin{polaczenie_rownolegle-rozwiazanie}\if1\dbEntryCheckResults
 $$U = U_{R_3} = U_{R_4}  \quad\qquad  I_{R_3} = \frac{U}{R_3}$$
