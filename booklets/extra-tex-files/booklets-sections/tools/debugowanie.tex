@@ -70,16 +70,17 @@ Uruchamianie poprzez GDB przydaje się także przy debugowaniu problemów typu "
 
 \subsection{analiza plików binarnych}
 
-\subsubsection{biblioteki .so i .a}
+\subsubsection{listowanie symboli}
 
 Przy problemach z linkowaniem przydatne może być wyświetlenie symboli które zawiera konkretna biblioteka. Możemy to zrobić poleceniami:
 
 \begin{Verbatim}
+# listowanie symboli w pliku wykonywalnym typu elf:
+	readelf -sWc   PLIK
+
 # listowanie symboli w pliku .so:
-	nm -g       PLIK.so
-	nm -gC      PLIK.so  # for C++ libs
-	readelf -Ws PLIK.so  # for ELF libs
+	nm -gC         PLIK.so
 
 # listowanie symboli w pliku .a:
-	nm          PLIK.a
+	nm             PLIK.a
 \end{Verbatim}
