@@ -67,7 +67,7 @@ Po nazwie polecenia mogą występować opcje i/lub argumenty. Są one oddzielane
 Nie ma silnego rozróżnienia opcji od argumentów, typowo stosowaną konwencją jest rozpoczynanie opcji od pojedynczego myślnika (opcje krótkie - jednoliterowe) lub dwóch myślników (opcje długie).
 	W przypadku stosowania tej konwencji po pojedynczym myślniku może występować kilka bezargumentowych opcji jednoliterowych.
 	Typowo argumenty opcji oddzielane są od nich spacją (w przypadku opcji krótkich) lub znakiem równości (w przypadku opcji długich).
-Jeżeli któryś z składników komendy (np. argument) zawiera spacje należy je zabezpieczyć przy pomocy odwrotnego ukośnika lub ujęcia zawierającego je napisu w apostrofy lub cudzysłowia.
+Jeżeli któryś z składników komendy (np. argument) zawiera spacje należy je zabezpieczyć przy pomocy odwrotnego ukośnika lub ujęcia zawierającego je napisu w apostrofy lub cudzysłowa.
 
 \subsection{Uzyskiwanie pomocy}
 
@@ -108,7 +108,6 @@ Jeżeli chcemy przekierować go do pliku połączenie strumieni powinno mieć mi
 ls . NieIstniejącyPlik >log.txt 2>&1
 \end{Verbatim}
 Bash pozwala użyć \Verb{>&} i \Verb{|&}, które przekierowują oba strumienie odpowiednio do pliku lub standardowego wejścia innego polecenia, ale jest to rozszerzenie wykraczające poza standardową składnię sh.
-% END: unix intro
 
 \subsection{Kod powrotu polecenia oraz łączenie poleceń}
 
@@ -129,6 +128,7 @@ Spacje w powyższych konstrukcjach są opcjonalne.
 	\item \Verb$a&$ uruchomi polecenie a w tle i odda linię poleceń,
 	\item \Verb$a;$ uruchomi polecenie a (dokładnie tak samo jakby nie było tego średnika).
 \end{itemize}
+% END: unix intro
 
 % BEGIN: katalog roboczy
 \subsection{Katalog roboczy}

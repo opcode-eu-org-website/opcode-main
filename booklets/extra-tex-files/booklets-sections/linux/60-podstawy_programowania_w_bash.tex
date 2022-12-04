@@ -32,12 +32,12 @@ Obsługiwane są liczby całkowite oraz napisy, bash nie posiada wbudowanej obs�
 
 \begin{CodeFrame*}[bash]{}
 zmiennaA=-91
-zmiennaB="qa z"
+zmiennaB="qa   z"
 zmiennaC=98.6 # to będzie traktowane jako napis a nie liczba
 \end{CodeFrame*}
 Zwróć uwagę na brak spacji pomiędzy nazwą zmiennej a znakiem równości w operacji przypisania - jest to wymóg składniowy.
 
-Odwołanie do zmiennej odbywa się z użyciem znaku dolara, po którym występuje nazwa zmiennej. Nazwa może być ujęta w klamry, ale nie musi (jest to przydatne gdy nie chcemy dawać spacji pomiędzy nazwą zmiennej a np. fragmentem napisu). Rozwijaniu ulegają nazwy zmiennych znajdujące się w napisach umieszczonych w podwójnych cudzysłowach.
+Odwołanie do zmiennej odbywa się z użyciem znaku dolara, po którym występuje nazwa zmiennej. Nazwa może być ujęta w klamry, ale nie musi (jest to przydatne gdy nie chcemy dawać spacji pomiędzy nazwą zmiennej a np. fragmentem napisu). Rozwijaniu ulegają nazwy zmiennych znajdujące się w napisach umieszczonych w podwójnych cudzysłowach. Umieszczenie odwołania do zmiennej w podójnych cudzysłowach zabezpiecza białe znaki (spacje nowe linie) przy przekazywaniu do funkcji i programów (w tym przy przekazywaniu do echo, celem wypisywania).
 
 \begin{CodeFrame*}[bash]{}
 echo  $zmiennaA ${zmiennaA}AA
@@ -174,10 +174,10 @@ Powyższa pętla wypisze po kolei wszystkie wiersze pliku \texttt{/etc/fstab} pr
 
 \begin{ProTip}[breakable]{przekierowania strumieni a zmienne}
 Przekierowanie standardowego wyjścia na standardowe wejście odbywa się między dwoma różnymi procesami.
-Zatem w konstrukcjach typu \texttt{while read} pętla while uruchamiana może być procesie potomnym obecnej powłoki.
+Zatem w konstrukcjach typu \texttt{while read} pętla while uruchamiana może być w procesie potomnym obecnej powłoki.
 Efektem tego jest iż w niektórych przypadkach wykonywane modyfikacje zmiennych wewnątrz takiej pętli nie będą widoczne poza nią.
 
-Przykładem takiej sytuacji jest poniższy kod (polecenie ps dodano aby pokazać utworzneie procesu potomnego powłoki):
+Przykładem takiej sytuacji jest poniższy kod (polecenie ps dodano aby pokazać utworzenie procesu potomnego powłoki):
 
 \begin{CodeFrame*}[bash]{}
 zm=0; ps -f
@@ -208,7 +208,7 @@ while read a b c; do echo "$a -- $c"; done < /etc/passwd
 unset IFS # przywracamy domyślne zachowanie read poprzez usunięcie zmiennej IFS
 \end{CodeFrame*}
 
-Należy mieć na uwadze, że cudzysłowa wokół wypisania zmiennej c są istotne – bez nich znak dwókropka mógłby być zmieniony na spacje.
+Należy mieć na uwadze, że cudzysłowa wokół wypisania zmiennej c są istotne – bez nich znak dwukropka mógłby być zmieniony na spacje.
 
 
 \subsubsection{Instrukcja if}
