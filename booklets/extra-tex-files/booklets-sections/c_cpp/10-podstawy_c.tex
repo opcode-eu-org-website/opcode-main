@@ -94,7 +94,6 @@ Szczegółowy opis \cpp{printf()} oraz więcej napisów formatujących można zn
 Do wypisywania samego napisu (bez możliwości podstawienia zmiennych, itd.) posłużyć może funkcja \cpp{puts()}, która wypisuje podany napis dodając znak nowej linii.
 \end{ProTip}
 
-
 \section{Przepływ sterowania w programie - skoki, warunki, pętle, funkcje}
 
 Licznik programu (program counter, instruction pointer lub instruction address register) jest rejestrem procesora który określa adres następnej (w niektórych architekturach aktualnej) instrukcji która ma zostać przetworzona procesor.
@@ -107,6 +106,8 @@ W większości przypadków pętle realizowane są na poziomie kodu maszynowego j
 
 Jako że program komputerowy jest sekwencją wykonywanych instrukcji musi rozpoczynać się od określonego miejsca.
 W przypadku kodu C/C++ punktem startu jest funkcja \cpp{main()}. Zakończenie tej funkcji oznacza zakończenie programu, a wartość przez nią zwracana odpowiedzialna jest za tzw. kod powrotu przekazany procesowi wywołującemu program. 
+
+\insertZadanie{booklets-sections/c_cpp/zadania.tex}{helloworld1}{}
 
 \subsection{Podstawowe konstrukcje}
 
@@ -168,6 +169,8 @@ int main() {
     }
 }
 \end{CodeFrame*}
+
+\insertZadanie{booklets-sections/c_cpp/zadania.tex}{helloworld2}{}
 
 \subsection{Własne funkcje}
 
@@ -232,6 +235,10 @@ int main() {
 Napisy w C są w istocie tablicami elementów typu \cpp{char}. Pojedynczy znak reprezentowany jest poprzez jeden element tablicy (dla znaków kodowanych jednobajtowo) lub grupę takich elementów (dla znaków kodowanych wielobajtowo, np. polskich znaczków w UTF8). Koniec napisu oznaczany jest przez element o wartości zero (\cpp{NULL}).
 
 W C pojedynczy znak napisu (czyli np. \cpp{char x = napis[i]} albo \cpp{char x = 'A';}) nie jest napisem – jest liczbą (zauważ różnicę między pojedynczymi a podwójnymi cudzysłowami). Możemy go wypisać z użyciem \cpp{printf()} jako wartość numeryczną poprzez \Verb#%d# lub jako znak poprzez \Verb#%c#: \cpp{printf("%d <=> %c", 'A', 'A');}.
+
+\insertZadanie{booklets-sections/c_cpp/zadania.tex}{podnapis}{}
+\insertZadanie{booklets-sections/c_cpp/zadania.tex}{podnapis2}{}
+\insertZadanie{booklets-sections/c_cpp/zadania.tex}{podnapis_utf}{}
 
 \section{Funkcja main}
 

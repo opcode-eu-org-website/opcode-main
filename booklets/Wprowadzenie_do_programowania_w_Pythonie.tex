@@ -27,7 +27,7 @@
 	Projekt ,,Matematyka dla Ciekawych Świata'',\\
 	Robert Ryszard Paciorek\\\normalsize\ttfamily <rrp@opcode.eu.org>
 }
-\date  {2022-12-06}
+\date  {2022-12-09}
 
 \makeatletter\hypersetup{
 	pdftitle = {\@title}, pdfauthor = {\@author}
@@ -39,6 +39,7 @@
 
 \section{Wprowadzenie}
 \input{booklets-sections/python/00-intro.tex}
+\input{booklets-sections/python/zadania-00-intro.tex}
 \input{booklets-sections/python/10-konsola_interaktywna.tex}
 \clearpage
 \input{booklets-sections/python/20-podstawy.tex}
@@ -70,12 +71,7 @@
 \input{booklets-sections/python/literatura.tex}
 
 \clearpage
-\ZadaniaRozwiazania[intro=booklets-sections/python/zadania-00-intro.tex]{
-	booklets-sections/python/zadania-20-podstawy.tex,
-	booklets-sections/python/zadania-30-napisy.tex,
-	booklets-sections/python/zadania-40-zmienne_i_ich_typy.tex,
-	booklets-sections/python/zadania-50_60-fork_pliki.tex,
-}
+\ZadaniaRozwiazaniaAuto[norepeat=true]
 
 \copyrightFooter{
 	© Matematyka dla Ciekawych Świata, 2016-2021.\\

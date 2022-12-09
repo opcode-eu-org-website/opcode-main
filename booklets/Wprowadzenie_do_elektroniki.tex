@@ -27,7 +27,7 @@
 	Projekt ,,Matematyka dla Ciekawych Świata'',\\
 	Robert Ryszard Paciorek\\\normalsize\ttfamily <rrp@opcode.eu.org>
 }
-\date  {2022-08-04}
+\date  {2022-12-09}
 
 \makeatletter\hypersetup{
 	pdftitle = {\@title}, pdfauthor = {\@author}
@@ -39,13 +39,30 @@
 
 \input{booklets-sections/electronics/10-podstawy.tex}
 \input{booklets-sections/electronics/11-bierne.tex}
+\subsection{Zadania praktyczne}
+	\insertZadanie{booklets-sections/electronics/zadania-10-12-podstawy.tex}{zbuduj_ladowanie_kondensatora}{}
 \input{booklets-sections/electronics/12-dioda.tex}
+\subsection{Zadania praktyczne}
+	\insertZadanie{booklets-sections/electronics/zadania-10-12-podstawy.tex}{zbuduj_spadek_napiecia_na_led}{}
+	\insertZadanie{booklets-sections/electronics/zadania-10-12-podstawy.tex}{zbuduj_stabilizator_zener1}{}
+
 \input{booklets-sections/electronics/13-tranzystor.tex}
+\subsection{Zadania praktyczne}
+	\insertZadanie{booklets-sections/electronics/zadania-13-tranzystor.tex}{zbuduj_klucz_npn1}{}
+	\insertZadanie{booklets-sections/electronics/zadania-13-tranzystor.tex}{zbuduj_klucz_npn2}{}
+	\insertZadanie{booklets-sections/electronics/zadania-13-tranzystor.tex}{zbuduj_stabilizator_zener2}{}
+	\insertZadanie{booklets-sections/electronics/zadania-13-tranzystor.tex}{wzmacniacz_operacyjny}{}
 
 \clearpage
 \input{booklets-sections/electronics/21-bramki.tex}
+\subsection{Zadania praktyczne}
+	\insertZadanie{booklets-sections/electronics/zadania-20-30-cyfrowa.tex}{zbuduj_przerzutnik_z_bramek}{}
+	\insertZadanie{booklets-sections/electronics/zadania-20-30-cyfrowa.tex}{zbuduj_bramka_z_tranzystorow}{}
 \input{booklets-sections/electronics/22-przerzutniki.tex}
 \input{booklets-sections/electronics/23-transmisja.tex}
+\subsection{Zadania praktyczne}
+	\insertZadanie{booklets-sections/electronics/zadania-20-30-cyfrowa.tex}{zbuduj_rejestr_przesuwny}{}
+\input{booklets-sections/electronics/24-standardowe_interfejsy.tex}
 
 \input{booklets-sections/electronics/30-programowalne.tex}
 
@@ -59,11 +76,7 @@
 \section{Literatura dodatkowa \zaawansowane{10}}
 \input{booklets-sections/electronics/literatura.tex}
 
-\ZadaniaRozwiazania{
-	booklets-sections/electronics/zadania-10-12-podstawy.tex,
-	booklets-sections/electronics/zadania-13-tranzystor.tex,
-	booklets-sections/electronics/zadania-20-30-cyfrowa.tex,
-}[praktyczne]
+\ZadaniaRozwiazaniaAuto[norepeat=true]
 
 \copyrightFooter{
 	© Matematyka dla Ciekawych Świata, 2017-2021.\\

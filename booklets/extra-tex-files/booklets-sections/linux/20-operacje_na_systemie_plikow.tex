@@ -23,10 +23,8 @@
 
 \section{Operacje na systemie plików}
 
-\subsection{Podstawowe komendy}
-
 % BEGIN: Operacje na systemie plików
-\subsubsection{echo i znaki uogólniające}
+\subsection{echo i znaki uogólniające}
 
 Polecenie echo służy do wypisania przekazanych do niego argumentów na ekran – np. \Verb$echo abc xyz$ wypisze \textit{abc xyz}.
 Polecenie to może zostać użyte także do wypisania plików pasujących do jakiegoś wzorca np. \Verb$echo a*$ wypisze pliki zaczynające się literą \textit{a}.
@@ -59,7 +57,7 @@ Kilka przykładów:
 	\item pliki ukryte (wliczając bieżący i nadrzędny katalog): \Verb{echo .*}
 \end{itemize}
 
-\subsubsection{listowanie i  wyszukiwanie plików}
+\subsection{listowanie i  wyszukiwanie plików}
 
 \begin{itemize}
 	\item \Verb{ls [opcje] [ścieżka]}
@@ -121,7 +119,12 @@ i w przypadku argumentów opcji takich jak np. \texttt{-name} na ogół chcemy a
 
 Warto zauważyć także, że jeżeli komanda \texttt{ls} w wyniku rozwinięcia znaków uogólniających dostanie jako argument ścieżkę do katalogu to wylistuje jego zawartość (zachowanie to zmienia opcja \texttt{-d}).
 
-\subsubsection{kopiowanie, przenoszenie, usuwanie, ...}
+\insertZadanie{booklets-sections/linux/zadania-10_20.tex}{lsetc}{}
+\insertZadanie{booklets-sections/linux/zadania-10_20.tex}{findetc}{}
+\insertZadanie{booklets-sections/linux/zadania-10_20.tex}{ls_nazwy_cd}{}
+\insertZadanie{booklets-sections/linux/zadania-10_20.tex}{findetc2}{}
+
+\subsection{kopiowanie, przenoszenie, usuwanie, ...}
 \begin{itemize}
 	\item \Verb{cp [opcje] źródło1 [źródło2 [...]] cel}
 		kopiuje wskazany plik (lub pliki) do wskazanej lokalizacji, w przypadku kopiowania wielu plików cel powinien być katalogiem, do ważniejszych opcji należy zaliczyć:\\
@@ -159,3 +162,6 @@ Warto zauważyć także, że jeżeli komanda \texttt{ls} w wyniku rozwinięcia z
 			\texttt{-p} pozwala na tworzenie całej ścieżki a nie tylko ostatniego elementu, nie zgłasza błędu gdy wskazany katalog istnieje
 \end{itemize}
 % END: Operacje na systemie plików
+
+\setcounter{subsection}{0}
+\insertZadanie{booklets-sections/linux/zadania-10_20.tex}{linki_symboliczne}{}

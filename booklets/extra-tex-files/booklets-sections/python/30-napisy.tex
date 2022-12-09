@@ -102,6 +102,8 @@ W powyższym przykładzie:
 \item komenda \python{tekst[::-3]} zwraca co 3 znak z napisu od tyłu (warto zauważyć że nie zawsze jest to równoważne wypisaniu napisu złożonego z co 3 znaku od tyłu).
 \end{itemize}
 
+\insertZadanie{booklets-sections/python/zadania-30-napisy.tex}{funkcja_wspak}{}
+
 \subsection{Napis jako lista}
 
 Wszystkie listy, których do tej pory używaliśmy w pętli \python{for} były listami liczb.
@@ -165,6 +167,8 @@ abXdeXgh
 \end{CodeFrame}
 %  END: Napisy - wprowadzenie
 
+\insertZadanie{booklets-sections/python/zadania-30-napisy.tex}{funkcja_wyiksuj}{}
+
 %  BEGIN: Obiektowość
 \subsection{Obiektowość}
 
@@ -182,6 +186,8 @@ Opis danego typu wraz z dostępnymi metodami można obejrzeć przy pomocy polece
 
 W przypadku napisów za pomocą metod tej klasy mamy możliwość między innymi wyszukania miejsca wystąpienia podnapisu, zamiany wielkich liter na małe i odwrotnie, etc.
 %  END: Obiektowość
+
+\insertZadanie{booklets-sections/python/zadania-40-zmienne_i_ich_typy.tex}{obiektowo_string}{}
 
 %  BEGIN: Konwersje liczba -- napis
 \subsection{Konwersje liczba -- napis}
@@ -270,6 +276,8 @@ Zwróć uwagę na równoważność poszczególnych zapisów – wypisują taki s
 
 Niektóre znaki specjalne jak np. znak nowej linii, tabulator możemy wprowadzić z użyciem krótszych i łatwiejszych do zapamietania sekwencji niż opartych o ich numer. Dla znaku nowej linii jest to \python{\n}, a tabulatora \python{\t}.
 %  END: Konwersja znak - numer unicode
+
+\insertZadanie{booklets-sections/python/zadania-30-napisy.tex}{dekodowanie_utf8_w_base64}{}
 
 %  BEGIN: Wyrażenia regularne 01
 \subsection{Wyrażenia regularne \zaawansowane{10}}
@@ -386,3 +394,6 @@ Zwróć uwagę na:
 	Po każdym z operatorów powtórzeń (\Verb@. ? + {n,m}@) możemy dodać pytajnik (\Verb@.? ?? +? {n,m}?@) aby wskazać że ma on dopasowywać najmniejszy możliwy fragment, czyli ma działać nie zachłannie.
 \end{itemize}
 %  END: Wyrażenia regularne 01
+
+\insertZadanie{booklets-sections/python/zadania-30-napisy.tex}{regex_czy_slowo}{}
+\insertZadanie{booklets-sections/python/zadania-30-napisy.tex}{regex_czy_liczba}{}

@@ -1,0 +1,88 @@
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\section{Standardowe interfejsy}
+
+Istnieje wiele zestandaryzowanych interfejsów zarówno szeregowych jak i równoległych, wśród najważniejszych należy wymienić:
+
+\begin{center} \includegraphics[width=0.47\textwidth]{img/elektronika/spi}    \includegraphics[width=0.47\textwidth]{img/elektronika/twi} \end{center}
+
+\subsection{SPI (Serial Peripheral Interface)}
+    jest to szeregowa magistrala full-duplex działająca w układzie master-slave złożona z linii zegarowej (SCLK), nadawania przez mastera (MOSI), odbioru przez mastera (MISO) oraz linii służących do aktywacji urządzenia slave (SS / CS). 
+
+\begin{wrapfigure}{r}{0.48\textwidth} \begin{center} \vspace{-20pt} \includegraphics[width=0.43\textwidth]{img/elektronika/onewire} \vspace{-20pt} \end{center} \end{wrapfigure}
+
+\subsection{I2C (TWI)}
+    jest to szeregowa magistrala half-duplex złożona z linii sygnałowej (SDA) i zegara (SCL) posiadająca zdefiniowany format ramki wraz z adresowaniem. Z wyjątkiem bitu startu i stopu stan linii danych może zmieniać się tylko przy niskim stanie linii zegarowej.
+    Nadajniki są typu open-drain przez co realizowany jest iloczyn na drucie, co pozwala na wykrywanie kolizji (jeżeli dany nadajnik nie nadaje zera a linia jest w stanie zera to nadaje także ktoś inny). Pozwala to także na uzyskanie układów multimaster, pomimo iż typowo na magistrali takiej występuje tylko jeden układ master (nadający sygnał zegara i inicjujący transmisję). 
+
+\subsection{1 wire (one-wire)}
+    jest to szeregowa magistrala half-duplex złożona z jedynie z linii sygnałowej (która może także służyć do zasilania urządzeń) posiadająca zdefiniowany format ramki wraz z adresowaniem. Standardowe nadawanie jest realizowane jako open-drain (wyjątkiem jest nadawanie tzw power-byte). 
+
+\subsection{USART}
+    jest to uniwersalny synchroniczny i asynchroniczny nadajnik i odbiornik, umożliwia realizację szeregowej transmisji synchronicznej (zgodnie z zegarem) lub asynchronicznej (wykrywanie początku ramki na podstawie linii danych). Interfejs korzysta z rozdzielonych linii nadajnika i odbiornika (wyjście danych TxD oraz wejście danych RxD, co umożliwia realizację transmisji full-duplex) oraz może korzystać z dodatkowych sygnałów sterujących (wyjście RTS informujące o gotowości do odbioru oraz wejście CTS informacji o gotowości odbioru / zezwolenia na nadawanie). Niekiedy dostępne jest także wyjście załączenia nadajnika używane do pracy w trybie half-duplex (linie TxD i RxD połączone buforem trój-stanowym nadajnika).
+
+    \begin{center} \includegraphics[width=0.94\textwidth]{img/elektronika/uart1} \end{center}
+    Interfejs ten najczęściej wykorzystywany jest w trybie asynchronicznym jako UART. W połączeniach UART zarówno nadajnik jak i odbiornik muszą mieć ustawione takie same parametry transmisji (szybkość, znaczenie 9 bitu (typowo bit parzystości, ale może także oznaczać np. pole adresowe), itp).
+    Głównymi standardami elektrycznymi dla UART są: poziomy napięć układów elektronicznych używających tych portów (3.3V, 5V), RS-232 (w pełnym wariancie używa sygnałów kontroli przepływu, poziom logiczny 1 wynosi od -15V do -3V, a poziom logiczny 0 od +3V do +15V), RS-422 (transmisja różnicowa full-duplex pomiędzy dwoma urządzeniami) i RS-485 (transmisja różnicowa half-duplex w oparciu o szynę łączącą wiele urządzeń, kompatybilny elektrycznie z RS-422), możliwa jest też transmisja światłowodowa i bezprzewodowa.
+
+    \begin{center} \resizebox{0.87\textwidth}{!}{\includegraphics[trim={0 0 0 9cm},clip]{img/elektronika/uart2}} \end{center}
+    \begin{center} \resizebox{0.87\textwidth}{!}{\includegraphics[trim={0 6cm 0 0},clip]{img/elektronika/uart2}} \end{center}
+% END: Elektronika - Typy transmisji
+
+\begin{ProTip}[breakable]{Rezystory terminujące \zaawansowane{30}}
+Niektóre  ze standardów interfejsów komunikacyjnych przewidują kończenie swoich magistral rezystorem terminującym.
+Zastosowanie takiego rezystora ma na celu eliminację odbić sygnału, które mogłyby powstać na końcu linii transmisyjnej.
+
+\vspace{7pt}
+
+Zjawisko to występuje w przypadku \textit{linii długich}, czyli takich których długość jest zbliżona lub większa od długości fali związanej z przesyłanym sygnałem.
+Jeżeli rozważymy np. impuls o czasie trwania 1$\mu \rm s$ to zajmie on na kablu odcinek o długości około 200m (zależy to od prędkości rozchodzenia się fali elektromagnetycznej w ośrodku który stanowi dany przewód).
+Zatem dla sygnału 1MHz (czyli takiego gdzie pojedyncze impulsy są właśnie długości 1$\mu \rm s$) przewód o długości kilkuset metrów będzie linią długą.
+
+\vspace{7pt}
+
+Odbicia te wynikają z faktu, iż przemieszczanie się sygnału (np. naszego impulsu 5V o czasie trwania 1$\mu \rm s$) wzdłuż przewodu związane jest z
+	ładowaniem kolejnych pojemności pasożytniczych, związanych z odcinkiem przewodu do którego dociera sygnał.
+Dzieje się to kosztem rozładowania pojemności odcinka przewodu który sygnał już opuścił.
+
+W momencie gdy sygnał trafia na koniec przewodnika nie ma możliwości rozładowania tej pojemności na kolejny odcinek przewodu, więc ładunek z nią związany „rozpływa się po kablu” powodując powstanie odbicia.
+Odbicie takie (biegnące od końca przewodu w stronę nadajnika) nakłada się na kolejne impulsy naszego sygnału (biegnące od nadajnika) i powoduje zakłócenia w ich odbiorze (interpretacji).
+
+Zastosowanie odpowiedniego rezystora na końcu linii pozwala na rozładowanie tej pojemności (tak jakby był tam kolejny nieskończenie długi odcinek przewodu) i eliminację odbicia.
+Wartość tej rezystancji jest charakterystyczna dla danego przewodu i określana przez parametr nazywany \textit{impedancją falową}.
+
+Rezystor terminujący stanowi obciążenie dla nadajnika i powinien on być stosowany tylko na końcach magistrali, czyli np. na ostatnich urządzeniach podłączonych do magistrali (a nie przy każdym urządzeniu do niej włączonym).
+
+\vspace{7pt}
+
+Jeżeli długość linii jest dużo mniejsza (dla sygnałów prostokątnych przyjmuje się że około 20-40 razy) od długości odcinka jaką zajmuje pojedynczy impuls (np. linia długości 3m, dla przykładowego sygnału 1MHz)
+to nie ma potrzeby stosowania rezystorów terminujących (często nawet gdy w ogólności dany standard je przewiduje), gdyż stan całej linii jest spójny i wymuszany przez nadajnik (nie jest to przypadek linii długiej).
+
+\vspace{7pt}
+
+Standard I2C nie przewiduje rezystorów terminujących (i nie powinny być w nim używane, zwłaszcza że są to linie open drain i powstawałby dzielnik z rezystorem pull-up).
+Wynika to z tego iż przy maksymalnej prędkości tego interfejsu za linie długie należałoby uznać odcinki co najmniej kilkunastometrowe, a z innych względów standard ten posiada ograniczenie do kilku metrów.
+
+Standard RS-485 przewiduje stosowanie rezystorów terminujących 120 Ω, jednak w przypadku krótkich połączeń i/lub małych prędkości transmisji mogą one być pominięte.
+\end{ProTip}

@@ -25,7 +25,6 @@
 	\insertZadanie{\currfilepath}{upper_false}{}
 	\insertZadanie{\currfilepath}{ls_nazwy}{}
 	\insertZadanie{\currfilepath}{wyszukaj_napis}{}
-	\insertZadanie{\currfilepath}{ls_nazwy_cd}{}
 }
 
 
@@ -76,24 +75,5 @@ grep -r nameserver /etc/
 \item można by użyć find z warunkiem exec wykonującym grep na danym pliku:\\
 	\shell{find /etc/ -exec grep nameserver \{\} \;}\\
 	ale gdy nie mamy potrzeby stosować innych warunków (dla których potrzebny byłby find) jest to przerostem formy (zarówno w zapisie jak i koszcie obliczeniowym wykonania – find dla każdego pliku musi zrobić fork i exec na odpowiedniego grep'a)
-\end{itemize}
-\fi
-
-
-\dbEntryBegin{ls_nazwy_cd}\if1\dbEntryCheckResults
-Wyświetl nazwy (bez ścieżki) plików i katalogów znajdujących się (bezpośrednio) w \texttt{/etc/}, których nazwa zaczyna się literą \texttt{p} (jak w zadaniu \ref{ls_nazwy}),
-ale korzystając jedynie z poleceń \Verb#cd# i \Verb#ls# (oczywiście możesz użyć innych argumentów i/lub opcji niż podane w zadaniu \ref{ls_nazwy}).
-\fi
-\dbEntryBegin{ls_nazwy_cd-rozwiazanie}\if1\dbEntryCheckResults
-\begin{CodeFrame*}[bash]{}
-cd /etc && ls -d p*
-\end{CodeFrame*}
-
-\noindent Zwróć uwagę że:
-\begin{itemize}
-\item \Verb#ls# listuje pliki z bierzącego katalogtu nie dodajac do nich ściezki
-\item do połaczenia polecenia \Verb#cd# i \Verb#ls# użyliśmy \Verb#&&#, w tym wypadku nie ma to większego znaczenia,
-      jednak jeżeli wykonanie drugiej komendy w niewłaściwym katalogu mogłoby być bolesne takie połączenie tych poleceń zapobiegnie uruchomieniu drugiego gdy pierwsze nie wykonało się poprawnie
-      (jest to dobra praktyka w takich przypadkach)
 \end{itemize}
 \fi

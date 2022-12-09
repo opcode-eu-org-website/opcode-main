@@ -26,6 +26,7 @@
 	\insertZadanie{\currfilepath}{lsetc}{}
 	\insertZadanie{\currfilepath}{findetc}{}
 	\insertZadanie{\currfilepath}{linki_symboliczne}{}
+	\insertZadanie{\currfilepath}{ls_nazwy_cd}{}
 	\insertZadanie{\currfilepath}{findetc2}{}
 }
 
@@ -83,6 +84,23 @@ ls -d /etc/?as* /etc/?ap*
 \end{itemize}
 \fi
 
+\dbEntryBegin{ls_nazwy_cd}\if1\dbEntryCheckResults
+Wyświetl nazwy (bez ścieżki) plików i katalogów znajdujących się (bezpośrednio) w \texttt{/etc/}, których nazwa zaczyna się literą \texttt{p} (jak w zadaniu \ref{ls_nazwy}).
+Zadanie rozwiąrz korzystając jedynie z poleceń \Verb#cd# i \Verb#ls# (oczywiście rozwiązanie może składać się z sekwencji poleceń, możesz też użyć innych argumentów i/lub opcji niż podane w zadaniu \ref{ls_nazwy}).
+\fi
+\dbEntryBegin{ls_nazwy_cd-rozwiazanie}\if1\dbEntryCheckResults
+\begin{CodeFrame*}[bash]{}
+cd /etc && ls -d p*
+\end{CodeFrame*}
+
+\noindent Zwróć uwagę że:
+\begin{itemize}
+\item \Verb#ls# listuje pliki z bierzącego katalogtu nie dodajac do nich ściezki
+\item do połączenia polecenia \Verb#cd# i \Verb#ls# użyliśmy \Verb#&&#, w tym wypadku nie ma to większego znaczenia,
+      jednak jeżeli wykonanie drugiej komendy w niewłaściwym katalogu mogłoby być bolesne takie połączenie tych poleceń zapobiegnie uruchomieniu drugiego gdy pierwsze nie wykonało się poprawnie
+      (jest to dobra praktyka w takich przypadkach)
+\end{itemize}
+\fi
 
 \dbEntryBegin{findetc}\if1\dbEntryCheckResults
 Wyszukaj (rekurencyjnie) wszystkie pliki w katalogu \texttt{/etc/} zmodyfikowane w przeciągu ostatnich 48 godzin.

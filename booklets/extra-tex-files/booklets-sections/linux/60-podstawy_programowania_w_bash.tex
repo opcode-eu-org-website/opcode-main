@@ -210,6 +210,8 @@ unset IFS # przywracamy domyślne zachowanie read poprzez usunięcie zmiennej IF
 
 Należy mieć na uwadze, że cudzysłowa wokół wypisania zmiennej c są istotne – bez nich znak dwukropka mógłby być zmieniony na spacje.
 
+% \setcounter{subsubsection}{0}
+\insertZadanie{booklets-sections/linux/zadania-60-bash.tex}{petla_linki_html}{}
 
 \subsubsection{Instrukcja if}
 
@@ -270,6 +272,9 @@ case $xx in
 		;;
 esac
 \end{CodeFrame*}
+
+% \setcounter{subsubsection}{0}
+\insertZadanie{booklets-sections/linux/zadania-60-bash.tex}{warunek_istnienie_pliku}{}
 
 \subsection{Definiowanie funkcji}
 
@@ -337,3 +342,6 @@ echo $a
 
 Zauważ że w tym wypadku nawiasy klamrowe zachowały się jak nawiasy okrągłe – modyfikacja zmiennej a nie jest widoczna po zakończeniu bloku. Wynika to z użycia przekierowania strumienia podobnie jak w sytuacji omawianej przy pętli while.
 % END: podstawy programowania w bashu
+
+\insertZadanie{booklets-sections/linux/zadania-60-bash.tex}{funkcja_n_razy_napis}{}
+\insertZadanie{booklets-sections/linux/zadania-60-bash.tex}{funkcja_liczba_kotow}{}
