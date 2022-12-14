@@ -81,6 +81,18 @@ Często dostępne są także klasyczne polecenia:
 \end{itemize}
 
 Innym przydatnym poleceniem z pakietu iproute2 jest \Verb#tc#, które służy do konfiguracji ustawień kontroli przepływu (np. kolejkowania) na interfejsach sieciowych.
+Do konfiguracji samych ethernetowych interfejsów fizycznych (np. wymuszenia prędkości karty) używane jest polecenie \Verb#ethtool#.
+Natomiast do konfiguracji sieci wifi mogą być użye polecenia takie jak:
+\begin{itemize}
+	\item \Verb{iwconfig}
+		konfiguracja (większości - do części trzeba użyć wlanctl-ng) bezprzewodowych interfejsów sieciowych
+	\item \Verb{wpa_supplicant}
+		konfiguracja większości bezprzewodowych interfejsów sieciowych z wsparciem dla WPA
+	\item \Verb{wpa_cli}
+		konfiguracja większości bezprzewodowych interfejsów sieciowych z wsparciem dla WPA
+	\item \Verb{iwlist}
+		dodatkowe informacje z bezprzewodowych interfejsów sieciowych (przydatna zwłaszcza opcja scan pokazująca dostępne sieci
+\end{itemize}
 
 Warto zaznaczyć iż konfiguracja dokonywana poleceniami takimi jak \Verb#ip#, \Verb#tc#, \Verb#ifconfig#, itp. jest konfiguracją typu \textit{runtime}, czyli jest tracona po wyłączeniu systemu.
 Aby konfiguracja sieci była trwała należy polecenia takie zapisać w postaci skryptu uruchamianego przy starcie systemu lub skorzystać z systemowych plików konfiguracyjnych związanych z siecią.

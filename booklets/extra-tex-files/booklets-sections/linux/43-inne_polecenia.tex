@@ -1,0 +1,68 @@
+% Copyright (c) 2017-2020 Matematyka dla Ciekawych Świata (http://ciekawi.icm.edu.pl/)
+% Copyright (c) 2017-2020 Robert Ryszard Paciorek <rrp@opcode.eu.org>
+% 
+% MIT License
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+
+\section{Inne polecenia}
+
+Oprócz opisanych wcześniej najpopularniejszych / najistotniejszych poleceń istnieje wiele innych standardowych lub mniej standardowych (wymagających doinstalowania na wielu systemach) narzędzi linii poleceń. Poniżej wymienionych zostało kilka bardziej użytecznych przykładów.
+
+Ponadto dowolny program w środowisku linuxowym (unixowym) może być uruchomiony z linii poleceń poprzez podanie jego nazwy (jeżeli jest w ścieżce wyszukiwania \Verb{$PARTH}) lub pełnej ścieżki do niego.
+W bardzo wielu przypadkach takie uruchamianie pozwala przekazać do niego argument w postaci pliku do otwarcia lub inne opcje, czy nawet użycie programu normalnie pracującego z graficznym interfejsem użytkownika (takiego jak blender, inkscape, ...) w trybie nie interaktywnym (np. do automatycznej konwersji, itp.).
+
+\begin{itemize}
+	\item \Verb{date}
+		data i czas, program ten potrafi także przeliczać datę i czas - np. \Verb$date -d @847103830 '+%Y-%m-%d %H:%M:%S'$, \Verb$date -d '1996-11-04 11:37:10' '+%s'$, \Verb$date -d '1996-11-04 11:37:10 +3week -2days'$
+	\item \Verb{cal}
+		kalendarz
+	
+	\item \Verb{wget} / \Verb{curl}
+		pobieranie stron internetowych i plików
+	
+	\item \Verb{file}
+		rozpoznaje typ pliku (w oparciu o zawartość)
+	
+	\item \Verb{convert}
+		konwersje plików graficznych
+	
+	\vspace{6pt}
+	
+	\item \Verb{iconv}
+		konwersje kodowań plików tekstowych
+	\item \Verb{konwert}
+		konwersje kodowań plików tekstowych – zarówno pomiędzy różnymi kodowaniami danego zbioru znaków, jak też pomiędzy kodowaniami nie pokrywającymi się czy też kodowaniami znaków 8 bitowych na mniejszej ilości bitów, na przykład://
+			\Verb{konwert utf8-ascii} "inteligentnie" usunie znaki nie ascii z pliku kodowanego w utf-8 (np. znaczki z polskimi ogonkami zamieni na odpowiednie znaki ASCII bez tych ogonków);//
+			\Verb{konwert qp-8bit} pozwoli zamienić kodowanie quoted printable na normalne 8 bitowe (rtf-8bit zrobi to z kodowaniem rtf'u)
+		
+	\item \Verb{mewencode} / \Verb{mewdecode}
+		program (stanowiący część pakieu narzędzi dodatkowych dla kilenta pocztowego Mew) do obsługi kodowań mime (w tym Quoted-Printable, base64), m.in. zmienia kodowanie base64 na 8 bitowe
+	\item \Verb{qprint}
+		program do kodowania i dekodowania "Quoted-Printable"
+	\item \Verb{base64}
+		program do kodowania i dekodowania base64
+	\item \Verb{strings}
+		wypisuje sekwencje znaków drukowanych (określanie zawartości plików nietekstowych)
+		
+	\vspace{6pt}
+	
+	\item \Verb{command -v  komenda}
+		zwraca wykonywaną ścieżkę / polecenie przy wykonywaniu \Verb{komenda}
+\end{itemize}
