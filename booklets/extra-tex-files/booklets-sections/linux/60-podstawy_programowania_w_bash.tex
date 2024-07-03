@@ -198,9 +198,38 @@ while read x; do
 done < /etc/fstab
 echo $zm
 \end{CodeFrame*}
+
+Jeżeli do pętli ma trafić wyjście jakiegoś polecenia możemy użyć składni bash'a pozwalajacej na podstawienie wyniku polecenia jako pliku w postaci \Verb$<(polecenie)$ wraz z przekierowaniem z pliku, na przykład:
+\begin{CodeFrame*}[bash]{}
+zm=0; ps -f
+while read x; do
+	[ $zm -lt 1 ] && ps -f
+	zm=13
+done < <$(cat /etc/fstab)
+echo $zm
+\end{CodeFrame*}
+
+Zauważ spację pomiędzy dwoma znakiami \Verb$<$ i brak spacji pomiędzy drugim \Verb$<$ i znakiem dolara).
+
+Inną możliwością jest użycie kodu powrotu do odebrania wartości z wnętrza pętli:
+\begin{CodeFrame*}[bash]{}
+zm=0; ps -f
+my_code() {
+	while read x; do
+		[ $zm -lt 1 ] && ps -f
+		zm=13
+	done;
+	return $zm;
+}
+cat /etc/fstab | my_code
+zm=$?
+echo $zm
+\end{CodeFrame*}
+
+Została tu zdefiniowana funkcja bash'owa (\Verb$my_code$), o których więcej informacji znajdziesz w odpowiednim rozdziale poniżej.
 \end{ProTip}
 
-Słowa domyślnie rozdzielane są przy pomocy dowolnego ciągu spacji lub tabulatorów, separator można zmienić za pomocą zmiennej \texttt{IFS}, np:
+Słowa domyślnie rozdzielane są przy pomocy dowolnego ciągu spacji lub tabulatorów. Separator ten można zmienić za pomocą zmiennej \texttt{IFS}, np:
 
 \begin{CodeFrame*}[bash]{}
 IFS=":"

@@ -37,7 +37,7 @@ Podstawowymi znakami uogólniającymi powłoki są:
 	\item \Verb{[a-z AD]} oznaczający dowolny znak z wymienionych w zbiorze ujętym w nawiasach kwadratowych, zbiór może być definiowany z użyciem zakresów, np. a-z AD oznacza dowolną małą literę od a do z włącznie, spację, dużą literą A lub D
 	\item \Verb{[!a-z]} oznaczający dowolny znak z wyjątkiem znaków wymienionych w podanym zbiorze, zbiór może być definiowany z użyciem zakresów, np. a-z oznacza dowolną małą literę od a do z włącznie
 \end{itemize}
-Warto zwrócić uwagę że sama gwiazdka nie dopasowuje plików ukrytych (zaczynających się od kropki), czyli np. \Verb$echo *$ wypisze wszystkie pliki w bieżącym katalogu, z wyjątkiem tych których pierwszym znakiem w nazwie jest kropka.
+Warto zwrócić uwagę że sama gwiazdka nie dopasowuje plików ukrytych (zaczynających się od kropki), czyli np. \Verb$echo *$ wypisze wszystkie pliki w bieżącym katalogu, z wyjątkiem tych których pierwszym znakiem w nazwie jest kropka. Aby je wypisać możemy użyć \Verb$echo .*$ lub (gdy chemy pominąć kropkę i dwie kropki, bedące specjalnymi dowiązaniami do bierzącego i nadżędnego katalogu):  \Verb$echo .[!.]*$
 
 Napisy (a więc także ścieżki i nazwy plików) mogą być ujęte w cudzysłowie pojedynczym (\texttt{'}, np. \texttt{'aaa bbb'}) lub podwójnym (\texttt{"}, np. \texttt{"aaa bbb"}) celem np. ochrony spacji w nich występujących.
 Oba typy cudzysłowów zabezpieczają przed rozwijaniem znaków uogólniających (zastępowaniem napisu ze znakami listą pasujących nazw / ścieżek).
