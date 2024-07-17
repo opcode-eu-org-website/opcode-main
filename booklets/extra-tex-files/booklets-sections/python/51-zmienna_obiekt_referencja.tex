@@ -115,6 +115,57 @@ Należy mieć także na uwadze że nawet argumenty funkcji przekazywane są jako
 natomiast dopiero operacja przypisania nowej wartości do zmiennej związanej z argumentem powoduje że zaczyna ona wskazywać
 na nowo utworzony (w wyniku wyrażenia po prawej stronie znaku równości) obiekt.
 
+\subsubsection{Lambda}
+
+\begin{CodeFrame}[python]{0.55\textwidth}
+tablicaA = [None, None, None, None]
+tablicaB = [None, None, None, None]
+
+for x in [0,1,2,3]:
+	def tmpA(a):
+		return x+a
+	def tmpB(a, x=x):
+		return x+a
+	tablicaA[x]=tmpA
+	tablicaB[x]=tmpB
+
+print (tablicaA[1](3), tablicaB[1](3))
+x = 0
+print (tablicaA[1](3), tablicaB[1](3))
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+6 4
+3 4
+\end{CodeFrame}
+
+Python pozwala na definiowanie funcji wewnątrz funkcji oraz łatwe przechowywanie funkcji w zmiennych, także kolekcjach takich jak listy i słowniki.
+Warto zwrócić uwagę na sposób obsługi zmiennych globalnych, czy też zewnętrznych w takich przypadkach.
+W powyższym przykładzie widzimy, że funkcje tak zdefiniowane nie korzystają z wartości zmiennej x z miejsca definicji, tylko z miejsca wywołania.
+Jeżeli potrzebujemy aby funkcja używała wartości z chwili definicji to możemy użyć x jako wartości domyślnej któregoś z argumentów tej funkcji.
+
+Innym sposobem lokalnego definiowania funkcji, często dostępnym także w językach nie pozwalajacych na tak swobodne fefiniowanie zwykłych funkcji, jest tak zwana lamba.
+W tym przypadku fefinicja jest jeszcze bardziej lokalna, funkcja nawet nie posiada swojej nazwy.
+A taka lamba może być bezpośrednio przypisana do jakiejś zmiennej lub przekazana w argumencie.
+Warto zauważyć też że sposób traktowania zmiennych zewnętrznych jest analogiczny.
+
+\begin{CodeFrame}[python]{0.55\textwidth}
+tablicaA = [None, None, None, None]
+tablicaB = [None, None, None, None]
+
+for x in [0, 1, 2, 3]:
+	tablicaA[x] = lambda a,x=x: x+a
+	tablicaB[x] = lambda a: x+a
+
+print (tablicaA[1](3), tablicaB[1](3))
+x = 0
+print (tablicaA[1](3), tablicaB[1](3))
+\end{CodeFrame}
+\begin{CodeFrame}{auto}
+6 4
+3 4
+\end{CodeFrame}
+
+
 \subsubsection{Dla jeszcze bardziej dociekliwych \zaawansowane{30}}
 
 Osobom jeszcze bardziej dociekliwym w temacie wnętrzności Pythona możemy polecić lekturę artykułu omawiającego te zagadnienia \url{http://www.rwdev.eu/articles/objectthinking} oraz samodzielne eksperymenty.
