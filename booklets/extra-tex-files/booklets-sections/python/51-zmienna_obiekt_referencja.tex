@@ -138,14 +138,14 @@ print (tablicaA[1](3), tablicaB[1](3))
 3 4
 \end{CodeFrame}
 
-Python pozwala na definiowanie funcji wewnątrz funkcji oraz łatwe przechowywanie funkcji w zmiennych, także kolekcjach takich jak listy i słowniki.
+Python pozwala na definiowanie funkcji wewnątrz funkcji oraz łatwe przechowywanie funkcji w zmiennych, także kolekcjach takich jak listy i słowniki.
 Warto zwrócić uwagę na sposób obsługi zmiennych globalnych, czy też zewnętrznych w takich przypadkach.
 W powyższym przykładzie widzimy, że funkcje tak zdefiniowane nie korzystają z wartości zmiennej x z miejsca definicji, tylko z miejsca wywołania.
 Jeżeli potrzebujemy aby funkcja używała wartości z chwili definicji to możemy użyć x jako wartości domyślnej któregoś z argumentów tej funkcji.
 
-Innym sposobem lokalnego definiowania funkcji, często dostępnym także w językach nie pozwalajacych na tak swobodne fefiniowanie zwykłych funkcji, jest tak zwana lamba.
-W tym przypadku fefinicja jest jeszcze bardziej lokalna, funkcja nawet nie posiada swojej nazwy.
-A taka lamba może być bezpośrednio przypisana do jakiejś zmiennej lub przekazana w argumencie.
+Innym sposobem lokalnego definiowania funkcji, często dostępnym także w językach nie pozwalających na tak swobodne definiowanie zwykłych funkcji, jest tak zwana lambda.
+W tym przypadku definicja jest jeszcze bardziej lokalna, funkcja nawet nie posiada swojej nazwy.
+A taka lambda może być bezpośrednio przypisana do jakiejś zmiennej lub przekazana w argumencie.
 Warto zauważyć też że sposób traktowania zmiennych zewnętrznych jest analogiczny.
 
 \begin{CodeFrame}[python]{0.55\textwidth}

@@ -199,7 +199,7 @@ done < /etc/fstab
 echo $zm
 \end{CodeFrame*}
 
-Jeżeli do pętli ma trafić wyjście jakiegoś polecenia możemy użyć składni bash'a pozwalajacej na podstawienie wyniku polecenia jako pliku w postaci \Verb$<(polecenie)$ wraz z przekierowaniem z pliku, na przykład:
+Jeżeli do pętli ma trafić wyjście jakiegoś polecenia możemy użyć składni bash'a pozwalającej na podstawienie wyniku polecenia jako pliku w postaci \Verb$<(polecenie)$ wraz z przekierowaniem z pliku, na przykład:
 \begin{CodeFrame*}[bash]{}
 zm=0; ps -f
 while read x; do
@@ -209,7 +209,7 @@ done < <$(cat /etc/fstab)
 echo $zm
 \end{CodeFrame*}
 
-Zauważ spację pomiędzy dwoma znakiami \Verb$<$ i brak spacji pomiędzy drugim \Verb$<$ i znakiem dolara).
+Zauważ spację pomiędzy dwoma znakami \Verb$<$ i brak spacji pomiędzy drugim \Verb$<$ i znakiem dolara).
 
 Inną możliwością jest użycie kodu powrotu do odebrania wartości z wnętrza pętli:
 \begin{CodeFrame*}[bash]{}
@@ -237,7 +237,7 @@ while read a b c; do echo "$a -- $c"; done < /etc/passwd
 unset IFS # przywracamy domyślne zachowanie read poprzez usunięcie zmiennej IFS
 \end{CodeFrame*}
 
-Należy mieć na uwadze, że cudzysłowa wokół wypisania zmiennej c są istotne – bez nich znak dwukropka mógłby być zmieniony na spacje.
+Należy mieć na uwadze, że cudzysłów wokół wypisania zmiennej c są istotne – bez nich znak dwukropka mógłby być zmieniony na spacje.
 
 % \setcounter{subsubsection}{0}
 \insertZadanie{booklets-sections/linux/zadania-60-bash.tex}{petla_linki_html}{}
