@@ -34,11 +34,13 @@
 
 \subsection{układy o programowalnej strukturze (PLD)}
 
-Są to układy w których programowany jest układ bramek, przerzutników, itp. "umieszczanych" w kości oraz ich połączeń.
+Układy z programowalną strukturą logiczną, oparte są na tym że wewnątrz takiego układu programujemy jakiś układ bramek logicznych, przerzutników i tym podobnych elementów oraz ich połączeń.
 
-Program dla takich układów tworzony jest w Hardware Description Language (najczęściej VHDL lub Verilog) i zamiast wykonywanego kodu opisuje strukturę układu logicznego (połączenia bramek, tablice prawdy, etc), która następnie jest programowana w fizycznej kości.
+Do programowania tego typu układów służą języki opisu sprzętu typu HDL (hardware description language). Najczęściej jest to VHDL lub Verilog i zamiast wykonywanego kodu opisuje strukturę układu logicznego (połączenia bramek, tablice prawdy, etc), która następnie jest programowana w fizycznej kości. Pozwala to na zaprogramowanie jakiegoś algorytmu, który realizowany będzie czysto sprzętowo. Taka realizacja sprzętowa, dzięki urównolegleniu wielu procesów jest zazwyczaj znacznie szybsza w działaniu niż wersja programowa.
 
-Najprostszym przykładem układu o programowalnej strukturze logicznej jest układ pamięci $2^n$ bitowej z n-bitową szyną adresową adresującą pojedyncze bity - pozwala on na realizację dowolnej funkcji logicznej o n wejściach i pojedynczym wyjściu.
+Najprostszym koncepcyjnie sposobem realizacji czegoś takiego jest układ pamięciowy, który pozwala na zrealizowanie dowolnej funkcji logicznej, czyli dowolnego układu bramek. Jeżeli weźmiemy pamięć która będzie miała $2^n$ bitów i będzie adresowana n-bitową szyną adresową, to z każdym adresem związany jest jakiś jeden bit i każdy bit odpowiada jednemu adresowi. Pamięć tego typu pozwala na zapisanie tabeli prawdy dowolnej funkcji która posiada n wejść i jedno wyjście – każdemu wejściu odpowiada jeden bit adresu, a związana z daną kombinacją wejść, wartość wyjścia zapisana jest w tej pamięci.
+
+Układy tego typu mają spore zastosowanie praktyczne i pozwalają na konstruowanie układów działających szybciej niż układy procesorowe Zastosowanie programowalnych układów logicznych jest prostsze i szybsze niż konstruowanie takich rozwiązań z pojedynczych elementów takich jak bramki, a przy produkcji na małą i średnią skalę także tańsze od projektowania i produkcji dedykowanych układów scalonych. Pozwala też na aktualizację takiego „sprzętu” poprzez zaprogramowanie poprawionej jego wersji.
 
 Do kategorii tej zaliczają się układy typu:
 \begin{itemize}
@@ -53,9 +55,12 @@ Do kategorii tej zaliczają się układy typu:
 \end{itemize}
 
 \subsection{systemy procesorowe}
-Są to systemy realizujące ciąg instrukcji pobieranych z jakiejś pamięci.
 
-System taki składa się z procesora odpowiedzialnego za interpretację i wykonywanie kolejnych instrukcji oraz pamięci z której pobierane są instrukcje i dane (może to być jedna pamięć, mogą to być rozdzielone pamięci). Do kategorii tej zaliczają się zarówno typowe systemy komputerowe, systemy obliczeniowe jak i różnego rodzaju programowalne mikrokontrolery.
+Układy procesorowe to systemy wykonujące ciąg instrukcji pobieranych z jakieś pamięci. Składają się one z procesora, pamięci programu i pamięci danych. Procesor odpowiedzialny jest za interpretację i wykonywanie kolejnych instrukcji, pamięć przechowuje instrukcje i dane. W zależności od stosowanej architektury kod programu, a raczej kod maszynowy utworzony w wyniku kompilacji kodu programu, może znajdować się albo w tej samej pamięci w której przechowujemy również dane albo może mieć osobną, wydzieloną pamięć.
+
+Systemami procesorowymi są zarówno systemy komputerowe, takie jak PCty czy laptopy, są nimi telefony komórkowe, zarówno smartfony jak i te bardziej prymitywne, są nimi duże systemy obliczeniowe, a także różnego rodzaju mikrokontrolery znajdujące się w sterownikach przemysłowych, centralkach alarmowych, telewizorach, sprzęcie AGD i tak dalej.
+
+Procesor pracuje w cyklach rozkazowych, w ramach których przetwarza pojedynczą instrukcję. Cykl taki może trwać od 1 do kilku lub więcej cykli zegarowych i typowo składa się z następujących kroków:
 
 Procesor pracuje w cyklach rozkazowych, w ramach których przetwarza pojedynczą instrukcję. Cykl taki może trwać od 1 do kilku lub więcej cykli zegarowych i typowo składa się z następujących kroków:
 \begin{enumerate}
@@ -69,12 +74,20 @@ Procesor pracuje w cyklach rozkazowych, w ramach których przetwarza pojedynczą
 	\item wykonanie instrukcji - realizacja wcześniej zdekodowanej instrukcji zgodnie z ustawioną konfiguracją procesora
 \end{enumerate}
 
-Instrukcje skoku polegają na załadowaniu nowej wartości do \emph{licznika programu}, w przypadku skoków warunkowych jest to uzależnione od stanu \emph{rejestru flag}, które ustawiane są w oparciu o wynik ostatniej operacji wykonywanej przez ALU.
+Instrukcje skoku polegają na załadowaniu nowej wartości do *licznika programu*, w przypadku skoków warunkowych jest to uzależnione od stanu *rejestru flag*, które ustawiane są w oparciu o wynik ostatniej operacji wykonywanej przez ALU.
 
-Przedstawiony model działania jest przykładowym i w rzeczywistym procesorze może to wyglądać odmiennie - np. długość instrukcji może być większa niż długość słowa używanego przez procesor / szerokość szyny danych co rozbudowuje fazę pobierania instrukcji z pamięci, mogą występować instrukcje bardziej złożone (np. operacje wykonywane z argumentem pobieranym z pamięci a nie rejestru), może także występować więcej faz (np. poprzez wydzielenie faz dostępu do pamięci, czy zapisywania wyników działania instrukcji).
-Procesor może także działać potokowo, czyli nakładać na siebie kolejne fazy wykonywania różnych instrukcji (np. w czasie wykonywania jednej instrukcji realizować pobieranie kolejnej).
+Trochę uproszczony model działania procesora może wyglądać w sposób następujący: Procesor wystawia na szynę adresową magistrali umożliwiającej dostęp do pamięci adres będący zawartością tak zwanego licznika programu. Jest to adres instrukcji, która ma zostać pobrana i wykonana. Po wystawieniu tego adresu generowany jest cykl odczytu na tej szynie. A odczytany kod instrukcji zapamiętywany jest w rejestrze instrukcji, następuje też zwiększenie licznika programu o 1 po to żeby móc w następnym cyklu pobrać kolejną instrukcję.
+	
+Następnym krokiem jest dekodowanie instrukcji – znajdujący się w procesorze układ dekodera dokonuje zdekodowania instrukcji znajdującej się we wspomnianym rejestrze i konfiguracji procesora w zależności od jej kodu i opcjonalnie argumentów. Konfiguracja ta może polegać na ustawienie odpowiednich multiplekserów, czyli właśnie takich przełączników elektronicznych pomiędzy rejestrami a jednostką wykonującą obliczenia (tak zwanym ALU – jednostką arytmetyczno-logiczną), wystawieniu odpowiedniego kodu operacji dla ALU (celem wykonanie operacji na przykład na zawartości określonych rejestrów). Może to być także podpięcie wskazanego rejestru do szyny danych (celem skomunikowania go z pamięcią - wykonania odczytu lub zapisu do pamięci, bądź celem załadowania jego wartości do licznika programu aby wykonać skok) i tym podobne operacje. Ostatnim krokiem takiego cyklu jest wykonanie tych operacji, czyli wykonanie wcześniej zdekodowanej instrukcji, zgodnie z ustawioną konfiguracją procesora.
+
+Przedstawiony model działania jest przykładowym i w rzeczywistym procesorze może to wyglądać odmiennie - np. długość instrukcji może być większa niż długość słowa używanego przez procesor / szerokość szyny danych co rozbudowuje fazę pobierania instrukcji z pamięci (instrukcja będzie ładowana w kilku fazach, gdyż cała instrukcja nie mieści się jednorazowo na szynie danych), mogą występować instrukcje bardziej złożone (np. operacje wykonywane z argumentem pobieranym z pamięci a nie rejestru), może także występować więcej faz (np. poprzez wydzielenie faz dostępu do pamięci, czy zapisywania wyników działania instrukcji).
+
+Procesor może również działać potokowo, czyli fazy mogą się na siebie nakładać – podczas gdy jedna instrukcja jest wykonywana to kolejna może być już dekodowana. Oczywiście wtedy procesor musi wykonywać pewne założenia co do prawdziwości skoków warunkowych, czyli na przykład wykonuje instrukcje skoku warunkowego, ale dekoduje już instrukcję która jest po niej, tak jakby skok miał nie zajść. W takiej sytuacji jeżeli skok zachodzi to wtedy ta zdekodowane instrukcja jest unieważniona, potok należy zapełnić od nowa i nie udaje się wykorzystać przyspieszenia związanego z wielopotokowością. Na takiej pracy potokowej opiera się tak zwany Hyper Threading dostępny w niektórych procesorach, jednak jak się przekonaliśmy taka praca potokowa nie jest równoważna z większą ilością niezależnych rdzeni.
+
+Magistrala pomiędzy procesorem a pamięcią często jest magistralą równoległą, na której mogą się znaleźć też inne urządzenia wejść wyjść dostępne pod innymi adresami. W niektórych konstrukcjach mają one wydzieloną przestrzeń adresową, a w innych wspólną z pamięcią.
 
 \subsubsection{Mikrokontrolery}
 
-Mikrokontroler jest układem typu "System on Chip" zawierającym w jednym układzie procesor, pamięć RAM, układy wejścia-wyjścia (np. GPIO, porty szeregowe typu USART, SPI, I2C, przetworniki ADC), pamięć typu Flash (dla programu).
+Przykładem systemu mikroprocesorowego, będącego jednocześnie przykładem układu typu system on chip, są mikrokontrolery. W jednym układzie scalonym zawierają one procesor, pamięć operacyjną RAM, pamięć stałą typu flash do przechowywania kodu programu (nie jest on w ich wypadku ładowany do RAMu, tylko wykonywany bezpośrednio z pamięci flash). Bardzo często w układzie tym znajdują się również różnego rodzaju układy wejścia-wyjścia, takie jak porty GPIO, które umożliwiają ustawienie lub odczyt stanu danej nóżki układu, mogą nimi być bardziej zaawansowane interfejsy jak porty szeregowe USART, I2C, SPI. Mogą to być także przetworniki analogowo-cyfrowe (umożliwiające pomiar wartości jakiegoś napięcia – sygnału analogowego) i cyfrowo analogowe (umożliwiające wystawienie napięcia o danej wartości).
+
 % END: Elektronika - Układy programowalne

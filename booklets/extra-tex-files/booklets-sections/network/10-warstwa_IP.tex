@@ -26,7 +26,15 @@
 
 Sieci komputerowe działają na zasadzie przesyłania informacji w postaci porcji, z których każda posiada co najmniej informację o adresie odbiorcy (zwykle też nadawcy), nazywanych ramkami lub pakietami. Kierowanie pakietów w odpowiednie miejsce odbywa się na podstawie adresu pakietu i nie jest związane z fizycznym zestawianiem łącza pomiędzy nadawcą a odbiorcą - każdy pakiet jest kierowany niezależnie, a w ramach pojedynczego łącza (kanału transmisji) mogą być przekazywane pakiety adresowane do różnych odbiorców. Nazywane jest to komutacją pakietów, w odróżnieniu od komutacji łącza (która występowała np. w klasycznej, analogowej telefonii, gdzie przekaźniki w centralach dokonywały zestawienia połączeń elektrycznych między dwoma aparatami telefonicznymi).
 
+To właśnie umieszczanie w nagłówku każdego z pakietów adresów umożliwia kierowanie ruchem takich pakietów bez wcześniejszego fizycznego zestawiania łącz. W oparciu o ten adres host jest w stanie rozpoznać czy pakiet jest przeznaczony dla niego czy nie, a przełączniki i routery mogą kierować pakiety do odpowiednich fragmentów sieci.
+
+Jeżeli w sieci komputerowej host A chce się komunikować z hostem B, a host C z hostem D nie musimy zapewnić im osobnych łączy do przeprowadzania takiej komunikacji, tak jak to było na przykład w klasycznej telefonii analogowej, gdzie dwie takie "rozmowy" wymagałyby zestawienia osobnych fizycznych kabli od jednego abonenta do drugiego (odbywało się to za pomocą przekaźników w centralach). W sieci komputerowej hosty te będą wytwarzały odpowiednio zaadresowane pakiety i reagowały tylko na pakiety zaadresowane do nich. Dzięki temu pakiety, stanowiące osobne strumienie komunikacji, mogą być z łatwością przesyłane tym samym fizycznym łączem. Host C może słyszeć lub nie komunikację pomiędzy hostami A i B (zależy to od różnych czynników, na przykład od wykorzystywanej sieci i względnego położenia tych hostów), natomiast wie że to "nie do niego". 
+
+Jeżeli w ramach sieci mamy jakieś urządzenie dzielące ją na mniejsze kawałki, podział ten będzie się odbywał w oparciu o adresy pakietów – urządzenie takie do danej sieci będzie przekazywało tylko pakiety adresowane do hostów w tej sieci. Mamy do czynienia z przełączaniem, czyli komutacją pakietów – w odróżnieniu od (omówionej pokrótce na przykładzie telefonii) komutacji łączy, która polegała na zestawianiu fizycznego łącza pomiędzy komunikującymi się hostami.
+
 \subsection{Struktura warstwowa}
+
+Protokoły sieciowe na ogół tworzą tak zwane stosy protokołów, gdzie dane opakowywane są kolejno w nagłówki kolejnych protokołów. Każdy z protokołów w takim stosie pełni dedykowane mu funkcje i na ogół nie ingeruje ani w protokoły warstwy niższej, ani w przenoszoną przez niego zawartość, czyli protokoły warstwy wyższej z danymi.
 
 Komunikacja sieciowa typowo posiada strukturę warstwową. W modelu OSI wyróżnia się 7 warstw:
 \begin{enumerate}
@@ -71,6 +79,8 @@ Z punktu widzenia modelu TCP/IP można powiedzieć o enkapsulacji danych kolejny
 \subsection{Protokół IP}
 
 Protokół IP (Internet Protocol) odpowiedzialny jest przede wszystkim za sposób adresacji hostów oraz reguły komutacji pakietów (routing). Jest on wspomagany przez kolejny protokół z tej rodziny - ICMP (Internet Control Message Protocol), którego zadaniem jest przekazywanie informacji kontrolnych np. o nieosiągalności hosta docelowego, odrzuceniu przetwarzania pakietu ze względu na zbyt dużą liczbę skoków (gdy wartość pola TTL z nagłówka IP wyniesie zero) a także pingi (zarówno żądanie jak i odpowiedź).
+
+Jako że IP stworzony jest do łączenia różnych fizycznych sieci w jedną sieć logiczną (internet), to pozwala on na wydzielanie w oparciu o zasady adresacji mniejszych fragmentów sieci, nazywanych niekiedy podsieciami. Oczywiście zapewnia też mechanizmy przekazywania pakietów pomiędzy takimi podsieciami.
 
 \inputSideBySideAsFigure
 	{Pakiet IPv4}{booklets-sections/network/ilustracje/10-ipv4.tex}

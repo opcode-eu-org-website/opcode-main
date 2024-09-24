@@ -49,7 +49,7 @@ Zwróć uwagę na wartości napięć i prądów.
 Zobacz co dzieje się przy próbie podłączenia bazy tranzystora do potencjału znacznie wyższego niż potencjał emitera – złącze baza-emiter jest takim samym złączem z jakim mamy do czynienia w diodzie i tak jak w przypadku diody występuje na nim stały spadek napięcia (nie działa tu prawo Ohma). Dlatego aby ograniczyć prąd płynący tą gałęzią i zapobiec zniszczeniu tranzystora konieczne jest zastosowanie rezystora.
 
 \subsection{PNP}
-Podobnie jak w NPE tyle że prąd przepływający pomiędzy emiterem a kolektorem jest funkcją prądu przepływającego pomiędzy emiterem a bazą.
+Podobnie jak w NPN tyle że prąd przepływający pomiędzy emiterem a kolektorem jest funkcją prądu przepływającego pomiędzy emiterem a bazą.
 
 Aby wprowadzić tranzystor PNP w stan zatkania należy podać na jego bazę potencjał większy lub równy potencjałowi emitera (zakładamy że potencjał emitera jest nie mniejszy niż kolektora - co ma miejsce w typowych warunkach polaryzacji tranzystora PNP), czyli $U_{BE} \geq 0$.
 
@@ -77,12 +77,12 @@ W kierunku dren → źródło tranzystor ten przewodzi gdy $U_{GS} > U_{GS (th)}
 
 Konkretna wartość $U_{GS (th)}$ zależna jest od konkretnego modelu tranzystora, innym istotnym parametrem związanym z sterowaniem tranzystorem jest maksymalna i minimalna dopuszczalna wartość napięcia $U_{GS}$.
 
-Aby wprowadzić tranzystor MOSFET w stan zatkania należy podać $U_{GS} < U_{GS (th)}$. Dla tranzystorów:
+Aby wprowadzić tranzystor N-MOSFET w stan zatkania należy podać $U_{GS} < U_{GS (th)}$. Dla tranzystorów:
 \begin{itemize}
-\item N-MOSFET z kanałem wzbogaconym wystarczy obniżyć potencjał bramki do wartości niewiele wyższej niż potencjał źródła
-\item N-MOSFET z kanałem zubożonym musi to być wartość poniżej potencjału źródła.
+\item z kanałem wzbogaconym wystarczy obniżyć potencjał bramki do potencjału źródła (lub nawet wartości niewiele wyższej od niego)
+\item z kanałem zubożonym musi to być wartość poniżej potencjału źródła.
 \end{itemize}
-Aby wprowadzić tranzystor MOSFET w stan przewodzenia należy podać $U_{GS} \gg U_{GS (th)}$.
+Aby wprowadzić tranzystor N-MOSFET w stan przewodzenia należy podać $U_{GS} \gg U_{GS (th)}$.
 
 \subsection{P-MOSFET}
 Podobnie jak N-MOSFET tyle że:
@@ -92,18 +92,18 @@ Podobnie jak N-MOSFET tyle że:
 \item dla tranzystorów z kanałem wzbogacanym (\emph{enhancement}) $U_{GS (th)} < 0$, a z kanałem zubożonym (\emph{depletion}) $U_{GS (th)} > 0$.
 \end{itemize}
 
-Aby wprowadzić tranzystor MOSFET w stan zatkania należy podać $U_{GS} < U_{GS (th)}$. Dla tranzystorów:
+Aby wprowadzić tranzystor P-MOSFET w stan zatkania należy podać $U_{GS} < U_{GS (th)}$. Dla tranzystorów:
 \begin{itemize}
-\item P-MOSFET z kanałem zubożonym wystarczy obniżyć potencjał bramki do wartości niewiele wyższej niż potencjał źródła
-\item P-MOSFET z kanałem wzbogaconym musi to być wartość poniżej potencjału źródła.
+\item z kanałem wzbogaconym wystarczy podnieść potencjał bramki do wartości potencjału źródła (lub nawet wartości niewiele niższej od niego)
+\item z kanałem zubożonym musi to być wartość powyżej potencjału źródła.
 \end{itemize}
-Aby wprowadzić tranzystor MOSFET w stan przewodzenia należy podać $U_{GS} \gg U_{GS (th)}$.
+Aby wprowadzić tranzystor P-MOSFET w stan przewodzenia należy podać $U_{GS} \gg U_{GS (th)}$.
 
 \vspace{12pt}
 
 Zobacz symulację pokazującą pracę tranzystorów MOSFET w trybie klucza: \url{http://ln.opcode.eu.org/mosfet}.
-Zauważ podobieństwo w sterowaniu do trnzystorów NPN i PNP (N-MOSFET przewodzi gdy potencjał bramki odpowiednio wyższy od drenu, P-MOSFET gdy odpowiednio niższy, obciążenie N-MOSFET włączane analogicznie jak NPN, a P-MOSFET jak PNP),
-	zauważ różnice (bramka jest izolowanie, nie płynie nią prąd\footnote{z pominięciem prądu związanego z przeładowaniem pojemności (pasożytniczego kondensatora)}, nie ma zatem potrzeby używania tam rezystora).
+Zauważ podobieństwo w sterowaniu do tranzystorów NPN i PNP (N-MOSFET przewodzi gdy potencjał bramki odpowiednio wyższy od drenu, P-MOSFET gdy odpowiednio niższy, obciążenie N-MOSFET włączane analogicznie jak NPN, a P-MOSFET jak PNP),
+	zauważ różnice (bramka jest izolowana, nie płynie nią prąd\footnote{z pominięciem prądu związanego z przeładowaniem pojemności (pasożytniczego kondensatora)}, nie ma zatem potrzeby używania tam rezystora).
 
 \begin{ProTip}{Wzory na wartość prądu drenu \zaawansowane{30}}
 Podobnie jak dla tranzystorów bipolarnych maksymalny prąd drenu jaki tranzystor MOSFET chce przepuścić przy danych parametrach określony jest odpowiednimi wzorami.
@@ -145,7 +145,7 @@ Rolę kluczy (przełączników) w ramach mostka mogą pełnić tranzystory PNP (
 
 \subsection{Wzmacniacz}
 
-Omawiając poszczególne typy tranzystorów skupialiśmy się na ich pracy w roli przełącznika (klucza), działającego w dwóch stanach – przewodzenia (nasycenia) i zastkania.
+Omawiając poszczególne typy tranzystorów skupialiśmy się na ich pracy w roli przełącznika (klucza), działającego w dwóch stanach – przewodzenia (nasycenia) i zatkania.
 Jednak tranzystor będąc elementem o regulowanym przewodzeniu może zostać wykorzystany także do wzmacniania sygnałów, czyli wytworzenia na swoim wyjściu sygnału proporcjonalnego do sygnału wejściowego tyle że wzmocnionego.
 Wzmacnianiu może ulegać sygnał napięciowy lub prądowy (najprostszym przypadkiem jest wzmocnienie prądu bazy jako prądu kolektora $I_C = \beta I_B$ w tranzystorze bipolarnym).
 Więcej o różnych układach pracy tranzystora w roli wzmacniacza można przeczytać na \href{http://vip.opcode.eu.org/#Wzmacniacz_sygna\%C5\%82u}{\texttt{http://vip.opcode.eu.org/\#Wzmacniacz\_sygnału}}.
@@ -166,4 +166,4 @@ Cechują się one bardzo dużym wzmocnieniem różnicy napięcia pomiędzy swoim
 Zobacz symulację: \url{http://ln.opcode.eu.org/opamp} i \url{http://ln.opcode.eu.org/opamp_loop}. Więcej na ich temat można przeczytać na \url{http://vip.opcode.eu.org/#Wzmacniacz_operacyjny}.
 
 \subsection{Przełączanie AC}
-Tranzystory stosowane są powszechnie do przełączania w obwodach prądu stałego. Istnieją także elementy półprzewodnikowe mogące pełnić funkcję przełączającą w obwodach prądu przemiennego - współcześnie są to przede wszystkim triaki.
+Tranzystory stosowane są powszechnie do przełączania w obwodach prądu stałego. Istnieją także elementy półprzewodnikowe mogące pełnić funkcję przełączającą w obwodach prądu przemiennego - są to przede wszystkim triaki.
