@@ -37,7 +37,7 @@ zmiennaC=98.6 # to będzie traktowane jako napis a nie liczba
 \end{CodeFrame*}
 Zwróć uwagę na brak spacji pomiędzy nazwą zmiennej a znakiem równości w operacji przypisania - jest to wymóg składniowy.
 
-Odwołanie do zmiennej odbywa się z użyciem znaku dolara, po którym występuje nazwa zmiennej. Nazwa może być ujęta w klamry, ale nie musi (jest to przydatne gdy nie chcemy dawać spacji pomiędzy nazwą zmiennej a np. fragmentem napisu). Rozwijaniu ulegają nazwy zmiennych znajdujące się w napisach umieszczonych w podwójnych cudzysłowach. Umieszczenie odwołania do zmiennej w podójnych cudzysłowach zabezpiecza białe znaki (spacje nowe linie) przy przekazywaniu do funkcji i programów (w tym przy przekazywaniu do echo, celem wypisywania).
+Odwołanie do zmiennej odbywa się z użyciem znaku dolara, po którym występuje nazwa zmiennej. Nazwa może być ujęta w klamry, ale nie musi (jest to przydatne gdy nie chcemy dawać spacji pomiędzy nazwą zmiennej a np. fragmentem napisu). Rozwijaniu ulegają nazwy zmiennych znajdujące się w napisach umieszczonych w podwójnych cudzysłowach. Umieszczenie odwołania do zmiennej w podwójnych cudzysłowach zabezpiecza białe znaki (spacje nowe linie) przy przekazywaniu do funkcji i programów (w tym przy przekazywaniu do echo, celem wypisywania).
 
 \begin{CodeFrame*}[bash]{}
 echo  $zmiennaA ${zmiennaA}AA
@@ -60,7 +60,7 @@ c=$((  $x / $y ))
 
 echo $e $c $z
 \end{CodeFrame*}
-Zauważ zachowanie przy odwołaniu do niezainicjalizowanej zmiennej \Verb{z}.
+Zauważ zachowanie przy odwołaniu do niezdefiniowanej zmiennej \Verb{z}.
 
 Do operacji arytmetycznych może być też jest wykorzystywane polecenie let.
 Najczęściej jest stosowane do inkrementacji podanej zmiennej, tak jak w poniższym przykładzie.
@@ -112,7 +112,7 @@ Sam bash oferuje jedynie podstawowe konstrukcje składniowe, obsługę zmiennych
 
 Na te zewnętrzne polecenia można patrzeć trochę jak na biblioteki w innych językach programowania –
 	komendy gwarantowane przez standard stanowią „bibliotekę standardową” basha,
-	a inne (np. użyty w powyższym przykładzie artmetyki zmiennoprzecinkowej python) stanowią dodatkowe opcjonalne „biblioteki”, które pozwalają na łatwiejsze i szybsze rozwiązywanie problemów.
+	a inne (np. użyty w powyższym przykładzie arytmetyki zmiennoprzecinkowej python) stanowią dodatkowe opcjonalne „biblioteki”, które pozwalają na łatwiejsze i szybsze rozwiązywanie problemów.
 W zasadzie podobnie można patrzeć na wywołania zewnętrznych programów w ramach kodu Pythona, C czy innych języków (niekiedy łatwiej jest zrobić np. \Verb#system("mv plik nowyplik")# niż zakodować to bezpośrednio w Pythonie czy w C).
 \end{ProTip}
 
@@ -157,7 +157,7 @@ done
 
 Często używana jest pętla while w połączeniu z instrukcją \Verb$read$\footnote{
 	Polecenie \Verb$read$ można także wykorzystać do wczytania danych podawanych przez użytkownika do jakiejś zmiennej – np. \Verb$read -p "wpisz coś >> " xyz$ wczyta tekst do zmiennej \Verb$xyz$.
-	\Verb$read$ z opcją \Verb$-e$ potrafi kożystać z biblioteki readline, jednak np. współdzieli histiorię z historią basha. Dlatego często wygodniejsze może być zainstalowanie i użycie \Verb$rlwrap$, np:
+	\Verb$read$ z opcją \Verb$-e$ potrafi korzystać z biblioteki readline, jednak np. współdzieli historię z historią basha. Dlatego często wygodniejsze może być zainstalowanie i użycie \Verb$rlwrap$, np:
 	\Verb$xyz=`rlwrap -H historia.txt -S "wpisz coś >> " head -n1`$.
 } co umożliwia przetwarzanie jakiegoś wejścia (wyniku komendy lub pliku) linia po linii (także z podziałem linii na słowa):
 
