@@ -239,6 +239,14 @@ unset IFS # przywracamy domyślne zachowanie read poprzez usunięcie zmiennej IF
 
 Należy mieć na uwadze, że cudzysłów wokół wypisania zmiennej c są istotne – bez nich znak dwukropka mógłby być zmieniony na spacje.
 
+\begin{ProTip}{ograniczona długość linii poleceń}
+W niektórych systuacjach należy mieć na uwadze ograniczenia dotyczących maksymalnej długości listy argumentów (zarówno całej jak i pojedynczego argumentu).
+Mogą one okazać się problemem na przykład, gdy korzystamy ze znaków uogólniających powłoki i dopasowanych zostanie zbyt wiele plików dopasowanych.
+Lub Gdy wykorzystujemy przechwycenie standardowego wyjścia jakiegoś polecenia, aby użyć go jako argumentów innego polecenia.
+W takich sytuacjach warto skorzystać na przykład z pętli while-read działającej na standardowym wyjściu polecenia zwracającego te dane.
+W przypadku listy plików może to być ls bez argumentów lub (gdy potrzebujemy wybrać tylko niektóre pliki) find.
+\end{ProTip}
+
 % \setcounter{subsubsection}{0}
 \insertZadanie{booklets-sections/linux/zadania-60-bash.tex}{petla_linki_html}{}
 
