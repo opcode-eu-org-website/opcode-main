@@ -103,12 +103,22 @@ Cewka (dławik) wprowadza do układu indukcyjność związaną z swoją wartośc
 
 Głównym (ale nie jedynym) parametrem rzeczywistej cewki oprócz indukcyjności jest maksymalny prąd który może przewodzić.
 
-\subsubsection{Przekaźniki, styczniki i transformatory}
+\subsubsection{Przekaźnik, stycznik}
 
 Cewki możemy spotkać w urządzeniach takich jak przekaźniki, czy styczniki\footnote{Zasadniczo przekaźnik i stycznik jest to to samo urządzenie. Przyjmuje się rozróżnienie w nazewnictwie - przekaźniki przełączają mniejsze prądy niż styczniki.}.
 Nawinięte na odpowiednim rdzeniu pełnią one tam funkcję elektromagnesu odpowiedzialnego za zmianę fizycznej pozycji styków prowadzącą do ich zwarcia lub rozwarcia (przełączania).
 
+\subsubsection{Transformator}
+
 Innym urządzeniem opartym o cewki są transformatory - wykorzystują one kilka cewek na wspólnym rdzeniu do przekazywania energii poprzez pole magnetyczne (jedna z cewek dzięki przepływowi zmiennego prądu elektrycznego wytwarza zmienne pole magnetyczne, inna dzięki zmiennemu polu magnetycznemu wytwarza przemienny prąd elektryczny). Transformator typowo służy do zmiany napięcia lub separacji galwanicznej obwodów.
+
+Najpowszechniejszym wykorzystaniem transformatorów jest podnoszenie i obniżanie napięcia w energetyce. Na przykład przy elektrowniach mamy transformatory podwyższające napięcie, gdyż generator w elektrowniach pracuje na ogół na napięciu rzędu kilku kilowoltów (na przykład 6 kV), a sieci przesyłowe pracują na napięciu kilkuset kilowoltów (na przykład na 220 kV). Następnie im bardziej zbliżamy się do odbiorcy energii elektrycznej, to mamy kolejne transformatory, tym razem obniżające napięcie najpierw do kilkunastu kilowoltów, a potem do 230 woltów, czyli takiego jakie mamy w domach. Takie podwyższenie napięcia pozwala obniżyć straty przesyłowe i stosować mniejsze średnice przewodów.
+
+Oprócz tego transformator może służyć do separacji galwanicznej obwodów, czyli rozdzielenia obwodu pierwotnego od obwodu wtórnego, w taki sposób aby prąd pomiędzy nimi nie mógł przepływać bezpośrednio. Wykonuje się to nawet pracując na tym samym napięciu, czyli istnieją i są stosowane również transformatory o przekładni jeden do jednego.
+
+Separacja taka opiera się na tym, że jeżeli nie zewrzemy w jakiś sposób jednego bieguna strony pierwotnej z jednym biegunem strony wtórnej, to napięcie wyjściowe (które jest pomiędzy biegunami strony wtórnej), nie ma żadnego odniesienia do napięć strony pierwotnej. Można zaobserwować że napięcia te pływają względem siebie.
+
+Typowo takie połączenie strony pierwotnej i wtórnej realizowane jest poprzez uziemienie jednego z wyprowadzeń każdej ze stron. W przypadku sieci elektroenergetycznych, które wykorzystują prąd trójfazowy, typowo łączony z potencjałem Ziemi jest punkt neutralny transformatora. W efekcie w większości naszych domowych gniazdek mamy przewód neutralny (połączony z potencjałem Ziemi) i fazowy (na którym jest napięcie w stosunku co do Ziemi). Zatem jeżeli chcemy żeby nasze napięcia za transformatorem odnosiły się do potencjału Ziemi to jeden z biegunów również uziemiamy, a jeżeli chcemy żeby transformator był separujący to tego nie robimy. Pierwsze podejście stosowane jest w większości (prawidłowo zasilonych) komputerów stacjonarnych, a drugie w wielu laptopach.
 
 \subsubsection{Rozłączanie cewki}
 
@@ -123,4 +133,18 @@ Pozwala to na podłączenie równolegle z cewką elementu który przewodzi tylko
 	Nawet jeżeli element ten fizycznie jest obok elementu przełączającego powinien być podłączany równolegle do cewki a nie do elementu przełączającego.
 }, w taki sposób aby w normalnym stanie nie przewodził, a po odłączeniu zasilania cewki pozwalał na jej rozładowanie.
 Takim elementem jest dioda.
+
+\subsection{Styk}
+
+Styk jest to element służący do mechanicznego załączania lub odłączania prądu, nazywany bywa także przełącznikiem.
+Wyróżnia się styki monostabilne (chwilowe), które samoistnie (po ustaniu czynnika przełączającego) wracają do jednej ze swoich pozycji oraz styki bistabilne, które po przełączeniu pozostają w wybranej pozycji.
+Wyróżnia się także styki zwierne (normalnie rozwarte), rozwierne (normalnie zwarte) lub przełączne (następuje przełączanie pomiędzy dwoma lub więcej możliwymi wyjściami).
+Czynnikiem odpowiedzialnym za przełączanie styków może być manualne działanie (przełącznik naciskany, przekręcany, pociąganym, itd przez człowieka) lub działanie elektromagnesu (cewki) - jest to wtedy przekaźnik elektromagnetyczny lub stycznik.
+
+Stan zwarcia określa się często mianem "zamknięty" (ang. "close"), a rozwarcia mianem "otwarty" ("open"). W niektórych przypadkach (zwłaszcza w automatyce) w ramach grup styków działających na skutek tego samego czynnika mechanicznego wyróżnia się (i oznacza zmodyfikowanymi symbolami) styki wyprzedzające (załączające się przed pozostałymi) i opóźnione (działające jako ostatnie).
+
+Należy (zwłaszcza w systemach cyfrowych) pamiętać, że styki potrafią drgać - na ogół przy zmianie pozycji zamiast pojedynczego impulsu generują całą serię.
+
+Styki posiadają także swoje parametry, do głównych należy zaliczyć: obciążalność prądową, rezystancję zamkniętego styku, trwałość mechaniczną (ilość cykli pracy).W energetyce oznacza się także zdolność rozłączania prądów roboczych oraz prądów zwarciowych przez dany styk.
+
 % END: Elektronika - bierne

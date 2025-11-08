@@ -30,7 +30,7 @@ W zależności od wyniku takich operacji może wykonywać skoki do innego miejsc
 Komputer zajmuje się jedynie wykonywaniem takich ciągów instrukcji składających się na program komputerowy.
 Z punktu widzenia procesora je wykonującego, mają one zawsze postać kodu maszynowego, czyli numeru instrukcji do wykonania i jej argumentów.
 Z punktu widzenia programisty, mogą być one reprezentowane przez złożone instrukcje języków wyższego poziomu lub wywołania funkcji bibliotecznych.
-Natomiast z punktu widzenia użytkownika, często są nimi całe gotowe programy, czy też jakieś konkretne funkcje w ramach danego programu.,
+Natomiast z punktu widzenia użytkownika, często są nimi całe gotowe programy, czy też jakieś konkretne funkcje w ramach danego programu.
 
 Zawsze jednak potrzebna jest metoda wprowadzenia takiego ciągu instrukcji oraz odebrania wyników działania programu.
 Dawno temu polegało to na przygotowaniu całości programu na jakimś nośniku (np. kartach perforowanych), uruchomieniu komputera, a następnie odebraniu wygenerowanych wyników na jakimś nośniku (np. w postaci wydruku).
@@ -41,7 +41,12 @@ Dialogu polegającego na przesyłaniu do komputera poleceń i danych oraz odbier
 Urządzenie umożliwiające taką tekstową komunikację z komputerem nazywamy terminalem.
 
 Podstawowym sposobem wydawania poleceń w systemach typu Unix jest wpisywanie ich w terminalu.
-Terminal może pracować w trybie tekstowym lub może być uruchomiony (jako tzw. emulator terminala) w trybie graficznym.
+
+\subsection{Terminal}
+
+Terminal może pracować zarówno w środowisku graficznym - jako tak zwany emulator terminala, działający pod kontrolą X serwera. Może on także działać w ramach linuxowej wirtualnej konsoli - czyli w trybie tekstowym lub pseudo tekstowym nie wymagającym środowiska graficznego lub być uruchomiony na prawdziwym połączeniu czysto tekstowym, takim jak na przykład port szeregowy.
+
+Terminal zapewnia obsługę wejścia-wyjścia czyli wprowadzania znaków (przyjmowanych typowo z klawiatury) oraz wyświetlania znaków, typowo na ekranie. Szczegóły tego działania zależne są od konkretnej implementacji terminala i sprzętu na którym funkcjonuje. Inaczej będzie realizowane działanie terminala na porcie szeregowym, a inaczej w środowisku X serwera. Terminal zapewnia też obsługę sekwencji sterujących związanych z ruchem kursora, ustalaniem miejsca wypisywania informacji, przełączania kolorów i innego formatowania tekstu.
 
 \subsection{Powłoka}
 
@@ -49,20 +54,24 @@ Wprowadzane polecenia interpretowane są przez działający w terminalu program 
 W terminalu mogą być uruchamiane kolejne (takie same lub różne) interpretery poleceń.
 Różne interpretery korzystają z różnych składni oraz często różnią się znakiem zachęty (czyli wypisanym tekstem poprzedzającym wprowadzane polecenia).
 
-\subsubsection{bash}
-Bash jest chyba najpopularniejszą powłoką (interpreterem poleceń) systemową w środowiskach linuksowych.
-Jest zgodny ze składnią z sh, zapewnia m.in. obsługę zmiennych (zasadniczo napisowych) oraz omówionych w dalszej części skryptu znaków uogólniających.
+Praca w POSIXowej (Unix'owej / Linux'owej) linii poleceń (*command line*) jest pracą w interpreterze skryptowego języka programowania. Możemy wykonywać interaktywnie poszczególne „linie kodu” (komendy), możemy także zapisać je w pliku i wykonywać jako całość. Możemy definiować funkcje, korzystać z instrukcji warunkowych i pętli, itd. Standardowa powłoka w systemach POSIXowych jest jednak specyficznym językiem, przeznaczonym głównie do uruchamiania innych programów, operowania na plikach (dokładniej raczej ścieżkach w systemie plików), itd. a nie wykonywania obliczeń. Dlatego na przykład uruchomienie programu, operowanie na jego standardowym wejściu i wyjściu będzie realizowane prostą składnią (będzie wymagało mniej kodu niż chyba w jakimkolwiek innym języku), za to zapis zwykłego dodawania będzie wyglądał dość egzotycznie.
+
+Powłoka na ogół używana jest albo do wyciągania jakieś rzeczy z plików albo do wykonywania operacji typu przenoszenie, czy zmiany nazw plików, czyli wywoływania jakiś innych komend na plikach lub odpowiednio przygotowanych nazwach przyszłych plików. Programowanie w tym języku polega w dużej mierze właśnie na wywoływaniu zewnętrznych programów, na które można patrzeć trochę jak na funkcje biblioteczne, a w przypadku bardziej rozbudowanych programów całe biblioteki. Powłoka jest też traktowana jako język mający przygotować środowisko pracy dla innej aplikacji, ustawić odpowiednie zmienne środowiskowe, przygotować katalogi, przetworzyć ścieżki, itd.
+
+\subsubsection{bash i zsh}
+
+Chyba najpopularniejszymi powłoki systemowymi (interpreteremi poleceń) jest bash i zsh. Są one zgodne ze składnią z sh, zapewniają m.in. obsługę zmiennych (zasadniczo napisowych), znaków uogólniających, itd.
 
 \begin{ProTip}[breakable]{Edycja i historia linii poleceń}
-Bash, podobnie jak wiele innych interpreterów poleceń (np. Python) umożliwia edycję linii poleceń oraz korzystanie z jej historii.\footnote{
-	Bash korzysta w tym celu z popularnej biblioteki \textit{GNU Readline} (więcej na jej temat: \url{https://en.wikipedia.org/wiki/GNU\_Readline}).
-	Biblioteka ta może zostać użyta w kodzie programu do obsługi wejścia, ale może zostać dodana do także zewnętrznie przy pomocy np. \Verb$rlwrap$.
+	Oba programy pozwalają na edycję linii poleceń oraz korzystanie z historii, dzięki czemu przy pomocy strzałek góra-dół możemy przeglądać historię wprowadzonych poleceń, a za pomocą skrótu Control R możemy ją przeszukiwać. Wprowadzane lub wybrane z historii polecenia możemy także edytować poruszając się po nich strzałkami prawo-lewo i uruchomić naciskając Enter.
+	
+	Istotnym ułatwieniem przy wprowadzaniu poleceń jest funkcja auto uzupełniania z użyciem przycisku Tab. Obejmująca zarówno same nazwy poleceń, jak również ścieżki, a nierzadko także inne argumenty poleceń. W przypadku bash'a pojedyncze naciśnięcie klawisza Tab powoduje dopełnienie wpisywanego tekstu, jeżeli jest ono jednoznaczne. Jeżeli jest kilka możliwości, dopełniony zostanie najdłuższy jednoznaczny fragment. Dwukrotne naciśnięcie klawisza Tab spowoduje wyświetlenie dostępnych możliwości. Po ujednoznacznieniu możemy ponownie użyć klawisza Tab, aby nastąpiło dopełnienie, i tak dalej. Domyślne zachowanie zsh jest trochę inne.
+	
+	Warto zauważyć że taka obsługa linii poleceń i jej historii nie jest cechą terminala, tylko samej powłoki. A jako że jest to często funkcjonalność dostarczana przez dedykowaną bibliotekę\footnote{
+		Bash korzysta w tym celu z popularnej biblioteki \textit{GNU Readline} (więcej na jej temat: \url{https://en.wikipedia.org/wiki/GNU\_Readline}).
+		Biblioteka ta może zostać użyta w kodzie programu do obsługi wejścia, ale może zostać dodana do także zewnętrznie przy pomocy np. \Verb$rlwrap$.
+	} to można ją także wielu innych programach.
 }
-Poruszanie się po historii linii poleceń możliwe jest strzałkami góra/dół, wyszukiwanie w historii przy pomocy Ctrl+R.
-Dostępne jest też polecenie wbudowane \texttt{history} umożliwiające wypisanie całej zapamiętanej historii oraz zarządzanie nią.
-
-Bash pozwala także na dopełnianie nazw poleceń i ścieżek (a po odpowiedniej konfiguracji – pakiet \textit{bash-completion} – także innych argumentów poleceń) przy pomocy tabulatora.
-\end{ProTip}
 
 \subsubsection{screen i tmux}
 \texttt{screen} i \texttt{tmux} są tzw. multiplexerami terminala - pozwala na uzyskanie wielu okien konsoli (także np. wyświetlanych jedno obok drugiego) na pojedynczym terminalu.
@@ -141,22 +150,37 @@ Spacje w powyższych konstrukcjach są opcjonalne.
 \end{itemize}
 % END: unix intro
 
-% BEGIN: katalog roboczy
-\subsection{Katalog roboczy}
+% BEGIN: system plików
+\subsection{System plików}
+System plików ma strukturę hierarchiczną (drzewiastą) i rozpoczyna się w korzeniu oznaczanym ukośnikiem: \Verb$/$. Wchodząc w jego podkatalogi, ich podkatalogi i tak dalej, możemy dojść do dowolnego pliku w systemie. Zapisując nazwy katalogów przez które przechodziliśmy i rozdzielając je od siebie oraz od nazwy pliku przy pomocy ukośników tworzymy bezwzględną ścieżkę do danego pliku, czyli taką która właśnie rozpoczyna się od tego korzenia (pierwszym znakiem w takiej ścieżce zawsze jest \Verb$/$ oznaczający właśnie korzeń).
 
-System plików ma strukturę hierarchiczną (drzewiastą) i rozpoczyna się w korzeniu oznaczanym ukośnikiem: \texttt{/}.
-Możliwe jest wyrażanie wszystkich ścieżek od korzenia, jednak nie jest to zbytnio wygodne.
-Interpreter poleceń taki jak \textit{bash} potrafi znajdować się gdzieś w tej strukturze plików i miejsce to nazywane jest bieżącym katalogiem roboczym (\textit{Present Working Directory}).
-Względem niego będą wyrażane ścieżki nie zaczynające się od korzenia, może być też oznaczony jawnie przy pomocy pojedynczej kropki.
+Możliwe jest wyrażanie wszystkich ścieżek od korzenia, jednak nie zawsze jest to wygodne. W wielu wypadkach chcemy móc wyrazić ścieżkę względem jakiegoś innego katalogu i w tym celu stosuje się ścieżki względne. Katalogiem względem którego, wyrażana jest ścieżka względna może być katalog, w którym znajduje się obiekt ją zawierający lub, znacznie częściej, jest to tak zwany bieżący katalog roboczy.
 
-\begin{itemize}
-	\item \Verb{cd [ścieżka]}
-		zmiana bieżącego katalogu,\\
-			warto zauważyć, iż katalogi w ścieżce oddzielamy ukośnikami \texttt{/}, bieżący katalog oznaczamy kropką \texttt{.}, nadrzędny oznaczamy dwiema kropkami \texttt{..},\\
-			ścieżki zaczynające się od ukośnika \texttt{/} oznaczają \emph{ścieżki bezwzględne} (od korzenia systemu plików), pozostałe oznaczają \emph{ścieżkę względną} (wyrażoną względem bierzącego katalogu),\\
-			katalog domowy oznacza się tyldą\ \ \texttt{\~}
-		
-	\item \Verb{pwd}
-		wyświetla ścieżkę do bieżącego katalogu
-\end{itemize}
-% END: katalog roboczy
+
+\subsubsection{Katalog roboczy}
+Interpreter poleceń taki jak \Verb$bash$ potrafi "znajdować się" gdzieś w tej strukturze plików i miejsce to nazywane jest bieżącym katalogiem roboczym (Present Working Directory). Względem niego będą wyrażane ścieżki nie zaczynające się od korzenia, może być też oznaczony jawnie przy pomocy pojedynczej kropki.
+
+Bieżący katalog roboczy jest określany niezależnie dla każdego z działających programów. Typowo pierwotna jego wartość jest ustawiana na bieżący katalog roboczy powłoki która uruchomiła dany program. Może być on zmieniony przez działający program przy użyciu odpowiedniej funkcji systemowej.
+
+W przypadku powłoki zgodnej z \Verb$sh$ informację o jej bieżącym katalogu roboczym możemy wypisać przy pomocy polecenia \Verb$pwd$. Często jest ona także podawana przed znakiem zachęty. Natomiast zmiany tego katalogu możemy dokonać przy pomocy polecenia \Verb$cd$, po którym podawana jest ścieżka do katalogu który ma być ustawiony jako katalog roboczy. W ten sposób zmienimy katalog względem którego będą interpretowane ścieżki względne w danej powłoce i w programach przez nią uruchamianych po wykonaniu tego polecenia. Zmiana ta nie wpłynie na uruchomione wcześniej i nadal działające w tle programy. Uruchomiony program w trakcie działania może także zmienić swój bieżący katalog roboczy wywołaniem odpowiedniej funkcji systemowej.
+
+
+\subsubsection{Ścieżki względne}
+Ścieżką względną jest dowolna ścieżka nie zaczynająca się od korzenia, czyli nie rozpoczynająca się od ukośnika.
+
+Zarówno w ścieżkach bezwzględnych jak i względnych można użyć pojedynczej kropki (\Verb$.$) oznaczającej aktualny katalog w ścieżce oraz dwóch kropek (\Verb$..$) oznaczających katalog nadrzędny (np. \Verb$../../abc$ to katalog \Verb$abc$ w katalogu nadrzędnym katalogu nadrzędnego). W ścieżkach bezwględnych są one jednak zawsze nadmiarowe i dlatego rzadko spotykane, natomiast w ścieżkach względnych pełnią bardzo istotną rolę. Dwie kropki (\Verb$..$) użyte odpowiednio wiele razy (z rozdzielającym je \Verb$/$) pozwalają wrócić ścieżką względną z dowolnego katalogu nawet aż do korzenia, a zatem dojść także do dowolnego innego pliku w naszym drzewie.
+
+Pojedyncza kropka (\Verb$.$) użyteczna jest praktycznie jedynie na początku ścieżki (gdzie oznacza katalog względem którego jest interpretowana ścieżka względna, na przykład bieżący katalog roboczy). Nierzadko jest używana nawet jako cała ścieżka do aktualnego katalogu.
+
+Sama nazwa pliku lub katalogu również stanowi ścieżkę względną (względem katalogu w którym się on znajduje), niekiedy jednak stosowany jest zapis kropka ukośnik nazwa pliku (\Verb$./nazwa$), który pozwala na bardziej jednoznaczne zasugerowanie iż mamy na myśli ścieżkę a nie jakąś nazwę. Dotyczy to zwłaszcza uruchamiania programów znajdujących się w bieżącym katalogu, gdyż w tym wypadku nazwa polecenia nie zawierająca ukośnika nie jest traktowana jako ścieżka.
+
+\subsubsection{Pliki ukryte}
+
+Pliki (i katalogi) których nazwy zaczynają się od kropki (`.`) traktowane są jako pliki ukryte i nie będą domyślnie pokazywane przez niektóre z programów.
+
+\subsubsection{Katalog domowy}
+
+Mianem katalogu domowego określamy domyślny katalog użytkownika (określony w konfiguracji jego konta) w którym ma on prawo zapisu swoich plików oraz (w postaci ukrytych plików i katalogów) przechowywana jest konfiguracja używanych przez niego programów.
+
+Tylda (\Verb$~$) użyta jako pierwszy znak w ścieżce oznacza że jest ona wyrażona względem katalogu domowego naszego lub wskazanego użytkownika - np. \Verb$~/abc$ to katalog \Verb$abc$ w naszym katalogu domowym, a \Verb$~xyz/abc$ to katalog \Verb$abc$ w katalogu domowym użytkownika \Verb$xyz$.
+% END: system plików
