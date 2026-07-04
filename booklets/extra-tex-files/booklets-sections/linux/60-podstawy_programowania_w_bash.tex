@@ -26,18 +26,35 @@
 \subsection{Zmienne}
 
 Określanie typów zmiennych w bashu odbywa się na podstawie wartości znajdującej się w zmiennej.
-Zasadniczo wszystkie zmienne są napisami, a interpretacja typu ma miejsce przy ich użyciu (a nie przy tworzeniu).
+Zasadniczo wszystkie zmienne są napisami, a interpretacja typu ma miejsce przy ich użyciu
+(a nie przy tworzeniu). Obsługiwane są liczby całkowite oraz napisy,
+ale bash nie posiada wbudowanej obsługi liczb zmiennoprzecinkowych.
+
 \teacher{Porównując do Pythona - jest to wyraźnie mniej silne typowanie. }
-Obsługiwane są liczby całkowite oraz napisy, bash nie posiada wbudowanej obsługi liczb zmiennoprzecinkowych.
 
 \begin{CodeFrame*}[bash]{}
 zmiennaA=-91
 zmiennaB="qa   z"
 zmiennaC=98.6 # to będzie traktowane jako napis a nie liczba
 \end{CodeFrame*}
-Brak spacji pomiędzy nazwą zmiennej a znakiem równości jest wymogiem składniowym. Wynika to ze znaczenia spacji w składni powłoki. Spacja oddziela nazwy poleceń i argumenty od siebie, czyli pełni istotną funkcję składniową, odpowiadającą nawiasom okrągłym i przecinkom, używanym do oddzielania nazwy funkcji i argumentów od siebie, z wielu innych języków programowania.
 
-Odwołanie do zmiennej odbywa się z użyciem znaku dolara (\textt{#}), po którym występuje nazwa zmiennej. Nazwa może być ujęta w klamry, ale nie musi (jest to przydatne gdy nie chcemy dawać spacji pomiędzy nazwą zmiennej a np. fragmentem napisu). Rozwijaniu ulegają nazwy zmiennych znajdujące się w napisach umieszczonych w podwójnych cudzysłowach. Umieszczenie odwołania do zmiennej w podwójnych cudzysłowach zabezpiecza białe znaki (spacje nowe linie) przy przekazywaniu do funkcji i programów (w tym przy przekazywaniu do echo, celem wypisywania). Użycie apostrofów wyłącza interpretację dolara jako znaku specjalnego (odwołania do zmiennej).
+Brak spacji pomiędzy nazwą zmiennej a znakiem równości jest wymogiem składniowym.
+
+Wynika to ze znaczenia spacji w składni powłoki.
+Spacja oddziela nazwy poleceń i argumenty od siebie, czyli pełni istotną funkcję
+składniową, odpowiadającą nawiasom okrągłym i przecinkom, używanym do oddzielania
+nazwy funkcji i argumentów od siebie, z wielu innych języków programowania.
+
+Odwołanie do zmiennej odbywa się z użyciem znaku dolara (\Verb{$}), po którym występuje
+nazwa zmiennej. Nazwa może być ujęta w klamry, ale nie musi (jest to przydatne gdy
+nie chcemy dawać spacji pomiędzy nazwą zmiennej a np. fragmentem napisu). Rozwijaniu
+ulegają nazwy zmiennych znajdujące się w napisach umieszczonych w podwójnych cudzysłowach.
+
+Umieszczenie odwołania do zmiennej w cudzysłowach zabezpiecza białe znaki
+(spacje nowe linie) przy przekazywaniu do funkcji i programów (w tym przy
+przekazywaniu do echo, celem wypisywania).
+
+Użycie apostrofów wyłącza interpretację dolara jako znaku specjalnego (odwołania do zmiennej).
 
 \begin{CodeFrame*}[bash]{}
 echo  $zmiennaA ${zmiennaA}AA
@@ -47,9 +64,19 @@ echo '$zmiennaA ${zmiennaA}AA'
 
 \subsubsection{Zmienne środowiskowe}
 
-Jeżeli chcemy aby zmienna była widoczna przez programy uruchamiane z naszej powłoki (w tym przez kolejne instancje bash'a, odpowiedzialne np. za wykonywanie kodu skryptu uruchamianego z pliku) należy ją wyeksportować za pomocą polecenia \Verb#export zmienna# (zwróć uwagę na brak dolara w tym miejscu). Taka zmienna jest dostępna jako zmienna środowiskowa dla wszystkich potomków tej powłoki.
+Jeżeli chcemy aby zmienna była widoczna przez programy uruchamiane z danej powłoki
+(w tym przez kolejne instancje bash'a, odpowiedzialne np. za wykonywanie kodu skryptu
+uruchamianego z pliku) należy ją wyeksportować za pomocą polecenia:
+\Verb#export zmienna#
 
-Zmienne środowiskowe mogą być także ustawiane bez użycia `export` dla pojedynczego nowego programu poprzez podanie ich nazw i wartości przed nazwą polecenia:
+Do polecenia \Verb#export# przekazujemy nazwę zmiennej a nie jej wartość,
+więc nie używamy znaku dolara.
+
+Taka zmienna jest dostępna jako zmienna środowiskowa dla wszystkich potomków tej powłoki.
+
+Zmienne środowiskowe mogą być także ustawiane bez użycia
+`export` dla pojedynczego nowego programu poprzez podanie
+ich nazw i wartości przed nazwą polecenia:
 
 \begin{CodeFrame*}[bash]{}
 ABCD=678 bash -c 'echo $ABCD'
@@ -57,24 +84,32 @@ ABCD=135 EFG=098 bash -c 'echo $ABCD $EFG'
 echo $ABCD
 \end{CodeFrame*}
 
-Są one jedynie widoczne w tak uruchomionym procesie potomnym (nie mogą być użyte w bieżącej powłoce, czy jako jako argumenty w linii poleceń). Dlatego w powyższych przykładach wywoływana jest nowa powłoka która korzysta z tak ustawionych zmiennych. Takie ustawianie zmiennych jest szczególnie przydatne gdy chcemy uruchomić pojedyncze polecenie w zmienionym środowisku - np. polecenie date w innej strefie czasowej: \Verb$TZ=America/New_York date$
+Są one jedynie widoczne w tak uruchomionym procesie potomnym
+(nie mogą być użyte w bieżącej powłoce, czy jako jako argumenty w linii poleceń).
+Dlatego w powyższych przykładach wywoływana jest nowa powłoka,
+która korzysta z tak ustawionych zmiennych.
+
+Takie ustawianie zmiennych jest szczególnie przydatne gdy
+chcemy uruchomić pojedyncze polecenie w zmienionym
+środowisku - np. polecenie date w innej strefie czasowej:
 
 \subsection{Podstawowe operacje}
 Aby wykonać działania arytmetyczne należy umieścić je wewnątrz \Verb{$((} i \Verb{))}
 
-Dodawanie, mnożenie, odejmowanie zapisuje się i działają one tak jak w normalnej matematyce, dzielenie zapisuje się przy pomocy ukośnika i jest ono zawsze dzieleniem całkowitym:
-
 \begin{CodeFrame*}[bash]{}
 a=12; b=3; x=5; y=6
 
+# Dodawanie, mnożenie, odejmowanie zapisuje się i działają one tak jak w normalnej matematyce:
 e=$(( ($a + $b) * 4 - $y ))
+
+# Dzielenie zapisuje się przy pomocy ukośnika i jest ono zawsze dzieleniem całkowitym:
 c=$((  $x / $y ))
 
 echo $e $c
 \end{CodeFrame*}
 
 Do operacji arytmetycznych może być też jest wykorzystywane polecenie let.
-Najczęściej jest stosowane do inkrementacji podanej zmiennej, tak jak w poniższym przykładzie.
+Najczęściej jest stosowane do inkrementacji podanej zmiennej, np.:
 
 \begin{CodeFrame*}[bash]{}
 echo $a
@@ -82,23 +117,40 @@ let a++
 echo $a
 \end{CodeFrame*}
 
-Zarówno operator podwójnych nawiasów okrągłych jak i komenda \Verb{let} mogą obsługiwać wyrażenia logiczne.
-Mimo to operacje logiczne najczęściej obsługiwane są komendą \Verb{test} lub operatorem \Verb{[ ]}, w których wynik zwracany jest jako kod powrotu.
-Należy zwrócić uwagę na escapowanie odwrotnym ukośnikiem nawiasów i na to że spacje mają znaczenie.
-\Verb{[} jest w istocie komendą, działającą jak \Verb{test}, tyle że wymaga \Verb{]} jako ostatniego argumentu.
-Negację realizuje \Verb{!}, należy pamiętać jednak że wynikiem negacji dowolnej liczby jest FALSE.
+Zarówno operator podwójnych nawiasów okrągłych jak i komenda \Verb{let}
+mogą obsługiwać wyrażenia logiczne. Mimo to operacje logiczne
+najczęściej obsługiwane są komendą \Verb{test} lub operatorem \Verb{[ ]},
+w których wynik zwracany jest jako kod powrotu.
+
+Negację realizuje \Verb{!}, ale wynikiem negacją dowolnej liczby jest FALSE
+
+Należy zwrócić uwagę na escapowanie odwrotnym ukośnikiem
+nawiasów i na to że spacje mają znaczenie. Wynika to z faktu,
+nawiasy kwadratowe wraz z zawartością to argumenty dla komendy \Verb{[}.
 
 \begin{CodeFrame*}[bash]{}
 [ \( $a -ge 0 -a $b -lt 2 \) -o $c -eq 5 ]; z=$?
 
 echo $z
 \end{CodeFrame*}
-Wartość zmiennej \Verb{z} jest wynikiem warunku: \texttt{((a większe równe od zera) AND (b mniejsze od dwóch)) OR (c równe 5)}.
-Bash stosuje logikę odwróconą 0 oznacza prawdę, coś nie zerowego to fałsz.
 
-Jako operacje podstawowe powinniśmy patrzyć także na wykonanie innych programów i pobieranie ich standardowego wyjścia i/lub kodu powrotu.
-Pobieranie standardowego wyjścia możemy realizować za pomocą ujęcia polecenia w \emph{backquotes} (\Verb{`}) lub operatora \Verb{$( )} (pozwala on na zagnieżdżanie takich operacji).
-Natomiast kod powrotu ostatniej komendy znajduje się w zmiennej \Verb{$?} (używaliśmy tego już przy obliczaniu wyrażeń logicznych).
+Wartość zmiennej \Verb{z} jest wynikiem warunku:
+\texttt{((a większe równe od zera) AND (b mniejsze od dwóch)) OR (c równe 5)}.
+Wynik ten został zwrócony jako *kod powrotu*,
+który jest dostępny (dla ostatnio wykonanego polecenia) poprzez \Verb{$?}.
+Wartość tej zmiennej została przypisana do zmiennej \Verb{z}.
+
+Kody powrotu stosują logikę odwróconą 0 oznacza prawdę, coś nie zerowego to fałsz.
+
+
+Jako operacje podstawowe powinniśmy także traktować wykonanie innych
+programów i pobieranie ich standardowego wyjścia i/lub kodu powrotu.
+
+Pobieranie standardowego wyjścia możemy realizować za pomocą ujęcia
+polecenia w \emph{backquotes} (\Verb{`})lub operatora \Verb{$( )}
+(pozwala on na zagnieżdżanie takich operacji).
+
+Natomiast kod powrotu ostatniej komendy znajduje się w zmiennej \Verb{$?}.
 
 \begin{CodeFrame*}[bash]{}
 a=`cat /etc/issuse`
@@ -108,9 +160,12 @@ echo  $a
 echo  $b
 echo "$b"
 \end{CodeFrame*}
-Zwróć uwagę na różnicę w wypisaniu zmiennej zawierającej znaki nowej linii objętej cudzysłowami i nie objętej nimi.
 
-Bash nie obsługuje liczb zmiennoprzecinkowych, nieobsługiwane operacje można wykonać za pomocą innego programu np:
+Zwróć uwagę na różnicę w wypisaniu zmiennej zawierającej znaki nowej
+linii objętej cudzysłowami i nie objętej nimi.
+
+Bash nie obsługuje liczb zmiennoprzecinkowych ani operacji bitowych,
+nieobsługiwane operacje można wykonać za pomocą innego programu np:
 
 \begin{CodeFrame*}[bash]{}
 a=`echo 'print(3/2)' | python3`
@@ -119,33 +174,41 @@ echo $a $b
 \end{CodeFrame*}
 
 \begin{ProTip}{inne polecenia}
-Programowanie w powłoce w dużej mierze polega na wywoływaniu innych programów (np. takich jak sed, grep, find, awk).
-Sama powłoka oferuje jedynie podstawowe konstrukcje składniowe, obsługę zmiennych i pewnych podstawowych operacji na nich.
+Programowanie w powłoce w dużej mierze polega na wywoływaniu innych programów
+(np. takich jak sed, grep, find, awk). Sama powłoka oferuje jedynie podstawowe
+konstrukcje składniowe, obsługę zmiennych i pewnych podstawowych operacji na nich.
 
-Na te zewnętrzne polecenia można patrzeć trochę jak na biblioteki w innych językach programowania –
-	komendy gwarantowane przez standard stanowią „bibliotekę standardową” basha,
-	a inne (np. użyty w powyższym przykładzie arytmetyki zmiennoprzecinkowej python) stanowią dodatkowe opcjonalne „biblioteki”, które pozwalają na łatwiejsze i szybsze rozwiązywanie problemów.
-W zasadzie podobnie można patrzeć na wywołania zewnętrznych programów w ramach kodu Pythona, C czy innych języków (niekiedy łatwiej jest zrobić np. \Verb#system("mv plik nowyplik")# niż zakodować to bezpośrednio w Pythonie czy w C).
+Na te zewnętrzne polecenia można patrzeć trochę jak na biblioteki w innych językach
+programowania – komendy gwarantowane przez standard stanowią „bibliotekę standardową” basha,
+a inne (np. użyty w powyższym przykładzie arytmetyki zmiennoprzecinkowej python)
+stanowią dodatkowe opcjonalne „biblioteki”, które pozwalają na łatwiejsze
+i szybsze rozwiązywanie problemów.
+
+W zasadzie podobnie można patrzeć na wywołania zewnętrznych programów w ramach kodu
+Pythona, C czy innych języków (niekiedy łatwiej jest zrobić
+np. `system("mv plik nowyplik")` niż zakodować to bezpośrednio w Pythonie czy w C).
 \end{ProTip}
 
 \subsection{Uruchamianie kodu z pliku}
 
-Dłuższe fragmenty kodu bashowego często wygodniej jest pisać w pliku tekstowym niż bezpośrednio w linii poleceń.
-Plik taki może zostać wykonany przy pomocy polecenia: \Verb{./nazwa_pliku} pod warunkiem że ma prawo wykonalności
-(powinien także zawierać w pierwszą linii komentarz określający program używany do interpretacji tekstowego pliku wykonywalnego,
-w postaci: \Verb{#!/bin/bash}).
-Może też być wykonany za pomocą wywołania: \Verb{bash nazwa_pliku}.
+Dłuższe fragmenty kodu shellowego często wygodniej jest pisać w pliku tekstowym niż bezpośrednio w linii poleceń.
+Plik taki może być wykonany za pomocą wywołania: \Verb{bash nazwa_pliku}.
+
+Plik taki może zostać wykonany przy pomocy polecenia: \Verb{./nazwa_pliku} pod warunkiem że ma prawo wykonalności.
+Powinien także także zawierać w pierwszą linii komentarz określający program używany do interpretacji tekstowego pliku wykonywalnego – <em>shebang</em> (np.  \Verb{#!/bin/bash}).
+Jednak wykonywalny plik bez takiego komentarza też zostanie wykonany jako skrypt shellowy, jednak niekoniecznie z użyciem właściwej powłoki.
 
 Przydatną alternatywą dla powyższych metod wykonania kodu zawartego w pliku jest włączenie go do aktualnej sesji basha przy pomocy \Verb{. ./nazwa_pliku}.
-W odróżnieniu od poprzednich metod pozwala to na korzystanie z funkcji i zmiennych zdefiniowanych w tym pliku w kolejnych poleceniach.
+W odróżnieniu od poprzednich metod kod zostanie wykonany w bieżącej instancji powłoki.
+Pozwala to na korzystanie z funkcji i zmiennych zdefiniowanych w tym pliku w kolejnych poleceniach.
 
 \subsection{Pętle i warunki}
 
 \subsubsection{Pętla for}
 
-W bashu możemy korzystać z kilku wariantów pętli for. Jednym z najczęściej używanych jest przypadek iterowania po liście elementów, najczęściej liście plików\footnote{
-	Dokładniej: iteracja odbywa się po liście napisów rozdzielanej spacjami - zobacz rezultat \Verb{echo /tmp/*}
-}:
+W bashu możemy korzystać z kilku wariantów pętli for.
+Jednym z najczęściej używanych jest przypadek iterowania po liście elementów,
+najczęściej liście plików:
 
 \begin{CodeFrame*}[bash]{}
 for nazwa in /tmp/* ; do
@@ -153,7 +216,10 @@ for nazwa in /tmp/* ; do
 done
 \end{CodeFrame*}
 
-Możliwe jest też iterowanie po wartościach całkowitych zarówno w stylu ,,shellowym'' \teacher{(zwróć uwagę na podobieństwo do Pythona) } jak i w stylu C
+Możliwe jest też iterowanie po wartościach całkowitych zarówno w stylu
+„shellowym” jak i w stylu C:
+
+\teacher{zwróć uwagę na podobieństwo stylu „shellowego” do Pythona}
 
 \begin{CodeFrame*}[bash]{}
 for i in `seq 0 20`; do
@@ -180,33 +246,43 @@ done
 \paragraph{konstrukcja while - read}
 
 Często używana jest pętla while w połączeniu z instrukcją \Verb$read$\footnote{
-	Polecenie \Verb$read$ można także wykorzystać do wczytania danych podawanych przez użytkownika do jakiejś zmiennej – np. \Verb$read -p "wpisz coś >> " xyz$ wczyta tekst do zmiennej \Verb$xyz$.
-	\Verb$read$ z opcją \Verb$-e$ potrafi korzystać z biblioteki readline, jednak np. współdzieli historię z historią basha. Dlatego często wygodniejsze może być zainstalowanie i użycie \Verb$rlwrap$, np:
-	\Verb$xyz=`rlwrap -H historia.txt -S "wpisz coś >> " head -n1`$.
-} co umożliwia przetwarzanie jakiegoś wejścia (wyniku komendy lub pliku) linia po linii (także z podziałem linii na słowa):
+	Polecenie \Verb$read$ można także wykorzystać do wczytania do jakiejś zmiennej danych
+	podawanych przez użytkownika – np. \Verb$read -p "wpisz coś >> " xyz$ wczyta tekst
+	ze standardowego wejścia do zmiennej \Verb$xyz$.
+	
+	\Verb$read$ z opcją \Verb$-e$ potrafi korzystać z biblioteki readline,
+	jednak np. współdzieli historię z historią basha. Dlatego często wygodniejsze
+	może być zainstalowanie i użycie \Verb$rlwrap$, np:
+	\Verb{xyz=$(rlwrap -H historia.txt -S "wpisz coś >> " head -n1)}.
+} co umożliwia przetwarzanie jakiegoś wejścia (wyniku komendy lub pliku)
+linia po linii (także z podziałem linii na słowa):
 
 \begin{CodeFrame*}[bash]{}
 cat /etc/fstab | while read slowo reszta; do
 	echo $reszta;
 done
 \end{CodeFrame*}
-Powyższa pętla wypisze po kolei wszystkie wiersze pliku \texttt{/etc/fstab} przekazanego przez stdin (przy pomocy komendy \texttt{cat})\footnote{
-	Przekazanie danych do while-read poprzez strumień stdout → stdin z innego programu jest często stosowane np. w celu przefiltrowania lub posortowania danych przekazywanych do tej pętli.
-	Jednak użycie w tym rozwiązaniu \texttt{cat} jest nadmiarowe (nazywane jest \emph{martwym kotem}) i powinno się go unikać.
-	Lepszym rozwiązaniem jest przekazywanie pliku przez przekierowanie strumienia wejściowego przy pomocy \texttt{< plik},
-	który w tym przypadku powinien znaleźć się za kończącym pętle słowem kluczowym \texttt{done}.
-	Między innymi oszczędza ono zasoby (i czas wykonania) związany z tworzeniem dodatkowego procesu dla polecenia \texttt{cat}.
+Powyższa pętla wypisze po kolei wszystkie wiersze pliku \texttt{/etc/fstab} przekazanego
+przez stdin (przy pomocy komendy \texttt{cat})\footnote{
+	Przekazanie danych do while-read poprzez strumień stdout → stdin z innego programu jest często
+	stosowane np. w celu przefiltrowania lub posortowania danych przekazywanych do tej pętli.
+	Jednak użycie w tym rozwiązaniu \texttt{cat} jest nadmiarowe (nazywane jest \emph{martwym kotem})
+	i powinno się go unikać. Lepszym rozwiązaniem jest przekazywanie pliku przez przekierowanie
+	strumienia wejściowego przy pomocy \texttt{< plik}, który w tym przypadku powinien znaleźć się za
+	kończącym pętle słowem kluczowym \texttt{done}. Między innymi oszczędza ono zasoby (i czas wykonania)
+	związany z tworzeniem dodatkowego procesu dla polecenia \texttt{cat}.
 } z pominięciem pierwszego słowa (które wczytywane było do zmiennej \texttt{slowo}).
 
-Powyższa pętla wypisze po kolei wszystkie wiersze pliku `/etc/fstab` przekazanego przez stdin (przy pomocy komendy `cat`) z pominięciem pierwszego słowa (które wczytywane było do zmiennej slowo).
 
 
 \begin{ProTip}[breakable]{przekierowania strumieni a zmienne}
 Przekierowanie standardowego wyjścia na standardowe wejście odbywa się między dwoma różnymi procesami.
-Zatem w konstrukcjach typu \texttt{while read} pętla while uruchamiana może być w procesie potomnym obecnej powłoki.
-Efektem tego jest iż w niektórych przypadkach wykonywane modyfikacje zmiennych wewnątrz takiej pętli nie będą widoczne poza nią.
+Zatem w konstrukcjach typu \texttt{while read} pętla while uruchamiana może być w procesie potomnym
+obecnej powłoki. Efektem tego jest iż w niektórych przypadkach wykonywane modyfikacje
+zmiennych wewnątrz takiej pętli nie będą widoczne poza nią.
 
-Przykładem takiej sytuacji jest poniższy kod (polecenie ps dodano aby pokazać utworzenie procesu potomnego powłoki):
+Przykładem takiej sytuacji jest poniższy kod
+(polecenie ps dodano aby pokazać utworzenie procesu potomnego powłoki):
 
 \begin{CodeFrame*}[bash]{}
 zm=0; ps -f
@@ -228,7 +304,10 @@ done < /etc/fstab
 echo $zm
 \end{CodeFrame*}
 
-Jeżeli do pętli ma trafić wyjście jakiegoś polecenia możemy użyć składni bash'a pozwalającej na podstawienie wyniku polecenia jako pliku w postaci \Verb$<(polecenie)$ wraz z przekierowaniem z pliku, na przykład:
+Jeżeli do pętli ma trafić wyjście jakiegoś polecenia możemy użyć składni bash'a pozwalającej
+na podstawienie wyniku polecenia jako pliku w postaci \Verb$<(polecenie)$
+wraz z przekierowaniem z pliku, na przykład:
+
 \begin{CodeFrame*}[bash]{}
 zm=0; ps -f
 while read x; do
@@ -255,12 +334,14 @@ zm=$?
 echo $zm
 \end{CodeFrame*}
 
-Została tu zdefiniowana funkcja bash'owa (\Verb$my_code$), o których więcej informacji znajdziesz w odpowiednim rozdziale poniżej.
+Została tu zdefiniowana funkcja bash'owa (\Verb$my_code$),
+o których więcej informacji znajdziesz w odpowiednim rozdziale poniżej.
 \end{ProTip}
 
 \paragraph{Separator słów}
 
-Słowa domyślnie rozdzielane są przy pomocy dowolnego ciągu spacji lub tabulatorów. Separator ten można zmienić za pomocą zmiennej \texttt{IFS}, np:
+Słowa domyślnie rozdzielane są przy pomocy dowolnego ciągu spacji lub tabulatorów.
+Separator ten można zmienić za pomocą zmiennej \texttt{IFS}, np:
 
 \begin{CodeFrame*}[bash]{}
 IFS=":"
@@ -268,12 +349,13 @@ while read a b c; do echo "$a -- $c"; done < /etc/passwd
 unset IFS # przywracamy domyślne zachowanie read poprzez usunięcie zmiennej IFS
 \end{CodeFrame*}
 
-Należy mieć na uwadze, że cudzysłów wokół wypisania zmiennej c są istotne – bez nich znak dwukropka mógłby być zmieniony na spacje.
+Należy mieć na uwadze, że cudzysłów wokół wypisania zmiennej c
+są istotne – bez nich znak dwukropka mógłby być zmieniony na spacje.
 
 \begin{ProTip}{ograniczona długość linii poleceń}
-W niektórych systuacjach należy mieć na uwadze ograniczenia dotyczących maksymalnej długości listy argumentów (zarówno całej jak i pojedynczego argumentu).
-Mogą one okazać się problemem na przykład, gdy korzystamy ze znaków uogólniających powłoki i dopasowanych zostanie zbyt wiele plików dopasowanych.
-Lub Gdy wykorzystujemy przechwycenie standardowego wyjścia jakiegoś polecenia, aby użyć go jako argumentów innego polecenia.
+W niektórych sytuacjach należy mieć na uwadze ograniczenia dotyczących maksymalnej długości listy argumentów (zarówno całej jak i pojedynczego argumentu).
+Mogą one okazać się problemem na przykład, gdy korzystamy ze znaków uogólniających powłoki i dopasowanych zostanie zbyt wiele plików dopasowanych,
+lub gdy wykorzystujemy przechwycenie standardowego wyjścia jakiegoś polecenia, aby użyć go jako argumentów innego polecenia.
 W takich sytuacjach warto skorzystać na przykład z pętli while-read działającej na standardowym wyjściu polecenia zwracającego te dane.
 W przypadku listy plików może to być ls bez argumentów lub (gdy potrzebujemy wybrać tylko niektóre pliki) find.
 \end{ProTip}
@@ -283,7 +365,8 @@ W przypadku listy plików może to być ls bez argumentów lub (gdy potrzebujemy
 
 \subsubsection{Instrukcja if}
 
-Poznane wcześniej obliczanie wartości wyrażeń logicznych najczęściej stosowane jest w instrukcji warunkowej \Verb{if}\footnote{
+Poznane wcześniej obliczanie wartości wyrażeń logicznych
+najczęściej stosowane jest w instrukcji warunkowej \Verb{if}\footnote{
 	Może być też stosowane np. w pokazanej wcześniej pętli \Verb{while}
 }.
 
@@ -298,33 +381,41 @@ else
 fi
 \end{CodeFrame*}
 
-Zauważ że spacje wokół i wewnątrz nawiasów kwadratowych przy warunku są istotne składniowo,
-zawartość nawiasów kwadratowych to tak naprawdę argumenty dla komendy \Verb{test}.
-Oprócz typowych warunków logicznych możemy sprawdzać np. istnienie plików, czy też ich typ (link, katalog, etc).
-Szczegółowy opis dostępnych warunków które mogą być użyte w tej konstrukcji znajduje się w \Verb{man test}.
+Spacje wokół i wewnątrz nawiasów kwadratowych przy warunku są istotne składniowo.
+Wynika to z faktu, iż \Verb{[} jest w istocie komendą, działającą jak \Verb{test},
+tyle że wymaga \Verb{]} jako ostatniego argumentu.
+
+Oprócz typowych warunków logicznych możemy sprawdzać np. istnienie plików,
+czy też ich typ (link, katalog, etc). Szczegółowy opis dostępnych warunków,
+które mogą być użyte w tej konstrukcji znajduje się w \Verb{man test}.
 \teacher{Zwrócić szczególną uwagę na tą dokumentację.}
 
-Jako warunek może wystąpić dowolne polecenie wtedy sprawdzany jest jego kod powrotu 0 oznacza prawdę / zakończenie sukcesem,
-a wartość nie zerowa fałsz / błąd
+Jako warunek może wystąpić dowolne polecenie wtedy sprawdzany jest jego kod powrotu:
+0 oznacza prawdę / zakończenie sukcesem, wartość nie zerowa fałsz / błąd.
 
 \begin{CodeFrame*}[bash]{}
 if grep '^root:' /etc/passwd > /dev/null; then
-	echo /etc/passwd zawiera root-a;
+	echo /etc/passwd zawiera użytkownika root;
 fi
 \end{CodeFrame*}
 
-Istnieje możliwość skróconego zapisu warunków z użyciem łączenia instrukcji
-przy pomocy \Verb{&&} (wykonaj gdy poprzednia zwróciła zero -- true)
-lub \Verb{||} (wykonaj gdy poprzednia zwróciła nie zero -- false):
+Istnieje możliwość skróconego zapisu warunków z użyciem łączenia instrukcji przy pomocy
+\begin{itemize}
+\item\Verb{&&} – wykonaj instrukcję występująca po prawej gdy poprzednia zwróciła zero (true)
+\item\Verb{||} – wykonaj instrukcję występująca po prawej gdy poprzednia zwróciła nie zero (false)
+\end{itemize}
 
 \begin{CodeFrame*}[bash]{}
 [ -f /etc/issuse ] && echo "jest plik /etc/issuse"
 
-grep '^root:' /etc/passwd > /dev/null && echo /etc/passwd zawiera root-a;
+grep '^root:' /etc/passwd > /dev/null && echo /etc/passwd zawiera użytkownika root;
 \end{CodeFrame*}
 
 \subsubsection{Instrukcja case}
-Instrukcja \Verb{case} służy do rozważania wielu przypadków opartych na równości zmiennej z podanymi napisami.
+
+Instrukcja \Verb{case} służy do rozważania wielu przypadków
+opartych na równości zmiennej z podanymi napisami.
+
 \teacher{Zwróć uwagę na podobieństwo do switch z C/C++ oraz różnicę - operuje na napisach a nie liczbach}
 
 \begin{CodeFrame*}[bash]{}
@@ -353,6 +444,9 @@ a do kolejnych parametrów możemy odwoływać się z użyciem \Verb{$1}, \Verb#
 
 \begin{CodeFrame*}[bash]{}
 f1() {
+	# W nawiasach po nazwie funkcji nie podajemy przyjmowanych argumentów,
+	# natomiast puste nawiasy te są elementem składniowym i muszą wystąpić.
+	
 	echo "wywołano z $# parametrami, parametry to: $@"
 	
 	[ $# -lt 2 ] && return;
@@ -366,31 +460,58 @@ f1() {
 	for i in `seq 1 $#`; do
 		echo $1
 		shift # powoduje zapomnienie $1
-		      # i przenumerowanie argumentów pozycyjnych o 1
+		      # i przenumerowanie pozostałych argumentów pozycyjnych o 1
 		      # wpływa na wartości $@ $# itp
 	done
 	
-	# funkcja może zwracać tylko wartość numeryczną -- tzw kod powrotu
+	# funkcja może zwracać tylko wartość numeryczną - tzw kod powrotu
 	return 83
 }
+
+# Wywołanie funkcji wygląda tak samo tak jak wywołania programów czy poleceń wbudowanych,
+# czyli argumenty od nazwy funkcji i od siebie nawzajem rozdzielane są spacjami
+# (nie występują tu nawiasy i przecinki znane z innych języków programowania).
+f1 aaa 3 "t t" 56
+
+# Kod powrotu ostatnio wywołanej funkcji uzyskuje się
+# (tak samo jak innych poleceń) poprzez $?
+echo $?
+
+# Często funkcje (tak jak wiele komend) wynik swojego
+# działania zwracają poprzez standardowe wyjście
+
+f2() { echo "Uwolnić mrożone truskawki$1"; }
+
+# Można użyć przekierowań strumieni aby przekazać go do innego programu lub funkcji
+# i tak samo można pozyskać go do zmiennej poprzez `` lub $()
+a=`f2 '!!!'`
+echo $a
+
+# Zapis z użyciem $() może być zagnieżdżony
+b=$(f2 "! $(f2 '!!!')")
+echo $b
+
+# W jednolinijkowym zapisie definicji funkcji (jak
+# miało to miejsce dla f2) spacje po { i przed } są
+# obowiązkowe, podobnie jak średniki po instukcjach
 \end{CodeFrame*}
 
-Zwróć uwagę że w nawiasach po nazwie funkcji nie podajemy przyjmowanych argumentów, natomiast puste nawiasy te są elementem składniowym i muszą wystąpić. Jeżeli zapisujesz definicję funkcji w jednej linii, np. \Verb@abc() { echo "abc"; }@ to pamiętaj, że spacja po otwierającym nawiasie klamrowym jest obowiązkowa, podobnie jak średniki występujące po każdej (także ostatniej) instrukcji w ciele funkcji.
-
-Wywołanie funkcji nie różni się niczym od wywołania programów czy instrukcji wbudowanych
-(możemy używać przekierowań strumieni wejścia, wyjścia, czy też przechwycić wyjście do zmiennej). Powyższą funkcję możemy wywołać np. w następujący sposób: \Verb{f1 a "b c"   d}
 
 \subsection{Grupowanie poleceń}
 
-Funkcje są przykładem grupowania poleceń – funkcja stanowi nazwany blok kodu, czyli nazwaną grupę poleceń.
-Polecenia w bashu możemy też grupować bez definiowania funkcji.
-W tym celu możemy zastosować nawiasy klamrowe (tak jak w definicji funkcji) lub nawiasy okrągłe.
+Funkcje są przykładem grupowania poleceń – funkcja stanowi nazwany blok kodu,
+czyli nazwaną grupę poleceń. Powłoka sh (i inne powłoki z nią zgodne)
+pozwalają na grupowanie bez definiowania funkcji. W tym celu możemy zastosować
+nawiasy klamrowe (tak jak w definicji funkcji) lub nawiasy okrągłe.
 
-Stosując nawiasy klamrowe musimy pamiętać (tak samo jak było to w przypadku funkcji)
+Stosując nawiasy klamrowe należy pamiętać (tak samo jak było to w przypadku funkcji)
 	o spacji po otwierającym nawiasie klamrowym i średniku (lub nowej linii) przed zamykającym.
-Instrukcje podane w nawiasach klamrowych będą wykonane w bieżącej powłoce basha, czyli mogą modyfikować zmienne.
+Instrukcje podane w nawiasach klamrowych będą wykonane w bieżącej powłoce basha,
+czyli mogą modyfikować zmienne (ale w pewnych sytuacjach może się to nie wydarzyć).
 
-Polecenia podane w nawiasach okrągłych będą wykonane w podpowłoce, czyli ustawione lub zmodyfikowane w nich zmienne nie będą widoczne po zakończeniu bloku. Nawiasy okrągłe nie wymagają spacji i ostatniego średnika.
+Polecenia podane w nawiasach okrągłych będą wykonane w podpowłoce,
+czyli ustawione lub zmodyfikowane w nich zmienne nie będą widoczne po zakończeniu bloku.
+Nawiasy okrągłe nie wymagają spacji i ostatniego średnika.
 
 \begin{CodeFrame*}[bash]{}
 a=0;
@@ -400,7 +521,9 @@ echo $a
 echo $a
 \end{CodeFrame*}
 
-Grupowanie poleceń jest przydatne na przykład w celu grupowania ich przy używaniu operatorów łączenia poleceń w oparciu o kod powrotu (\shell{&&} i \shell{||}), a także w celu przekazania standardowego wyjścia wielu poleceń w ramach jednego strumienia.
+Grupowanie poleceń jest przydatne na przykład w celu grupowania ich przy używaniu operatorów
+łączenia poleceń w oparciu o kod powrotu (\shell{&&} i \shell{||}),
+a także w celu przekazania standardowego wyjścia wielu poleceń w ramach jednego strumienia.
 
 \begin{CodeFrame*}[bash]{}
 a=0;
@@ -408,7 +531,9 @@ a=0;
 echo $a
 \end{CodeFrame*}
 
-Zauważ że w tym wypadku nawiasy klamrowe zachowały się jak nawiasy okrągłe – modyfikacja zmiennej a nie jest widoczna po zakończeniu bloku. Wynika to z użycia przekierowania strumienia podobnie jak w sytuacji omawianej przy pętli while.
+W tym wypadku nawiasy klamrowe zachowały się jak nawiasy okrągłe – modyfikacja
+zmiennej a nie jest widoczna po zakończeniu bloku.
+Wynika to z użycia przekierowania strumienia podobnie jak w sytuacji omawianej przy pętli while.
 % END: podstawy programowania w bashu
 
 \insertZadanie{booklets-sections/linux/zadania-60-bash.tex}{funkcja_n_razy_napis}{}

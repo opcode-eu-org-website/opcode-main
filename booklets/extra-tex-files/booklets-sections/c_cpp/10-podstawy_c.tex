@@ -37,7 +37,7 @@ uint8_t liczbaC = 0xf3;
 char* napisA = "q we";
 \end{CodeFrame*}
 
-Dodawanie, mnożenie, odejmowanie zapisuje się i działają one tak jak w normalnej matematyce, dzielenie zapisuje się przy pomocy ukośnika i zależnie od typów na których operuje jest ono dzieleniem całkowitym lub zmiennoprzecinkowym.
+\section{Podstawowe operacje}
 
 \begin{CodeFrame*}[c]{}
 double a = 12.7, b = 3, c, d, e;
@@ -47,7 +47,9 @@ int x = 5, y = 6, z;
 // i działają one tak jak w normalnej matematyce:
 e = (a + b) * 4 - y;
 
-// dzielenie zależy od typów argumentów
+// dzielenie zapisuje się przy pomocy ukośnika
+// zależnie od typów na których operuje jest ono
+// dzieleniem całkowitym lub zmiennoprzecinkowym.
 d = a / b; // będzie dzieleniem zmiennoprzecinkowym bo a i b są typu float
 c = x / y; // będzie dzieleniem całkowitym bo z i y są zmiennymi typu int
 b = (int)a / (int)b; // będzie dzieleniem całkowitym
@@ -79,13 +81,16 @@ printf("%x %x %x\n", x, y, z);
 \end{CodeFrame*}
 
 \begin{ProTip}{printf() i puts()}
-Funkcja \cpp{printf()} wypisuje napis określony przez pierwszy argument, podstawiają pod elementy typu \Verb#%x# wartości kolejnych argumentów (np. zmiennych) odpowiednio je interpretując, np.:
+
+Do wypisywania tekstu oraz wartości zmiennych może być użyta funkcja \cpp{printf()} z biblioteki standardowej języka C (z nagłówka \Verb$stdio.h$).
+W pierwszym argumencie przyjmuje ona napis formatujący, który może zawierać ciągi rozpoczynające się od znaku procenta (\Verb$%$) pod które będą podstawiane wartości kolejnych zmiennych.
+Ciąg znaków po \Verb$%$ określa sposób interpretacji i wypisywania kolejnych argumentów, np.:
 \begin{itemize}
-	\item \Verb#%x# - liczba dziesiętna,
-	\item \Verb#%x# - liczba szesnastkowa,
+	\item \Verb#%d# - liczba całkowita wypisana dziesiętnie,
+	\item \Verb#%x# - liczba całkowita bez znaku wypisana szesnastkowo,
 	\item \Verb#%f# - liczba zmiennoprzecinkowa,
 	\item \Verb#%s# - napis,
-	\item \Verb#%c# - pojedynczy znak.
+	\item \Verb#%c# - pojedynczy znak (liczba całkowita wypisana jako znak ASCII).
 \end{itemize}
 Funkcja ta nie dodaje do wypisywanego napisu znaku nowej linii, więc jeżeli chcemy przejść do nowej linii to musi on być umieszczony w nim w sposób jawny jako \Verb#\n# (niekiedy jako \Verb#\r\n# - protokoły sieciowe, Windows, ...).
 Szczegółowy opis \cpp{printf()} oraz więcej napisów formatujących można znaleźć w \Verb#man 3 printf#.
@@ -96,7 +101,8 @@ Do wypisywania samego napisu (bez możliwości podstawienia zmiennych, itd.) pos
 
 \section{Przepływ sterowania w programie - skoki, warunki, pętle, funkcje}
 
-Licznik programu (program counter, instruction pointer lub instruction address register) jest rejestrem procesora który określa adres następnej (w niektórych architekturach aktualnej) instrukcji która ma zostać przetworzona procesor.
+Licznik programu (program counter, instruction pointer lub instruction address register)
+jest rejestrem procesora który określa adres następnej (w niektórych architekturach aktualnej) instrukcji która ma zostać przetworzona procesor.
 
 Skoki bezwarunkowe, instrukcje warunkowe, pętle, wywołania funkcji są realizowane poprzez modyfikację licznika programu. W przypadku wywołań funkcji dodatkowo wykonywane są operacje związane z obsługą stosu (zachowywaniem stanu rejestrów, umieszczaniem argumentów na stosie, ...). Instrukcja goto (realizująca skok bezwarunkowy) jest pełnoprawną instrukcją skoku, jedyną wadą jej stosowania jest to że przy niewłaściwym / zbyt częstym wykorzystywaniu (zamiast wywołań funkcji, warunków i pętli) kod programu staje się mniej czytelny.
 
@@ -105,22 +111,15 @@ W większości przypadków pętle realizowane są na poziomie kodu maszynowego j
 \subsection{Punkt startu}
 
 Jako że program komputerowy jest sekwencją wykonywanych instrukcji musi rozpoczynać się od określonego miejsca.
-W przypadku kodu C/C++ punktem startu jest funkcja \cpp{main()}. Zakończenie tej funkcji oznacza zakończenie programu, a wartość przez nią zwracana odpowiedzialna jest za tzw. kod powrotu przekazany procesowi wywołującemu program. 
+
+Wykonywanie programu stworzonego w C rozpocznie się od funkcji \textbf{main}. W ramach całego programu (nieważne czy zapisanego w jednym czy w wielu plikach) musi być dokładnie jedna funkcja \Verb$main$. Zakończenie tej funkcji oznacza zakończenie programu, a wartość przez nią zwracana odpowiedzialna jest za \textbf{kod powrotu} przekazany procesowi wywołującemu program.
 
 \insertZadanie{booklets-sections/c_cpp/zadania.tex}{helloworld1}{}
 
-\subsection{Podstawowe konstrukcje}
-
-Język C oferuje kilka pętli – \cpp{for}, \cpp{while}, \cpp{do - while} oraz instrukcję warunkową \cpp{if} i instrukcję wyboru \cpp{switch}.
-Możliwe jest też korzystanie z operatora warunkowego:
+\subsection{Podstawowe konstrukcje składniowe}
 
 \begin{CodeFrame*}[c]{}
-warunek ? wartosc_gdy_prawda : wartosc_gdy_falsz.
-\end{CodeFrame*}
-Gdzie zarówno \Verb#wartosc_gdy_prawda#, jak i  \Verb#wartosc_gdy_falsz#, mogą być wartością jak też wyrażeniem obliczającym jakąś wartość (wyrażeniem matematycznym, wywołaniem funkcji, itd.).
-
-\begin{CodeFrame*}[c]{}
-#include <stdio.h> // włączenie pliku nagłówkowego
+#include <stdio.h>
 
 int main() {
     int i, j, k;
@@ -138,6 +137,12 @@ int main() {
     if (i<j || j<k)
         puts("i<j OR j<k");
     // innymi operatorami logicznymi są && (AND), ! (NOT)
+    
+    // operator warunkowy `warunek ? wartosc_gdy_prawda : wartosc_gdy_falsz`
+    // gdzie zarówno `wartosc_gdy_prawda`, jak i `wartosc_gdy_falsz`,
+    // mogą być wartością jak też wyrażeniem obliczającym jakąś wartość
+    // (wyrażeniem matematycznym, wywołaniem funkcji, itd.)
+    int z = (i==j) ? 5 : (2*13);
     
     // pętla for
     for (i=2; i<=9; ++i) {
@@ -188,18 +193,27 @@ int f2(int a, int b) {
     return a*2.5 + b;
 }
 
+// funkcja z jednym argumentem obowiązkowym i jednym opcjonalnym
+float f3(int a, int b=1) {
+	puts("F3");
+	return a*2.5 + b;
+}
+
 int main() {
     f1();
+    
     int a = f2(3, 6);
-    // zwracaną wartość można wykorzystać (jak wyżej) lub zignorować
     printf("%d\n", a);
+    
+    // zwracaną wartość można wykorzystać (jak wyżej) lub zignorować:
+    f(3);
 }
 \end{CodeFrame*}
 
 \section{Złożone typy danych}
 
 \subsection{Struktury}
-Struktura jest złożonym typem danych służącym do grupowania powiązanych ze sobą logicznie zmiennych. Zmienne wchodzące w skład struktury (pola) identyfikowane są nazwami i mogą być różnych typów. Struktura zajmuje ciągły obszar pamięci, w którym umieszczane są wartości kolejnych pól. 
+Struktura jest złożonym typem danych służącym do grupowania powiązanych ze sobą logicznie zmiennych. Zmienne wchodzące w skład struktury (pola) identyfikowane są nazwami i mogą być różnych typów. Struktura zajmuje ciągły obszar pamięci, w którym umieszczane są wartości kolejnych pól.
 
 \begin{CodeFrame*}[c]{}
 #include <stdio.h>
@@ -232,9 +246,20 @@ int main() {
 \end{CodeFrame*}
 
 \subsection{Napisy}
-Napisy w C są w istocie tablicami elementów typu \cpp{char}. Pojedynczy znak reprezentowany jest poprzez jeden element tablicy (dla znaków kodowanych jednobajtowo) lub grupę takich elementów (dla znaków kodowanych wielobajtowo, np. polskich znaczków w UTF8). Koniec napisu oznaczany jest przez element o wartości zero (\cpp{NULL}).
 
-W C pojedynczy znak napisu (czyli np. \cpp{char x = napis[i]} albo \cpp{char x = 'A';}) nie jest napisem – jest liczbą (zauważ różnicę między pojedynczymi a podwójnymi cudzysłowami). Możemy go wypisać z użyciem \cpp{printf()} jako wartość numeryczną poprzez \Verb#%d# lub jako znak poprzez \Verb#%c#: \cpp{printf("%d <=> %c", 'A', 'A');}.
+Napisy w języku C są tablicami bajtów (tablicami typu \cpp{char})
+zakończonymi bajtem o wartości zero (\cpp{NULL}),
+będącym znacznikiem końca napisu.
+
+Pojedynczy znak reprezentowany jest poprzez jeden element tablicy
+(dla znaków kodowanych jednobajtowo) lub grupę takich elementów
+(dla znaków kodowanych wielobajtowo, np. polskich znaczków w UTF8).
+
+W C pojedynczy znak napisu (czyli np. \cpp{char x = napis[i]} albo \cpp{char x = 'A';})
+nie jest napisem – jest liczbą (zauważ różnicę między apostrofami i cudzysłowami).
+Można go wypisać z użyciem \cpp{printf()}` jako wartość numeryczną poprzez \Verb#%d#
+lub jako znak poprzez \Verb#%c#:
+\Verb#%c#: \cpp{printf("%d <=> %c", 'A', 'A');}.
 
 \insertZadanie{booklets-sections/c_cpp/zadania.tex}{podnapis}{}
 \insertZadanie{booklets-sections/c_cpp/zadania.tex}{podnapis2}{}
@@ -242,18 +267,38 @@ W C pojedynczy znak napisu (czyli np. \cpp{char x = napis[i]} albo \cpp{char x =
 
 \section{Funkcja main}
 
-Jak już zauważyliśmy funkcja \cpp{main()} zwraca wartość całkowitą. Jest to kod powrotu programu, który służy do informowania procesu wywołującego nasz program o tym czy zakończył się on sukcesem czy porażką. W przypadku sukcesu powinien zwrócić 0, a niezerowa wartość oznacza niepowodzenie (można użyć różnych wartości do sygnalizowania różnego rodzaju niepowodzeń - np. polecenie grep inaczej sygnalizuje nie znalezienie podanego wzorca, a inaczej brak pliku który miało przeszukać).
+Jak zostało już wspomniane funkcja \cpp{main()} zwraca wartość całkowitą.
+Jest to kod powrotu programu, który służy do informowania procesu wywołującego
+nasz program o tym czy zakończył się on sukcesem czy porażką.
 
-Funkcja \cpp{main()} może przyjmować także argumenty, dzięki którym program może odebrać parametry przekazane w linii poleceń.
-Drugi argument zazwyczaj nazywany \textit{argv} jest tablicą napisów \cpp{char *},
-	której elementy stanowią kolejne słowa (ciągi znaków oddzielane niezabezpieczonymi spacjami) składające się na linię polecenia w wyniku którego został uruchomiony program (czyli nazwa polecenia, opcje i argumenty)
+W przypadku sukcesu powinien zwrócić 0. Niezerowa wartość oznacza niepowodzenie
+(można użyć różnych wartości do sygnalizowania różnego rodzaju niepowodzeń.
+Na przykład polecenie grep inaczej sygnalizuje nie znalezienie podanego wzorca,
+a inaczej brak pliku który miało przeszukać).
 
-Pierwszy argument jest liczbą całkowita typu \cpp{int} i określa ilość elementów tablicy przekazanej jako drugi argument.
+Argumenty linii poleceń (w tym nazwa pod którą został uruchomiony program)
+przekazywane są do funkcji main jako dwa pierwsze argumenty:
+	\\
+	1) liczba całkowita określająca ilość argumentów, typowo nazywany \Verb$argc$
+	\\
+	2) tablica napisów o długości określonej w pierwszym argumencie,
+	   typowo nazywany \Verb$argv$
+
+Elementami tablicy przekazywanej jako drugi argument są kolejne słowa
+(ciągi znaków oddzielane niezabezpieczonymi spacjami) składające się na linię polecenia
+w wyniku którego został uruchomiony program (czyli nazwa polecenia, opcje i argumenty)
+
 
 \begin{CodeFrame*}[c]{}
 #include <stdio.h>
 
 int main(int argc, char* argv[]) {
+	printf("Liczba elementów: %d\n", argc);
+	
+	// tablica otrzymana jako drugi argumnent zawsze ma co najmniej jeden element
+	// nazwę lub ścieżkę której użyto do uruchomienia programu.
+	printf("Moja nazwa: %s\n", argv[0]);
+	
 	for (int i=0; i<argc; ++i)
 		printf("element %d to: %s\n", i, argv[i]);
 	
@@ -274,8 +319,6 @@ element 1 to: a
 Kod powrotu 0
 \end{Verbatim}
 
-Zauważ że tablica otrzymana jako drugi argumnent zawsze ma co najmniej jeden element - nazwę uruchomionego polecenia.
-
 \begin{ProTip}{Porada}
-Argumenty linii poleceń są na ogół dużo lepszą metodą odbierania danych od użytkownika niż zadawanie pytań i oczekiwanie na wprowadzenie danych z klawiatury na standardowe wejście – umożliwiają łatwe wykorzystanie naszych programów w bardziej złożonych poleceniach, czy skryptach. Zastanów się jakby wyglądało programowanie w bashu gdyby komendy takie jak ls, grep, find, itd oczekiwały na wprowadzenie swoich opcji i argumentów na standardowym wejściu.
+Argumenty linii poleceń są na ogół dużo lepszą metodą odbierania danych od użytkownika niż zadawanie pytań i oczekiwanie na wprowadzenie danych z klawiatury na standardowe wejście – umożliwiają łatwe wykorzystanie takich programów w bardziej złożonych poleceniach, czy skryptach. Wystarczy zastanowić się jak wyglądałoby programowanie w bashu gdyby komendy takie jak ls, grep, find, itd oczekiwały na wprowadzenie swoich opcji i argumentów na standardowym wejściu.
 \end{ProTip}

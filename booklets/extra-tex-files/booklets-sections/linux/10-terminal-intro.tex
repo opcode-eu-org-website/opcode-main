@@ -54,7 +54,7 @@ Wprowadzane polecenia interpretowane są przez działający w terminalu program 
 W terminalu mogą być uruchamiane kolejne (takie same lub różne) interpretery poleceń.
 Różne interpretery korzystają z różnych składni oraz często różnią się znakiem zachęty (czyli wypisanym tekstem poprzedzającym wprowadzane polecenia).
 
-Praca w POSIXowej (Unix'owej / Linux'owej) linii poleceń (*command line*) jest pracą w interpreterze skryptowego języka programowania. Możemy wykonywać interaktywnie poszczególne „linie kodu” (komendy), możemy także zapisać je w pliku i wykonywać jako całość. Możemy definiować funkcje, korzystać z instrukcji warunkowych i pętli, itd. Standardowa powłoka w systemach POSIXowych jest jednak specyficznym językiem, przeznaczonym głównie do uruchamiania innych programów, operowania na plikach (dokładniej raczej ścieżkach w systemie plików), itd. a nie wykonywania obliczeń. Dlatego na przykład uruchomienie programu, operowanie na jego standardowym wejściu i wyjściu będzie realizowane prostą składnią (będzie wymagało mniej kodu niż chyba w jakimkolwiek innym języku), za to zapis zwykłego dodawania będzie wyglądał dość egzotycznie.
+Praca w POSIXowej (Unix'owej / Linux'owej) linii poleceń (*command line*) jest pracą w interpreterze skryptowego języka programowania. Można wykonywać interaktywnie poszczególne „linie kodu” (komendy), można także zapisać je w pliku i wykonywać jako całość. Możemy definiować funkcje, korzystać z instrukcji warunkowych i pętli, itd. Standardowa powłoka w systemach POSIXowych jest jednak specyficznym językiem, przeznaczonym głównie do uruchamiania innych programów, operowania na plikach (dokładniej raczej ścieżkach w systemie plików), itd. a nie wykonywania obliczeń. Dlatego na przykład uruchomienie programu, operowanie na jego standardowym wejściu i wyjściu będzie realizowane prostą składnią (będzie wymagało mniej kodu niż chyba w jakimkolwiek innym języku), za to zapis zwykłego dodawania będzie wyglądał dość egzotycznie.
 
 Powłoka na ogół używana jest albo do wyciągania jakieś rzeczy z plików albo do wykonywania operacji typu przenoszenie, czy zmiany nazw plików, czyli wywoływania jakiś innych komend na plikach lub odpowiednio przygotowanych nazwach przyszłych plików. Programowanie w tym języku polega w dużej mierze właśnie na wywoływaniu zewnętrznych programów, na które można patrzeć trochę jak na funkcje biblioteczne, a w przypadku bardziej rozbudowanych programów całe biblioteki. Powłoka jest też traktowana jako język mający przygotować środowisko pracy dla innej aplikacji, ustawić odpowiednie zmienne środowiskowe, przygotować katalogi, przetworzyć ścieżki, itd.
 
@@ -63,14 +63,16 @@ Powłoka na ogół używana jest albo do wyciągania jakieś rzeczy z plików al
 Chyba najpopularniejszymi powłoki systemowymi (interpreteremi poleceń) jest bash i zsh. Są one zgodne ze składnią z sh, zapewniają m.in. obsługę zmiennych (zasadniczo napisowych), znaków uogólniających, itd.
 
 \begin{ProTip}[breakable]{Edycja i historia linii poleceń}
-	Oba programy pozwalają na edycję linii poleceń oraz korzystanie z historii, dzięki czemu przy pomocy strzałek góra-dół możemy przeglądać historię wprowadzonych poleceń, a za pomocą skrótu Control R możemy ją przeszukiwać. Wprowadzane lub wybrane z historii polecenia możemy także edytować poruszając się po nich strzałkami prawo-lewo i uruchomić naciskając Enter.
+	Oba programy pozwalają na edycję linii poleceń oraz korzystanie z historii, dzięki czemu przy pomocy strzałek góra-dół można przeglądać historię wprowadzonych poleceń, a za pomocą skrótu Control R można ją przeszukiwać. Wprowadzane lub wybrane z historii polecenia można także edytować poruszając się po nich strzałkami prawo-lewo i uruchomić naciskając Enter.
 	
-	Istotnym ułatwieniem przy wprowadzaniu poleceń jest funkcja auto uzupełniania z użyciem przycisku Tab. Obejmująca zarówno same nazwy poleceń, jak również ścieżki, a nierzadko także inne argumenty poleceń. W przypadku bash'a pojedyncze naciśnięcie klawisza Tab powoduje dopełnienie wpisywanego tekstu, jeżeli jest ono jednoznaczne. Jeżeli jest kilka możliwości, dopełniony zostanie najdłuższy jednoznaczny fragment. Dwukrotne naciśnięcie klawisza Tab spowoduje wyświetlenie dostępnych możliwości. Po ujednoznacznieniu możemy ponownie użyć klawisza Tab, aby nastąpiło dopełnienie, i tak dalej. Domyślne zachowanie zsh jest trochę inne.
+	Istotnym ułatwieniem przy wprowadzaniu poleceń jest funkcja auto uzupełniania z użyciem przycisku Tab. Obejmująca zarówno same nazwy poleceń, jak również ścieżki, a nierzadko także inne argumenty poleceń. W przypadku bash'a pojedyncze naciśnięcie klawisza Tab powoduje dopełnienie wpisywanego tekstu, jeżeli jest ono jednoznaczne. Jeżeli jest kilka możliwości, dopełniony zostanie najdłuższy jednoznaczny fragment. Dwukrotne naciśnięcie klawisza Tab spowoduje wyświetlenie dostępnych możliwości. Po ujednoznacznieniu można ponownie użyć klawisza Tab, aby nastąpiło dopełnienie, i tak dalej. Domyślne zachowanie zsh jest trochę inne.
 	
-	Warto zauważyć że taka obsługa linii poleceń i jej historii nie jest cechą terminala, tylko samej powłoki. A jako że jest to często funkcjonalność dostarczana przez dedykowaną bibliotekę\footnote{
+	Warto zauważyć że taka obsługa linii poleceń i jej historii nie jest cechą terminala, tylko samej powłoki.
+	A jako że jest to często funkcjonalność dostarczana przez dedykowaną bibliotekę\footnote{
 		Bash korzysta w tym celu z popularnej biblioteki \textit{GNU Readline} (więcej na jej temat: \url{https://en.wikipedia.org/wiki/GNU\_Readline}).
 		Biblioteka ta może zostać użyta w kodzie programu do obsługi wejścia, ale może zostać dodana do także zewnętrznie przy pomocy np. \Verb$rlwrap$.
-	} to można ją także wielu innych programach.
+	}
+	to można ją także wielu innych programach.
 }
 
 \subsubsection{screen i tmux}
@@ -87,7 +89,16 @@ Po nazwie polecenia mogą występować opcje i/lub argumenty. Są one oddzielane
 Nie ma silnego rozróżnienia opcji od argumentów, typowo stosowaną konwencją jest rozpoczynanie opcji od pojedynczego myślnika (opcje krótkie - jednoliterowe) lub dwóch myślników (opcje długie).
 	W przypadku stosowania tej konwencji po pojedynczym myślniku może występować kilka bezargumentowych opcji jednoliterowych.
 	Typowo argumenty opcji oddzielane są od nich spacją (w przypadku opcji krótkich) lub znakiem równości (w przypadku opcji długich).
-Jeżeli któryś z składników komendy (np. argument) zawiera spacje należy je zabezpieczyć przy pomocy odwrotnego ukośnika lub ujęcia zawierającego je napisu w apostrofy lub cudzysłowa.
+
+\subsubsection{Spacje znaki specjalne, cudzysłowy i apostrofy}
+
+Jeżeli któryś z składników komendy (np. argument) zawiera spacje należy je zabezpieczyć przy pomocy odwrotnego ukośnika (\Verb$\$) lub ujęcia zawierającego je napisu w apostrofy (\Verb$'$) lub cudzysłowa (\Verb$"$).
+
+W cudzysłowy bądź apostrofy ujęte moga być dowolne napisy. Zarówno celem ochrony zawartych w nich białych znaków (takich jak np. spacje) jak też celem ochrony innych znaków specjalnych powłoki.
+Oba typy cudzysłowów zabezpieczają przed rozwijaniem znaków uogólniających (zastępowaniem napisu ze znakami listą pasujących nazw / ścieżek).
+Apostrof (w odróżnieniu od cudzysłowu podwójnego) zabezpiecza także przed interpretacją umieszczonych wewnątrz innych znaków specjalnych takich jak odwołania do zmiennych.
+Dowolny problematyczny znak może zostać zabezpieczony przy pomocy odwrotnego ukośnika, bez konieczności umieszczania go lub całości napisu w cudzysłowach bądź apostrofach.
+Powłoka typu sh obsługuje bez operatorowe łączenie napisów, pozwala to na zmianę typu cudzysłowów w ramach jednego napisu np. \Verb{'a $b'"c 'd"} to jeden napis postaci \Verb{a $bc 'd}.
 
 \subsection{Uzyskiwanie pomocy}
 
@@ -101,17 +112,21 @@ Zarówno w tekstach pomocy jak i w tym dokumencie stosowana jest konwencja poleg
 \subsection{more i less}
 
 Jeżeli wynik jakiejś komendy nie mieści się na ekranie do jego obejrzenia możemy użyć poleceń \Verb{more} lub \Verb{less}. Są to programy umożliwiające przeglądanie tekstu ekran po ekranie.
-\Verb{less} posiada większe możliwości od more (w szczególności posiada możliwość przeglądanie dokumentu w tył)\footnote{
-wybrane przydatne opcje:
+
+\Verb{less} posiada większe możliwości od more, w szczególności posiada możliwość przeglądanie dokumentu nie tylko w przód ale także w tył (strzałki, page up, page down) oraz umożliwia także wyszukiwanie (klawisz \Verb{/} pozwala na wprowadzenie szukanej frazy, a \Verb{n} na wyszukanie kolejnego wystąpienia).
+
+Wybrane przydatne opcje \Verb{less}:
 	\Verb{-X} nie czyści ekranu przy wychodzeniu z less'a (całość historii wyświetlania pliku pozostaje w historii terminala)
 	\Verb{-F} automatycznie kończy gdy wyświetlany tekst mieści się na jednym ekranie
 	\Verb{-R} przepuszcza surowe sekwencje sterujące terminalem dotyczące kolorów
-}. Programy te kończą się po wciśnięciu klawisza \Verb{q}. \Verb{less} umożliwia także wyszukiwanie -- klawisz \Verb{/} pozwala na wprowadzenie szukanej frazy, a \Verb{n} na wyszukanie kolejnego wystąpienia.
-Programy te umożliwiają też wyświetlanie wskazanych jako argumenty plików.
 
+Programy te umożliwiają też wyświetlanie wskazanych jako argumenty plików, a kończą się po wciśnięciu klawisza \Verb{q}.
+% END: unix intro
+
+% BEGIN: Łączenie poleceń
 \subsection{Przekierowania}
 
-Typowo program posiada trzy strumienie danych: jeden wejściowy (stdin) i dwa wyjściowe (stdout i stderr). Standardowe wyjście możemy przekierować na standardowe wejście innego programu przy pomocy~\Verb{|}, np:
+Typowo program posiada trzy strumienie danych: jeden wejściowy (stdin) i dwa wyjściowe (stdout i stderr). Standardowe wyjście można przekierować na standardowe wejście innego programu przy pomocy~\Verb{|}, np.:
 \begin{Verbatim}
 ls --help | less
 \end{Verbatim}
@@ -120,8 +135,8 @@ Konstrukcja ta przekieruje wynik komendy \Verb{ls} uruchomionej z opcją \Verb{-
 Możemy także przekierować standardowe wyjście do pliku (przy pomocy~\Verb{>} lub~\Verb{>>}, gdy chcemy dopisywać do pliku) lub pobrać standardowe wejście z pliku (przy pomocy \Verb{<}).
 \Verb{2>} pozwala na przekierowanie standardowego wyjścia błędu do pliku.
 
-Jeżeli zachodzi potrzeba połączenia obu strumieni możemy użyć \Verb{2>&1} w celu przekierowania strumienia drugiego do pierwszego.
-Następnie możemy użyć ~\Verb{|} aby przekierować połączony strumień do następnej komendy.
+Jeżeli zachodzi potrzeba połączenia obu strumieni można użyć \Verb{2>&1} w celu przekierowania strumienia drugiego do pierwszego.
+Następnie można użyć ~\Verb{|} aby przekierować połączony strumień do następnej komendy.
 Jeżeli chcemy przekierować go do pliku połączenie strumieni powinno mieć miejsce po przekierowaniu pierwszego z nich do pliku, np.:
 \\* \\* \vspace{-2\baselineskip} % nopagebreak here !
 \begin{Verbatim}[]
@@ -148,11 +163,13 @@ Spacje w powyższych konstrukcjach są opcjonalne.
 	\item \Verb$a&$ uruchomi polecenie a w tle i odda linię poleceń,
 	\item \Verb$a;$ uruchomi polecenie a (dokładnie tak samo jakby nie było tego średnika).
 \end{itemize}
-% END: unix intro
+% END: Łączenie poleceń
 
 % BEGIN: system plików
 \subsection{System plików}
-System plików ma strukturę hierarchiczną (drzewiastą) i rozpoczyna się w korzeniu oznaczanym ukośnikiem: \Verb$/$. Wchodząc w jego podkatalogi, ich podkatalogi i tak dalej, możemy dojść do dowolnego pliku w systemie. Zapisując nazwy katalogów przez które przechodziliśmy i rozdzielając je od siebie oraz od nazwy pliku przy pomocy ukośników tworzymy bezwzględną ścieżkę do danego pliku, czyli taką która właśnie rozpoczyna się od tego korzenia (pierwszym znakiem w takiej ścieżce zawsze jest \Verb$/$ oznaczający właśnie korzeń).
+System plików ma strukturę hierarchiczną (drzewiastą) i rozpoczyna się w korzeniu oznaczanym ukośnikiem: \Verb$/$. W tym punkcie zamontowany jest główny system plików (rootfs), inne systemy plików mogą być montowane w kolejnych katalogach.
+
+Wchodząc w katalogi znajdujące się bezpośrednio w korzeniu, ich podkatalogi i tak dalej, można dojść do dowolnego pliku w systemie. Zapisując nazwy katalogów przez które przechodziliśmy i rozdzielając je od siebie oraz od nazwy pliku przy pomocy ukośników tworzymy bezwzględną ścieżkę do danego pliku, czyli taką która właśnie rozpoczyna się od tego korzenia (pierwszym znakiem w takiej ścieżce zawsze jest \Verb$/$ oznaczający właśnie korzeń).
 
 Możliwe jest wyrażanie wszystkich ścieżek od korzenia, jednak nie zawsze jest to wygodne. W wielu wypadkach chcemy móc wyrazić ścieżkę względem jakiegoś innego katalogu i w tym celu stosuje się ścieżki względne. Katalogiem względem którego, wyrażana jest ścieżka względna może być katalog, w którym znajduje się obiekt ją zawierający lub, znacznie częściej, jest to tak zwany bieżący katalog roboczy.
 
@@ -162,7 +179,7 @@ Interpreter poleceń taki jak \Verb$bash$ potrafi "znajdować się" gdzieś w te
 
 Bieżący katalog roboczy jest określany niezależnie dla każdego z działających programów. Typowo pierwotna jego wartość jest ustawiana na bieżący katalog roboczy powłoki która uruchomiła dany program. Może być on zmieniony przez działający program przy użyciu odpowiedniej funkcji systemowej.
 
-W przypadku powłoki zgodnej z \Verb$sh$ informację o jej bieżącym katalogu roboczym możemy wypisać przy pomocy polecenia \Verb$pwd$. Często jest ona także podawana przed znakiem zachęty. Natomiast zmiany tego katalogu możemy dokonać przy pomocy polecenia \Verb$cd$, po którym podawana jest ścieżka do katalogu który ma być ustawiony jako katalog roboczy. W ten sposób zmienimy katalog względem którego będą interpretowane ścieżki względne w danej powłoce i w programach przez nią uruchamianych po wykonaniu tego polecenia. Zmiana ta nie wpłynie na uruchomione wcześniej i nadal działające w tle programy. Uruchomiony program w trakcie działania może także zmienić swój bieżący katalog roboczy wywołaniem odpowiedniej funkcji systemowej.
+W przypadku powłoki zgodnej z \Verb$sh$ informację o jej bieżącym katalogu roboczym można wypisać przy pomocy polecenia \Verb$pwd$. Często jest ona także podawana przed znakiem zachęty. Natomiast zmiany tego katalogu można dokonać przy pomocy polecenia \Verb$cd$, po którym podawana jest ścieżka do katalogu który ma być ustawiony jako katalog roboczy. W ten sposób zmienimy katalog względem którego będą interpretowane ścieżki względne w danej powłoce i w programach przez nią uruchamianych po wykonaniu tego polecenia. Zmiana ta nie wpłynie na uruchomione wcześniej i nadal działające w tle programy. Uruchomiony program w trakcie działania może także zmienić swój bieżący katalog roboczy wywołaniem odpowiedniej funkcji systemowej.
 
 
 \subsubsection{Ścieżki względne}
@@ -176,7 +193,7 @@ Sama nazwa pliku lub katalogu również stanowi ścieżkę względną (względem
 
 \subsubsection{Pliki ukryte}
 
-Pliki (i katalogi) których nazwy zaczynają się od kropki (`.`) traktowane są jako pliki ukryte i nie będą domyślnie pokazywane przez niektóre z programów.
+Pliki (i katalogi) których nazwy zaczynają się od kropki (\Verb$.$) traktowane są jako pliki ukryte i nie będą domyślnie pokazywane przez niektóre z programów.
 
 \subsubsection{Katalog domowy}
 

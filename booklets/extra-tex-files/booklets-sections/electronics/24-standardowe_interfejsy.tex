@@ -28,16 +28,16 @@ Istnieje wiele zestandaryzowanych interfejsów zarówno szeregowych jak i równo
 \begin{center} \includegraphics[width=0.47\textwidth]{img/elektronika/spi}    \includegraphics[width=0.47\textwidth]{img/elektronika/twi} \end{center}
 
 \subsection{SPI (Serial Peripheral Interface)}
-    jest to szeregowa magistrala full-duplex działająca w układzie master-slave złożona z linii zegarowej (SCLK), nadawania przez mastera (MOSI), odbioru przez mastera (MISO) oraz linii służących do aktywacji urządzenia slave (SS / CS). 
+    jest to szeregowa magistrala full-duplex działająca w układzie master-slave złożona z linii zegarowej (SCLK), nadawania przez mastera (MOSI), odbioru przez mastera (MISO) oraz linii służących do aktywacji urządzenia slave (SS / CS).
 
 \begin{wrapfigure}{r}{0.48\textwidth} \begin{center} \vspace{-20pt} \includegraphics[width=0.43\textwidth]{img/elektronika/onewire} \vspace{-20pt} \end{center} \end{wrapfigure}
 
 \subsection{I2C (TWI)}
     jest to szeregowa magistrala half-duplex złożona z linii sygnałowej (SDA) i zegara (SCL) posiadająca zdefiniowany format ramki wraz z adresowaniem. Z wyjątkiem bitu startu i stopu stan linii danych może zmieniać się tylko przy niskim stanie linii zegarowej.
-    Nadajniki są typu open-drain przez co realizowany jest iloczyn na drucie, co pozwala na wykrywanie kolizji (jeżeli dany nadajnik nie nadaje zera a linia jest w stanie zera to nadaje także ktoś inny). Pozwala to także na uzyskanie układów multimaster, pomimo iż typowo na magistrali takiej występuje tylko jeden układ master (nadający sygnał zegara i inicjujący transmisję). 
+    Nadajniki są typu open-drain przez co realizowany jest iloczyn na drucie, co pozwala na wykrywanie kolizji (jeżeli dany nadajnik nie nadaje zera a linia jest w stanie zera to nadaje także ktoś inny). Pozwala to także na uzyskanie układów multimaster, pomimo iż typowo na magistrali takiej występuje tylko jeden układ master (nadający sygnał zegara i inicjujący transmisję).
 
 \subsection{1 wire (one-wire)}
-    jest to szeregowa magistrala half-duplex złożona z jedynie z linii sygnałowej (która może także służyć do zasilania urządzeń) posiadająca zdefiniowany format ramki wraz z adresowaniem. Standardowe nadawanie jest realizowane jako open-drain (wyjątkiem jest nadawanie tzw power-byte). 
+    jest to szeregowa magistrala half-duplex złożona z jedynie z linii sygnałowej (która może także służyć do zasilania urządzeń) posiadająca zdefiniowany format ramki wraz z adresowaniem. Standardowe nadawanie jest realizowane jako open-drain (wyjątkiem jest nadawanie tzw power-byte).
 
 \subsection{USART}
     jest to uniwersalny synchroniczny i asynchroniczny nadajnik i odbiornik, umożliwia realizację szeregowej transmisji synchronicznej (zgodnie z zegarem) lub asynchronicznej (wykrywanie początku ramki na podstawie linii danych). Interfejs korzysta z rozdzielonych linii nadajnika i odbiornika (wyjście danych TxD oraz wejście danych RxD, co umożliwia realizację transmisji full-duplex) oraz może korzystać z dodatkowych sygnałów sterujących (wyjście RTS informujące o gotowości do odbioru oraz wejście CTS informacji o gotowości odbioru / zezwolenia na nadawanie). Niekiedy dostępne jest także wyjście załączenia nadajnika używane do pracy w trybie half-duplex (linie TxD i RxD połączone buforem trój-stanowym nadajnika).
@@ -51,7 +51,7 @@ Istnieje wiele zestandaryzowanych interfejsów zarówno szeregowych jak i równo
 % END: Elektronika - Typy transmisji
 
 \begin{ProTip}[breakable]{Rezystory terminujące \zaawansowane{30}}
-Niektóre  ze standardów interfejsów komunikacyjnych przewidują kończenie swoich magistral rezystorem terminującym.
+Niektóre ze standardów interfejsów komunikacyjnych przewidują kończenie swoich magistral rezystorem terminującym.
 Zastosowanie takiego rezystora ma na celu eliminację odbić sygnału, które mogłyby powstać na końcu linii transmisyjnej.
 
 \vspace{7pt}
@@ -62,8 +62,8 @@ Zatem dla sygnału 1MHz (czyli takiego gdzie pojedyncze impulsy są właśnie d�
 
 \vspace{7pt}
 
-Odbicia te wynikają z faktu, iż przemieszczanie się sygnału (np. naszego impulsu 5V o czasie trwania 1$\mu \rm s$) wzdłuż przewodu związane jest z
-	ładowaniem kolejnych pojemności pasożytniczych, związanych z odcinkiem przewodu do którego dociera sygnał.
+Odbicia te wynikają z faktu, iż przemieszczanie się sygnału (np. naszego impulsu 5V o czasie trwania 1$\mu \rm s$) wzdłuż przewodu związane jest
+	z ładowaniem kolejnych pojemności pasożytniczych, związanych z odcinkiem przewodu do którego dociera sygnał.
 Dzieje się to kosztem rozładowania pojemności odcinka przewodu który sygnał już opuścił.
 
 W momencie gdy sygnał trafia na koniec przewodnika nie ma możliwości rozładowania tej pojemności na kolejny odcinek przewodu, więc ładunek z nią związany „rozpływa się po kablu” powodując powstanie odbicia.

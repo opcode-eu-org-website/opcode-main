@@ -119,7 +119,8 @@ int main() {
 
 \subsection{tablice zmiennej długości}
 
-Język C od wersji C99 pozwala na korzystanie z tablic zmiennej długości (\textit{VLA}), czyli tablic których rozmiar nie jest stałą czasu kompilowania a zmienną - np.:
+Język C od wersji C99 pozwala na korzystanie z tablic zmiennej długości (\textit{VLA}),
+czyli tablic których rozmiar nie jest stałą czasu kompilowania a zmienną - np.:
 
 \begin{CodeFrame*}[c]{}
 void xxx(int n) {
@@ -129,8 +130,12 @@ void xxx(int n) {
 }
 \end{CodeFrame*}
 
-C++ tablic zmiennej długości w stylu C99 C++ oficjalnie nie obsługuje, przy czym niektóre z kompilatorów dopuszczają użycie VLA w C++.
-C++ posiada za to typ std:vector pozwalający na definiowanie tablic, których rozmiar można łatwo (z punktu widzenia programisty, niekoniecznie maszyny wykonującej ten kod) zmieniać nawet po utworzeniu tablicy:
+C++ oficjalnie nie obsługuje tablic zmiennej długości w stylu C99 C++
+jednak niektóre z kompilatorów dopuszczają użycie VLA w C++.
+
+C++ posiada za to typ std:vector pozwalający na definiowanie tablic,
+których rozmiar można łatwo (z punktu widzenia programisty, niekoniecznie
+maszyny wykonującej ten kod) zmieniać nawet po utworzeniu tablicy:
 \begin{CodeFrame*}[cpp]{}
 void xxx(int n) {
     std::vector<float> vals(n);
@@ -188,7 +193,10 @@ int main() {
 }
 \end{CodeFrame*}
 
-W przypadku C++ listy implementowane są jako listy a nie tablice wskaźników, więc operacje wstawiania na początku i w środku są szybkie, ale operacja uzyskania n-tego elementu jest powolna.
+W przypadku C++ listy implementowane są jako listy a nie tablice,
+(jak ma to miejsce np. w Pythonie - tablice wskaźników)
+W efekcie operacje wstawiania na początku i w środku są szybkie,
+ale operacja uzyskania n-tego elementu jest powolna.
 
 \subsection{mapy}
 
@@ -224,8 +232,12 @@ int main() {
 }
 \end{CodeFrame*}
 
-Mapa \cpp{std::map} nie zachowuje kolejności wkładania elementów, natomiast jest zawsze posortowana.
-C++ oferuje też inne rodzaje map (np. nie posortowaną \cpp{std::unordered_map}, czy też nie wymagającą unikalności klucza \cpp{std::multimap}).
+Mapa \cpp{std::map} nie zachowuje kolejności wkładania elementów,
+natomiast jest zawsze posortowana. C++ oferuje też inne rodzaje map, np.:
+\begin{itemize}
+  \item nie posortowaną \cpp{std::unordered_map}`,
+  \item nie wymagającą unikalności klucza \cpp{std::multimap}).
+\end{itemize}
 
 \insertZadanie{booklets-sections/c_cpp/zadania.tex}{parsuj_klucz_wartosc_cpp}{}
 
@@ -233,24 +245,31 @@ C++ oferuje też inne rodzaje map (np. nie posortowaną \cpp{std::unordered_map}
 
 \subsubsection{referencje}
 
-Referencje są zasadniczo wskaźnikami, których używamy jak zwykłych zmiennych (bez stosowania operatora \cpp{*} w celu operowania na wartości wskaźnika).
-W odróżnieniu od wskaźników nie możemy bezpośrednio operować na adresie referencji (np. spowodować aby wskazywała na inną zmienną).
+Referencje są zasadniczo wskaźnikami, których używa się jak zwykłych zmiennych
+(bez stosowania operatora \cpp{*} w celu operowania na wartości wskaźnika).
+W odróżnieniu od wskaźników nie możemy bezpośrednio operować na wskazywanym
+przez nią adresie (np. spowodować aby wskazywała na inną zmienną).
+
 Kontynuując przykład z modyfikacją zmiennej przekazanej jako argument funkcji, z użyciem referencji kod ten może wyglądać następująco:
 
 \begin{CodeFrame*}[cpp]{}
-void ff(int& a) { // zwróć uwagę na & oznaczający że będzie to referencja
+void f3(int& a) { // & oznacza że argument będzie pobrany jako referencja
     a = 15;
 }
 int main() {
     x = 10;
-    ff(x);
-    printf("%d\n", x); // wypisze 15
+    f3(x); // w wywołaniu funkcji pobierającej argument jako referencja
+           // podajemy po prostu zmienną na którą chcemy uzyskać referencję
+           // nie ma tu operatora pobrania adresu jak przy wskaźniku
+    std::cout << x "\n"; // wypisze 15
 }
 \end{CodeFrame*}
 
 \subsubsection{iteratory}
 
-W powyższych przykładach użycia list i map w C++ warto zwrócić uwagę na użycie iteratorów pozwalających na pobieranie kolejnych wartości z tych kontenerów:
+Już w powyższych przykładach użycia list i map w C++
+wykorzystane były iteratory, pozwalające na
+pobieranie kolejnych wartości z tych kontenerów:
 
 \begin{CodeFrame*}[cpp]{}
 void wypiszListe(std::list<int> l) {
@@ -260,14 +279,25 @@ void wypiszListe(std::list<int> l) {
 }
 \end{CodeFrame*}
 
-Iterator zwracają niektóre z metod obiektów reprezentujących te kontenery, np. \cpp{.begin()} zwraca iterator na pierwszy element.
-Zwiększanie iteratora odbywa się z użyciem operatorów \cpp{++}.
-Wyjście poza zakres (zwiększenie iteratora wskazującego na ostatni element kolekcji) nie powoduje rzucenia wyjątku, za to iterator przyjmuje specjalną wartość oznaczającą koniec.
-Iterator o tej wartości zwracany jest przez metodę \cpp{.end()} (lub \cpp{.rend()} przy iterowaniu w przeciwną stronę).
+Iterator zwracają niektóre z metod tych kontenerów,
+np. \cpp{.begin()} zwraca iterator na pierwszy element.
+Zwiększanie iteratora odbywa się z użyciem operatora \cpp{++}.
+
+Wyjście poza zakres (zwiększenie iteratora wskazującego na
+ostatni element kolekcji) nie powoduje rzucenia wyjątku,
+za to iterator przyjmuje specjalną wartość oznaczającą koniec.
+Iterator o tej wartości zwracany jest przez metodę \cpp{.end()}
+(lub \cpp{.rend()} przy iterowaniu w przeciwną stronę).
 
 \subsubsection{typ auto}
 
-Współczesny C++ oferuje także specjalny typ \cpp{auto} zwalniający programistę z konieczności jawnego definiowania typu zmiennej do której przypisywana jest od razu jakaś wartość z określonym typem. Możemy napisać np. \cpp{auto x = 5;}, ale nie możemy napisać \cpp{auto x; x = 5;}. Typ ten jest użyteczny np. do obsługi iteratorów, pozwalając powyższą pętle zapisać bez \cpp{std::list<int>::iterator} jako:
+Przy używaniu iteratorów w C++ wygodne jest korzystanie
+z typu \cpp{auto}. Typ ten zwalnia programistę z konieczności
+jawnego definiowania typu zmiennej do której przypisywana
+jest od razu jakaś wartość z określonym typem.
+Typ zmiennej zostanie ustalony przez kompilator w oparciu o
+wartość przypisywaną, można zatem napisać np. \cpp{auto x = 5;},
+ale nie można napisać: \cpp{auto x; x = 5;}.
 
 \begin{CodeFrame*}[cpp]{}
 void wypiszListe(std::list<int> l) {
@@ -279,7 +309,12 @@ void wypiszListe(std::list<int> l) {
 
 \subsubsection{pętla for(each)}
 
-C++ udostępnia także inną składnię pętli \cpp{for} pozwalającą na iterowanie po wszystkich elementach kolekcji takich jak listy, mapy, itp. Będącą odpowiednikiem pętli \Verb#foreach# znanej z niektórych języków programowania, czy też pythonowskiej pętli \python{for}:
+C++ udostępnia także inną składnię pętli \cpp{for} pozwalającą
+na iterowanie po wszystkich elementach kolekcji takich jak
+listy, mapy, itp.
+
+Jest to odpowiedniki pętli typu \textit{foreach} znanej z niektórych
+języków programowania (np. pętla \python{for} w Pythonie)
 
 \begin{CodeFrame*}[cpp]{}
 void wypiszListe(std::list<int> l) {
@@ -289,15 +324,25 @@ void wypiszListe(std::list<int> l) {
 }
 \end{CodeFrame*}
 
-Zamiast \cpp{auto i} możemy napisać \cpp{auto& i} aby otrzymać dostęp przez referencję (wtedy wykonanie przypisania wartości do i, np \cpp{i = 0}, spowoduje modyfikację elementu listy).
+Zamiast \cpp{auto i} można napisać \cpp{auto& i} aby otrzymać dostęp
+przez referencję (wtedy wykonanie przypisania wartości do i,
+np. \cpp{i = 0}, spowoduje modyfikację elementu listy).
+Unikniemy także kopiowania obiektu (co może mieć znaczenie wydajnościowe).
 
-Warto zauważyć także, że w odróżnieniu od wcześniejszej pętli nie operujemy tutaj na iteratorach, a na wartościach / referencjach do wartości z kontenera.
+Warto zauważyć także, że w odróżnieniu od wcześniejszej pętli
+zmienna reprezentuje wyłuskany iterator (jest to wartość /
+referencja do wartości elementu a nie sam iterator).
 
 \subsubsection{szablony}
 
-C++ pozwala też definiować szablony funkcji oraz klas, dzięki którym kompilator będzie mógł wytworzyć funkcje/klasy dla potrzebnych typów w oparciu o ten szablon (zdefiniowany dla ogólnego typu).
-Na przykład powyższa funkcja wypisująca listy zdefiniowana jest tylko dla list zawierających liczby całkowite.
-Jednak takie funkcje dla dowolnych typów obsługiwanych przez cout-owy operator \cpp{<<} (np. liczb zmiennoprzecinkowych, napisów, ...) będą wyglądały tak samo.
+C++ pozwala też definiować szablony funkcji oraz klas,
+dzięki którym kompilator będzie mógł wytworzyć funkcje/klasy dla potrzebnych typów
+w oparciu o ten szablon (zdefiniowany dla ogólnego typu).
+
+Na przykład wcześniej używana funkcja wypisująca listy
+zdefiniowana jest tylko dla list zawierających liczby całkowite.
+Jednak takie funkcje dla dowolnych typów obsługiwanych przez cout-owy operator \cpp{<<}
+(np. liczb zmiennoprzecinkowych, napisów, ...) będą wyglądały tak samo.
 Dzięki mechanizmowi szablonów możemy napisać:
 
 \begin{CodeFrame*}[cpp]{}
@@ -344,8 +389,19 @@ int main() {
 }
 \end{CodeFrame*}
 
-C++ pozwala także na definiowanie i używanie lambd.
-Definicja taka składa się z listy przechwytywanych zmiennych, listy argumentów i ciała funkcji. Lista przechwytywania może określać przechwytywanie przez wartość lub przez referencję. W pierwszym przypadku wartość zmiennej z miejsca utworzenia funkcji zostanie w niej "zamrożona", czyli jej dalsze zmiany nie będą widoczne w wywołaniach lambdy.' W drugim przypadku lambda będzie widzieć zawsze aktualną wartość, a zmiany tej zmiennej wewnątrz lambdy będą widoczne także na zewnątrz. Lista argumentów i ciało funkcji działa jak w zwykłych funkcjach. Lambda może zwracać lub może nie zwracać wartość z użyciem return.
+C++ pozwala także na definiowanie i używanie lambd. Definicja taka składa
+się z listy przechwytywanych zmiennych, listy argumentów i ciała funkcji.
+
+Lista przechwytywania może określać przechwytywanie przez wartość lub przez referencję.
+
+W pierwszym przypadku wartość zmiennej z miejsca utworzenia funkcji zostanie w niej "zamrożona",
+czyli jej dalsze zmiany nie będą widoczne w wywołaniach lambdy.
+
+W drugim przypadku lambda będzie widzieć zawsze aktualną wartość,
+a zmiany tej zmiennej wewnątrz lambdy będą widoczne także na zewnątrz.
+
+Lista argumentów i ciało funkcji działa jak w zwykłych funkcjach.
+Lambda może zwracać lub może nie zwracać wartość z użyciem return.
 
 \subsubsection{jeszcze więcej ... \zaawansowane{20}}
 

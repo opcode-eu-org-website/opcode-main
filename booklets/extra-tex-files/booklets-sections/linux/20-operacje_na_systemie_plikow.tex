@@ -26,42 +26,49 @@
 % BEGIN: Operacje na systemie plików
 \subsection{echo i znaki uogólniające}
 
-Polecenie echo służy do wypisania przekazanych do niego argumentów na ekran – np. \Verb$echo abc xyz$ wypisze \textit{abc xyz}.
-Polecenie to może zostać użyte także do wypisania plików pasujących do jakiegoś wzorca np. \Verb$echo a*$ wypisze pliki zaczynające się literą \textit{a}.
+Polecenie \Verb$echo$ wypisuje tekst określony w argumentach na standardowe wyjście
+– np. \Verb$echo abc xyz$ wypisze \textit{abc xyz}.
 
-Dzieje się to dzięki obsłudze przez powłokę \textit{znaków uogólniających}, które mogą być użyte w napisach i zostaną rozwinięte przez powłokę do listy pasujących ścieżek lub nazw plików.
-Podstawowymi znakami uogólniającymi powłoki są:
+Polecenie to może zostać użyte także do wypisania plików pasujących do jakiegoś wzorca np. \Verb$echo a*$ wypisze pliki zaczynające się literą \textit{a}. Jest to spowodowane tym iż znak \Verb$*$ jest jednym ze \textit{znaków uogólniających} powłoki.
+
+W napisie opisującym ścieżkę można także umieścić pewne znaki specjalne, pozwalające na uogólnienie takiej ścieżki, tak aby opisywała wiele plików lub plik, którego pewnych szczegółów położenia/nazwy nie chcemy określić jednoznacznie. Tymi snakami specjalnymi są znaki uogólniające powłoki (\textit{glob}):
 \begin{itemize}
-	\item \Verb{?} oznaczający dowolny znak
-	\item \Verb{*} oznaczający dowolny (także pusty) ciąg znaków
-	\item \Verb{[a-z AD]} oznaczający dowolny znak z wymienionych w zbiorze ujętym w nawiasach kwadratowych, zbiór może być definiowany z użyciem zakresów, np. a-z AD oznacza dowolną małą literę od a do z włącznie, spację, dużą literą A lub D
-	\item \Verb{[!a-z]} oznaczający dowolny znak z wyjątkiem znaków wymienionych w podanym zbiorze, zbiór może być definiowany z użyciem zakresów, np. a-z oznacza dowolną małą literę od a do z włącznie
+	\item \Verb{?} oznacza dowolny znak
+	\item \Verb{*} oznacza dowolny (także pusty) ciąg znaków
+	\item \Verb{[a-z AD]} oznacza dowolny znak z wymienionych w zbiorze ujętym w nawiasach kwadratowych, zbiór może być definiowany z użyciem zakresów, np. a-z AD oznacza dowolną małą literę od a do z włącznie, spację, dużą literą A lub D
+	\item \Verb{[!a-z]} oznacza dowolny znak z wyjątkiem znaków wymienionych w podanym zbiorze, zbiór może być definiowany z użyciem zakresów, np. a-z oznacza dowolną małą literę od a do z włącznie
 \end{itemize}
-Warto zwrócić uwagę że sama gwiazdka nie dopasowuje plików ukrytych (zaczynających się od kropki), czyli np. \Verb$echo *$ wypisze wszystkie pliki w bieżącym katalogu, z wyjątkiem tych których pierwszym znakiem w nazwie jest kropka. Aby je wypisać możemy użyć \Verb$echo .*$ lub (gdy chcemy pominąć kropkę i dwie kropki, będące specjalnymi dowiązaniami do bieżącego i nadrzędnego katalogu):  \Verb$echo .[!.]*$
 
-Napisy (a więc także ścieżki i nazwy plików) mogą być ujęte w cudzysłowie pojedynczym (\texttt{'}, np. \texttt{'aaa bbb'}) lub podwójnym (\texttt{"}, np. \texttt{"aaa bbb"}) celem np. ochrony spacji w nich występujących.
-Oba typy cudzysłowów zabezpieczają przed rozwijaniem znaków uogólniających (zastępowaniem napisu ze znakami listą pasujących nazw / ścieżek).
-Cudzysłów pojedynczy (w odróżnieniu od podwójnego) zabezpiecza także przed interpretacją umieszczonych wewnątrz innych znaków specjalnych takich jak odwołania do zmiennych.
+Należy zwrócić uwagę że sama gwiazdka nie dopasowuje plików ukrytych (zaczynających się od kropki), czyli np. \Verb$echo *$ wypisze wszystkie pliki w bieżącym katalogu, z wyjątkiem tych których pierwszym znakiem w nazwie jest kropka. Aby je wypisać możemy użyć \Verb$echo .*$ lub (gdy chcemy pominąć kropkę i dwie kropki, będące specjalnymi dowiązaniami do bieżącego i nadrzędnego katalogu):  \Verb$echo .[!.]*$
 
-Listowanie plików jest operacją na tyle istotną i użyteczną że istnieje do tego dedykowane polecenie – \Verb$ls$. Pozwala ono na m.in. wypisywanie szczegółowych informacji o plikach, listowanie całej zawartości katalogu, sortowanie wyników itd.
-Należy jednak pamiętać że rozwijaniem znaków uogólniających (czyli zamianą napisu je zawierającego na listę plików) dla polecenia \Verb$ls$ zajmuje się powłoka (czyli np. \Verb$bash$) – tak samo jak dla polecenia \Verb$echo$ – gdyż sama komenda \Verb$ls$ nie rozumie znaków uogólniających.
-%
-Kilka przykładów:
+Znaki uogólniające mogą być także stosowne nie tylko do dopasowywania nazw plików, czy też ścieżek, ale także ogólnego dopasowywania napisów (są takim prostszym odpowiednikiem wyrażeń regularnych).
+
+Znaki uogólniające rozwijane są (t.j. zamieniane na listę pasujących ścieżek) przez powłokę. A jedynie w przypadku braku dopasowań przekazywane w niezmienionej postaci do uruchamianego programu.
+Niektóre programy oczekują jednak otrzymania i operowania na znakach uogólniających. Niekiedy też chcemy przekazać jako argument jakiegoś polecenia coś co nie ma być dopasowywane a jedynie zawiera któreś z tych znaków.
+W obu wypadkach dla poprawnego działania polecenia niezależnie od ewentualnego istnienia pasujących plików ciąg zawierający te znaki należy zabezpieczyć cudzysłowami lub apostrofami (ew. użyć odwrotnych ukośników do zabezpieczenia tych znaków).
+
+Przykłady dopasowań nazw i ścieżek z użyciem znaków uogólniających:
 \begin{itemize}
-	\item pliki z jednoznakową nazwą: \Verb{ls ?}
-	\item pliki zaczynające się od znaku zapytania: \Verb{ls \?*} lub  \Verb{ls '?'*}
-	\item pliki nie zaczynające się od a: \Verb{ls [!a]*}
-	\item pliki mające w nazwie literę b: \Verb{ls *b*}
-	\item pliki mające w nazwie literę a lub b: \Verb{ls *[ab]*}
-	\item pliki zaczynające się od liter a,b,c,d: \Verb{ls [a-d]*}
-	\item pliki ukryte (wliczając bieżący i nadrzędny katalog): \Verb{echo .*}
+	\item\Verb{?} → pliki (z bieżącego katalogu) z jedno znakową nazwą
+	\item\Verb{\?*} lub \Verb{'?'*} → pliki (z bieżącego katalogu) których nazwa zaczyna się od znaku zapytania
+	
+	\item\Verb{*b*} → wszystkie (nieukryte) pliki (z bieżącego katalogu) których nazwa zawiera małą literę b
+	\item\Verb{*[ab]*} → wszystkie (nieukryte) pliki (z bieżącego katalogu) których nazwa zawiera małą literę a lub b
+	
+	\item\Verb{[a-d]*} → wszystkie (nieukryte) pliki (z bieżącego katalogu których nazwa zaczyna się od liter a,b,c,d
+	\item\Verb{[^ad]*} → wszystkie (nieukryte) pliki (z bieżącego katalogu których nazwa nie zaczyna się na małą literę a lub d
+	\item\Verb{a[0-9]/*} → wszystkie (nieukryte) pliki znajdujące się wewnątrz katalogów których nazwa jest dwuznakowa, gdzie pierwszym znakiem jest \Verb{a} a kolejnym cyfra.
+	
+	\item\Verb{.*} → wszystkie ukryte pliki (z bieżącego katalogu)
+	\item\Verb{.[!.]*} → wszystkie ukryte pliki (z bieżącego katalogu), z wyjątkiem odwołania do katalogu bieżącego i nadrzędnego
 \end{itemize}
+Katalog jest specjalnym rodzajem pliku, zatem, w powyższych opisach "pliki" oznacza także katalogi.
 
 \subsection{listowanie i  wyszukiwanie plików}
 
 \begin{itemize}
 	\item \Verb{ls [opcje] [ścieżka]}
-		listowanie zawartości katalogu, do ważniejszych opcji należy zaliczyć:\\
+		listowanie zawartości katalogu z możliwością sortowania, wypisywanie szczegółowych informacji o plikach, do ważniejszych opcji należy zaliczyć:\\
 			\texttt{-a} wyświetlaj pliki ukryte (zaczynających się od kropki)\\
 			\texttt{-l} wyświetlaj pliki w formie listy z szczegółowymi informacjami (uprawnienia, rozmiar, data modyfikacji, właściciel, grupa, rozmiar)\\
 			\texttt{-1} wyświetlaj pliki w formie 1 plik w jednej linii (bez dodatkowych informacji; stosowane domyślne gdy wynik komendy przekazywany jest strumieniem do innej komendy lub pliku)\\
@@ -70,7 +77,9 @@ Kilka przykładów:
 			\texttt{-S} sortuj wg rozmiaru\\
 			\texttt{-r} odwróć kolejność sortowania\\
 			\texttt{-c} użyj daty utworzenia zamiast daty modyfikacji (stosowane w połączeniu z \texttt{-l} i/lub \texttt{-t})\\
-			\texttt{-d} wyświetlaj informacje o katalogu zamiast jego zawartości
+			\texttt{-d} wyświetlaj informacje o katalogu zamiast jego zawartości\\
+			Należy pamiętać że polecenie \Verb$ls$ nie rozumie znaków uogólniających i rozwijaniem ich dla niego zajmuje się powłoka która je wywołująca.\\
+			Warto zauważyć także, że jeżeli komanda \texttt{ls} w wyniku rozwinięcia znaków uogólniających dostanie jako argument ścieżkę do katalogu to wylistuje jego zawartość (zachowanie to zmienia opcja \texttt{-d}).
 		
 	\item \Verb{find [opcje] [katalog startowy] [wyrażenie]}
 		wyszukiwanie w systemie plików w oparciu o nazwę/ścieżkę lub właściwości pliku, do ważniejszych opcji należy zaliczyć:\\
@@ -78,7 +87,8 @@ Kilka przykładów:
 			\texttt{-L} wypisuj informacje o wskazywanych przez linki symboliczne plikach\\
 		do ważniejszych elementów wyrażenia należy zaliczyć:\\
 			\texttt{-name "wyrażenie"} pliki których nazwa pasuje do wyrażenia korzystającego z shellowych znaków uogólniających\\
-				komenda find (w odróżnieniu np. od \texttt{ls}) samodzielnie interpretują wyrażenia zawierające shellowe znaki uogólniające, w związku z czym konieczne może się okazać zabezpieczenie ich przed interpretacją przez powłokę np. przy pomocy umieszczenia wewnątrz pojedynczych cudzysłowów\\
+				komenda find (w odróżnieniu np. od \texttt{ls}) samodzielnie interpretują wyrażenia zawierające shellowe znaki uogólniające w argumentach tych opcji,
+				w związku z czym konieczne może się okazać zabezpieczenie ich przed interpretacją przez powłokę np. przy pomocy umieszczenia wewnątrz pojedynczych cudzysłowów\\
 			\texttt{-iname "wyrażenie"} jak \texttt{-name}, tyle że nie rozróżnia wielkości liter\\
 			\texttt{-path "wyrażenie"} pliki których ścieżka pasuje do wyrażenia korzystającego z shellowych znaków uogólniających\\
 			\texttt{-ipath "wyrażenie"} jak \texttt{-path}, tyle że nie rozróżnia wielkości liter\\
@@ -96,7 +106,11 @@ Kilka przykładów:
 			\emph{w powyższych testach \texttt{+} oznacza więcej niż, \texttt{-} oznacza mniej niż, uwaga: porównywaniu podlegają liczby całkowite, np. +1 oznacza $>1$ w liczbach całkowitych tzn. $\ge2$}\vspace{6pt}\\
 			%
 			\texttt{-exec}\Verb@ polecenie \{\} \;@ dla każdego znalezionego pliku wykonaj \texttt{polecenie} podstawiając ścieżkę do tego pliku pod \Verb@\{\}@ (zastosowane odwrotne ukośniki służą zabezpieczeniu nawiasów klamrowych i średnika przed zinterpretowaniem ich przez powłokę)\\
-			\Verb@-execdir polecenie \{\} \;@, podobnie jak \texttt{-exec} tyle że polecenie zostanie uruchomione w katalogu w którym znajduje się wyszukany plik
+			\Verb@-execdir polecenie \{\} \;@, podobnie jak \texttt{-exec} tyle że polecenie zostanie uruchomione w katalogu w którym znajduje się wyszukany plik\\
+			%
+			Należy pamiętać że komenda \Verb$find$ potrafi sama rozwijać znaki uogólniające (w przypadku argumentów niektórych z jej opcji) i w przypadku argumentów opcji takich jak np. \Verb$-name$ na ogół chcemy aby znaki uogólniające nie były rozwijane przez powłokę, a interpretowane przez samą komendę \Verb$find$ – w tym celu powinniśmy je zabezpieczyć przed rozwinięciem przy pomocy cudzysłowów.\\
+			Jednak, w przypadku określania katalogu startowego \Verb$find$ zachowuje się jak inne komendy (np. \Verb$ls$) dla których znaki uogólniające musi rozwinąć powłoka (i tu na ogół nie chcemy ich zabezpieczać).
+			Na przykład jeżeli chcemy przeszukać wszystkie katalogi zaczynające się na literę a w poszukiwaniu plików zaczynających się na literę b to należy wykonać: \Verb$find a* -name "b*"$,	a nie \Verb$find "a*" -name "b*"$ czy \Verb$find a* -name b*$, itd.
 		
 	\item \Verb{du [opcje] ścieżka1 [ścieżka2 [...]]}
 		wyświetlanie informacji o zajętej przestrzeni dyskowej przez wskazane pliki / katalogi, do ważniejszych opcji należy zaliczyć:\\
@@ -108,16 +122,6 @@ Kilka przykładów:
 	\item \Verb{df [opcje]}
 		wyświetlanie informacji o zajętości miejsca na poszczególnych systemach plików
 \end{itemize}
-
-Należy zwrócić uwagę iż komenda \texttt{find} potrafi sama rozwijać znaki uogólniające\footnote{
-	W przypadku argumentów niektórych z jej opcji. W przypadku określania katalogu startowego \texttt{find} zachowuje się jak inne komendy (np. \texttt{ls}) dla których znaki uogólniające musi rozwinąć powłoka.
-	Na przykład jeżeli chemy przeszukać wszystkie katalogi zaczynające się na \textit{a} w poszukiwaniu plików zaczynających się na \textit{b} to należy wykonać: \Verb$find a* -name "b*"$,
-	a nie \Verb$find "a*" -name "b*"$ czy \Verb$find a* -name b*$, itd.
-}
-i w przypadku argumentów opcji takich jak np. \texttt{-name} na ogół chcemy aby znaki uogólniające nie były rozwijane przez powłokę, a interpretowane przez samą komendę \texttt{find}
-– w tym celu powinniśmy je zabezpieczyć przed rozwinięciem przy pomocy cudzysłowów.
-
-Warto zauważyć także, że jeżeli komanda \texttt{ls} w wyniku rozwinięcia znaków uogólniających dostanie jako argument ścieżkę do katalogu to wylistuje jego zawartość (zachowanie to zmienia opcja \texttt{-d}).
 
 \insertZadanie{booklets-sections/linux/zadania-10_20.tex}{lsetc}{}
 \insertZadanie{booklets-sections/linux/zadania-10_20.tex}{findetc}{}
@@ -141,8 +145,9 @@ Warto zauważyć także, że jeżeli komanda \texttt{ls} w wyniku rozwinięcia z
 			\texttt{-r} używa ścieżki względnej zamiast bezwzględnej przy tworzeniu dowiązań symbolicznych
 			\vspace{5pt}\\\hspace*{1cm}\includegraphics[width=0.75\textwidth]{img/linux/link_twardy_i_symboliczny}
 			\\
-			Link twardy jest innym uchwytem do tych samych danych i może być używany także po skasowaniu oryginalnego pliku. Liczbę dowiązań do danego pliku pokazuje m.in. komenda \Verb{ls} z opcją \Verb{-l}.
-			Nie można utworzyć linków twardych do katalogów, ani do plików na innym zasobie dyskowym (innym systemie plików).
+			Link twardy jest innym dowiązaniem (uchwytem) wskazującym na te same dane na dysku twardym i może być używany także po skasowaniu oryginalnego pliku (jest równoważny oryginalnemu uchwytowi).
+			Liczbę dowiązań do danego pliku pokazuje m.in. komenda \Verb{ls} z opcją \Verb{-l}.
+			Ze względu na taką naturę linków twardych ograniczają się one do pojedynczego systemu plików (urządzenia) na którym znajdują się dane. Typowo nie jest również dopuszczalne tworzenie linków twardych do katalogów.
 			\\
 			Link symboliczny wskazuje na konkretną ścieżkę (względną lub bezwzględną – co może mieć znaczenie przy przenoszeniu takiego linku) do dowolnego (nawet nie istniejącego – wtedy mówimy o zerwanym linku) pliku lub katalogu.
 		

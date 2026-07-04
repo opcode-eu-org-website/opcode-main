@@ -57,9 +57,9 @@ Najprostszą metą kopiowania plików pomiędzy różnymi systemami jest wykorzy
 	\item złożonego polecenia opartego na przekierowaniu wyjścia jakiejś komendy do ssh, które uruchamia po zdalnej stronie proces odbierający te dane na swoim standardowym wejściu, np.:
 		\begin{itemize}
 			\item \Verb{tar -czf - ścieżka1 [ścieżka2 [...]] | ssh [user@]host 'cat > plik.tgz'}\\
-				archiwizuje wskazane pliki/katalogi bezpośrednio na zdalny system z użyciem tar i kompresji gzip do pliku \texttt{plik.tgz}
+				archiwizuje wskazane pliki/katalogi bezpośrednio na zdalny system z użyciem tar, ssh i kompresji gzip do pliku \texttt{plik.tgz}
 			\item \Verb{tar -cf - ścieżka1 [ścieżka2 [...]] | ssh [user@]host 'tar -xf - -C cel'}\\
-				kopiuje wskazane pliki/katalogi na zdalny system z użyciem tar do katalogu \texttt{cel}
+				kopiuje wskazane pliki/katalogi na zdalny system z użyciem tar i ssh do katalogu \texttt{cel}
 		\end{itemize}
 \end{itemize}
 % END: zdalne kopiowanie 

@@ -24,7 +24,7 @@
 % BEGIN: System operacyjny - intro
 \section{System operacyjny}
 
-System operacyjny jest programem uruchamianym po starcie komputera (co prawda nie jako pierwszym, ale zastępującym / usuwającym z pamięci uruchomione wcześniej, więc najstarszym z działających).
+System operacyjny jest programem uruchamianym po starcie komputera (co prawda nie jako pierwszym, ale zastępującym uruchomione wcześniej, więc najstarszym z działających).
 % END: System operacyjny - intro
 
 % BEGIN: Proces uruchamiania komputera
@@ -56,9 +56,10 @@ Jednym z głównych zadań systemu operacyjnego jest zarządzanie procesami na n
 % BEGIN: Zarządzanie pamięcią
 \subsubsection{Zarządzanie pamięcią}
 
-Drugą podstawową funkcją systemu operacyjnego, wspomnianą na początku, jest zarządzanie pamięcią. Zarządzanie pamięcią polega na odpowiednim mapowaniu adresów logicznych (używanych przez procesy) na adresy fizyczne (używane przez procesor), korzysta ono z wsparcia sprzętowego ze strony procesora.
+Drugą podstawową funkcją systemu operacyjnego, wspomnianą na początku, jest zarządzanie pamięcią.
+Zarządzanie pamięcią polega na odpowiednim mapowaniu adresów logicznych (używanych przez procesy) na adresy fizyczne (używane przez procesor), korzysta ono z wsparcia sprzętowego ze strony procesora.
 
-Jest to najczęściej realizowane w oparciu o wspomniany mechanizm stronicowania. Polega to na podziale pamięci dostępnej pamięci fizycznej na jednakowe bloki zwane ramkami oraz podziale pamięci logicznej na jednakowe bloki (o tej całej wielkości co ramki) zwane stronami. Strony które są wykorzystywane przez program są mapowane na dowolne ramki pamięci fizycznej (w przypadku gdy dana strona nie zamapowana - w zależności od okoliczności błąd braku strony lub błąd ochrony strony).
+Jest to najczęściej realizowane w oparciu o wspomniany mechanizm stronicowania. Polega to na podziale pamięci dostępnej pamięci fizycznej na jednakowe bloki zwane ramkami oraz podziale pamięci logicznej na jednakowe bloki (o tej całej wielkości co ramki) zwane stronami. Strony które są wykorzystywane przez program są mapowane na dowolne ramki pamięci fizycznej (w przypadku gdy dana strona nie zamapowana – w zależności od okoliczności błąd braku strony lub błąd ochrony strony).
 
 \begin{center}\includegraphics[width=0.95\textwidth]{img/linux/pamięć_wirtualna}\end{center}
 

@@ -68,11 +68,16 @@ W zależności od układu fizycznych połączeń komunikujących się urządzeń
 Na schemacie poniżej przedstawione zostały główne topologie połączeń:
 
 \begin{itemize}
-\item \strong{magistrala} (linear bus) -- wszystkie urządzenia są podłączone do jednej linii (wspólnego medium transmisyjnego), okablowanie nie wyróżnia punktu centralnego
-\item \strong{łańcuch} (daisy chain) -- struktura okablowania podobna jak w magistrali, ale medium transmisyjne jest podzielone (połączenie n urządzeń składa się z n-1 łączy punkt-punkt pomiędzy urządzeniami)
-\item \strong{pierścień} (ring) -- topologia daisy chain w której końce są połączone, uodparnia to na pojedyncze uszkodzenie
-\item \strong{gwiazda} (star) -- wszystkie podłączenia biorą początek w węźle centralnym, w zależności od konstrukcji węzła centralnego może być realizowana w oparciu o współdzielone medium lub połączenia punkt-punkt
-\item \strong{krata} (mesh) -- każde urządzenie ma bezpośrednie połączenie punkt-punkt do każdego innego urządzenia (połączenie n urządzeń wymaga n(n-1)/2 połączeń punkt punkt)
+\item \strong{linear bus} (magistrala) –
+    wszystkie urządzenia są podłączone do jednej linii (wspólnego medium transmisyjnego), okablowanie nie wyróżnia punktu centralnego
+\item \strong{daisy chain} (łańcuch) –
+    struktura okablowania podobna jak w magistrali, ale medium transmisyjne jest podzielone (połączenie n urządzeń składa się z n-1 łączy punkt-punkt pomiędzy urządzeniami)
+\item \strong{ring} (pierścień) –
+    topologia daisy chain w której końce są połączone, uodparnia to na pojedyncze uszkodzenie
+\item \strong{star} (gwiazda) –
+    wszystkie podłączenia biorą początek w węźle centralnym, w zależności od konstrukcji węzła centralnego może być realizowana w oparciu o współdzielone medium lub połączenia punkt-punkt
+\item \strong{mesh} (krata) –
+    każde urządzenie ma bezpośrednie połączenie punkt-punkt do każdego innego urządzenia (połączenie n urządzeń wymaga n(n-1)/2 połączeń punkt punkt)
 \end{itemize}
 
 \begin{center}
@@ -85,9 +90,12 @@ Ponadto występują topologie mieszane złożone z opisanych powyżej: gwiazda w
 
 Wyróżnić można także typy transmisji:
 \begin{itemize}
-\item \strong{simplex} -- umożliwia tylko transmisję jednokierunkową
-\item \strong{half-duplex} -- umożliwia transmisję dwukierunkową, ale tylko w jedną stronę równocześnie
-\item \strong{full-duplex} -- umożliwia pełną transmisję dwukierunkową (równoczesne nadawanie i odbiór)
+\item \strong{simplex} –
+    umożliwia tylko transmisję jednokierunkową
+\item \strong{half-duplex} –
+    umożliwia transmisję dwukierunkową, ale tylko w jedną stronę równocześnie
+\item \strong{full-duplex} –
+    umożliwia pełną transmisję dwukierunkową (równoczesne nadawanie i odbiór)
 \end{itemize}
 
 \subsection{Magistrala równoległa}

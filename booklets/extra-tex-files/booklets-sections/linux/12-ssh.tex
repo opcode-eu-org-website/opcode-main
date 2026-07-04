@@ -26,7 +26,7 @@
 Komenda
 \texttt{ssh [user@]host}
 umożliwia uzyskanie powłoki zdalnego systemu poprzez szyfrowane połączenie, przydatne opcje:\\
-	\texttt{-L portLokalny:hostZdalny:portZdalny} tworzy tunel przekierowujący dane kierowane na portLokalny komputera na którym działa klient ssh do portu portZdalny na serwerze hostZdalny poprzez serwer SSH (przydatne gdy hostZdalny jest osiągalny z hostSSH ale nie z komputera lokalnego)\\
+	\texttt{-L lokalnyPortNasłuchiwania:hostZdalny:portZdalny} tworzy tunel przekierowujący dane kierowane na lokalnyPortNasłuchiwania komputera na którym działa klient ssh do portu portZdalny na serwerze hostZdalny poprzez serwer SSH (przydatne gdy hostZdalny jest osiągalny z hostSSH ale nie z komputera lokalnego)\\
 	\texttt{-D port} tworzy tunel dynamiczny na wskazanym porcie (może on być użyty jako proxy typu SOCKS np. w Firefoxie w celu zapewnienia dostępu do zasobów WWW dostępnych z serwera SSH a niedostępny z komputera lokalnego)\\
 	\texttt{-p port} określa inny niż domyślny port serwera SSH\\
 	\texttt{-X} aktywuje przekazywanie komend X serwera ze strony zdalnej do klienta (pozwala na uruchomienie po stronie zdalnej aplikacji z GUI, które zostanie wyświetlone na lokalnym X serwerze)

@@ -24,16 +24,20 @@
 % BEGIN: grep cut sed
 \subsection{grep, cut, sed, ...}
 
-Jako że większość operacji wykonywanych w powłoce takiej jak bash wiąże się z uruchamianiem zewnętrznych programów,
+Jako że większość operacji wykonywanych w powłoce takiej jak bash
+wiąże się z uruchamianiem zewnętrznych programów,
 to także przetwarzanie napisów może być realizowane w ten sposób.
 Opiera się na tym jedno z podejść do obsługi napisów w bashu,
-którym jest korzystanie z standardowych komend POSIX, takich jak grep, cut, sed.
+którym jest korzystanie z standardowych komend POSIX,
+takich jak grep, cut, sed.
 
 \begin{CodeFrame*}[bash]{}
+a="aąbcć 123"
+
 # obliczanie długości napisu w znakach, w bajtach i ilości słów w napisie
-echo -n "aąbcć 123" | wc -m
-echo -n "aąbcć 123" | wc -c
-echo -n "aąbcć 123" | wc -w
+echo -n $a | wc -m
+echo -n $a | wc -c
+echo -n $a | wc -w
 
 # obliczanie ilości linii (dokładniej ilości znaków nowej linii)
 wc -l < /etc/passwd
@@ -48,19 +52,21 @@ Inną bardzo przydatną komendą jest sed pozwala ona m.in na zastępowanie
 wyszukiwanego na podstawie wyrażenia regularnego tekstu innym:
 
 \begin{CodeFrame*}[bash]{}
-echo "aa bb cc bb dd bb ee" | sed -e 's@\([bc]\+\) \([bc]\+\)@X-\2-X@g'
+echo "aa bb cc bb dd bb ee" | sed -e 's#\([bc]\+\) \([bc]\+\)#X-\2-X#g'
 \end{CodeFrame*}
 
-Sedowe polecenie s przyjmuje 3 argumenty (oddzielane mogą być dowolnym znakiem który wystąpi za~\Verb@s@),
-pierwszy to wyszukiwane wyrażenie, drugi tekst którym ma zostać zastąpione,
-a trzeci gdy jest \Verb@g@ to powoduje zastępowanie wszystkich wystąpień a nie tylko pierwszego.
+Sedowe polecenie s przyjmuje 3 argumenty (oddzielane mogą być dowolnym znakiem,
+który wystąpi za~\Verb@s@), pierwszy to wyszukiwane wyrażenie, drugi to tekst
+którym ma zostać zastąpione, a trzeci to flagi, jeżeli podano tam \Verb@g@
+to zastępowane bądą wszystkie wystąpienia a nie tylko pierwsze.
 
-Należy zwrócić uwagę na różnicę w składni wyrażenia regularnego polegającą na poprzedzaniu
-\Verb@(@, \Verb@)@ i \Verb@+@ odwrotnym ukośnikiem aby miały znaczenie specjalne
-(jeżeli nie chcemy tego robić możemy włączyć obsługę ERE w sed poprzez opcję \Verb@-E@).
+Należy zwrócić uwagę na różnicę w składni wyrażenia regularnego polegającą
+na poprzedzaniu \Verb@(@, \Verb@)@ i \Verb@+@ odwrotnym ukośnikiem aby miały znaczenie specjalne
+(aby tego uniknąć należy włączyć obsługę ERE w sed poprzez opcję \Verb@-E@).
 
-Innymi przydatnymi komendami przetwarzającymi (specyficznej postaci) napisy są polecenia \Verb@basename@ i \Verb@dirname@.
-Służą one do uzyskania nazwy najgłębszego elementu ścieżki oraz ścieżki bez tego najgłębszego elementu. Zobacz wynik działania:
+Innymi przydatnymi komendami przetwarzającymi (specyficznej postaci) napisy są
+polecenia \Verb@basename@ i \Verb@dirname@. Służą one do uzyskania nazwy najgłębszego elementu
+ścieżki oraz ścieżki bez tego najgłębszego elementu. Zobacz wynik działania:
 
 \begin{CodeFrame*}[bash]{}
 basename /proc/sys/net/core/
