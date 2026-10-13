@@ -1,4 +1,4 @@
-** This is source code repo for [www.opcode.eu.org](http://www.opcode.eu.org) **
+**This is source code repo for [www.opcode.eu.org](http://www.opcode.eu.org)**
 
 ## Licence
 
@@ -31,62 +31,28 @@
 	SOFTWARE.
 
 
-## Install dependencies
+## Build
 
-To build pdf booklets and xhtml files from this repo you must install dependencies:
+### make way
 
 1. run `make init` in main dir of this repo
-2. download and install *Libraries and tools for free EDA suites (gEDA/gschem and pcb-rnd)* from [https://bitbucket.org/OpCode-eu-org/eda-libs](https://bitbucket.org/OpCode-eu-org/eda-libs) with its dependencies:
-    1. `git clone https://bitbucket.org/OpCode-eu-org/eda-libs && cd eda-libs`
-    2. `sudo make installDependencies`
-    3. `make installLibs; sudo make installTools`
-3. run `sudo make installDependencies` in main dir of this repo
+2. run `sudo make installDependencies` in main dir of this repo
+3. run `make all` to build all documents
+4. results will be write into `output-www` directory
 
-**NOTE:** Steps 2.2 and 3 are dedicated for Debian based system (`installDependencies` targets use apt for software installation).
-On non-Debian system see `Makefile` (in this repo main dir and in *eda-libs* repo main dir) for list of needed software and install it manually.
+#### single document build
 
-### Package dependencies
+* To build a single document run `make dokumentName` in source dir for this document, where `name` is the name of the file without extension (for example `(cd booklets; make Sieci)`).
+* To build a *teacher version* add the suffix `--teacher` to the filename, (e.g. `make Sieci--teacher`.
+* To force rebuild a file (ignoring *make* dependency tracking) add `FORCE=1` to the command (e.g. `make Sieci FORCE=1`).
 
-To compile the tex toolkit, several packages are necessary (on Debian Buster)
+### act way
 
-	texlive-xetex
-	texlive-luatex
-	texlive-latex-base
-	texlive-latex-recommended
-	texlive-latex-extra
-	texlive-font-utils
-	fonts-symbola
-	
-	poppler-utils:amd64 0.71.0-5 -> 0.48.0-2+deb9u2  (this had to be manually downgraded and put on hold)
-	python3-pygments
-	pdftk
-	make
-	wkhtmltopdf
-	
-	geda-gschem  (need also symbols and tools from [https://bitbucket.org/OpCode-eu-org/eda-libs](eda-libs) repo)
-	ps2eps
-	ghostscript
-	pdf2svg
-	inkscape
-	netpbm
+You can use [act](https://github.com/nektos/act) to locally run [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)
 
-Those packages will be installed automatically (with apt) when run `installDependencies` make target during the procedure described above.
+1. run `act --reuse` in main dir of this repo
+2. use `docker cp` to copy output directory (`output-www`) from container to host system.
 
-## Usage instruction
-
-## Build PDF documents
-
-* To build all the files use `make all` (in a given subdirectory or in the root directory).
-* To build a single PDF file run the command `make filename` in a directory with its sources, where `name` is the name of the file without extension,
-  e.g. for a file `aaa.pdf` built from `dir/aaa.tex` it will be `cd dir && make aaa`.
-* To build a *teacher version* add the suffix `--teacher` to the filename, e.g. `make aaa - teacher` 
-* To force a file rebuild (ignoring *make* dependency tracking) add `VERBOSE=1` to the command, e.g. `make aaa VERBOSE=1`
-* The output files are located in the `output-www` directory
-
-## Build XHTML documents
-
-It is only possible for XML sources and is identical to building PDF documents from LaTeX sources.
-A PDF document is also built based on the conversion (printout) of XHTML to PDF using `wkhtmltopdf`. 
 
 ## Directory structure and Makefile
 

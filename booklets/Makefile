@@ -12,7 +12,7 @@ $(OUTDIR)/Bash_jako_narzędzie_programowania.pdf:             $(SECTIONS)/linux/
 $(OUTDIR)/Sieci.pdf:                                         $(SECTIONS)/network/*      $(VIDEO)                                          extra-tex-files/vip-code-src/sieciowe/*.py extra-tex-files/RJ-45_TIA-568*.png
 $(OUTDIR)/Wprowadzenie_do_programowania_w_Pythonie.pdf:      $(SECTIONS)/python/*       $(VIDEO)  
 $(OUTDIR)/Podstawy_programowania_mikrokontrolerów_STM32.pdf: $(SECTIONS)/stm32/*        $(VIDEO)  $(call img4tex_from_src,stm32/*)        extra-tex-files/stm32-examples/*/*        $(SECTIONS)/sbc/*
-$(OUTDIR)/Warsztat_elektroniczny.pdf:                        $(SECTIONS)/warsztat/*     $(VIDEO)                                          extra-tex-files/warsztat_elektroniczny/*
+$(OUTDIR)/Warsztat_elektroniczny.pdf:                        $(SECTIONS)/warsztat/*     $(VIDEO)  $(call img4tex_from_src,elektronika/*)  extra-tex-files/warsztat_elektroniczny/*
 $(OUTDIR)/Narzędzia_deweloperskie.pdf:                       $(SECTIONS)/tools/*
 $(OUTDIR)/Podstawy_elektryki.pdf:                            $(SECTIONS)/elektryka/*              $(call img4tex_from_src,elektryka/*.s*)
 $(OUTDIR)/Elektronika_trochę_bardziej_zaawansowana.pdf:                                           $(call img4tex_from_src,elektronika2/*)

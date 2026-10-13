@@ -28,7 +28,7 @@
 
 RS Flip-flop (RS Latch) jest podstawowym układem służącym do zapamiętania jednego bitu informacji. Posiada on dwa wejścia (set i reset) i dwa wyjścia (Q i NOT Q), wejścia mogą reagować na stan wysoki (oznaczane jako S i R) lub niski (oznaczane jako wejścia zanegowane \~{}S i \~{}R), jedno z wyjść może być jedynie wewnętrzne (nie wyprowadzone na zewnątrz układu). Podanie stanu wysokiego na wejście S (niskiego na \~{}S) powoduje wystawienie stanu wysokiego na wyjściu Q, a podanie stanu wysokiego na wejście R (niskiego na \~{}R) powoduje wystawienie stanu niskiego na wyjściu Q. Stan na wyjściu Q nie zmienia się po zmianie wejść S i R na stan niski (zostaje zapamiętany).
 
-Zobacz i przeanalizuj symulację działania zatrzasku RS: \url{http://ln.opcode.eu.org/rs} z wejściami zanegowanymi.
+Zobacz i przeanalizuj symulację działania zatrzasku RS: \url{http://cs.opcode.eu.org/rs} z wejściami zanegowanymi.
 
 \subsection{zatrzask a przerzutnik}
 
@@ -48,11 +48,11 @@ Przerzutnik jest elementem reagującym na zbocze sygnału na wejściu "clock" (C
 
 Posiada jedno wejścia sygnałowe "data" (D) oraz wejście "enable" (E) w przypadku zatrzasku lub wejście "clock" (CLK) w przypadku przerzutnika. Może także posiadać asynchroniczne (niezależne od stanu wejścia E / CLK) wejścia reset i set (zanegowane lub proste). Obniżenie sygnału E lub zbocze sygnału CLK powodują zapamiętanie (i wystawienie na wyjściu Q) stanu wejścia D.
 
-Zobacz symulację zatrzasku typu D zbudowanego z bramek NAND: \url{http://ln.opcode.eu.org/zatrzask} (możesz zmieniać stan wejścia D klikając na nie, zegar zmienia się automatycznie).
+Zobacz symulację zatrzasku typu D zbudowanego z bramek NAND: \url{http://cs.opcode.eu.org/zatrzask} (możesz zmieniać stan wejścia D klikając na nie, zegar zmienia się automatycznie).
 Zwróć uwagę iż przy wysokim stanie sygnału zegara (enable) stan wyjścia odpowiada stanowi wejścia (zatrzask jest przeźroczysty),
 	natomiast przy niskim stanie zegara wyjście nie reaguje na zmiany stanu wejścia i znajduje się w takim stanie w jakim było wejście w chwili opadającego zbocza sygnału zegarowego.
 
-Zobacz symulację przerzutnika D złożonego z dwóch zatrzasków: \url{http://ln.opcode.eu.org/przerzutnik}.
+Zobacz symulację przerzutnika D złożonego z dwóch zatrzasków: \url{http://cs.opcode.eu.org/przerzutnik}.
 Zauważ że w żadnej fazie sygnału zegarowego nie jest on przeźroczysty (wyjście Q nie zależy od obecnego stanu wejścia D).
 Zwróć uwagę że sygnał wejściowy zostanie zapamiętany i wystawiony na wyjście Q w momencie opadającego zbocza sygnału zegarowego.
 
@@ -62,15 +62,15 @@ Mianem rejestru n-bitowego określa się zespół n przerzutników (rzadziej zat
 \subsubsection{rejestry równoległe}
 Posiadają taką samą liczbę wejść jak i wyjść, sygnał na i-tym wyjściu jest bezpośrednio powiązany z sygnałem z i-tego wejścia (jest sygnałem zapamiętanym z tego wejścia).
 
-Zobacz symulację rejestru równoległego zbudowanego z przerzutników typu D: \url{http://ln.opcode.eu.org/rejestr1} (stan wszystkich wejść zostanie zapamiętany i przepisany na wyjścia w chwili narastającego zbocza zegara).
+Zobacz symulację rejestru równoległego zbudowanego z przerzutników typu D: \url{http://cs.opcode.eu.org/rejestr1} (stan wszystkich wejść zostanie zapamiętany i przepisany na wyjścia w chwili narastającego zbocza zegara).
 
 \subsubsection{rejestry szeregowe serial-input}
 Z kolejnymi sygnałami zegarowymi odczytywany jest stan wejścia szeregowego, a stan poprzedni przenoszony jest do kolejnego przerzutnika w ramach rejestru. W ten sposób po n cyklach zegara n-bitowy rejestr ma zapisaną nową zawartość. Często posiada zespolony z nim rejestr równoległy zapobiegający zmianie stanu wyjść w trakcie ładowania danych z wejścia szeregowego przepisanie danych z rejestru przesuwnego do rejestru odpowiedzialnego za sterowanie wyjściami sterowane jest osobnym sygnałem zegarowym.
 
-Zobacz symulację prostego rejestru z wejściem szeregowym (bez zatrzasku/rejestru wyjściowego): \url{http://ln.opcode.eu.org/rejestr2}.
+Zobacz symulację prostego rejestru z wejściem szeregowym (bez zatrzasku/rejestru wyjściowego): \url{http://cs.opcode.eu.org/rejestr2}.
 Zauważ że stan wyjść zmienia się na bieżąco w trakcie szeregowego wpisywania wartości do rejestru.
 
-Zobacz symulację rejestru z wejściem szeregowym i rejestrem wyjściowym: \url{http://ln.opcode.eu.org/rejestr3}.
+Zobacz symulację rejestru z wejściem szeregowym i rejestrem wyjściowym: \url{http://cs.opcode.eu.org/rejestr3}.
 Zauważ, że stan wyjść zmienia się na skutek osobnego sygnału, który może zostać wygenerowany po zakończeniu szeregowego zapisu do rejestru.
 
 \subsubsection{rejestry szeregowe paraller-input serial-output}

@@ -37,28 +37,26 @@ init: | checkout-submodules $(TEXBUILDDIR)/pdfArticle.cls $(TEXBUILDDIR)/labels4
 	@ echo "init done"
 
 installDependencies:
-	cd $(MAINDIR)/TextUtils && make installDependencies
-	apt install  texlive-xetex texlive-luatex texlive-latex-extra texlive-font-utils fonts-symbola wget
-	@ if ! command -v sch2img.sh > /dev/null; then \
-		echo "Cant't find sch2img.sh in PATH"; \
-		echo "You should download and install EDA libs (with dependencies!) from https://bitbucket.org/OpCode-eu-org/eda-libs"; \
-		return 3; \
-	fi
+	cd $(MAINDIR)/OpCode-vip && make installDependencies
+	apt install -y  texlive-xetex texlive-luatex texlive-latex-extra texlive-font-utils fonts-symbola wget gnuplot
 
 all:
 	$(MAKE) buildAll
-	@ [ "$(MAINDIR)" = "$(PWD)" ] && (cd booklets    && $(MAKE) -f ../Makefile buildAll) || true
-	@ [ "$(MAINDIR)" = "$(PWD)" ] && (cd LaTeX-demos && $(MAKE) -f ../Makefile buildAll) || true
+	@ if [ "$(realpath $(MAINDIR))" = "$(realpath $(PWD))" ]; then \
+		(cd booklets    && $(MAKE) -f ../Makefile buildAll); \
+		(cd LaTeX-demos && $(MAKE) -f ../Makefile buildAll); \
+		ln -sf $(MAINDIR)/newIndex.xhtml $(OUTDIR)/index.xhtml; \
+		(cd output-www; rm -f offline.tar.xz; tar -chJf ../tmp-build/offline.tar.xz .; mv ../tmp-build/offline.tar.xz .); \
+	fi
 
 serve:
 	cd $(OUTDIR) && python3 -m http.server
 
 upload:
-	ln -sf $(MAINDIR)/newIndex.xhtml $(OUTDIR)/index.xhtml
 	cd $(OUTDIR) && rsync -rLc --delete -v -e "ssh" --exclude="~rrp" ./ www.opcode.eu.org:/srv/WebPages/main/
 
 upload-ln:
-	cd booklets/booklets-sections/electronics && ./simulations2nginx.sh | ssh dragon 'cat > /srv/WebPages/ln/circuitjs.short_links.conf'
+	cd booklets/booklets-sections/electronics && ./simulations2nginx.sh | ssh dragon 'cat > /srv/WebPages/circuitjs/short_links.conf'
 	@echo -e '\033[93mYou need to reload nginx to apply the changes.\033[0m'
 
 #

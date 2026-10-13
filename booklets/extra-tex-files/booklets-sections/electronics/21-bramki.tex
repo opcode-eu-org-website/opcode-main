@@ -33,7 +33,7 @@
 
 Bramki są układami elektronicznymi realizującymi podstawowe funkcje logiczne. Obok zostały przedstawione podstawowe symbole poszczególnych bramek w wariancie dwu wejściowym, spotkać się można także z symbolami z zanegowanymi wejściami - w takiej konwencji np. bramka AND reprezentowana jest przez NOR z zanegowanymi wejściami. Bramki (z wyjątkiem buforów oraz bramki NOT), mogą występować także w wariantach wielo-wejściowych (ze względu na łączność podstawowych operacji nie ma wątpliwości co don wyniku jaki powinna dawać np. 8 wejściowa bramka OR). Na ogół w pojedynczym układzie scalonym znajduje się kilka jednakowych bramek.
 
-Zobacz symulację działania różnych bramek logicznych: \url{http://ln.opcode.eu.org/bramki} (H oznacza stan wysoki, czyli prawdę, L stan niski czyli fałsz, klikając na H/L przy wejściach można zmieniać ich stan).
+Zobacz symulację działania różnych bramek logicznych: \url{http://cs.opcode.eu.org/bramki} (H oznacza stan wysoki, czyli prawdę, L stan niski czyli fałsz, klikając na H/L przy wejściach można zmieniać ich stan).
 
 \subsection{trój-stanowe}
 Typowa bramka wymusza (w sposób silny) na swoim wyjściu stan wysoki lub niski, co uniemożliwia bezpośrednie łączenie wyjść bramek.
@@ -55,7 +55,7 @@ Stan wysoki musi zostać zapewniony zewnętrznym rezystorem podciągającym. Poz
 \end{wrapfigure}
 Na schemacie obok przedstawiono dwa układy (U1 i U2) typu open-drain sterujące wspólną linią wyjściową w układzie \emph{suma na drucie}. Jeżeli jeden z podłączonych do linii układów będzie miał wewnętrzne wyjście ("ctrl\textit{X}") w stanie wysokim to jego wyjście OC będzie zwarte do masy (negacja na tranzystorze N-MOS lub NPN), wtedy też cała linia będzie w stanie niskim.
 
-Zobacz symulację lininii z bramkami trójstanowymi (stan wysokiej impedancji symulowany za pomocą przełącznika) oraz linii open-colektor: \url{http://ln.opcode.eu.org/ster}
+Zobacz symulację lininii z bramkami trójstanowymi (stan wysokiej impedancji symulowany za pomocą przełącznika) oraz linii open-colektor: \url{http://cs.opcode.eu.org/ster}
 
 \begin{wrapfigure}{r}{0.61\textwidth}
   \begin{center}
@@ -77,7 +77,7 @@ Dzięki zastosowaniu tranzystorów PMOS polaryzowanych Vdd oraz NMOS polaryzowan
 
 Działanie bramki transmisyjnej polega na przepuszczaniu lub nie (w zależności od stanu wejścia sterującego) sygnału z wejścia na wyjście. Bramka taka nie regeneruje sygnału. Ponadto w uproszczonym (jedno tranzystorowym) rozwiązaniu prowadzi ona do degradacji sygnału wartość w przybliżeniu równą napięciu progowemu tranzystora. Dlatego też na ogół występuje wraz z bramką NOT (bufor 3 stanowy z negacją) lub dwiema szeregowo połączonymi bramkami NOT (bufor 3 stanowy bez negacji).
 
-Zobacz symulację budowy bramek: NOT (\url{http://ln.opcode.eu.org/not}), NAND (\url{http://ln.opcode.eu.org/nand}) i NOR (\url{http://ln.opcode.eu.org/nor}).
+Zobacz symulację budowy bramek: NOT (\url{http://cs.opcode.eu.org/not}), NAND (\url{http://cs.opcode.eu.org/nand}) i NOR (\url{http://cs.opcode.eu.org/nor}).
 % END: Elektronika - Bramki
 
 \setcounter{subsection}{0}
