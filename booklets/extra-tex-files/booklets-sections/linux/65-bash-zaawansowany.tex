@@ -207,15 +207,13 @@ Bash pozwala także na podstawienie standardowego wyjścia różnych komend
 w miejsce kilku plików bez potrzeby jawnego tworzenia plików tymaczasowych. Na przykład:
 
 \begin{CodeFrame*}[bash]{}
-diff <(cat /etc/passwd) <(cat /etc/passwd-)
+diff <(sort /etc/passwd) <(sort /etc/passwd-)
 \end{CodeFrame*}
 
 \noindent
-które poleceniu diff jako jeden plik postawia standardowe wyjście pierwszego cat,
-a jako drugi plik drugiego cat.
-Oczywiście zaprezentowane zastosowanie tego z poleceniami \texttt{cat}
-jest bezsensowne (prościej podać ścieżki do plików),
-ale gdyby występował tam już np. jakiś grep mogłoby to być użyteczne.
+które poleceniu diff jako jeden plik postawia standardowe wyjście pierwszego sort,
+a jako drugi plik drugiego sort.
+Pozwalając porównać posortowane pliki, bez tworzenia plików tymczasowych.
 
 Możliwe jest też działanie w drugą stronę czyli przesłanie danych wpisywanych przez
 jeden proces do pliku jasko standardowego wejścia innego programu
