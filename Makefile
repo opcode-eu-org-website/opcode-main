@@ -24,21 +24,20 @@ MAINDIR     := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 OUTDIR      := $(MAINDIR)/output-www
 TEXBUILDDIR := $(MAINDIR)/tmp-build
 LIBFILESDIR := $(MAINDIR)/OpCode-core/lib
-SVGICONURL  := https://bytebucket.org/OpCode-eu-org/svgiconset/raw/HEAD/other/
-export PATH := $(MAINDIR)/TextUtils/convert:$(PATH)
 
+include $(shell if [ ! -f "$(MAINDIR)/OpCode-core/Makefile" ]; then \
+	git submodule update --quiet --init "$(MAINDIR)/OpCode-vip" > /dev/null; \
+	cd "$(MAINDIR)/OpCode-vip" && make > /dev/null; \
+fi; echo "$(MAINDIR)/OpCode-core/Makefile")
 
-.PHONY: help init installDependencies all upload serve
-help:
-	@ cd $(MAINDIR) && awk '/^#/ {x=0} x==1 {print $0} /^## Install/ {x=1}' README.md
-	@ echo "Run \`make all\` to build all documents or build single document by run \`make dokumentName\` in source dir for this document (e.g. \`cd booklets; make Sieci\`)."
+.PHONY: init installDependencies all upload serve
 
 init: | checkout-submodules $(TEXBUILDDIR)/pdfArticle.cls $(TEXBUILDDIR)/labels4easylist.sty $(TEXBUILDDIR)/vtable.sty $(TEXBUILDDIR)/ehhline.sty $(TEXBUILDDIR)/tikzPackets.sty
 	@ echo "init done"
 
 installDependencies:
-	cd $(MAINDIR)/OpCode-vip && make installDependencies
-	apt install -y  texlive-xetex texlive-luatex texlive-latex-extra texlive-font-utils fonts-symbola wget gnuplot
+	$(SUDO_CMD) cd $(MAINDIR)/OpCode-core && make installCoreDependencies
+	$(SUDO_CMD) apt install -y  texlive-xetex texlive-luatex texlive-latex-extra texlive-font-utils fonts-symbola wget gnuplot
 
 all:
 	$(MAKE) buildAll
@@ -60,32 +59,13 @@ upload-ln:
 	@echo -e '\033[93mYou need to reload nginx to apply the changes.\033[0m'
 
 #
-# submodules
-#
-
-.PHONY: checkout-submodules
-
-checkout-submodules:
-	git submodule update --init --recursive
-
-#
 # extra dependencies
 #
 
 OutDir: $(OUTDIR)/lib/htmlFile-Blog.svg  $(OUTDIR)/lib/webSite-OldOpCode.svg
 
 #
-# include core makefile from TextUtils
-#
-
--include $(MAINDIR)/TextUtils/makefiles/buildWebSite.mk
-
-#
 # addionals files
 #
 
 include $(MAINDIR)/booklets/Makefile
-
-$(TEXBUILDDIR)/pdfArticle.cls $(TEXBUILDDIR)/labels4easylist.sty $(TEXBUILDDIR)/vtable.sty $(TEXBUILDDIR)/ehhline.sty $(TEXBUILDDIR)/tikzPackets.sty:
-	mkdir -p $(TEXBUILDDIR)
-	wget -O "$@" "https://bitbucket.org/OpCode-eu-org/latex-libs/raw/HEAD/pkgs/$(@F)"
